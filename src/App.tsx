@@ -74,7 +74,7 @@ import PDFList from './Pages/PDFList/PDFList';
 function App() {
   // const loginUrl = `http://13.202.29.139:5000/auth/login`;
   // const loginUrl = `https://13.235.239.244/auth/login`;
-   const loginUrl = "https://qaapi.gyansetu.ai/" || "http://localhost:3000";
+   const loginUrl = "https://uatapi.gyansetu.ai/" || "http://localhost:3000";
 
   // const loginUrl = `http://127.0.0.1:5000/login`;
   const { postData } = useApi();
