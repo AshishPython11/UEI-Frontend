@@ -15,18 +15,25 @@ import PreviewAdminProfile from '../PreviewAdminProfile';
 
 import { Divider, useMediaQuery, useTheme } from '@mui/material';
 import { toast } from 'react-toastify';
+
 import { useNavigate } from 'react-router-dom';
 import { QUERY_KEYS_ADMIN_BASIC_INFO } from '../../utils/const';
 import useApi from '../../hooks/useAPI';
+import { inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 
 const steps = ['Admin Basic Information', 'Admin Address', 'Language known', 'Admin Description', 'Admin Contact Details', 'Admin Profession'];
 
 
+
 export default function AdminProfile() {
+  const context = React.useContext(NameContext);
+  const {namecolor }:any = context;
   let adminId = localStorage.getItem('_id')
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
+
   const [isEdit, setIsEdit] = React.useState(false);
   const [isEdit1, setIsEdit1] = React.useState(false);
   const [isProComplate, setIsProComplate] = React.useState(0);
@@ -40,20 +47,22 @@ export default function AdminProfile() {
   const profileURL = QUERY_KEYS_ADMIN_BASIC_INFO.ADMIN_GET_PROFILE;
   const { getData } = useApi()
 
-  const handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
+  const handleNext = () => {
+      let newSkipped = skipped;
+      if (isStepSkipped(activeStep)) {
+          newSkipped = new Set(newSkipped.values());
+          newSkipped.delete(activeStep);
+      }
+
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setSkipped(newSkipped);
   };
 
   const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+      setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
 
   const handleStep = (step: number) => () => {
     setActiveStep(step);
@@ -81,18 +90,22 @@ export default function AdminProfile() {
     }
 
     setActiveStep(0);
+
   };
 
   const editProfile = () => {
     setIsEdit(true)
+
     // setIsEdit1(true)
   }
   const isEditfun = () => {
     setIsEdit1(false)
+
   }
   const viewProfile = () => {
     setIsEdit(false)
   }
+
   const viewProfileHome = () => {
     navigator('/main/DashBoard')
   }
@@ -249,7 +262,7 @@ export default function AdminProfile() {
     <>
       <div className="profile_section">
         <div className="card">
-          <div className="card-header">
+          <div className="card-header custom-header">
             {/* <div className="card-header--actions d-flex justify-content-end align-items-right">
             <Button  className="float-left">
                   Back 
@@ -263,16 +276,16 @@ export default function AdminProfile() {
                 </Button>}
             </div> */}
             <div className="card-header--actions d-flex justify-content-between align-items-right">
-              <Button className="float-left" onClick={viewProfileHome}>
+              <Button className="float-left custom-header" onClick={viewProfileHome}>
                 Back
               </Button>
               <div>
                 {isEdit ? (
-                  <Button onClick={viewProfile} className="float-right">
+                  <Button onClick={viewProfile} className="float-right custom-header">
                     View Profile
                   </Button>
                 ) : (
-                  <Button onClick={editProfile} className="float-right">
+                  <Button onClick={editProfile} className="float-right custom-header">
                     Edit Profile
                   </Button>
                 )}
@@ -302,7 +315,19 @@ export default function AdminProfile() {
                       <Step key={label} {...stepProps}>
                         <StepLabel {...labelProps}
                           onClick={handleStep(index)}
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: "pointer"}}
+                          sx={{
+                            '& .MuiStepLabel-label': {
+                                color: activeStep === index ? inputfieldtext(namecolor) : 'gray', 
+                            },
+                            '& .MuiStepLabel-label.Mui-active': {
+                                color: inputfieldtext(namecolor), // Active step color
+                            },
+                            // '& .MuiStepLabel-label.Mui-completed': {
+                            //     color: inputfield(namecolor), // Completed step color
+                            // },
+                        }}
+                          
                         >
                           {label}</StepLabel>
                       </Step>
@@ -318,6 +343,7 @@ export default function AdminProfile() {
                       onClick={handleBack}
                       sx={{ mr: 1 }}
                       variant="contained"
+                      className='mainbutton'
                       
                       // onMouseEnter={handleMouseEnter}
                       // onMouseLeave={handleMouseLeave}
@@ -329,6 +355,7 @@ export default function AdminProfile() {
                     {activeStep !== steps.length - 1 ?
                       <Button onClick={handleNext}
                       variant="contained"
+                       className='mainbutton'
                       >
                         Next
                       </Button>
@@ -338,11 +365,14 @@ export default function AdminProfile() {
                         viewProfile1();
                       }}
                       variant="contained"
+                       className='mainbutton'
                       >
+
                         Finish
                       </Button>
                     }
                   </Box>
+
                   <Typography sx={{ mt: 2, mb: 1 }}>
 
                     {/* <Divider sx={{ borderBottomWidth: 1, borderColor: 'black' }} /> */}
@@ -398,5 +428,6 @@ export default function AdminProfile() {
         </div>
       </div>
     </>
+
   );
 }

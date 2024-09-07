@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -16,6 +16,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+
+
 import "react-toastify/dist/ReactToastify.css";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -24,6 +26,8 @@ import useApi from "../../hooks/useAPI";
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { toast } from "react-toastify";
+import NameContext from "../Context/NameContext";
+import { inputfield, inputfieldhover, inputfieldtext, tabletools } from "../../utils/helpers";
 
 interface Box {
   id: number;
@@ -32,6 +36,7 @@ interface Box {
   starting_date: any;
   ending_date: any;
   learning_style: string;
+  class_id: string;
 }
 interface Boxset {
   id: number;
@@ -48,17 +53,25 @@ interface Course {
   course_name: string;
   course_id: string;
 }
+interface Classes {
+  id: number;
+  class_name: string;
+  class_id: string;
+}
 
 const Boxsetvalue = {
   id: 0,
   Institute_Name_Add: "",
 };
 function StudentAcademicHistory() {
+  const context = useContext(NameContext);
+  const {namecolor }:any = context;
   const { getData, postData, putData, deleteData } = useApi();
   const [boxes, setBoxes] = useState<Box[]>([]);
   const [boxes1, setBoxes1] = useState<Boxset[]>([Boxsetvalue]);
   const [institutes, setInstitutes] = useState<Institute[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
+  const [classes, setClasses] = useState<Classes[]>([]);
   const [editFlag, setEditFlag] = useState<boolean>(false);
   const [idInstitute, setIdInstitute] = useState();
   const [insituteFlag, setInsituteFlag] = useState<boolean>(false);
@@ -73,6 +86,7 @@ function StudentAcademicHistory() {
       starting_date: null,
       ending_date: null,
       learning_style: "",
+      class_id: "",
     };
     setBoxes([...boxes, newBox]);
   };
@@ -140,6 +154,21 @@ function StudentAcademicHistory() {
           theme: "colored",
         });
       });
+      getData("/class/list")
+      .then((response: any) => {
+        if (response.status === 200) {
+          // const filteredData = response?.data?.filter((item:any) => item?.is_active === 1);
+          const filteredData = response?.data?.filter((item:any) => item?.is_active === true);
+          setClasses(filteredData ||[]);
+          // setCourses(response.data);
+        }
+      })
+      .catch((error) => {
+        toast.error(error?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      });
 
     getData(`${"student_academic_history/edit/" + StudentId}`)
     .then((data: any) => {
@@ -152,6 +181,7 @@ function StudentAcademicHistory() {
             starting_date: item?.starting_date ? dayjs(item?.starting_date) : null,
             ending_date: item?.ending_date ? dayjs(item?.ending_date) : null,
             learning_style: item?.learning_style,
+            class_id: item?.class_id,
           };
           if (!boxes.some((box) => box.id === newBox.id)) {
             setBoxes((prevBoxes) => [...prevBoxes, newBox]);
@@ -166,6 +196,7 @@ function StudentAcademicHistory() {
             starting_date: null,
             ending_date: null,
             learning_style: "",
+            class_id: "",
           },
         ]);
         setEditFlag(true);
@@ -198,6 +229,7 @@ const saveAcademicHistory = async (event: React.FormEvent<HTMLFormElement>) => {
       starting_date: box.starting_date,
       ending_date: box.ending_date,
       learning_style: box.learning_style,
+      class_id:String(box.class_id),
     };
 
     if (validatePayload(payload) && isDateValid(box.starting_date, box.ending_date)) {
@@ -333,6 +365,7 @@ const saveAcademi = async (index:number) => {
       }
     }).filter(promise => promise !== null);
 
+
     const responses = await Promise.all(promises);
 
     const allSuccessful = responses.every(response => response?.status === 200);
@@ -364,7 +397,9 @@ const saveAcademi = async (index:number) => {
       theme: "colored",
     });
   }
+
 }
+
 
 
 
@@ -376,9 +411,11 @@ const saveAcademi = async (index:number) => {
 //       newEnddateInvalidList[index] = true; // Set end date invalid for the current row
 //     } else {
 //       newEnddateInvalidList[index] = false; // Set end date valid for the current row
+
 //     }
 //     setEnddateInvalidList(newEnddateInvalidList);
 //   }
+
 
 //   const newBoxes: any = [...boxes];
 //   newBoxes[index][field] = value;
@@ -387,6 +424,7 @@ const saveAcademi = async (index:number) => {
 const handleInputChange = (index: number, field:  keyof Box, value: string | dayjs.Dayjs | null) => {
   const newBoxes = [...boxes];
   newBoxes[index] = { ...newBoxes[index], [field]: value };
+
 
   // Check date validity
   const startDate = dayjs(newBoxes[index].starting_date);
@@ -410,12 +448,13 @@ const handleInputChange1 = (index: number, field: keyof Boxset, value: any) => {
   setBoxes1(newBoxes);
 };
 
+console.log("test class",classes)
 return (
   <div className="mt-5">
     <form onSubmit={saveAcademicHistory}>
     {boxes?.map((box, index) => (
       <div className="row align-items-center" key={box.id} style={{ marginBottom: "5px" }}>
-        <div className="col">
+        <div className="col form_field_wrapper">
           <FormControl required sx={{ m: 1, minWidth: 220, width: "100%" }}>
             <InputLabel>Institute Name</InputLabel>
             <Select
@@ -427,11 +466,25 @@ return (
               label="Institute Name"
             >
               {institutes.map((institute) => (
-                <MenuItem key={institute.id} value={institute.id}>
+                <MenuItem key={institute.id} value={institute.id}
+                sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}>
                   {institute.institution_name}
                 </MenuItem>
               ))}
-              <MenuItem key={1} value={1}>
+              <MenuItem key={1} value={1}
+                  sx={{
+                    backgroundColor: inputfield(namecolor),
+                    color: inputfieldtext(namecolor),
+                    '&:hover': {
+                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                    },
+                }}>
                  Others
                 </MenuItem>
             </Select>
@@ -467,7 +520,7 @@ return (
                 </>
           )}
         </div>
-        <div className="col">
+        <div className="col form_field_wrapper">
           <FormControl required sx={{ m: 1, minWidth: 220, width: "100%" }}>
             <InputLabel>Course</InputLabel>
             <Select
@@ -478,14 +531,46 @@ return (
               label="Course"
             >
               {courses.map((course) => (
-                <MenuItem key={course.id} value={course.id}>
+                <MenuItem key={course.id} value={course.id}
+                sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}>
                   {course.course_name}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         </div>
-        <div className="col">
+        <div className="col form_field_wrapper">
+          <FormControl required sx={{ m: 1, minWidth: 220, width: "100%" }}>
+            <InputLabel>Class</InputLabel>
+            <Select
+              value={box.class_id}
+              onChange={(e) =>
+                handleInputChange(index, "class_id", e.target.value)
+              }
+              label="Class"
+            >
+              {classes.map((classes) => (
+                <MenuItem key={classes.id} value={classes.id}
+                sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}>
+                  {classes.class_name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+        <div className="col form_field_wrapper">
           <FormControl required sx={{ m: 1, minWidth: 180, width: "100%" }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
@@ -499,7 +584,7 @@ return (
             </LocalizationProvider>
           </FormControl>
         </div>
-        <div className="col">
+        <div className="col form_field_wrapper">
           <FormControl required sx={{ m: 1, minWidth: 180, width: "100%" }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
@@ -518,7 +603,7 @@ return (
             </p>
           )}
         </div>
-        <div className="col">
+        <div className="col form_field_wrapper">
           <FormControl required sx={{ m: 1, minWidth: 70, width: "100%", maxWidth: 200 }}>
             <InputLabel>Learning Style</InputLabel>
             <Select
@@ -528,20 +613,41 @@ return (
               }
               label="Learning Style"
             >
-              <MenuItem value="online">Online</MenuItem>
-              <MenuItem value="offline">Offline</MenuItem>
-              <MenuItem value="any">Any</MenuItem>
+              <MenuItem value="online"
+                  sx={{
+                    backgroundColor: inputfield(namecolor),
+                    color: inputfieldtext(namecolor),
+                    '&:hover': {
+                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                    },
+                }}>Online</MenuItem>
+              <MenuItem value="offline"
+                  sx={{
+                    backgroundColor: inputfield(namecolor),
+                    color: inputfieldtext(namecolor),
+                    '&:hover': {
+                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                    },
+                }}>Offline</MenuItem>
+              <MenuItem value="any"
+                  sx={{
+                    backgroundColor: inputfield(namecolor),
+                    color: inputfieldtext(namecolor),
+                    '&:hover': {
+                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                    },
+                }}>Any</MenuItem>
             </Select>
           </FormControl>
         </div>
         <div className="col-1">
-          <IconButton onClick={addRow} sx={{ width: "35px", height: "35px" }}>
+          <IconButton onClick={addRow} sx={{ width: "35px", height: "35px",color: tabletools(namecolor) }}>
             <AddIcon />
           </IconButton>
           {boxes.length !== 1 && (
             <IconButton
               onClick={() => deleterow(box.id, index)}
-              sx={{ width: "35px", height: "35px", color: "#f70404b8" }}
+              sx={{ width: "35px", height: "35px",color: tabletools(namecolor) }}
             >
               <DeleteIcon />
             </IconButton>
@@ -552,6 +658,7 @@ return (
     <div className="row justify-content-center">
       <div className="col-3">
         <Button
+        className="mainbutton"
           variant="contained"
           color="primary"
            type="submit"
@@ -567,4 +674,6 @@ return (
 );
 }
 
+
 export default StudentAcademicHistory;
+

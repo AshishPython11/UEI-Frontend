@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../RolevsAdmin/RolevsAdmin.scss';
 import TextField from '@mui/material/TextField';
 import useApi from '../../hooks/useAPI';
@@ -9,13 +9,16 @@ import { toast } from 'react-toastify';
 import { Form, Formik, FormikHelpers, setNestedObjectValues } from 'formik';
 import * as Yup from 'yup';
 import { MenuListinter } from '../../Components/Table/columns';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, inputfield, inputfieldhover, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 interface IRolevsAdmin {
     role_master_id: string,
     admin_id: string
 }
 
 const AddEditRoleVsAdmin = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const RolevsAdminAddURL = QUERY_KEYS_ROLEVSADMIN.ROLEVSADMIN_ADD;
     const RolevsAdminEditURL = QUERY_KEYS_ROLEVSADMIN.ROLEVSADMIN_EDIT;
     const RoleURL = QUERY_KEYS_ROLE.GET_ROLE;
@@ -238,10 +241,30 @@ const AddEditRoleVsAdmin = () => {
                                                         name="role_master_id"
                                                         value={values?.role_master_id}
                                                         variant="outlined"
+                                                        sx={{
+                                                            backgroundColor: inputfield(namecolor) , 
+                                                            color: inputfieldtext(namecolor) 
+                                                        }}
+                                                        MenuProps={{
+                                                            PaperProps: {
+                                                                style: {
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor)
+                                                                },
+                                                            },
+                                                        }}
                                                     >
                                                         {
                                                             dataRole?.map((item: any) => (
-                                                                <MenuItem value={item.id}>{item.role_name}</MenuItem>
+                                                                <MenuItem value={item.id} 
+                                                                sx={{
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor),
+                                                                    '&:hover': {
+                                                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                                                    },
+                                                                }}
+                                                                >{item.role_name}</MenuItem>
                                                             ))
                                                         }
 
@@ -262,10 +285,30 @@ const AddEditRoleVsAdmin = () => {
                                                         name="admin_id"
                                                         value={values?.admin_id}
                                                         variant="outlined"
+                                                        sx={{
+                                                            backgroundColor: inputfield(namecolor) , 
+                                                            color: inputfieldtext(namecolor) 
+                                                        }}
+                                                        MenuProps={{
+                                                            PaperProps: {
+                                                                style: {
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor)
+                                                                },
+                                                            },
+                                                        }}
                                                     >
                                                         {
                                                             dataAdmin?.map((item: any) => (
-                                                                <MenuItem value={item.id}>{item.first_name}</MenuItem>
+                                                                <MenuItem value={item.id}
+                                                                sx={{
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor),
+                                                                    '&:hover': {
+                                                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                                                    },
+                                                                }}
+                                                                >{item.first_name}</MenuItem>
                                                             ))
                                                         }
 
@@ -277,7 +320,7 @@ const AddEditRoleVsAdmin = () => {
                                             }
                                         </div>
                                     </div>
-                                    <button className='btn btn-primary'  >{id ? "Update" : "Save"}</button>
+                                    <button className='btn btn-primary mainbutton'  >{id ? "Update" : "Save"}</button>
                                     </Form>
                             )}
                             </Formik>

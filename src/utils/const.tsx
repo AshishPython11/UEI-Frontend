@@ -14,11 +14,14 @@ export const QUERY_KEYS = {
 
     // CHATADD: "/chat/chatadd",
     // CHATADD: "/chat/chat/fetch-or-generate",
+    // CHATADDRAGMODEL: "/rag-model",
+    // CHATADDOLLAMA: "/ollama-chat",
     CHATADD: "/chat/fetch-from-db",
-    CHATADDRAGMODEL: "/rag-model",
-    CHATADDOLLAMA: "/ollama-chat",
+    CHATADDRAGMODEL: "http://13.233.157.129:5000/rag-model",
+    CHATADDOLLAMA: "http://13.233.157.129:5000/ollama-chat",
     CHATADDAI: "/chat/generate-from-api",
     CHAT_HISTORY:"/Chatbot/add",
+    CHAT_STORE:"/chat/store",
     CHAT_HISTORYCON:"/Chatbot/chat_data_store",
     CHAT_LIST:"/Chatbot/list_based_on_id",
     CHATDELETE:"/Chatbot/delete",
@@ -56,6 +59,21 @@ export const QUERY_KEYS_ENTITY = {
     ENTITY_ADD: "/entity/add",
     ENTITY_EDIT: "/entity/edit",
     ENTITY_DELETE: "/entitydelete",
+
+
+};
+
+export const QUERY_KEYS_CLASS = {
+    GET_CLASS: "/class/list",
+    // GET_ENTITYACTIVE: "/entity/activate",
+    // GET_ENTITYDEACTIVE: "/entity/deactivate",
+    CLASS_ADD: "/class/add",
+    CLASS_EDIT: "/class/edit",
+    CLASS_DELETE: "/class/delete",
+    GET_CLASSACTIVE: "/class/activate",
+    GET_CLASSDEACTIVE: "/class/deactivate",
+    CLASS_GET_EDIT: "/class/get"
+
 
 
 };
@@ -151,6 +169,22 @@ export const QUERY_KEYS_HOBBY = {
     HOBBY_DELETE: "/hobbydelete",
     GET_HOBBYACTIVE: "/hobby/activate",
     GET_HOBBYDEACTIVE: "/hobby/deactivate",
+
+};
+export const QUERY_KEYS_FEEDBACK = {
+    GET_FEEDBACK: "/feedback/list",
+    FEEDBACK_ADD: "/feedback/add",
+    FEEDBACK_EDIT: "/feedback/edit",
+    FEEDBACK_DELETE: "/feedback/delete",
+    GET_FEEDBACK_ACTIVE: "/feedback/activate",
+    GET_FEEDBACK_DEACTIVE: "/feedback/deactivate",
+
+};
+export const QUERY_KEYS_STUDENT_FEEDBACK = {
+    GET_FEEDBACK: "/feedback/all_student_feedback",
+    FEEDBACK_ADD: "/feedback/student_feedback",
+    GET_FEEDBACK_ACTIVE: "/feedback/activate",
+    GET_FEEDBACK_DEACTIVE: "/feedback/deactivate",
 
 };
 export const QUERY_KEYS_ADMIN_BASIC_INFO = {

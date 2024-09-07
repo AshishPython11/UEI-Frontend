@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -28,6 +28,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { LocalizationProvider, DateTimePicker } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { inputfield, inputfieldhover, inputfieldtext, tabletools } from "../../utils/helpers";
+import NameContext from "../Context/NameContext";
 
 interface Language {
   id: string;
@@ -70,7 +72,10 @@ function AdminLenguage() {
     language_id: any;
     proficiency: any;
   }
+  const context = useContext(NameContext);
+    const {namecolor }:any = context;
   const { getData, postData, putData ,deleteData} = useApi();
+
 
   const theme = useTheme();
   const [alllanguage, setAllLanguage] = React.useState<Language[]>([]);
@@ -120,6 +125,7 @@ function AdminLenguage() {
   // });
   };
 
+
   useEffect(() => {
     getData(`${"language/list"}`)
       .then((data: any) => {
@@ -127,6 +133,7 @@ function AdminLenguage() {
           const filteredData = data?.data?.filter((item:any) => item?.is_active === 1);
           setAllLanguage(filteredData ||[]);
           // setAllLanguage(data?.data);
+
         }
       })
       .catch((e) => {
@@ -186,6 +193,7 @@ function AdminLenguage() {
       if (editFalg) {
         postData("admin_language_known/add", payload)
           .then((data: any) => {
+
             if(data.status === 200) {
 
               toast.success("Language saved successfully", {
@@ -198,6 +206,7 @@ function AdminLenguage() {
                 theme: "colored",
               });
             }
+
           })
           .catch((e) => {
             toast.error(e?.message, {
@@ -209,6 +218,7 @@ function AdminLenguage() {
         if (box.id === 0) {
           postData("admin_language_known/add", payload)
             .then((data: any) => {
+
               if(data.status === 200) {
                 toast.success("Language saved successfully", {
                   hideProgressBar: true,
@@ -222,6 +232,7 @@ function AdminLenguage() {
 
               }
                
+
             })
             .catch((e) => {
               toast.error(e?.message, {
@@ -230,6 +241,7 @@ function AdminLenguage() {
               });
             });
         } else {
+
             // console.log("this is kjnfdfsj",payload)
           putData("admin_language_known/edit/" + AdminId, payload)
             .then((data: any) => {
@@ -246,6 +258,7 @@ function AdminLenguage() {
                 });
 
               }
+
             })
             .catch((e) => {
               toast.error(e?.message, {
@@ -284,12 +297,14 @@ function AdminLenguage() {
     );
   };
 
+
   // console.log("boxes sasa", boxes);
+
   return (
     <form onSubmit={saveLanguage}>
       {boxes.map((box, index) => (
         <div className="row d-flex justify-content-start align-items-center mt-4 ">
-          <div className="col-md-4 ">
+          <div className="col-md-4 form_field_wrapper ">
             <FormControl required sx={{ m: 1, minWidth: 320, width: "100%" }}>
               <InputLabel id="demo-simple-select-required-label">
                 Language
@@ -305,12 +320,21 @@ function AdminLenguage() {
                 }}
               >
                 {alllanguage.map((lang) => (
-                  <MenuItem value={lang.id}>{lang.language_name}</MenuItem>
+                  <MenuItem value={lang.id}
+                  sx={{
+                    backgroundColor: inputfield(namecolor),
+                    color: inputfieldtext(namecolor),
+                    '&:hover': {
+                        backgroundColor: inputfieldhover(namecolor), 
+                    },
+                }}
+                  
+                  >{lang.language_name}</MenuItem>
                 ))}
               </Select>
             </FormControl>
           </div>
-          <div className="col-md-4 col-sm-3">
+          <div className="col-md-4 col-sm-3 form_field_wrapper">
             <FormControl required sx={{ m: 1, minWidth: 220, width: "100%" }}>
               <InputLabel id="demo-simple-select-required-label">
                 Proficiency
@@ -325,20 +349,45 @@ function AdminLenguage() {
                   handleChange1(e, index);
                 }}
               >
-                <MenuItem value={"read"}>Read</MenuItem>
-                <MenuItem value={"write"}>Write</MenuItem>
-                <MenuItem value={"both"}>Both</MenuItem>
+                <MenuItem value={"read"} 
+                 sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}
+                >Read</MenuItem>
+                <MenuItem value={"write"}
+                 sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}
+                >Write</MenuItem>
+                <MenuItem value={"both"}
+                 sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}
+                >Both</MenuItem>
               </Select>
             </FormControl>
           </div>
           <div className="col-md-4 col-sm-3">
-            <IconButton onClick={addRow} sx={{ width: "35px", height: "35px" }}>
+            <IconButton onClick={addRow} sx={{ width: "35px", height: "35px",color: tabletools(namecolor)  }}>
               <AddIcon />
             </IconButton>
             {boxes.length !== 1 && (
               <IconButton
                 onClick={() => deleterow(box.id,index)}
-                sx={{ width: "35px", height: "35px", color: "#f70404b8" }}
+                sx={{ width: "35px", height: "35px", color: tabletools(namecolor) }}
+
               >
                 <DeleteIcon />
               </IconButton>
@@ -348,8 +397,8 @@ function AdminLenguage() {
       ))}
       <div className="row justify-content-center">
         <div className="col-md-12">
-          <button className="btn btn-primary" style={{ marginTop: "25px" }}>
-            save your language
+          <button className="btn btn-primary mainbutton" style={{ marginTop: "25px" }}>
+            Save your language
           </button>
         </div>
       </div>

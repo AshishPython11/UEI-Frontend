@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { Field, Form, Formik, FormikProps, setNestedObjectValues } from 'formik';
 import * as Yup from 'yup';
-import { deepEqual } from '../../utils/helpers';
+import { deepEqual, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 interface IAdminDescription {
     description: string
  }
@@ -21,6 +22,8 @@ export default function AdminDescription() {
         description: "",
        
     };
+    const context = React.useContext(NameContext);
+    const {namecolor }:any = context;
     let adminId = localStorage.getItem('_id')
     const { getData, postData, putData,loading } = useApi();
     const [description, setDesctiption] = useState(initialState);
@@ -99,7 +102,7 @@ export default function AdminDescription() {
                     const response=await postData('admin_profile_description/add', paylod);
           
                     if (response?.status === 200) {
-                        toast.success("Profile description saved successfully", {
+                        toast.success("Admin description saved successfully", {
                             hideProgressBar: true,
                             theme: "colored"
                         })
@@ -126,7 +129,7 @@ export default function AdminDescription() {
                     const response=await putData('admin_profile_description/edit/'+adminId,paylod);
         
                     if(response?.status === 200){
-                         toast.success("Profile description updated successfully",{
+                         toast.success("Admin description updated successfully",{
                             hideProgressBar:true,
                             theme:"colored"
                          })
@@ -168,6 +171,7 @@ export default function AdminDescription() {
             .required("Please enter Description")
     })
     return (
+
           
             <Formik
         onSubmit={(formData) => submitHandle(formData)}
@@ -181,9 +185,9 @@ export default function AdminDescription() {
         {({ errors, values ,touched , isValid, dirty}:any) => (
             <Form>
 
-                <Card style={{ margin: "15px" }}>
+                <Card className='description' style={{ margin: "15px" }}>
 
-                    <CardContent>
+                    <CardContent className='description'>
                         {/* <TextField
                             id="description"
                             label="Description *"
@@ -194,6 +198,7 @@ export default function AdminDescription() {
                             value={values.description}
                             onChange={handleChange}
                         /> */}
+                        
                             <Field
                                 id="description"
                                 label="Description *"
@@ -206,6 +211,17 @@ export default function AdminDescription() {
                                 margin="normal"
                                 value={values?.description}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "description")}
+                                InputProps={{
+                                    style: {
+                                        color: inputfieldtext(namecolor), // Change this to your desired text color
+                                    },
+                                }}
+                                InputLabelProps={{
+                                    style: {
+                                        color:inputfieldtext(namecolor), // Change this to your desired label color
+                                    },
+                                }}
+                                
                             />
                             {touched?.description && errors?.description ?
                                 <p style={{ color: 'red' }}>{errors?.description}</p> : <></>
@@ -215,8 +231,9 @@ export default function AdminDescription() {
                 <div className='row justify-content-center' style={{margin:"10px"}}>
 
                     <div className="col-2">
-                        <button className='btn btn-primary'  >{editFalg?"save":"save changes"}</button>
+                        <button className='btn btn-primary  mainbutton'  >{editFalg?"save":"save changes"}</button>
                     </div>
+
                 </div>
             </Form>
         )}

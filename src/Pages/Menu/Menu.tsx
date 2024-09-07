@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import '../Menu/Menu.scss';
 import useApi from "../../hooks/useAPI";
@@ -11,10 +11,13 @@ import { QUERY_KEYS_MENU } from '../../utils/const';
 import { DeleteDialog } from '../../Components/Dailog/DeleteDialog';
 import { toast } from 'react-toastify';
 import FullScreenLoader from '../Loader/FullScreenLoader';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, tabletools } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 
 const Menu = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const location = useLocation();
     const pathSegments = location.pathname.split('/').filter(Boolean);
     const lastSegment = pathSegments[pathSegments.length - 1].toLowerCase();
@@ -46,6 +49,7 @@ const Menu = () => {
     const [dataDelete, setDataDelete] = useState(false)
     const [dataDeleteId, setDataDeleteId] = useState("")
     const callAPI = async () => {
+
         getData(`${MenuURL}`).then((data: any) => {
             // const linesInfo = data || [];
             // dispatch(setLine(linesInfo))
@@ -58,6 +62,7 @@ const Menu = () => {
                 theme: "colored",
             });
         });
+
     }
     useEffect(() => {
         callAPI()
@@ -75,6 +80,7 @@ const Menu = () => {
         setDataDelete(true)
 
     }
+
     // const handleDelete = async (id: any) => {
     //     try {
     // deleteData(`${DeleteMenuURL}/${id}`).then((data: any) => {
@@ -112,6 +118,7 @@ const Menu = () => {
     };
 
     return (
+
         <>
          {loading && <FullScreenLoader />}
             <div className='dashboard'>
@@ -126,6 +133,7 @@ const Menu = () => {
                                     </Typography>
                                     {filteredData?.form_data?.is_save === true && (
                                             <Button
+                                             className='mainbutton'
                                                 variant="contained"
                                                 component={NavLink}
                                                 to="add-Menu"
@@ -165,7 +173,7 @@ const Menu = () => {
                                                 {filteredData?.form_data?.is_update === true && (
                                                     <Tooltip arrow placement="right" title="Edit">
                                                         <IconButton
-                                                            sx={{ width: "35px", height: "35px" }}
+                                                            sx={{ width: "35px", height: "35px" ,color:tabletools(namecolor)  }}
                                                             onClick={() => {
                                                                 handleEditFile(row?.row?.original?.id);
                                                             }}
@@ -176,7 +184,7 @@ const Menu = () => {
                                                  )}  
                                                 <Tooltip arrow placement="right" title="Delete">
                                                     <IconButton
-                                                        sx={{ width: "35px", height: "35px" }}
+                                                        sx={{ width: "35px", height: "35px"  ,color:tabletools(namecolor)}}
                                                         onClick={() => {
                                                             handleDeleteFiles(row?.row?.original?.id)
                                                         }}

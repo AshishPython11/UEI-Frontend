@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useContext, useEffect, useState } from "react";
+
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -19,9 +21,12 @@ import {
 import "react-toastify/dist/ReactToastify.css";
 import useApi from "../../hooks/useAPI";
 import { toast } from "react-toastify";
-import { deepEqual } from "../../utils/helpers";
+import { deepEqual, inputfield, inputfieldhover, inputfieldtext } from "../../utils/helpers";
+import NameContext from "../Context/NameContext";
 
 function StudentcontactDetails() {
+  const context = useContext(NameContext);
+  const {namecolor }:any = context;
   const { getData, postData, putData } = useApi();
   const [contcodeWtsap, setContcodeWtsap] = useState("+91");
   const [whatsappNum, setWhatsappNum] = useState("");
@@ -182,12 +187,15 @@ function StudentcontactDetails() {
 
   return (
     <form onSubmit={submitHandel}>
+
       {/* <div className=' mt-5'> */}
       <div className='d-flex justify-content-start mt-5' style={{ margin: '25px' }}>
         <div className='row'>
           {/* <label className="pb-2">Mobile Number *</label> */}
           <label style={{ textAlign: "left", margin: "10px" }}>Mobile Number *</label>
-          <div className='col'>
+
+          <div className='col form_field_wrapper'>
+
             <FormControl required fullWidth>
               <InputLabel id="demo-simple-select-label">
                 Country code
@@ -199,13 +207,34 @@ function StudentcontactDetails() {
                 label="Country code"
                 onChange={(event) => setContcodePhone(event.target.value)}
               >
-                <MenuItem value={"+91"}>+91</MenuItem>
-                <MenuItem value={"+971"}>+971</MenuItem>
-                <MenuItem value={"+1"}>+1</MenuItem>
+                <MenuItem value={"+91"}
+                    sx={{
+                      backgroundColor: inputfield(namecolor),
+                      color: inputfieldtext(namecolor),
+                      '&:hover': {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                      },
+                  }}>+91</MenuItem>
+                <MenuItem value={"+971"}
+                    sx={{
+                      backgroundColor: inputfield(namecolor),
+                      color: inputfieldtext(namecolor),
+                      '&:hover': {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                      },
+                  }}>+971</MenuItem>
+                <MenuItem value={"+1"}
+                    sx={{
+                      backgroundColor: inputfield(namecolor),
+                      color: inputfieldtext(namecolor),
+                      '&:hover': {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                      },
+                  }}>+1</MenuItem>
               </Select>
             </FormControl>
           </div>
-          <div className='col'>
+          <div className='col form_field_wrapper'>
             <TextField
               className="form-control"
               type='text'
@@ -222,10 +251,10 @@ function StudentcontactDetails() {
       </div>
       {/* <div className="mt-3"> */}
       <div className='d-flex justify-content-start mt-3' style={{ margin: '25px' }}>
-        <div className="row ">
+        <div className="row">
           {/* <label className="pb-2"> Whatsapp Number </label> */}
           <label style={{ textAlign: "left", margin: "10px" }}>Whatsapp Number </label>
-          <div className="col">
+          <div className="col form_field_wrapper">
             <FormControl 
             // required
              fullWidth>
@@ -239,13 +268,34 @@ function StudentcontactDetails() {
                 label="Country code"
                 onChange={(event) => setContcodeWtsap(event.target.value)}
               >
-                <MenuItem value={"+91"}>+91</MenuItem>
-                <MenuItem value={"+971"}>+971</MenuItem>
-                <MenuItem value={"+1"}>+1</MenuItem>
+                <MenuItem value={"+91"}
+                    sx={{
+                      backgroundColor: inputfield(namecolor),
+                      color: inputfieldtext(namecolor),
+                      '&:hover': {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                      },
+                  }}>+91</MenuItem>
+                <MenuItem value={"+971"}
+                    sx={{
+                      backgroundColor: inputfield(namecolor),
+                      color: inputfieldtext(namecolor),
+                      '&:hover': {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                      },
+                  }}>+971</MenuItem>
+                <MenuItem value={"+1"}
+                    sx={{
+                      backgroundColor: inputfield(namecolor),
+                      color: inputfieldtext(namecolor),
+                      '&:hover': {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                      },
+                  }}>+1</MenuItem>
               </Select>
             </FormControl>
           </div>
-          <div className="col">
+          <div className="col form_field_wrapper">
             <TextField
               type="text"
               placeholder="Enter Whatsapp number"
@@ -260,11 +310,13 @@ function StudentcontactDetails() {
           </div>
         </div>
       </div>
+
       
       <div className='row d-flex justify-content-start mt-3' style={{marginLeft:"1%"}}>
-        <div className='col-4'>
+        <div className='col-4 form_field_wrapper'>
           {/* <label>{""}   E-mail <span></span></label> */}
           <label style={{ textAlign: "left", margin: "5px" }}> Email Id </label>
+
           <TextField
             type='email'
             className="form-control"
@@ -276,17 +328,19 @@ function StudentcontactDetails() {
             disabled
             error={!!errors.email}
             helperText={errors.email}
-            sx={{width: 480}}
+            sx={{width: 480 ,color:inputfieldtext(namecolor)}}
             
           />
         </div>
 
       </div>
       <div className='col-6 d-flex justify-content-center mt-3'>
-        <button className='btn btn-primary'> {editFalg ? "save" : "Save Changes"}</button>
+        <button className='btn btn-primary mainbutton'> {editFalg ? "save" : "Save Changes"}</button>
       </div>
     </form>
   );
 }
 
+
 export default StudentcontactDetails;
+

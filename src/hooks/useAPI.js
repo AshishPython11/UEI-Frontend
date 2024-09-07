@@ -4,8 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { httpClient } from "../utils/http-client";
 
 const useApi = () => {
+
   const utoken = localStorage.getItem("token");
-  const baseUrl = "http://3.110.33.158:5000/";
+  const baseUrl = "https://3.110.33.158:5000/";
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -13,7 +15,9 @@ const useApi = () => {
   const headers = {
     Authorization: `${token}`,
   };
-  const loginUrl = `http://13.232.7.220:5000/auth/login`;
+
+  // const loginUrl = `http://13.232.7.220:5000/auth/login`;
+
   // const getData = async (url,id) => {
   //   setLoading(true);
   //   setError(null);
@@ -28,6 +32,7 @@ const useApi = () => {
   //     throw error; // Re-throw the error for the caller to handle
   //   }
   // };
+  
   const getData = async (url, id) => {
     setLoading(true);
     setError(null);
@@ -120,14 +125,16 @@ const useApi = () => {
       throw error;
     }
   };
+
+  
   const postFileData = async (url, data, redirectUrl = null) => {
     setLoading(true);
     setError(null);
-  // console.log(data)
+    // console.log(data)
     try {
       const response = await httpClient.post(url, data, {
         headers: {
-           Authorization: `${token}`,
+          Authorization: `${token}`,
           'Content-Type': 'multipart/form-data',
         },
       });
@@ -142,7 +149,24 @@ const useApi = () => {
       throw error;
     }
   };
-  return { getData, postData, putData, patchData, deleteData, loading, error,postFileData };
+
+  const deleteFileData = async (url, payload) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // console.log("url", url);
+      const response = await httpClient.delete(url, { headers,data: JSON.stringify(payload) });
+      setLoading(false);
+      return response?.data;
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+      throw error;
+    }
+  };
+
+  return { getData, postData, putData, patchData, deleteData, postFileData, deleteFileData, loading, error };
 };
 
 export default useApi;

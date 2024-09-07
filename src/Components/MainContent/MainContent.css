@@ -92,7 +92,7 @@
    /* src/components/MainContent.css */
 .main-content {
     flex: 1;
-    background-color: #ECF0F1;
+    background-color: var(--cardbodycolor);
     padding: 20px;
   }
   
@@ -120,11 +120,12 @@
   }
   
   .stat-item {
-    background-color: #fff;
+    /* background-color: #fff; */
+    background-color:var(--cardcolor);
     padding: 20px;
     border-radius: 5px;
     text-align: center;
-    width: 15%;
+ 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
   
@@ -140,7 +141,7 @@
   }
   
   .chart {
-    background-color: #fff;
+    background-color:var(--cardcolor) !important;
     padding: 20px;
     border-radius: 5px;
     /* width: 48%; */
@@ -154,7 +155,8 @@
 }
 
 .stats .stat-item {
-    background-color: #f8f9fa;
+    /* background-color: #f8f9fa; */
+    background-color:var(--cardcolor);
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -162,12 +164,14 @@
 .stat-item h2 {
     font-size: 2rem;
     margin-top: 10px;
-    color: #2c3e50;
+    /* color: #2c3e50; */
+    color: var(--cardvaluecolor);
 }
 
 .stat-item p {
     font-size: 1.2rem;
-    color: #7f8c8d;
+    /* color: #7f8c8d; */
+    color: var(--cardtextcolor);
 }
 
 .charts {

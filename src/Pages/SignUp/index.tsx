@@ -41,6 +41,7 @@ const Signup = () => {
   const [issuccess, setIssuccess] = useState(false);
   const [msg, setMsg] = useState("");
 
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue((event.target as HTMLInputElement).value);
   };
@@ -58,6 +59,7 @@ const Signup = () => {
   ) => {
     if (reason === "clickaway") {
       return;
+
     }
 
     setIssuccess(false);
@@ -310,7 +312,7 @@ const Signup = () => {
                     )}
                   </div>
                 )} */}
-                  <div className="form_field_wrapper">
+                  <div className="form_field_wrapper-login">
                     <TextField
                       id="emailphone"
                       value={emailphone}
@@ -327,6 +329,24 @@ const Signup = () => {
                       error={!!errorEmail}
                       helperText={errorEmail}
                       required={true}
+                      sx={{
+                        '& input:-webkit-autofill': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important', // Set the background color you want
+                          WebkitTextFillColor: 'black !important', // Set the text color you want
+                        },
+                        '& input:-webkit-autofill:hover': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                        '& input:-webkit-autofill:focus': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                        '& input:-webkit-autofill:active': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                      }}
                     />
                     {/* {uservalue === "userid" && (
                     <small className="text-danger">
@@ -334,7 +354,7 @@ const Signup = () => {
                     </small>
                   )} */}
                   </div>
-                  <div className="form_field_wrapper">
+                  <div className="form_field_wrapper-login">
                     <TextField
                       type={showPassword ? "text" : "password"}
                       placeholder="Password"
@@ -366,6 +386,24 @@ const Signup = () => {
                             </IconButton>
                           </InputAdornment>
                         ),
+                      }}
+                      sx={{
+                        '& input:-webkit-autofill': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important', // Set the background color you want
+                          WebkitTextFillColor: 'black !important', // Set the text color you want
+                        },
+                        '& input:-webkit-autofill:hover': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                        '& input:-webkit-autofill:focus': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                        '& input:-webkit-autofill:active': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
                       }}
                       fullWidth
                     />

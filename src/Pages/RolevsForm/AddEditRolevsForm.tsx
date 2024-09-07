@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../Form/Form.scss';
 import useApi from '../../hooks/useAPI';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
 import { Form, Formik, FormikHelpers, setNestedObjectValues } from 'formik';
 import * as Yup from 'yup';
 import { MenuListinter } from '../../Components/Table/columns';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, inputfield, inputfieldhover, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 interface IRolevsForm {
     role_master_id: string,
     form_master_id: string,
@@ -17,6 +18,8 @@ interface IRolevsForm {
     is_search:boolean
 }
 const AddEditRolevsForm = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const RolevsFormAddURL = QUERY_KEYS_ROLEVSFORM.ROLEVSFORM_ADD;
     const RolevsFormEditURL = QUERY_KEYS_ROLEVSFORM.ROLEVSFORM_EDIT;
     const RoleURL = QUERY_KEYS_ROLE.GET_ROLE;
@@ -287,10 +290,31 @@ const AddEditRolevsForm = () => {
                                                         name="role_master_id"
                                                         value={values?.role_master_id}
                                                         variant="outlined"
+                                                        sx={{
+                                                            backgroundColor: inputfield(namecolor) , 
+                                                            color: inputfieldtext(namecolor) 
+                                                        }}
+                                                        MenuProps={{
+                                                            PaperProps: {
+                                                                style: {
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor)
+                                                                },
+                                                            },
+                                                        }}
+                                                        
                                                     >
                                                         {
                                                             dataRole?.map((item: any) => (
-                                                                <MenuItem value={item.id}>{item.role_name}</MenuItem>
+                                                                <MenuItem value={item.id}
+                                                                sx={{
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor),
+                                                                    '&:hover': {
+                                                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                                                    },
+                                                                }}
+                                                                >{item.role_name}</MenuItem>
                                                             ))
                                                         }
 
@@ -311,10 +335,31 @@ const AddEditRolevsForm = () => {
                                                         name="form_master_id"
                                                         value={values?.form_master_id}
                                                         variant="outlined"
+                                                        sx={{
+                                                            backgroundColor: inputfield(namecolor) , 
+                                                            color: inputfieldtext(namecolor) 
+                                                        }}
+                                                        MenuProps={{
+                                                            PaperProps: {
+                                                                style: {
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor)
+                                                                },
+                                                            },
+                                                        }}
                                                     >
                                                         {
                                                             dataForm?.map((item: any) => (
-                                                                <MenuItem value={item.id}>{item.form_name}</MenuItem>
+                                                                <MenuItem value={item.id}
+                                                                sx={{
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor),
+                                                                    '&:hover': {
+                                                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                                                    },
+                                                                }}
+                                                                
+                                                                >{item.form_name}</MenuItem>
                                                             ))
                                                         }
 
@@ -328,15 +373,15 @@ const AddEditRolevsForm = () => {
                                     
                                         <div className='col-md-4'>
                                             <div className="form_field_wrapper">
-                                                <Typography sx={{ marginLeft: "15px", display: "flex", alignItems: "flex-start" }}>Is Search</Typography>
+                                                <Typography sx={{ marginLeft: "15px", display: "flex", alignItems: "flex-start" , color: inputfieldtext(namecolor) }}>Is Search</Typography>
                                                 <RadioGroup
                                                     row
                                                     name="is_search"
                                                     value={values.is_search}
                                                     onChange={handleChangemenuVisible}
                                                 >
-                                                    <FormControlLabel value={true} control={<Radio />} label="Yes" />
-                                                    <FormControlLabel value={false} control={<Radio />} label="No" />
+                                                    <FormControlLabel value={true} control={<Radio className='radiobutton' />} label="Yes" />
+                                                    <FormControlLabel value={false} control={<Radio className='radiobutton' />} label="No" />
                                                 </RadioGroup>
                                             </div>
                                             {errors.is_search  && touched.is_search ?
@@ -345,15 +390,15 @@ const AddEditRolevsForm = () => {
                                         </div>
                                         <div className='col-md-4'>
                                             <div className="form_field_wrapper">
-                                                <Typography sx={{ marginLeft: "15px", display: "flex", alignItems: "flex-start" }}>Is Save</Typography>
+                                                <Typography sx={{ marginLeft: "15px", display: "flex", alignItems: "flex-start" , color: inputfieldtext(namecolor),}}>Is Save</Typography>
                                                 <RadioGroup
                                                     row
                                                     name="is_save"
                                                     value={values.is_save}
                                                     onChange={handleChangemenuVisible}
                                                 >
-                                                    <FormControlLabel value={true} control={<Radio />} label="Yes" />
-                                                    <FormControlLabel value={false} control={<Radio />} label="No" />
+                                                    <FormControlLabel value={true} control={<Radio className='radiobutton' />} label="Yes" />
+                                                    <FormControlLabel value={false} control={<Radio className='radiobutton'/>} label="No" />
                                                 </RadioGroup>
                                             </div>
                                             {errors.is_save  && touched.is_save ?
@@ -362,15 +407,15 @@ const AddEditRolevsForm = () => {
                                         </div>
                                         <div className='col-md-4'>
                                             <div className="form_field_wrapper">
-                                                <Typography sx={{ marginLeft: "15px", display: "flex", alignItems: "flex-start" }}>Is Update</Typography>
+                                                <Typography sx={{ marginLeft: "15px", display: "flex", alignItems: "flex-start" , color: inputfieldtext(namecolor),}}>Is Update</Typography>
                                                 <RadioGroup
                                                     row
                                                     name="is_update"
                                                     value={values.is_update}
                                                     onChange={handleChangemenuVisible}
                                                 >
-                                                    <FormControlLabel value={true} control={<Radio />} label="Yes" />
-                                                    <FormControlLabel value={false} control={<Radio />} label="No" />
+                                                    <FormControlLabel value={true} control={<Radio className='radiobutton' />} label="Yes" />
+                                                    <FormControlLabel value={false} control={<Radio className='radiobutton' />} label="No" />
                                                 </RadioGroup>
                                             </div>
                                             {errors.is_update  && touched.is_update ?
@@ -378,7 +423,7 @@ const AddEditRolevsForm = () => {
                                             }
                                         </div>
                                     </div>
-                                    <button className='btn btn-primary'  >{id ? "Update" : "Save"}</button>
+                                    <button className='btn btn-primary mainbutton'  >{id ? "Update" : "Save"}</button>
                                     </Form>
                             )}
                         </Formik>

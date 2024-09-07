@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../Department/Department.scss';
 import TextField from '@mui/material/TextField';
 import { Typography } from '@mui/material';
@@ -9,9 +9,12 @@ import { toast } from 'react-toastify';
 import { DepartmentRep0oDTO, MenuListinter } from '../../Components/Table/columns';
 import { Field, Form, Formik, FormikHelpers, FormikProps, setNestedObjectValues } from 'formik';
 import * as Yup from 'yup';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, inputfield, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 const AddEditDepartment = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const DepartmentAddURL = QUERY_KEYS_DEPARTMENT.DEPARTMENT_ADD;
     const DepartmentEditURL = QUERY_KEYS_DEPARTMENT.DEPARTMENT_EDIT;
     const { getData, postData, putData } = useApi()
@@ -143,7 +146,7 @@ const AddEditDepartment = () => {
             .required("Please enter Department name")
             .matches(/^[a-zA-Z\s]*$/, 'Please enter a valid Department name only characters allowed.')
     })
-
+console.log("ttttt",inputfield(namecolor))
     return (
         <div className='profile_section'>
             <div className='card'>
@@ -173,6 +176,17 @@ const AddEditDepartment = () => {
                                                 name="department_name"
                                                 value={values?.department_name}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                                                InputProps={{
+                                                    style: {
+                                                        backgroundColor: inputfield(namecolor) ,
+                                                        // backgroundColor:'red' ,
+                                                    }
+                                                }}
+                                                InputLabelProps={{
+                                                    style: {
+                                                        color: inputfieldtext(namecolor)
+                                                    }
+                                                }}
                                             />
                                             {touched?.department_name && errors?.department_name ?
                                                 <p style={{ color: 'red' }}>{errors?.department_name}</p> : <></>
@@ -180,7 +194,7 @@ const AddEditDepartment = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <button className='btn btn-primary'  >{id ? "Update" : "Save"}</button>
+                                <button className='btn btn-primary mainbutton'  >{id ? "Update" : "Save"}</button>
                             </Form>
                         )}
                     </Formik>

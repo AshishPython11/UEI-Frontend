@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "../Subject/Subject.scss";
 import TextareaAutosize from 'react-textarea-autosize';
 import TextField from "@mui/material/TextField";
@@ -13,7 +13,8 @@ import { toast } from "react-toastify";
 import { Field, Form, Formik, FormikHelpers, FormikProps, setNestedObjectValues } from 'formik';
 import * as Yup from 'yup';
 import { MenuListinter } from "../../Components/Table/columns";
-import { dataaccess } from "../../utils/helpers";
+import { dataaccess, inputfield, inputfieldtext } from "../../utils/helpers";
+import NameContext from "../Context/NameContext";
 
 
 interface ISubjectForm {
@@ -21,6 +22,8 @@ interface ISubjectForm {
   // created_by: string
 }
 const AddEditSubject = () => {
+  const context = useContext(NameContext);
+  const {namecolor }:any = context;
   const SubjectAddURL = QUERY_KEYS_SUBJECT.SUBJECT_ADD;
   const SubjectEditURL = QUERY_KEYS_SUBJECT.SUBJECT_EDIT;
   const { getData, postData, putData } = useApi();
@@ -256,7 +259,7 @@ const AddEditSubject = () => {
                 <div className="col-md-4 mt-2">
                   <div className="col">
                     <Grid item xs={12}>
-                      <Typography variant="h6">Upload a Photo</Typography>
+                      <Typography variant="h6" sx={{color:inputfieldtext(namecolor)}}>Upload a Photo</Typography>
                     </Grid>
                     <Grid item xs={12}>
                       <input
@@ -268,6 +271,7 @@ const AddEditSubject = () => {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "menu_image")}
                         id="file-upload"
                         name='menu_image'
+                        style={{ color:inputfieldtext(namecolor)}}
                       />
 
                       {/* {selectedFile && (
@@ -279,13 +283,13 @@ const AddEditSubject = () => {
               </div>
               <div className="row mt-4">
                 <div className="col-md-4">
-                  <InputLabel className="text-secondary">
+                  <InputLabel className="text-secondary" sx={{color:inputfieldtext(namecolor)}}>
                     Description
                   </InputLabel>
                   <TextareaAutosize
                     aria-label="empty textarea"
                     minRows={5} 
-                    style={{ width: "100%", fontSize:"1rem"}} 
+                    style={{ width: "100%", fontSize:"1rem" ,backgroundColor:inputfield(namecolor) , color:inputfieldtext(namecolor) }} 
                     placeholder="Enter your text here..."
                     name="description"
                     value={values.description}
@@ -294,7 +298,7 @@ const AddEditSubject = () => {
                 </div>
               </div>
               <div className=" mt-3">
-                <button className="btn btn-primary">
+                <button className="btn btn-primary mainbutton">
                   {id ? "Update" : "Save"}
                 </button>
               </div>

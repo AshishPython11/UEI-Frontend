@@ -93,3 +93,85 @@ export const dataaccess = (Menulist: any,lastSegment: any,urlcheck:any,datatest:
      
   }
 }
+
+export const tabletools =(themes: any)=>{
+  const tabletools:any = {
+    light:'#547476',dark:'#00D1D9',default:'#547476'
+  }
+  return tabletools[themes]
+}
+
+export const inputfield =(themes: any)=>{
+  const tabletools:any = {
+    light:'#FFFFFF',dark:'#151E26',default:'#FFFFFF'
+  }
+  return tabletools[themes]
+}
+export const inputfieldselect =(themes: any)=>{
+  const tabletools:any = {
+    light:'#F4F7F7',dark:'#1d2a35',default:'#F4F7F7'
+  }
+  return tabletools[themes]
+}
+export const inputfieldtext =(textcolor: any)=>{
+  const inputtext:any = {
+    light:'#1C1C1C',dark:'#FFFFFF',default:'#1C1C1C'
+  }
+  return inputtext[textcolor]
+}
+export const inputfieldtextselect =(textcolor: any)=>{
+  const inputtext:any = {
+    light:'#1C1C1C',dark:'#FFFFFF',default:'#1C1C1C'
+  }
+  return inputtext[textcolor]
+}
+export const inputfieldhover =(textcolor: any)=>{
+  const inputtext:any = {
+    light:'#edf4fb',dark:'#152533',default:'#edf4fb'
+  }
+  return inputtext[textcolor]
+}
+
+export const chatdialog =(themes: any)=>{
+  const tabletools:any = {
+    light:'#F4F7F7',dark:'#151E26',default:'#F4F7F7'
+  }
+  return tabletools[themes]
+}
+export const chattextbgright =(themes: any)=>{
+  const tabletools:any = {
+    light:'#003032',dark:'#2f2f2f',default:'#003032'
+  }
+  return tabletools[themes]
+}
+export const chattextbgleft =(themes: any)=>{
+  const tabletools:any = {
+    light:'#f1f1f1',dark:'#f1f1f1',default:'#f1f1f1'
+  }
+  return tabletools[themes]
+}
+export const chattextright =(themes: any)=>{
+  const tabletools:any = {
+    light:'#FFFFFF',dark:'#FFFFFF',default:'#FFFFFF'
+  }
+  return tabletools[themes]
+}
+export const chattextleft =(themes: any)=>{
+  const tabletools:any = {
+    light:'#000',dark:'#000',default:'#000'
+  }
+  return tabletools[themes]
+}
+export const chatdatetext =(themes: any)=>{
+  const tabletools:any = {
+    light:'#1C1C1C',dark:'#F4F7F7',default:'#1C1C1C'
+  }
+  return tabletools[themes]
+}
+export const chatcalandericon =(themes: any)=>{
+  const tabletools:any = {
+    light:'#024F52',dark:'#2f2f2f',default:'#024F52'
+  }
+  return tabletools[themes]
+}
+    

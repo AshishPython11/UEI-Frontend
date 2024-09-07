@@ -1,4 +1,6 @@
+
 import React, { useContext, useEffect, useState } from "react";
+
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -275,7 +277,7 @@ function StudentBasicInfo() {
           }
           
         setError1('');
-        console.log('file',file)
+        // console.log('file',file)
         const reader: any = new FileReader();
         reader.onloadend = () => {
           setFilePreview(reader.result);
@@ -573,7 +575,7 @@ function StudentBasicInfo() {
   return (
     <form onSubmit={submitHandel}>
       <div className="row d-flex mt-5">
-        <div className="col-md-6 pb-3">
+        <div className="col-md-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             First Name <span>*</span>
@@ -595,7 +597,7 @@ function StudentBasicInfo() {
           {/* {error.first_name && <span style={{ color: 'red' }}>{error.first_name}</span>} */}
         </div>
 
-        <div className="col-md-6 pb-3">
+        <div className="col-md-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Last Name <span>*</span>
@@ -617,7 +619,7 @@ function StudentBasicInfo() {
           {/* {error.last_name && <span style={{ color: 'red' }}>{error.last_name}</span>} */}
         </div>
 
-        <div className="col-md-6 pb-3">
+        <div className="col-md-6 pb-3 form_field_wrapper">
           <FormControl>
             <FormLabel id="demo-row-radio-buttons-group-label">
               Gender *
@@ -625,17 +627,17 @@ function StudentBasicInfo() {
             <RadioGroup
               row
               name="gender"
-              value={basicInfo.gender}
+              value={basicInfo.gender?.toLowerCase()}
               onChange={handleChange}
-            >
+            > 
               <FormControlLabel
                 value="male"
-                control={<Radio  />}
+                control={<Radio className='radiobutton'  />}
                 label="Male"
               />
               <FormControlLabel
                 value="female"
-                control={<Radio />}
+                control={<Radio className='radiobutton' />}
                 label="Female"
               />
             </RadioGroup>
@@ -646,8 +648,8 @@ function StudentBasicInfo() {
             )}
           </div>
         </div>
-        <div className="col-md-6 pb-3">
-          <Typography variant="body1">
+        <div className="col-md-6 pb-3 form_field_wrapper">
+          <Typography className="profiletext" variant="body1">
             Date of Birth <span>*</span>
           </Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -666,7 +668,7 @@ function StudentBasicInfo() {
           {/* <div>{error.dob && <span style={{ color: 'red' }}>{error.dob}</span>}</div> */}
         </div>
 
-        <div className="col-md-6 pb-3">
+        <div className="col-md-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Father Name <span>*</span>
@@ -688,7 +690,7 @@ function StudentBasicInfo() {
           {/* {error.father_name && <span style={{ color: 'red' }}>{error.father_name}</span>} */}
         </div>
 
-        <div className="col-md-6 pb-3 ">
+        <div className="col-md-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Mother Name <span>*</span>
@@ -710,7 +712,7 @@ function StudentBasicInfo() {
           {/* {error.mother_name && <span style={{ color: 'red' }}>{error.mother_name}</span>} */}
         </div>
 
-        <div className="col-md-6 pb-3">
+        <div className="col-md-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Guardian Name <span></span>
@@ -729,7 +731,7 @@ function StudentBasicInfo() {
           {/* {error.guardian_name && <span style={{ color: 'red' }}>{error.guardian_name}</span>} */}
         </div>
 
-        <div className="col-md-6 pb-3">
+        <div className="col-md-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Aim <span></span>
@@ -786,7 +788,7 @@ function StudentBasicInfo() {
         </div>
       </div>
       <div className="d-flex justify-content-center mt-5">
-        <button className="btn btn-primary sunbutton" type="submit">
+        <button className="btn btn-primary sunbutton mainbutton" type="submit">
          {editFalg ? "Save" : "Save Changes"}
         </button>
       </div>
@@ -795,3 +797,4 @@ function StudentBasicInfo() {
 }
 
 export default StudentBasicInfo;
+

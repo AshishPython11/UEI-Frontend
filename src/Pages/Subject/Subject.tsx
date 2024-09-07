@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import '../Subject/Subject.scss';
 import useApi from "../../hooks/useAPI";
@@ -11,7 +11,8 @@ import { QUERY_KEYS_SUBJECT } from '../../utils/const';
 import { toast } from 'react-toastify';
 import { DeleteDialog } from '../../Components/Dailog/DeleteDialog';
 import FullScreenLoader from '../Loader/FullScreenLoader';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, tabletools } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 interface RowData {
     patientname: string;
@@ -27,6 +28,8 @@ interface RowData {
 
 
 const Subject = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const location = useLocation();
     const pathSegments = location.pathname.split('/').filter(Boolean);
     const lastSegment = pathSegments[pathSegments.length - 1].toLowerCase();
@@ -60,6 +63,7 @@ const Subject = () => {
     const [dataDelete, setDataDelete] = useState(false)
     const [dataDeleteId, setDataDeleteId] = useState("")
     const callAPI = async () => {
+
         getData(`${SubjectURL}`).then((data: any) => {
             // const linesInfo = data || [];
             // dispatch(setLine(linesInfo))
@@ -81,6 +85,7 @@ const Subject = () => {
         navigate(`edit-Subject/${id}`)
     };
     const handlecancel = () => {
+
 
         setDataDelete(false)
     };
@@ -120,6 +125,7 @@ const Subject = () => {
                                     </Typography>
                                     { filteredData?.form_data?.is_save === true && (
                                             <Button
+                                             className='mainbutton'
                                                 variant="contained"
                                                 component={NavLink}
                                                 to="add-Subject"
@@ -159,7 +165,7 @@ const Subject = () => {
                                                 {filteredData?.form_data?.is_update === true && (
                                                     <Tooltip arrow placement="right" title="Edit">
                                                         <IconButton
-                                                            sx={{ width: "35px", height: "35px" }}
+                                                            sx={{ width: "35px", height: "35px",color:tabletools(namecolor) }}
                                                             onClick={() => {
                                                                 handleEditFile(row?.row?.original?.id);
                                                             }}
@@ -171,7 +177,7 @@ const Subject = () => {
 
                                                 <Tooltip arrow placement="right" title="Delete">
                                                     <IconButton
-                                                        sx={{ width: "35px", height: "35px" }}
+                                                        sx={{ width: "35px", height: "35px",color:tabletools(namecolor) }}
                                                         onClick={() => {
                                                             handleDeleteFiles(row?.row?.original?.id)
                                                         }}

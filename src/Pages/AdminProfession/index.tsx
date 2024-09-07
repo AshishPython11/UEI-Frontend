@@ -11,12 +11,15 @@ import {
 import { useEffect, useState } from "react";
 import useApi from "../../hooks/useAPI";
 import { toast } from "react-toastify";
-import { deepEqual } from "../../utils/helpers";
+import { deepEqual, inputfield, inputfieldhover, inputfieldtext } from "../../utils/helpers";
+import NameContext from "../Context/NameContext";
 
 
 // console.log(adminId);
 
 export default function AdminProfession() {
+  const context = React.useContext(NameContext);
+    const {namecolor }:any = context;
   let adminId = localStorage.getItem("_id");
   const { getData, postData, putData } = useApi();
   const [institude, setInstitude] = React.useState<
@@ -239,12 +242,13 @@ export default function AdminProfession() {
   };
 // console.log("testing",selectInstitude,selectCourse,selectSubject)
 
+
   return (
     <form onSubmit={handleSubmit}>
 
       <div className='row d-flex justify-content-center' style={{ margin: "15px" }}>
 
-        <div className='col'>
+        <div className='col form_field_wrapper'>
           <FormControl required sx={{ m: 1, minWidth: 220 }} >
             <InputLabel id="demo-simple-select-standard-label">Institute</InputLabel>
             <Select
@@ -256,7 +260,15 @@ export default function AdminProfession() {
 
             >
               {institude?.map((institut) => (
-                <MenuItem key={institut?.id} value={institut?.id}>{institut?.institution_name}</MenuItem>
+                <MenuItem key={institut?.id} value={institut?.id}
+                sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}
+                >{institut?.institution_name}</MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -264,7 +276,7 @@ export default function AdminProfession() {
             <p style={{marginLeft:"10px", color: 'red' }}>Please select an Institute.</p>
           )}</div> */}
         </div>
-        <div className='col'>
+        <div className='col form_field_wrapper'>
           <FormControl required sx={{ m: 1, minWidth: 220 }}>
             <InputLabel id="demo-simple-select-standard-label">Course</InputLabel>
             <Select
@@ -293,7 +305,14 @@ export default function AdminProfession() {
 
             >
               {course?.map((data) => (
-                <MenuItem key={data?.id} value={data?.id}>{data?.course_name}</MenuItem>
+                <MenuItem key={data?.id} value={data?.id}
+                sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}>{data?.course_name}</MenuItem>
               ))}
 
 
@@ -303,7 +322,7 @@ export default function AdminProfession() {
             <p style={{marginLeft:"10px", color: 'red' }}>Please select a Course.</p>
           )}</div> */}
         </div>
-        <div className='col'>
+        <div className='col form_field_wrapper'>
           <FormControl required sx={{ m: 1, minWidth: 220 }}>
             <InputLabel id="demo-simple-select-standard-label">Subject</InputLabel>
             <Select
@@ -314,7 +333,14 @@ export default function AdminProfession() {
               label="Subject"
             >
               {subject?.map((data) => (
-                <MenuItem key={data?.id} value={data?.id}>{data?.subject_name}</MenuItem>
+                <MenuItem key={data?.id} value={data?.id}
+                sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}>{data?.subject_name}</MenuItem>
               ))}
 
             </Select>
@@ -326,10 +352,11 @@ export default function AdminProfession() {
       </div>
       <div className='row justify-content-center' style={{ marginTop: "50px" }}>
         <div className='col-2'>
-          <button className='btn btn-primary'>{editFalg ? "save" : "save changes"}</button>
+          <button className='btn btn-primary  mainbutton'>{editFalg ? "save" : "save changes"}</button>
         </div>
       </div>
     </form>
   );
+
 }
 

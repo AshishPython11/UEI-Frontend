@@ -7,7 +7,7 @@ function Dashboard() {
 
             <div className='card'>
                 <div className='card-body'>
-                    <h1>Dashboard</h1>
+                    <h1 className='main_title_dashboard'>Dashboard</h1>
                    <MainContent /> 
                 </div>
             </div>

@@ -8,7 +8,7 @@ const AvatarModal = ({ open, handleClose, handleAvatarSelect, avatars }:any) => 
       <div style={{ backgroundColor: 'white', padding: '20px', margin: 'auto', marginTop: '10%', width: '20%' ,marginLeft:"150px" }}>
         <h4>Select an Avatar</h4>
         <div className="avatar-list" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-          {avatars.map((avatar: string | undefined, index: React.Key | null | undefined) => (
+          {avatars?.map((avatar: string | undefined, index: React.Key | null | undefined) => (
             <img
               key={index}
               src={avatar}

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+
 import {
   Box,
   Button,
@@ -13,7 +14,8 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useApi from "../../hooks/useAPI";
 import { toast } from "react-toastify";
-import { deepEqual } from "../../utils/helpers";
+import { deepEqual, inputfield, inputfieldhover, inputfieldtext, tabletools } from "../../utils/helpers";
+import NameContext from "../Context/NameContext";
 
 // Define interfaces for Box, Course, and Subject
 interface Box {
@@ -37,6 +39,8 @@ interface Subject {
 }
 
 const StudentSubjectPreference = () => {
+  const context = useContext(NameContext);
+  const {namecolor }:any = context;
   const { getData, postData, putData, deleteData } = useApi();
   const [boxes, setBoxes] = useState<Box[]>([]);
   const [boxes11, setBoxes11] = useState<Box[]>([]);
@@ -392,7 +396,7 @@ const StudentSubjectPreference = () => {
             key={box.id}
             style={{ marginBottom: "5px" }}
           >
-            <div className="col">
+            <div className="col form_field_wrapper">
               <FormControl required sx={{ m: 1, minWidth: 220, width: "100%" }}>
                 <InputLabel>Course</InputLabel>
                 <Select
@@ -404,14 +408,22 @@ const StudentSubjectPreference = () => {
                   label="Course"
                 >
                   {courses.map((course) => (
-                    <MenuItem key={course.id} value={course.id}>
+                    <MenuItem key={course.id} value={course.id}
+                    sx={{
+                      backgroundColor: inputfield(namecolor),
+                      color: inputfieldtext(namecolor),
+                      '&:hover': {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                      },
+                  }}
+                    >
                       {course.course_name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </div>
-            <div className="col">
+            <div className="col form_field_wrapper">
               <FormControl required sx={{ m: 1, minWidth: 220, width: "100%" }}>
                 <InputLabel>Subject</InputLabel>
                 <Select
@@ -423,14 +435,22 @@ const StudentSubjectPreference = () => {
                   label="Subject"
                 >
                   {subjects.map((subject) => (
-                    <MenuItem key={subject.id} value={subject.id}>
+                    <MenuItem key={subject.id} value={subject.id}
+                    sx={{
+                      backgroundColor: inputfield(namecolor),
+                      color: inputfieldtext(namecolor),
+                      '&:hover': {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                      },
+                  }}
+                    >
                       {subject.subject_name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </div>
-            <div className="col">
+            <div className="col form_field_wrapper">
               <FormControl sx={{ m: 1, minWidth: 180, width: "100%" }}>
                 <TextField
                   name="preference"
@@ -443,7 +463,7 @@ const StudentSubjectPreference = () => {
                 />
               </FormControl>
             </div>
-            <div className="col" style={{paddingTop:validationErrors[index]?.score_in_percentage ? 78 : ""}}>
+            <div className="col form_field_wrapper" style={{paddingTop:validationErrors[index]?.score_in_percentage ? 78 : ""}}>
               <FormControl sx={{ m: 1, minWidth: 180, width: "100%" }}>
                 <TextField
                
@@ -467,17 +487,17 @@ const StudentSubjectPreference = () => {
               </FormControl>
             
             </div>
-            <div className="col">
+            <div className="col form_field_wrapper">
               <IconButton
                 onClick={addRow}
-                sx={{ width: "35px", height: "35px" }}
+                sx={{ width: "35px", height: "35px", color: tabletools(namecolor) }}
               >
                 <AddIcon />
               </IconButton>
               {boxes.length !== 1 && (
                 <IconButton
                   onClick={() => deleteRow(box.id, index)}
-                  sx={{ width: "35px", height: "35px", color: "#f70404b8" }}
+                  sx={{ width: "35px", height: "35px",  color: tabletools(namecolor) }}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -488,6 +508,7 @@ const StudentSubjectPreference = () => {
         <div className="row justify-content-center">
           <div className="col-3">
             <Button
+            className="mainbutton"
               variant="contained"
               color="primary"
               type="submit"
@@ -502,4 +523,6 @@ const StudentSubjectPreference = () => {
   );
 };
 
+
 export default StudentSubjectPreference;
+

@@ -17,20 +17,78 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import useApi from "../../hooks/useAPI";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { QUERY_KEYS } from "../../utils/const";
+import { QUERY_KEYS, QUERY_KEYS_STUDENT } from "../../utils/const";
 import { MdContactMail } from "react-icons/md";
 import FullScreenLoader from "../../Pages/Loader/FullScreenLoader";
+import {jwtDecode, JwtPayload} from "jwt-decode";
 
 const Login = () => {
   const navigate = useNavigate();
   useEffect(() => {
     
     let login_id = localStorage.getItem("_id");
+    const token = localStorage.getItem("token");
     if (login_id) {
       navigate("/main/DashBoard");
     }
   }, []);
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     try {
+  //       // const decodedToken = jwtDecode(token);
+  //       const decodedToken: JwtPayload = jwtDecode<JwtPayload>(token);
+  //       const currentTime = Date.now() / 1000; // Current time in seconds
+  //       // console.log("t-=-=-=-=",decodedToken,currentTime)
+  //       // if (decodedToken.exp < currentTime) {
+  //         if (decodedToken.exp && decodedToken.exp < currentTime) {
+  //         // Token has expired
+  //         localStorage.removeItem("token");
+  //         localStorage.removeItem("_id");
+  //         navigate("/"); // Redirect to login page
+  //       } else {
+  //         // Token is valid
+  //         const login_id = localStorage.getItem("_id");
+  //         if (login_id) {
+  //           navigate("/main/DashBoard");
+  //         }
+  //       }
+  //     } catch (error) {
+  //       // console.error("Invalid token", error);
+  //       localStorage.removeItem("token");
+  //       localStorage.removeItem("_id");
+  //       navigate("/"); // Redirect to login page
+  //     }
+  //   } else {
+  //     navigate("/"); // Redirect to login page if no token found
+  //   }
+  // }, [navigate]);
+
+
+//   useEffect(() => {
+//     const token = localStorage.getItem('token');
+//     const tokenExpiry = localStorage.getItem('tokenExpiry');
+// console.log("test expire time",tokenExpiry)
+//     if (token && tokenExpiry) {
+//       const currentTime = Date.now();
+//       console.log("test expire time in",currentTime,tokenExpiry)
+//       if (currentTime > parseInt(tokenExpiry)) {
+//         console.log("test expire time finally done",currentTime,tokenExpiry)
+//         // Token has expired
+//         localStorage.removeItem('token');
+//         localStorage.removeItem('tokenExpiry');
+//         navigate('/');
+//       }
+//     } else {
+//       navigate('/');
+//     }
+//   }, [navigate]); 
+
+
+  
   const { postData } = useApi();
+
   const navigator = useNavigate();
   const [password, setPassword] = useState("");
   // const [email, setEmail] = useState("")
@@ -43,6 +101,9 @@ const Login = () => {
   const loginUrl = QUERY_KEYS.POST_LOGIN;
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const profileURL = QUERY_KEYS_STUDENT.STUDENT_GET_PROFILE;
+  const [flagforcheck,setFlagforcheck]=useState<boolean>(false);
+
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -53,6 +114,7 @@ const Login = () => {
   useEffect(() => {
     if (emailphone && password) {
       setuserValue("");
+
     }
   }, [emailphone, password]);
 
@@ -85,7 +147,8 @@ const Login = () => {
         const data = await postData(loginUrl, UserSignUp);
         if (data?.status === 200) {
           setLoading(false);
-          handleSuccessfulLogin(data, UserSignUp.password);
+          await localStorage.setItem("token", data?.token);
+          handleSuccessfulLogin(data, UserSignUp?.password);
         } else if (
           data?.status === 404 &&
           data?.message === "Invalid userid or password"
@@ -120,19 +183,33 @@ const Login = () => {
   const handleSuccessfulLogin = (data: any, password: string) => {
     localStorage.setItem("token", data?.token);
     localStorage.setItem("user_type", data?.data?.user_type);
-    // localStorage.setItem("user_type", "teacher");
     localStorage.setItem("userid", data?.data?.userid);
     localStorage.setItem("pd", password);
     localStorage.setItem("userdata", JSON.stringify(data?.data));
     localStorage.setItem("_id", data?.data?.id);
 
-    toast.success(data?.message, {
+
+    const tokenLifespan = 7100; // token lifespan in seconds (1 hour)
+    // Calculate the expiry time
+    const expiryTime = Date.now() + tokenLifespan * 1000;
+    localStorage.setItem('tokenExpiry', expiryTime.toString());
+
+    toast.success("User logged in successfully", {
       hideProgressBar: true,
       theme: "colored",
       autoClose: 500,
     });
-
+    let usertype=localStorage.getItem("token");
+    // if(data?.data?.id && data.data.user_type ==='student' && usertype){
+  //  getData(profileURL+'/'+data?.data?.id).then((data) => {
+  //    console.log(data.data);
+  //    if(data.status==200){
+  //      setFlagforcheck(true);
+  //    }
+  //  });
+//  }
     const userType = data.data.user_type;
+    // navigator(userType === "admin" ? "/profile-chat" : "/profile-chat");
     navigator(userType === "admin" ? "/main/Dashboard" : "/main/Dashboard");
   };
 
@@ -231,7 +308,7 @@ const Login = () => {
                                         <small className="text-danger">Please Enter Mobile No</small>)}
                                 </div>
                                 } */}
-                  <div className="form_field_wrapper">
+                  <div className="form_field_wrapper-login">
                     <TextField
                       id="email/phone"
                       value={emailphone}
@@ -248,15 +325,28 @@ const Login = () => {
                       variant="outlined"
                       error={!!error}
                       helperText={error}
+                      sx={{
+                        '& input:-webkit-autofill': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important', // Set the background color you want
+                          WebkitTextFillColor: 'black !important', // Set the text color you want
+                        },
+                        '& input:-webkit-autofill:hover': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                        '& input:-webkit-autofill:focus': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                        '& input:-webkit-autofill:active': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                      }}
                     />
-                    {/* {uservalue === "userid" && (
-                    <small className="text-danger">
-                      Please Enter Email/Number
-                    </small>
-                  )} */}
-                    {/* {error && <small className="text-danger">{error}</small>} */}
+                   
                   </div>
-                  <div className="form_field_wrapper">
+                  <div className="form_field_wrapper-login">
                     <TextField
                       type={showPassword ? "text" : "password"}
                       placeholder="Password"
@@ -286,6 +376,24 @@ const Login = () => {
                           </InputAdornment>
                         ),
                       }}
+                      sx={{
+                        '& input:-webkit-autofill': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important', // Set the background color you want
+                          WebkitTextFillColor: 'black !important', // Set the text color you want
+                        },
+                        '& input:-webkit-autofill:hover': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                        '& input:-webkit-autofill:focus': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                        '& input:-webkit-autofill:active': {
+                          WebkitBoxShadow: '0 0 0 1000px white inset !important',
+                          WebkitTextFillColor: 'black !important',
+                        },
+                      }}
                       fullWidth
                     />
                     {uservalue === "password" && (
@@ -294,9 +402,15 @@ const Login = () => {
                       </small>
                     )}
                   </div>
-                  <div className="form_field_wrapper forgotpass">
+                  {/* <div className="form_field_wrapper-login forgotpass">
                     <Link className="ato" to="/forgotpassword">
                       Forgot Password?
+                    </Link>
+                  </div> */}
+                  <div className="form_field_wrapper signuplink_block">
+                    <Link className="ato signupa" to="/forgotpassword">
+                    
+                      <span className="signup_txt"> Forgot Password?</span>
                     </Link>
                   </div>
                   <RadioGroup row value={value} onChange={handleChange}>

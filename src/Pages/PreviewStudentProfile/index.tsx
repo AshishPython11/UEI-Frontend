@@ -21,6 +21,7 @@ import maleAvatar4 from '../../assets/avatar/images_man4.png';
 import maleAvatar5 from '../../assets/avatar/images_man5.png';
 import maleAvatar6 from '../../assets/avatar/images_man6.png';
 import NameContext from "../Context/NameContext";
+import { inputfieldtext } from "../../utils/helpers";
 
 // import { QUERY_STUDENT_PROFILE_KEYS } from '../../utils/const';
 interface PreviewStudentProfileProps {
@@ -44,7 +45,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
   const context = useContext(NameContext);
   let StudentId = localStorage.getItem("_id");
   const profileURL = QUERY_KEYS_STUDENT.STUDENT_GET_PROFILE;
-  const {setProImage }:any = context;
+  const {setProImage,namecolor }:any = context;
   const [profileData, setProfileData] = useState<any>({});
   const [basicinfoPercentage, setbasicinfoPercentage] = useState<number>(0);
   const [addressPercentage, setaddressPercentage] = useState<number>(0);
@@ -185,7 +186,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
       return match.toUpperCase();
     });
   }
-  const genderCamelCase = profileData?.gender ? toCamelCase(profileData.gender) : '';
+  const genderCamelCase = profileData?.basic_info?.gender ? toCamelCase(profileData?.basic_info?.gender) : '';
   const getDefaultImage = (gender: string) => {
     if (gender === 'Male' || gender === 'male') {
       // return "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp";
@@ -326,7 +327,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
   };
 
   const gender: string = profileData?.gender?.toString() || 'default';
-  const avatars = avatarsMap[gender];
+  const avatars = avatarsMap[gender.toLowerCase()];
 
   return (
     <>
@@ -336,17 +337,17 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
           <div className="card-body">
             <React.Fragment>
               {profileData ? (
-                <section style={{ backgroundColor: "#eee" }}>
+                <section className="sectionbody">
                   <div className="container py-5">
                     <div className="row">
                       <div className="col-lg-4">
                         <div className="card mb-4">
-                          <span style={{
+                          <span className="profilebody" style={{
                             display: "flex",
                             justifyContent: "flex-end",
-                            margin: "10px"
+                             padding: "10px"
                           }} >
-                            <p style={{ cursor: "pointer" ,color:isHovered ? "blue" : "black", }}
+                            <p style={{ cursor: "pointer" ,color:isHovered ?inputfieldtext(namecolor)  :inputfieldtext(namecolor)}}
                               onClick={handleImageClick}
                               onMouseEnter={() => setIsHovered(true)}
                               onMouseLeave={() => setIsHovered(false)}
@@ -354,7 +355,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                               Select Avatar
                             </p>
                           </span>
-                          <div className="card-body text-center">
+                          <div className="card-body text-center profilebody">
                             <img
                               // src={
                               //   loading? '' : profileImage
@@ -370,15 +371,15 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
 
                             />
                             <h5 className="my-3">
-                              {profileData?.first_name} {profileData?.last_name}
+                              {profileData?.basic_info?.first_name} {profileData?.basic_info?.last_name}
                             </h5>
-                            <p className="text-muted mb-1">
+                            <p className="text-muted mb-1 profiletext">
                               {/* {profileData?.gender}*/}
                               {genderCamelCase}
                             </p>
-                            {profileData?.address &&
+                            {/* {profileData?.address &&
                               Object.keys(profileData?.address).length > 0 && (
-                                <p className="text-muted mb-4">
+                                <p className="text-muted mb-4 profiletext">
                                   {profileData?.address?.address1} ,
                                   {profileData?.address?.address2} ,
                                   {profileData?.address?.district} ,
@@ -387,7 +388,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                                   {profileData?.address?.country} ,
                                   {profileData?.address?.pincode}
                                 </p>
-                              )}
+                              )} */}
 
                             <p className="mb-4">
                               <span className="text-primary font-italic me-1"></span>{" "}
@@ -402,7 +403,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                               style={{ height: "5px" }}
                             >
                               <div
-                                className="progress-bar"
+                                className="progress-bar custom-progress-bar"
                                 role="progressbar"
                                 style={{ width: `${basicinfoPercentage}%` }}
                                 aria-valuenow={basicinfoPercentage}
@@ -425,7 +426,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                               style={{ height: "5px" }}
                             >
                               <div
-                                className="progress-bar"
+                                className="progress-bar custom-progress-bar"
                                 role="progressbar"
                                 style={{ width: `${addressPercentage}%` }}
                                 aria-valuenow={addressPercentage}
@@ -448,7 +449,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                               style={{ height: "5px" }}
                             >
                               <div
-                                className="progress-bar"
+                                className="progress-bar custom-progress-bar"
                                 role="progressbar"
                                 style={{ width: `${languagePercentage}%` }}
                                 aria-valuenow={languagePercentage}
@@ -467,11 +468,11 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                               Academic History
                             </p>
                             <div
-                              className="progress rounded"
+                              className="progress rounded "
                               style={{ height: "5px" }}
                             >
                               <div
-                                className="progress-bar"
+                                className="progress-bar custom-progress-bar"
                                 role="progressbar"
                                 style={{
                                   width: `${academichistoryPercentage}%`,
@@ -496,7 +497,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                               style={{ height: "5px" }}
                             >
                               <div
-                                className="progress-bar"
+                                className="progress-bar custom-progress-bar"
                                 role="progressbar"
                                 style={{ width: `${contactPercentage}%` }}
                                 aria-valuenow={contactPercentage}
@@ -519,7 +520,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                               style={{ height: "5px" }}
                             >
                               <div
-                                className="progress-bar"
+                                className="progress-bar custom-progress-bar"
                                 role="progressbar"
                                 style={{ width: `${subjectPercentage}%` }}
                                 aria-valuenow={subjectPercentage}
@@ -533,16 +534,16 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                       </div>
                       <div className="col-lg-8">
                         <div className="card mb-4">
-                          <div className="card-body">
+                          <div className="card-body profilebody">
                             <div className="row">
                               <div className="col-sm-3">
                                 <p className="mb-0">Full Name</p>
                               </div>
                               <div className="col-sm-9">
-                                <p className="text-muted mb-0">
-                                  {profileData?.first_name}{" "}
+                                <p className="text-muted mb-0 profileinnertext">
+                                  {profileData?.basic_info?.first_name}{" "}
                                   {/* {profileData?.father_name}{" "} */}
-                                  {profileData?.last_name}
+                                  {profileData?.basic_info?.last_name}
                                 </p>
                               </div>
                             </div>
@@ -552,7 +553,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                                 <p className="mb-0">Email</p>
                               </div>
                               <div className="col-sm-9">
-                                <p className="text-muted mb-0">
+                                <p className="text-muted mb-0 profileinnertext">
                                   {/* {profileData?.contact?.email_id} */}
                                   {profileData?.contact?.email_id !== undefined ? profileData?.contact?.email_id?.includes('@') ? profileData?.contact?.email_id : "" : userId && userId?.includes('@') ? userId : ""}
                                 </p>
@@ -564,7 +565,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                                 <p className="mb-0">Mobile</p>
                               </div>
                               <div className="col-sm-9">
-                                <p className="text-muted mb-0">
+                                <p className="text-muted mb-0 profileinnertext">
                                   {profileData?.contact?.mobile_no_call !== undefined ? profileData?.contact?.mobile_isd_call + " " + profileData?.contact?.mobile_no_call : userId && !userId?.includes('@') ? userId : ""}
 
                                 </p>
@@ -576,7 +577,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                                 <p className="mb-0">Whatsapp</p>
                               </div>
                               <div className="col-sm-9">
-                                <p className="text-muted mb-0">
+                                <p className="text-muted mb-0 profileinnertext">
                                   {profileData?.contact?.mobile_no_watsapp !== undefined ? profileData?.contact?.mobile_no_watsapp !== "" ? profileData?.contact?.mobile_isd_watsapp + " " + profileData?.contact?.mobile_no_watsapp : "" : ""}
                                   {/* {profileData?.contact?.mobile_isd_watsapp}{" "}
                                   {profileData?.contact?.mobile_no_watsapp} */}
@@ -589,11 +590,11 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                                 <p className="mb-0">Address</p>
                               </div>
                               <div className="col-sm-9">
-                                <p className="text-muted mb-0">
+                                <p className="text-muted mb-0 profileinnertext">
                                   {profileData?.address &&
                                     Object.keys(profileData?.address).length >
                                     0 && (
-                                      <p className="text-muted mb-4">
+                                      <p className="text-muted mb-4 profileinnertext">
                                         {profileData?.address?.address1} ,
                                         {profileData?.address?.address2} ,
                                         {profileData?.address?.district} ,

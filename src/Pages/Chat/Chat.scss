@@ -45,19 +45,21 @@
 }
 
 .BG_chatA {
-    background-color:#f7f7f8 !important;
+    // background-color:var(--buttonbgcolor) !important;
+    background-color:var(--chatcolor) !important;
+    color: var(--chattextcolor) !important;
 
 }
 .BG_chatA::after {
     
     // border-bottom: 25px solid rgb(142, 240, 215) !important;
-    border-bottom: 25px solid #f7f7f8 !important;
+    border-bottom: 25px solid var(--chatcolor) !important;
 }
 .hr_chat{
     margin: 0 !important;
 }
 .chathedding{
-    background: #bad7f1;
+    background-color: var(--chatsubtitlecolor) !important;
     display: flex;
     align-items: center !important;
     justify-content: center !important;
@@ -66,4 +68,52 @@
 font-size: medium !important;
     font-family: sans-serif;
     font-weight: 400 !important;
+}
+.chat_view{
+    padding: 20px !important;
+    background-color: var(--chatviewbodycolor);
+}
+.mainsearch{
+    color: var(--chatcolor);
+    top:0%
+}
+.search-bar .search-form button {
+    border: 0;
+    padding: 0;
+    margin-left: -24px;
+    background: none;
+    margin-top: 5px;
+}
+.search-bar{
+    background-color: var(--chatviewbodycolor) !important;
+    // margin: none !important;
+}
+// .search-form input:-webkit-autofill {
+//     -webkit-box-shadow:  var(--chatviewbodycolor) inset !important; /* Set the background color you want */
+//     -webkit-text-fill-color: green !important;              /* Set the text color you want */
+//   }
+  
+//   .search-form input:-webkit-autofill:hover,
+//   .search-form input:-webkit-autofill:focus,
+//   .search-form input:-webkit-autofill:active {
+//     -webkit-box-shadow: 0 0 0 1000px white inset !important;
+//     -webkit-text-fill-color: green !important;
+//   }
+
+
+// feedback css start
+.feedback-view{
+    padding: 20px !important;
+    background-color: var(--chatviewbodycolor);
+    .message-bubble{
+        background-color: var(--chatbodyinnercolor);
+        font-size: 20px;
+        &:hover{
+            transform: unset;
+        }
+        +.row{
+            padding: 15px 20px;
+        }
+    }
+   
 }

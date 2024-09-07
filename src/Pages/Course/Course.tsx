@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 
 import '../Course/Course.scss';
 import useApi from "../../hooks/useAPI";
@@ -11,17 +11,22 @@ import { QUERY_KEYS_COURSE } from '../../utils/const';
 import { toast } from 'react-toastify';
 import { DeleteDialog } from '../../Components/Dailog/DeleteDialog';
 import FullScreenLoader from '../Loader/FullScreenLoader';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, tabletools } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 
 const Course = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const location = useLocation();
     const pathSegments = location.pathname.split('/').filter(Boolean);
     const lastSegment = pathSegments[pathSegments.length - 1].toLowerCase();
     const Menulist: any = localStorage.getItem('menulist1');;
     const [filteredData, setFilteredData] = useState<MenuListinter | any>([]);
 
-
+      const tableheader:any = {
+        light:'',dark:'#1D2A35',default:''
+      }
 //FOR PAGINATION CODE  
     // const [loading, setLoading] = useState(false);
     // const [pagination, setPagination] = useState({
@@ -110,7 +115,9 @@ const Course = () => {
     const [dataDeleteId, setDataDeleteId] = useState<number>()
 
     const callAPI = async () => {
+
         getData(`${CourseURL}`).then((data: { data: CourseRep0oDTO[] }) => {
+
             if (data.data) {
                 setDataCourse(data?.data)
             }
@@ -123,6 +130,7 @@ const Course = () => {
                 theme: "colored",
             });
         });
+
     }
 
     useEffect(() => {
@@ -147,6 +155,7 @@ const Course = () => {
             toast.success(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+
             });
             callAPI();
             setDataDelete(false);
@@ -157,6 +166,7 @@ const Course = () => {
             toast.error(e?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+
             });
         });
     }
@@ -175,6 +185,7 @@ const Course = () => {
                                    
                                     {filteredData?.form_data?.is_save === true && (
                                             <Button
+                                            className='mainbutton'
                                                 variant="contained"
                                                 component={NavLink}
                                                 to="add-Course"
@@ -200,6 +211,39 @@ const Course = () => {
                                                 size: 150,
                                             },
                                         }}
+                                        // muiTableHeadCellProps={{
+                                        //     sx: {
+                                        //         backgroundColor: tableheader[namecolor], // Change this to your desired header background color
+                                        //         color: '#FFFFFF', // Change this to your desired header text color
+                                        //     },
+                                        // }}
+                                        // muiTableBodyCellProps={{
+                                        //     sx: {
+                                        //         backgroundColor: 'lightgrey', // Change this to your desired cell background color
+                                        //         color: 'black', // Change this to your desired cell text color
+                                        //     },
+                                        // }}
+                                        // muiTopToolbarProps={{
+                                        //     sx: {
+                                        //         backgroundColor: tabletools[namecolor], // Change this to your desired toolbar background color
+                                        //         color: '#00D1D9', // Change this to your desired toolbar text color
+                                        //     },
+                                        // }}
+                                        // muiTableFooterProps={{
+                                        //     sx: {
+                                        //         backgroundColor: 'darkblue', // Footer background color
+                                        //         color: 'white', // Footer text color
+                                        //     },
+                                        // }}
+                                        // muiTableBodyProps={{
+                                        //     sx: {
+                                        //         backgroundColor: 'red', // Change this to your desired body background color
+                                        //         color: 'black', // Change this to your desired body text color
+                                        //     },
+                                        // }}
+
+
+
                                         // FOR PAGINATION CODE
 
                                         // onPaginationChange= {setPagination}
@@ -225,7 +269,7 @@ const Course = () => {
                                                 {filteredData?.form_data?.is_update === true && (
                                                     <Tooltip arrow placement="right" title="Edit">
                                                         <IconButton
-                                                            sx={{ width: "35px", height: "35px" }}
+                                                            sx={{ width: "35px", height: "35px",color:tabletools(namecolor) }}
                                                             onClick={() => {
                                                                 handleEditFile(row?.row?.original?.id);
                                                             }}
@@ -237,7 +281,7 @@ const Course = () => {
                                                 
                                                 <Tooltip arrow placement="right" title="Delete">
                                                     <IconButton
-                                                        sx={{ width: "35px", height: "35px" }}
+                                                        sx={{ width: "35px", height: "35px" ,color:tabletools(namecolor) }}
                                                         onClick={() => {
                                                             handleDeleteFiles(row?.row?.original?.id)
                                                         }}

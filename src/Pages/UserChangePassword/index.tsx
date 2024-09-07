@@ -136,7 +136,7 @@ const UserChangePassword = () => {
         postData(`${changepassUrl}`, UserSignUp).then((data: any) => {
             if (data?.status === 200) {
                 // navigator('/')
-                toast.success('Your Password has been changed successfuly!! Please try to login again with new password', {
+                toast.success('Your Password has been changed successfuly! Please try to login again with new password', {
                     hideProgressBar: true,
                     theme: "colored",
                 });
@@ -296,7 +296,7 @@ const UserChangePassword = () => {
                                             <TextField
                                                 type={showConfPassword ? "text" : "password"}
                                                 name="confpassword"
-                                                label="Confirm password"
+                                                label="Confirm Password"
                                                 value={values?.confpassword}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "confpassword")}
                                                 InputProps={{

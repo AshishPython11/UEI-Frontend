@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../Menu/Menu.scss';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -16,13 +16,16 @@ import { toast } from 'react-toastify';
 import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import { MenuListinter } from '../../Components/Table/columns';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, inputfield, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 interface IMenuForm {
     menu_name: string
     priority: string
 }
 const AddEditMenu = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const location = useLocation();
     const MenuAddURL = QUERY_KEYS_MENU.MENU_ADD;
     const MenuEditURL = QUERY_KEYS_MENU.MENU_EDIT;
@@ -231,6 +234,17 @@ const AddEditMenu = () => {
                                                     label="Menu name *"
                                                     value={values?.menu_name}
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "menu_name")}
+                                                    InputProps={{
+                                                        style: {
+                                                            backgroundColor: inputfield(namecolor) ,
+                                                            // backgroundColor:'red' ,
+                                                        }
+                                                    }}
+                                                    InputLabelProps={{
+                                                        style: {
+                                                            color: inputfieldtext(namecolor)
+                                                        }
+                                                    }}
                                                 />
                                                 {touched?.menu_name && errors?.menu_name ?
                                                     <p style={{ color: 'red' }}>{errors?.menu_name}</p> : <></>
@@ -257,6 +271,17 @@ const AddEditMenu = () => {
                                                     label="Menu sequence *"
                                                     value={values?.priority}
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "priority")}
+                                                    InputProps={{
+                                                        style: {
+                                                            backgroundColor: inputfield(namecolor) ,
+                                                            // backgroundColor:'red' ,
+                                                        }
+                                                    }}
+                                                    InputLabelProps={{
+                                                        style: {
+                                                            color: inputfieldtext(namecolor)
+                                                        }
+                                                    }}
                                                 />
                                                 {touched?.priority && errors?.priority ?
                                                     <p style={{ color: 'red' }}>{errors?.priority}</p> : <></>
@@ -271,7 +296,7 @@ const AddEditMenu = () => {
                                         <div className='col-md-4 mt-2'>
                                             <div className='col'>
                                                 <Grid item xs={12}>
-                                                    <Typography variant="h6">Upload a Photo</Typography>
+                                                    <Typography variant="h6" sx={{color:inputfieldtext(namecolor)}}>Upload a Photo</Typography>
                                                 </Grid>
                                                 <Grid item xs={12}>
                                                     <input
@@ -280,7 +305,7 @@ const AddEditMenu = () => {
                                                         // onChange={(event) => setSelectedFile(event.target.value)}
                                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "menu_image")}
                                                         // value={selectedFile}
-                                                        //style={{ display: 'none' }}
+                                                        style={{ color:inputfieldtext(namecolor)}}
                                                         id="file-upload"
                                                         name='menu_image'
                                                     />
@@ -293,17 +318,18 @@ const AddEditMenu = () => {
                                     </div>
                                     <div className='row mt-4'>
                                         <div className='col-md-4'>
-                                            <InputLabel className='text-secondary'>Description</InputLabel>
+                                            <InputLabel className='text-secondary' sx={{color:inputfieldtext(namecolor)}}>Description</InputLabel>
                                             <TextareaAutosize
                                                 aria-label="empty textarea"
                                                 minRows={5}
-                                                style={{ width: "100%", fontSize: "1rem" }}
+                                                style={{ width: "100%", fontSize: "1rem" ,backgroundColor:inputfield(namecolor) , color:inputfieldtext(namecolor) }}
                                                 placeholder="Enter your text here..."
+                                                
                                             />
                                         </div>
                                     </div>
                                     <div className=' mt-3'>
-                                        <button className='btn btn-primary'>{id ? "Update" : "Save"}</button>
+                                        <button className='btn btn-primary mainbutton'>{id ? "Update" : "Save"}</button>
                                     </div>
                                     {/* </form> */}
                                 </Form>

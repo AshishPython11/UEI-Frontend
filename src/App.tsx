@@ -29,7 +29,7 @@ import Menu from './Pages/Menu/Menu';
 import AddEditMenu from './Pages/Menu/AddEditMenu';
 import AddEditSubmenu from './Pages/Submenu/AddEditSubmenu';
 import Submenu from './Pages/Submenu/Submenu';
-
+import ProfileChat from './Pages/ProfileChat';
 import Role from './Pages/Role/Role';
 import AddEditRole from './Pages/Role/AddEditRole';
 import AddEditForm from './Pages/Form/AddEditform';
@@ -53,24 +53,96 @@ import NotFound from './Pages/NotFound/NotFound';
 import ChatList from './Pages/ChatList/ChatList';
 import SuperAdmin from './Pages/SuperAdmin/SuperAdmin';
 import UserChangePassword from './Pages/UserChangePassword';
+import AdminFeedbackView from './Pages/adminFeedbackView';
+
+import Feedback from './Pages/UserFeedBack';
+
 import Teacher from './Pages/Uploadpdf/Uploadpdf';
 import Uploadpdf from './Pages/Uploadpdf/Uploadpdf';
+import AddEditAdminFeedback from './Pages/AdminFeedback/AddEditAdminFeedback';
+import AdminFeedback from './Pages/AdminFeedback/AdminFeedback';
+import StudentFeedback from './Pages/AdminFeedback/StudentFeedback';
+import AddStudentFeedback from './Pages/StudentFeedback/AddStudentFeedback';
 
+
+import Class from './Pages/Class/Class';
+import AddEditClass from './Pages/Class/AddEditClass';
+import PDFList from './Pages/PDFList/PDFList';
+
+// import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 function App() {
   // const loginUrl = `http://13.202.29.139:5000/auth/login`;
-  const loginUrl = `http://13.235.239.244:5000/auth/login`;
+  // const loginUrl = `https://13.235.239.244/auth/login`;
+   const loginUrl = "https://qaapi.gyansetu.ai/" || "http://localhost:3000";
+
   // const loginUrl = `http://127.0.0.1:5000/login`;
   const { postData } = useApi();
   const navigate = useNavigate()
 
-  setInterval(() => {
+  // setInterval(() => {
+  //   const token = localStorage.getItem('token');
+  //   if (token) {
+  //     navigate("/")
+  //     // refreshToken()
+  //   }
+  // }, 3000000)
+  // useEffect(() => {
+  //   console.log("test inteval useeffect")
+  //   const intervalId = setInterval(() => {
+  //     console.log("test inteval in 1 hour")
+  //     const token = localStorage.getItem('token');
+  //     if (token) {
+  //       try {
+  //         const decodedToken: JwtPayload = jwtDecode<JwtPayload>(token);
+  //         const currentTime = Date.now() / 1000; // Current time in seconds
+
+  //         if (decodedToken.exp && decodedToken.exp < currentTime) {
+  //           // Token has expired
+  //           localStorage.removeItem("token");
+  //           localStorage.removeItem("_id");
+  //           navigate("/"); // Redirect to login page
+  //         } else {
+  //           // Token is valid
+  //           const login_id = localStorage.getItem("_id");
+  //           if (login_id) {
+  //             navigate("/main/DashBoard");
+  //           }
+  //         }
+  //       } catch (error) {
+  //         // Invalid token
+  //         localStorage.removeItem("token");
+  //         localStorage.removeItem("_id");
+  //         navigate("/"); // Redirect to login page
+  //       }
+  //     } else {
+  //       navigate("/"); // Redirect to login page if no token found
+  //     }
+  //   }, 3600000); // 1 hour interval
+
+  //   return () => clearInterval(intervalId); // Cleanup interval on component unmount
+  // }, [navigate]);
+
+
+
+  useEffect(() => {
     const token = localStorage.getItem('token');
-    if (token) {
-      navigate("/")
-      // refreshToken()
+    const tokenExpiry = localStorage.getItem('tokenExpiry');
+// console.log("test expire time",tokenExpiry)
+    if (token && tokenExpiry) {
+      const currentTime = Date.now();
+      // console.log("test expire time in",currentTime,tokenExpiry)
+      if (currentTime > parseInt(tokenExpiry)) {
+        // console.log("test expire time finally done",currentTime,tokenExpiry)
+        // Token has expired
+        // localStorage.removeItem('token');
+        // localStorage.removeItem('tokenExpiry');
+        navigate('/');
+      }
+    } else {
+      // navigate('/');
     }
-  }, 3000000)
+  }, [navigate]); 
 
   const refreshToken = async () => {
     const userid = localStorage.getItem('userid');
@@ -96,11 +168,16 @@ function App() {
     <div className="App">
        <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/profile-chat" element={<ProfileChat />} />
+        <Route path="/feedback-chat" element={<Feedback />} />
+        {/* <Route path="/admin-feedback-chat" element={<AdminFeedback />} /> */}
+        <Route path="/admin-feedback-view" element={<AdminFeedbackView/>} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/forgotpassword" element={<Forgotpassword />} />
         <Route path="/changepassword" element={<ChangePassword />} />
         <Route path="/chatbot" element={<Chatbot answer={[]} />} />
         <Route path="/main" element={<Main />}>
+          <Route path="/main/chat" element={<Protected Component={Chat} menuName="Chat" />} />
           <Route path="/main/chat" element={<Protected Component={Chat} menuName="Chat" />} />
           <Route path="/main/chat/:Id" element={<Protected Component={Chat} menuName="Chat" />} />
           <Route path="/main/DashBoard">
@@ -122,6 +199,14 @@ function App() {
               element={<Protected Component={AddEditEntity} menuName="Entity" />}
             />
           </Route>
+          <Route path="/main/Class" >
+            <Route path="" element={<Protected Component={Class} menuName="Class"/>} />
+            <Route path="add-Class" element={<Protected Component={AddEditClass} menuName="Class"/>}  />
+            <Route
+              path="edit-Class/:id"
+              element={<Protected Component={AddEditClass} menuName="Class" />}
+            />
+            </Route>
           <Route path="/main/Student" >
             <Route path="" element={<Protected Component={Student}   menuName="Student"/>} />
             <Route path="add-Student" element={<Protected Component={AddEditStudent} menuName="Student" />} />
@@ -236,6 +321,18 @@ function App() {
           </Route>
           <Route path="/main/uploadpdf">
             <Route path="" element={<Protected Component={Uploadpdf} menuName="uploadpdf" />} />
+          </Route>
+          <Route path="/main/pdflist">
+            <Route path="" element={<Protected Component={PDFList} menuName="pdflist" />} />
+          </Route>
+          <Route path="/main/feedback">
+            <Route path="" element={<Protected Component={AdminFeedback} menuName="feedback" />} />
+            <Route path="add-feedback" element={<Protected Component={AddEditAdminFeedback} menuName="feedback" />} />
+            <Route path="edit-feedback/:id" element={<Protected Component={AddEditAdminFeedback} menuName="feedback" />} />
+          </Route>
+          <Route path="/main/student-feedback">
+            <Route path="" element={<Protected Component={StudentFeedback} menuName="student-feedback" />} />
+            <Route path="add-student-feedback" element={<Protected Component={AddStudentFeedback} menuName="student-feedback" />} />
           </Route>
         </Route>
         <Route path="profile" element={<Profile />} />

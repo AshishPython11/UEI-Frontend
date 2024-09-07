@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "../Chat/Chat.scss";
 import data from "./data.json";
 import axios from "axios";
@@ -7,19 +7,21 @@ import { toast, ToastContentProps } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { QUERY_KEYS, QUERY_KEYS_STUDENT } from "../../utils/const";
 import FullScreenLoader from "../Loader/FullScreenLoader";
-import soundimg from '../../assets/img/sound.gif'
+import soundimg from "../../assets/img/sound.gif";
 import Chatbot from "../Chatbot";
 import { useNavigate, useParams } from "react-router-dom";
 import { Box, IconButton, useMediaQuery } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 import { DeleteDialog } from "../../Components/Dailog/DeleteDialog";
-import StarIcon from '@mui/icons-material/Star';
+import StarIcon from "@mui/icons-material/Star";
+import NameContext from "../Context/NameContext";
 // import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
-
-
 const Chat = () => {
+  const context = useContext(NameContext);
+  const { namecolor }: any = context;
+  const userid = localStorage.getItem("_id") || "";
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [studentDetail, setStudentData] = useState<any>();
@@ -28,7 +30,7 @@ const Chat = () => {
   const [filteredProducts, setFilteredProducts] = useState<any>([]);
   const { Id } = useParams();
   const intials = {
-    "answer": [
+    answer: [
       "Welcome",
       "to",
       "Gyan",
@@ -41,19 +43,20 @@ const Chat = () => {
       "assist",
       "you",
       "today",
-      "?"
+      "?",
     ],
-  }
+  };
   const [selectedchat, setSelectedChat] = useState<any>([intials]);
   const userdata = JSON.parse(localStorage.getItem("userdata") || "/{/}/");
-  const [dataDelete, setDataDelete] = useState(false)
-  const [dataflagged, setDataflagged] = useState(false)
-  const [dataDeleteId, setDataDeleteId] = useState<number>()
+  const [dataDelete, setDataDelete] = useState(false);
+  const [dataflagged, setDataflagged] = useState(false);
+  const [dataDeleteId, setDataDeleteId] = useState<number>();
 
   const ChatURL = QUERY_KEYS.CHATADD;
   const ChatURLRAG = QUERY_KEYS.CHATADDRAGMODEL;
   const ChatURLOLLAMA = QUERY_KEYS.CHATADDOLLAMA;
   const ChatURLAI = QUERY_KEYS.CHATADDAI;
+  const ChatStore = QUERY_KEYS.CHAT_STORE;
 
   const ChatDELETEURL = QUERY_KEYS.CHATDELETE;
   const chatlisturl = QUERY_KEYS.CHAT_LIST;
@@ -62,13 +65,20 @@ const Chat = () => {
   const StudentGETURL = QUERY_KEYS_STUDENT.STUDENT_GET_PROFILE;
   const [chat, setchatData] = useState<any>([]);
   const [chatlist, setchatlistData] = useState<any>();
-  const [statredchat,setstatredchat] =useState<any>();
-  const [chathistory ,setchathistory] = useState<any>();
-  const [chathistoryrecent ,setchathistoryrecent] = useState<any>();
+  const [statredchat, setstatredchat] = useState<any>([]);
+  const [chathistory, setchathistory] = useState<any>([]);
+  const [chathistoryrecent, setchathistoryrecent] = useState<any>();
   const [chatsaved, setChatSaved] = useState<boolean>();
   const { postData, getData, deleteData } = useApi();
   const navigate = useNavigate();
-  const [profileCompletion, setProfileCompletion] = useState(localStorage.getItem("Profile_completion") || "0");
+  const [profileCompletion, setProfileCompletion] = useState(
+    localStorage.getItem("Profile_completion") || "0"
+  );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuerystarred, setSearchQuerystarred] = useState("");
+  const [isStarredChatOpen, setIsStarredChatOpen] = useState(false);
+  const [isChatHistoryOpen, setIsChatHistoryOpen] = useState(false);
+  const [loaderMsg, setLoaderMsg] = useState("");
   let synth: SpeechSynthesis;
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   let selectedvoice: SpeechSynthesisVoice | null = null;
@@ -77,16 +87,28 @@ const Chat = () => {
     getVoices();
   };
   if (profileCompletion !== "100") {
-    navigate('/*')
-}
+    navigate("/*");
+  }
   const chatRef = useRef<HTMLInputElement>(null);
   // console.log();
   const handlecancel = () => {
-    setDataDelete(false)
+    setDataDelete(false);
   };
 
-
-
+  useEffect(() => {
+    setSelectedChat([]);
+    setTimeout(() => {
+      if (Id !== undefined) {
+        setSelectedChat([intials]);
+        setSearchQuery("");
+        setSearchQuerystarred("");
+      } else {
+        setSelectedChat([]);
+        setSearchQuery("");
+        setSearchQuerystarred("");
+      }
+    }, 500);
+  }, [Id]);
 
   const callAPI = async () => {
     getData(`${StudentGETURL}${userdata ? `/${userdata?.id}` : ""}`)
@@ -102,9 +124,9 @@ const Chat = () => {
     getData(`${chatlisturl}/${userdata?.id}`)
       .then((data: any) => {
         setchatlistData(data?.data);
-        setstatredchat(data?.data?.filter((chat:any)=>chat?.flagged) )
-        setchathistory(data?.data?.filter((chat:any)=>!chat?.flagged))
-        setchathistoryrecent(data?.data?.filter((chat:any)=>!chat?.flagged))
+        setstatredchat(data?.data?.filter((chat: any) => chat?.flagged));
+        setchathistory(data?.data?.filter((chat: any) => !chat?.flagged));
+        setchathistoryrecent(data?.data?.filter((chat: any) => !chat?.flagged));
       })
       .catch((e) => {
         toast.error(e?.message, {
@@ -132,47 +154,71 @@ const Chat = () => {
   // };
   useEffect(() => {
     callAPI();
-    getVoices()
+    getVoices();
   }, []);
 
-  const filterdataCall = async()=>{
+  const filterdataCall = async () => {
     if (Id === "recentChat") {
       // Convert updated_at strings to Date objects for comparison
-      const parsedChatHistory = await chathistory?.map((chat: { updated_at: string | number | Date; }) => ({
-        ...chat,
-        updated_at: new Date(chat?.updated_at)
-      }));
-  
+      const parsedChatHistory = await chathistory?.map(
+        (chat: { updated_at: string | number | Date }) => ({
+          ...chat,
+          updated_at: new Date(chat?.updated_at),
+        })
+      );
+
       // Sort the chat history by updated_at in descending order
-      const sortedChatHistory = parsedChatHistory?.sort((a: { updated_at: any; }, b: { updated_at:any; }) => b?.updated_at - a?.updated_at);
-  
-      // Get the last 6 chats
-      const lastSixChats = sortedChatHistory?.slice(0, 6);
-  
-      // Set the filtered chat history
-      setchathistory(lastSixChats);
-    }
-  }
-  
-    useEffect(()=>{
-      if (Id === "recentChat") {
-      filterdataCall()
-      }else{
-        setchathistory(chathistoryrecent)
+      const sortedChatHistory = parsedChatHistory?.sort(
+        (a: { updated_at: any }, b: { updated_at: any }) =>
+          b?.updated_at - a?.updated_at
+      );
+      const chatDataString: any = localStorage?.getItem("chatData");
+      const chatmodify = JSON.parse(chatDataString);
+
+      if (chatmodify && chatmodify[0].question !== "") {
+        const lastSixChats = sortedChatHistory?.slice(0, 5);
+        const newArray = [...lastSixChats];
+        let column = [
+          {
+            question: chatmodify[0]?.question,
+            answer: chatmodify[0]?.answer,
+          },
+        ];
+        let newObject = {
+          chat_conversation: JSON.stringify(column),
+          chat_title: chatmodify[0]?.question,
+          flagged: false,
+        };
+
+        newArray.unshift(newObject);
+        setchathistory(newArray);
+      } else {
+        // Get the last 6 chats
+        const lastSixChats = sortedChatHistory?.slice(0, 6);
+        // Set the filtered chat history
+        setchathistory(lastSixChats);
       }
-    
-    },[Id,chatlist])
+    }
+  };
+
+  useEffect(() => {
+    if (Id === "recentChat") {
+      filterdataCall();
+    } else {
+      setchathistory(chathistoryrecent);
+    }
+  }, [Id, chatlist]);
   const speak = (text: string, index: number) => {
     const textArray = Array.isArray(text) ? text : [text];
 
     // Join the array into a single string
-    let cleanedText = textArray.join(' ');
+    let cleanedText = textArray.join(" ");
 
     // Remove unwanted characters and replace with spaces
     // cleanedText = cleanedText.replace(/[^\w\s]/gi, ' ');
 
     // Replace multiple spaces with a single space
-    cleanedText = cleanedText.replace(/\s+/g, ' ');
+    cleanedText = cleanedText.replace(/\s+/g, " ");
 
     // Trim any leading or trailing spaces
     cleanedText = cleanedText.trim();
@@ -185,8 +231,7 @@ const Chat = () => {
     //   cleanedText += '.';
     // }
     const utterance = new SpeechSynthesisUtterance(cleanedText);
-    utterance.onerror = (event) => {
-    };
+    utterance.onerror = (event) => {};
     // Event listener for when the speech ends
     utterance.onend = () => {
       const updatedChat = [...selectedchat];
@@ -195,7 +240,9 @@ const Chat = () => {
     };
 
     // console.log("ssssss",cleanedText,voices);
-    const voice = voices.find(voice => voice.name === 'Microsoft Mark - English (United States)') as SpeechSynthesisVoice;
+    const voice = voices.find(
+      (voice) => voice.name === "Microsoft Mark - English (United States)"
+    ) as SpeechSynthesisVoice;
     utterance.rate = 0.9;
     utterance.voice = voice;
     synth.speak(utterance);
@@ -218,37 +265,39 @@ const Chat = () => {
       // let address  = studentDetail.address.address1 +","+studentDetail.address.address2 +","+studentDetail.address.district +","+studentDetail.address.city +","+studentDetail.address.state +","+studentDetail.address.country +","+studentDetail.address.pincode
       // let prompt = "Hi I am"+studentDetail.first_name+" "+ studentDetail.last_name + ".Currenly I am studying at "+ studentDetail.institution +" at "+address+ " in "+studentDetail.course+ " and persuing "+studentDetail.subject+" can you please provide "+search+" based on given course and subject"
       setLoading(true);
+      setLoaderMsg("Fetching data from Database.");
       setSearchErr(false);
       // newchat();
 
       let prompt = studentDetail?.prompt;
-      prompt = prompt?.replace("**question**", 'answer');
-      let payload = {}
+      prompt = prompt?.replace("**question**", "answer");
+      let payload = {};
       if (selectedchat?.question !== "") {
         payload = {
           question: search,
           prompt: prompt,
           course: studentDetail?.course === null ? "" : studentDetail?.course,
           stream: studentDetail?.subject,
-          chat_hostory: [{ role: "user", content: selectedchat?.question }, {
-            role: "assistant",
-            content: selectedchat?.answer
-          }]
+          chat_hostory: [
+            { role: "user", content: selectedchat?.question },
+            {
+              role: "assistant",
+              content: selectedchat?.answer,
+            },
+          ],
         };
-
       } else {
         payload = {
           question: search,
           prompt: prompt,
           course: studentDetail?.course === null ? "" : studentDetail?.course,
-          stream: studentDetail?.subject
-
+          stream: studentDetail?.subject,
         };
       }
       postData(`${ChatURL}`, payload)
         .then((data: any) => {
           if (data?.data) {
-            const newData = data?.data
+            const newData = data?.data;
 
             data.data.speak = false;
             setFilteredProducts(data?.data);
@@ -259,8 +308,7 @@ const Chat = () => {
             setchatData((prevState: any) => [...prevState, newData]);
             setLoading(false);
             setSearch("");
-          }
-          else {
+          } else {
             setLoading(false);
             toast.error(data?.message, {
               hideProgressBar: true,
@@ -276,7 +324,6 @@ const Chat = () => {
           });
         });
     }
-
   };
 
   const searchData = () => {
@@ -284,36 +331,47 @@ const Chat = () => {
       setSearchErr(true);
       return;
     }
-  
+
     setLoading(true);
+    setLoaderMsg("Fetching data from Database.");
     setSearchErr(false);
-  
-    let prompt = studentDetail?.prompt?.replace("**question**", 'answer');
-    let payload = {}
-      if (selectedchat?.question !== "") {
-        payload = {
-          question: search,
-          prompt: prompt,
-          course: studentDetail?.course === null ? "" : studentDetail?.course,
-          stream: studentDetail?.subject,
-          chat_hostory: [{ role: "user", content: selectedchat?.question }, {
+
+    let prompt = studentDetail?.prompt?.replace("**question**", "answer");
+    let payload = {};
+    let rag_payload = {};
+    if (selectedchat?.question !== "") {
+      payload = {
+        question: search,
+        prompt: prompt,
+        // course: studentDetail?.course === null ? "" : studentDetail?.course,
+        course: "class_10",
+        stream: studentDetail?.subject,
+        chat_hostory: [
+          { role: "user", content: selectedchat?.question },
+          {
             role: "assistant",
-            content: selectedchat?.answer
-          }]
-        };
-
-      } else {
-        payload = {
-          question: search,
-          prompt: prompt,
-          course: studentDetail?.course === null ? "" : studentDetail?.course,
-          stream: studentDetail?.subject
-
-        };
-      }
-  
-    const handleResponse = (data: { data: any; }) => {
-      const newData = data?.data;
+            content: selectedchat?.answer,
+          },
+        ],
+      };
+      rag_payload = {
+        user_query: search,
+        student_id: userid,
+      };
+    } else {
+      payload = {
+        question: search,
+        prompt: prompt,
+        course: studentDetail?.course === null ? "" : studentDetail?.course,
+        stream: studentDetail?.subject,
+      };
+      rag_payload = {
+        user_query: search,
+        student_id: userid,
+      };
+    }
+    const handleResponse = (data: { data: any }) => {
+      const newData = data?.data ? data?.data : data;
       newData.speak = false;
       setFilteredProducts(newData);
       setSelectedChat((prevState: any) => [...prevState, newData]);
@@ -321,9 +379,61 @@ const Chat = () => {
       setchatData((prevState: any) => [...prevState, newData]);
       setLoading(false);
       setSearch("");
+      getData(`${chatlisturl}/${userdata?.id}`)
+        .then((data: any) => {
+          setchatlistData(data?.data);
+          setstatredchat(data?.data?.filter((chat: any) => chat?.flagged));
+          setchathistory(data?.data?.filter((chat: any) => !chat?.flagged));
+          setchathistoryrecent(
+            data?.data?.filter((chat: any) => !chat?.flagged)
+          );
+        })
+        .catch((e) => {
+          toast.error(e?.message, {
+            hideProgressBar: true,
+            theme: "colored",
+          });
+        });
     };
-  
-    const handleError = (e: { message: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | ((props: ToastContentProps<unknown>) => React.ReactNode) | null | undefined; }) => {
+
+    const handleResponsereg = (data: { data: any }) => {
+      const newData = data;
+      // newData.speak = false;
+      setFilteredProducts(newData);
+      setSelectedChat((prevState: any) => [...prevState, newData]);
+      setChatSaved(false);
+      setchatData((prevState: any) => [...prevState, newData]);
+      setLoading(false);
+      setSearch("");
+      getData(`${chatlisturl}/${userdata?.id}`)
+        .then((data: any) => {
+          setchatlistData(data?.data);
+          setstatredchat(data?.data?.filter((chat: any) => chat?.flagged));
+          setchathistory(data?.data?.filter((chat: any) => !chat?.flagged));
+          setchathistoryrecent(
+            data?.data?.filter((chat: any) => !chat?.flagged)
+          );
+        })
+        .catch((e) => {
+          toast.error(e?.message, {
+            hideProgressBar: true,
+            theme: "colored",
+          });
+        });
+    };
+
+    const handleError = (e: {
+      message:
+        | string
+        | number
+        | boolean
+        | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+        | Iterable<React.ReactNode>
+        | React.ReactPortal
+        | ((props: ToastContentProps<unknown>) => React.ReactNode)
+        | null
+        | undefined;
+    }) => {
       setLoading(false);
       toast.error(e?.message, {
         hideProgressBar: true,
@@ -335,27 +445,78 @@ const Chat = () => {
         if (data.status === 200) {
           handleResponse(data);
         } else if (data.status === 404) {
-          return postData(`${ChatURLRAG}`, payload);
+          // return postData(`${ChatURLAI}`, payload);
+          // return postData(`${ChatURLRAG}`, rag_payload);
+          setLoaderMsg("Fetching data from PDF.");
+          // return getData(
+          //   `http://13.232.96.204:5000/rag-model?user_query=${search}&student_id=${userid}`
+          // );
+          if (studentDetail?.academic_history?.institution_type == "school") {
+            return getData(
+              `http://13.232.96.204:5000/rag-model-class?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.class?.name}`
+            );
+          } else {
+            return getData(
+              `http://13.232.96.204:5000/rag-model?user_query=${search}&student_id=${userid}`
+            );
+          }
         } else {
           handleError(data);
         }
       })
-      .then((data) => {
+      .then((data: any) => {
         if (data?.status === 200) {
-          handleResponse(data);
+          let ChatStorepayload = {
+            student_id: userid,
+            chat_question: search,
+            response: data?.answer,
+          };
+
+          postData(`${ChatStore}`, ChatStorepayload)
+            .then((data) => {
+              if (data?.status === 200) {
+                // handleResponse(data);
+              } else if (data) {
+                // handleError(data);
+              }
+            })
+            .catch(handleError);
+
+          handleResponsereg(data);
         } else if (data?.status === 404) {
-          let Ollamapayload ={
-            user_query:search
-          }
-          return postData(`${ChatURLOLLAMA}`, Ollamapayload);
+          let Ollamapayload = {
+            user_query: search,
+          };
+          // return postData(`${ChatURLOLLAMA}`, Ollamapayload);
+          setLoaderMsg("Fetching Data from Ollama model.");
+          return getData(
+            `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+          );
         } else if (data) {
           handleError(data);
         }
       })
       .then((data) => {
         if (data?.status === 200) {
-          handleResponse(data);
+          // handleResponse(data);
+          let ChatStorepayload = {
+            student_id: userid,
+            chat_question: search,
+            response: data?.answer,
+          };
+
+          postData(`${ChatStore}`, ChatStorepayload)
+            .then((data) => {
+              if (data?.status === 200) {
+                // handleResponse(data);
+              } else if (data) {
+                // handleError(data);
+              }
+            })
+            .catch(handleError);
+          handleResponsereg(data);
         } else if (data?.status === 404) {
+          setLoaderMsg("Fetching data from Chat-GPT API.");
           return postData(`${ChatURLAI}`, payload);
         } else if (data) {
           handleError(data);
@@ -370,26 +531,22 @@ const Chat = () => {
       })
       .catch(handleError);
   };
-  
 
-useEffect(() => {
-  if(dataflagged){
-    setSelectedChat([intials])
-
-  }
-
-},[dataflagged])
+  useEffect(() => {
+    if (dataflagged) {
+      setSelectedChat([intials]);
+    }
+  }, [dataflagged]);
   useEffect(() => {
     if (chat.length > 0) {
-      localStorage.setItem('chatData', JSON.stringify(chat))
-      localStorage.setItem('chatsaved', JSON.stringify(chatsaved))
+      localStorage.setItem("chatData", JSON.stringify(chat));
+      localStorage.setItem("chatsaved", JSON.stringify(chatsaved));
     }
-
-  }, [chat, chatsaved])
+  }, [chat, chatsaved]);
 
   let chatData: any;
   useEffect(() => {
-    const chatDataString = localStorage?.getItem('chatData');
+    const chatDataString = localStorage?.getItem("chatData");
 
     if (chatDataString) {
       chatData = JSON.parse(chatDataString);
@@ -398,20 +555,15 @@ useEffect(() => {
     }
 
     if (chatData?.length > 0) {
-      saveChatlocal()
-
+      saveChatlocal();
     }
-
-  }, [chatData])
-
-
-
+  }, [chatData]);
 
   const saveChatlocal = async () => {
-    const chatDataString = localStorage?.getItem('chatData');
-    const chatflagged = localStorage?.getItem('chatsaved');
+    const chatDataString = localStorage?.getItem("chatData");
+    const chatflagged = localStorage?.getItem("`chatsaved`");
     // console.log("chatData testing save",chatDataString);
-    const isChatFlagged = chatflagged === 'true';
+    const isChatFlagged = chatflagged === "true";
     let chatData: any;
 
     if (chatDataString) {
@@ -420,28 +572,33 @@ useEffect(() => {
       chatData = null;
     }
 
-
     let datatest;
     if (chatlist !== undefined) {
-      datatest = chatlist?.filter((chatitem: { chat_title: any; }) => chatitem?.chat_title === chatData[0]?.question);
+      datatest = chatlist?.filter(
+        (chatitem: { chat_title: any }) =>
+          chatitem?.chat_title === chatData[0]?.question
+      );
     }
 
     let chat_payload;
-    if (datatest?.length !== 0 && Array.isArray(chatData) && chatData.length >= 2) {
+    if (
+      datatest?.length !== 0 &&
+      Array.isArray(chatData) &&
+      chatData.length >= 2
+    ) {
       // chatData?.shift();
       chat_payload = {
         student_id: userdata.id,
         chat_title: chatData[0]?.question,
         chat_conversation: JSON.stringify(chatData),
-        flagged: isChatFlagged
+        flagged: isChatFlagged,
       };
-
     } else {
       chat_payload = {
         student_id: userdata.id,
         chat_title: chatData[0]?.question,
         chat_conversation: JSON.stringify(chatData),
-        flagged: isChatFlagged
+        flagged: isChatFlagged,
       };
     }
     // postData(`${chataddurl}`, chat_payload)
@@ -453,8 +610,8 @@ useEffect(() => {
         //   theme: "colored",
         // });
         callAPI();
-        localStorage.removeItem('chatData');
-        localStorage.removeItem('chatsaved');
+        localStorage.removeItem("chatData");
+        localStorage.removeItem("chatsaved");
       })
       .catch((e) => {
         // toast.error(e?.message, {
@@ -468,7 +625,10 @@ useEffect(() => {
     // alert("called!!");
     let datatest;
     if (chatlist !== undefined) {
-      datatest = chatlist?.filter((chatitem: { chat_title: any; }) => chatitem?.chat_title === chat[0]?.question);
+      datatest = chatlist?.filter(
+        (chatitem: { chat_title: any }) =>
+          chatitem?.chat_title === chat[0]?.question
+      );
     }
 
     let chat_payload;
@@ -478,15 +638,14 @@ useEffect(() => {
         student_id: userdata.id,
         chat_title: chat[0]?.question,
         chat_conversation: JSON.stringify(chat),
-        flagged: chatsaved
+        flagged: chatsaved,
       };
-
     } else {
       chat_payload = {
         student_id: userdata.id,
         chat_title: chat[0]?.question,
         chat_conversation: JSON.stringify(chat),
-        flagged: chatsaved
+        flagged: chatsaved,
       };
     }
     // postData(`${chataddurl}`, chat_payload)
@@ -497,8 +656,8 @@ useEffect(() => {
           hideProgressBar: true,
           theme: "colored",
         });
-        localStorage.removeItem('chatData');
-        localStorage.removeItem('chatsaved');
+        localStorage.removeItem("chatData");
+        localStorage.removeItem("chatsaved");
         callAPI();
       })
       .catch((e) => {
@@ -528,7 +687,7 @@ useEffect(() => {
 
   const newchat = async () => {
     if (chat.length > 0) {
-      await saveChat()
+      await saveChat();
     }
     setSelectedChat([]);
 
@@ -549,11 +708,11 @@ useEffect(() => {
     //     "?"
     //   ],
     // },])
-    setDataflagged(true)
+    setDataflagged(true);
     setTimeout(() => {
-      setDataflagged(false)  
+      setDataflagged(false);
     }, 100);
-    setchatData([])
+    setchatData([]);
     setChatSaved(false);
     setSearch("");
     setSearchErr(false);
@@ -562,214 +721,366 @@ useEffect(() => {
       chatRef?.current.focus();
       chatRef?.current.scrollIntoView();
     }
-
   };
   const displayChat = async (chats: any) => {
-    const datatest = chatlist.filter((chatitem: { chat_title: any; }) => chatitem.chat_title === chat[0]?.question);
+    const datatest = chatlist.filter(
+      (chatitem: { chat_title: any }) =>
+        chatitem.chat_title === chat[0]?.question
+    );
 
     if (datatest.length === 0 && chat[0]?.question !== undefined) {
       await saveChat();
     } else if (Array.isArray(chat) && chat.length >= 2) {
       await saveChat();
-    }else{
+    } else {
       //empty
     }
-    setchatData([])
-    const chatt = JSON.parse(chats?.chat_conversation)
-    setSelectedChat([])
+    setchatData([]);
+    const chatt = JSON.parse(chats?.chat_conversation);
+    setSelectedChat([]);
     let chatdataset: any[] = [];
     chatt.map((itemchat: any) => {
       setTimeout(() => {
-        let chatdata: any = {}
-        chatdata.question = itemchat?.question
+        let chatdata: any = {};
+        chatdata.question = itemchat?.question;
         // chatdata.answer = chat?.response
-        let elements: any = []
+        let elements: any = [];
         try {
-          if (typeof itemchat?.answer === 'string') {
-            elements = JSON.parse(itemchat?.answer)
+          if (typeof itemchat?.answer === "string") {
+            elements = JSON.parse(itemchat?.answer);
+          } else {
+            elements = itemchat?.answer;
           }
-          else {
-            elements = itemchat?.answer
-          }
-        }
-        catch (e) {
+        } catch (e) {
           const cleanString = itemchat?.answer
             .replace(/\\"/g, '"')
-            .replace(/[{}]/g, '')
+            .replace(/[{}]/g, "")
             .replace(/\\'/g, "'")
-            .replace(/(^"|"$)/g, '')
-            .replace(/(^\\\"|\\\"$)/g, '')
-          const stringArray = cleanString.split(',').map((item: any) => item.trim());
-          elements = stringArray.map((item: any) => item.replace(/"/g, ''));
+            .replace(/(^"|"$)/g, "")
+            .replace(/(^\\\"|\\\"$)/g, "");
+          const stringArray = cleanString
+            .split(",")
+            .map((item: any) => item.trim());
+          elements = stringArray.map((item: any) => item.replace(/"/g, ""));
         }
-        chatdata.answer = elements
-        chatdata.speak = false
-        chatdataset.push(chatdata)
-        setSelectedChat(chatdataset)
+        chatdata.answer = elements;
+        chatdata.speak = false;
+        chatdataset.push(chatdata);
+        setSelectedChat(chatdataset);
       }, 500);
-
-
-    })
-
-  }
+    });
+  };
 
   const handleDeleteFiles = (id: number | undefined) => {
-    setDataDeleteId(id)
-    setDataDelete(true)
-  }
+    setDataDeleteId(id);
+    setDataDelete(true);
+  };
   const handleDelete = (id: number | undefined) => {
-    deleteData(`${ChatDELETEURL}/${id}`).then((data: { message: string }) => {
-      toast.success(data?.message, {
-        hideProgressBar: true,
-        theme: "colored",
+    deleteData(`${ChatDELETEURL}/${id}`)
+      .then((data: { message: string }) => {
+        toast.success(data?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+        callAPI();
+        setDataDelete(false);
+      })
+      .catch((e) => {
+        if (e?.response?.status === 401) {
+          navigate("/");
+        }
+        toast.error(e?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
       });
-      callAPI()
-      setDataDelete(false);
-    }).catch(e => {
-      if (e?.response?.status === 401) {
-        navigate("/")
-      }
-      toast.error(e?.message, {
-        hideProgressBar: true,
-        theme: "colored",
-      });
-    });
-  }
+  };
 
   const saveChatstar = () => {
     setChatSaved(!chatsaved);
-  }
+    // saveChatlocal();
+  };
 
-  const isSmallScreen = useMediaQuery('(max-width:600px)');
-  const isMediumScreen = useMediaQuery('(min-width:601px) and (max-width:1200px)');
-  
-  let fontSize = '27px';
-  
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+  const isMediumScreen = useMediaQuery(
+    "(min-width:601px) and (max-width:1200px)"
+  );
+
+  let fontSize = "27px";
+
   if (isSmallScreen) {
-    fontSize = '18px';
+    fontSize = "18px";
   } else if (isMediumScreen) {
-    fontSize = '22px';
-  }else{
+    fontSize = "22px";
+  } else {
     //empty
   }
-//   let statredchat:any =[];
-//   let chathistory:any =[];
-// useEffect(()=>{
+  //   let statredchat:any =[];
+  //   let chathistory:any =[];
+  // useEffect(()=>{
 
-//      statredchat = chatlist?.filter((chat:any)=>chat?.flagged) 
-//      chathistory = chatlist?.data?.filter((chat:any)=>!chat?.flagged) 
-  
-// },[chatlist,statredchat,chathistory])
-// console.log("test starred",statredchat,chatlist,selectedchat)
+  //      statredchat = chatlist?.filter((chat:any)=>chat?.flagged)
+  //      chathistory = chatlist?.data?.filter((chat:any)=>!chat?.flagged)
 
-
-const [isStarredChatOpen, setIsStarredChatOpen] = useState(false);
-  const [isChatHistoryOpen, setIsChatHistoryOpen] = useState(false);
+  // },[chatlist,statredchat,chathistory])
+  // console.log("test starred",statredchat,chatlist,selectedchat)
 
   const toggleStarredChat = () => setIsStarredChatOpen(!isStarredChatOpen);
   const toggleChatHistory = () => setIsChatHistoryOpen(!isChatHistoryOpen);
-  return (
 
+  const iconcolor: any = {
+    light: "#003032",
+    dark: "#FFFFFF",
+    default: "#003032",
+  };
+
+  // Handle search input change
+  const handleSearchChange = (e: {
+    target: { value: React.SetStateAction<string> };
+  }) => {
+    setSearchQuery(e?.target?.value);
+    setSearchQuerystarred(e?.target?.value);
+  };
+
+  // Filter chats based on search query, or show all if query is blank
+  const filteredChatsstarred = searchQuery
+    ? statredchat?.filter((chat: { chat_title: string }) =>
+        chat?.chat_title.toLowerCase().includes(searchQuery?.toLowerCase())
+      )
+    : statredchat;
+  const filteredChats = searchQuerystarred
+    ? chathistory?.filter((chat: { chat_title: string }) =>
+        chat?.chat_title
+          ?.toLowerCase()
+          ?.includes(searchQuerystarred?.toLowerCase())
+      )
+    : chathistory;
+
+    console.log("test details",studentDetail,studentDetail?.academic_history?.class_name)
+  return (
     <>
-      {loading && <FullScreenLoader />}
+      {loading && <FullScreenLoader msg={loaderMsg} />}
       <div className="chat_view">
         <div className="chat_section">
           <div className="row">
             <div className="left_panel col-md-3">
               <div className="left_panel_inner">
-
-
                 <div className="chat">
                   <Box className="title" style={{ fontSize }}>
                     Chat History
                   </Box>
-
+                  {Id === undefined ? (
+                    <div className="search-bar" id="search-toggle">
+                      <form
+                        className="search-form d-flex align-items-center"
+                        method="POST"
+                        action="#"
+                        onSubmit={(e) => e?.preventDefault()} // Prevent form submission
+                      >
+                        <input
+                          className="search-input-text"
+                          type="text"
+                          name="query" //question add
+                          placeholder="Search"
+                          title="Enter search keyword"
+                          value={searchQuery}
+                          onChange={handleSearchChange}
+                        />
+                        <button type="submit" title="Search">
+                          <i className="bi bi-search"></i>
+                        </button>
+                      </form>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <div className="chat_inner">
                     {/* <div className="chathedding title">Starred Chat</div> */}
-                    <div className="chathedding title" onClick={toggleStarredChat} style={{ cursor: 'pointer' }}>
-                      Starred Chat <span style={{marginLeft:"10px"}} >{isStarredChatOpen ? '▲' : '▼'}</span>
+                    <div
+                      className="chathedding title"
+                      onClick={toggleStarredChat}
+                      style={{ cursor: "pointer" }}
+                    >
+                      Starred Chat{" "}
+                      <span style={{ marginLeft: "10px" }}>
+                        {isStarredChatOpen ? "▲" : "▼"}
+                      </span>
                     </div>
-                    { isStarredChatOpen && 
+                    {/* { isStarredChatOpen && 
                       statredchat?.length > 0 &&
                       statredchat
                         .map((chat: { chat_title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; flagged: any; id: number | undefined; },index: React.Key | null | undefined) => {
-                          //  {console.log("chatname",chat.chat_title,)}
-                           return (
-                              <div className="chat_item" key={index}>
-                                <div className="chat_item_inner row">
-                                  <div className="left_part col-sm-8 col-md-7 col-lg-8 col-xl-7">
-                                    <div className="chat_detail">
-                                      <div className="chat_title chat_head" onClick={() => displayChat(chat)}>
-                                        {chat?.chat_title}
-                                      </div>
-                                      {/* <div className="chat_response">
+                           */}
+                    {isStarredChatOpen &&
+                      filteredChatsstarred?.length > 0 &&
+                      filteredChatsstarred?.map(
+                        (
+                          chat: {
+                            chat_title:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | Iterable<React.ReactNode>
+                              | React.ReactPortal
+                              | null
+                              | undefined;
+                            flagged: any;
+                            id: number | undefined;
+                          },
+                          index: React.Key | null | undefined
+                        ) => {
+                          return (
+                            <div className="chat_item" key={index}>
+                              <div className="chat_item_inner row">
+                                <div className="left_part col-sm-8 col-md-7 col-lg-8 col-xl-7">
+                                  <div className="chat_detail">
+                                    <div
+                                      className="chat_title chat_head"
+                                      onClick={() => displayChat(chat)}
+                                    >
+                                      {chat?.chat_title}
+                                    </div>
+                                    {/* <div className="chat_response">
                                       {chat?.response}
                                     </div> */}
-                                    </div>
                                   </div>
-                                  <div className="right_part col-sm-4 col-md-5 col-lg-4 col-xl-5">
-                                    <div style={{ display: "flex", flexDirection: "row" }}>
-                                      <div style={{ marginTop: "5px" }}> {chat?.flagged ? <StarIcon color="success" /> : ""}</div>
-                                      <div className="dateandtime">
-                                        <IconButton
-                                          // onClick={()=>handleDelete(chat?.id)}
-                                          onClick={() => handleDeleteFiles(chat?.id)}
-
-                                          sx={{ width: "35px", height: "35px", color: "#201f1fb8" }}
-                                        >
-                                          <DeleteIcon />
-                                        </IconButton>
-                                      </div>
+                                </div>
+                                <div className="right_part col-sm-4 col-md-5 col-lg-4 col-xl-5">
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "row",
+                                    }}
+                                  >
+                                    <div style={{ marginTop: "5px" }}>
+                                      {" "}
+                                      {chat?.flagged ? (
+                                        <StarIcon
+                                          sx={{ color: iconcolor[namecolor] }}
+                                        />
+                                      ) : (
+                                        ""
+                                      )}
+                                    </div>
+                                    <div className="dateandtime">
+                                      <IconButton
+                                        // onClick={()=>handleDelete(chat?.id)}
+                                        onClick={() =>
+                                          handleDeleteFiles(chat?.id)
+                                        }
+                                        sx={{
+                                          width: "35px",
+                                          height: "35px",
+                                          color: iconcolor[namecolor],
+                                        }}
+                                      >
+                                        <DeleteIcon />
+                                      </IconButton>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                           )
-                          }
-                        )}
-                        <hr className="hr_chat"></hr>
-                        {/* <div className="hr"></div> */}
-                        {/* <div className="chathedding title">Chat History</div> */}
-                    <div className="chathedding title"  onClick={toggleChatHistory} style={{ cursor: 'pointer'}}>
-                   {Id !== undefined ? "Chat" : "Chat History"}    <span style={{marginLeft:"10px"}} >{isChatHistoryOpen ? '▲' : '▼'}</span> 
+                            </div>
+                          );
+                        }
+                      )}
+                    <hr className="hr_chat"></hr>
+                    {/* <div className="hr"></div> */}
+                    {/* <div className="chathedding title">Chat History</div> */}
+                    <div
+                      className="chathedding title"
+                      onClick={toggleChatHistory}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {Id !== undefined ? "Chat" : "Chat History"}{" "}
+                      <span style={{ marginLeft: "10px" }}>
+                        {isChatHistoryOpen ? "▲" : "▼"}
+                      </span>
                     </div>
-                    { isChatHistoryOpen &&
+                    {/* { isChatHistoryOpen &&
                       chathistory?.length > 0 &&
-                      chathistory
-                        .map((chat: { chat_title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; flagged: any; id: number | undefined; },index: React.Key | null | undefined) => {
-                           return (
-                              <div className="chat_item" key={index}>
-                                <div className="chat_item_inner row">
-                                  <div className="left_part col-sm-8 col-md-7 col-lg-8 col-xl-7">
-                                    <div className="chat_detail">
-                                      <div className="chat_title chat_head" onClick={() => displayChat(chat)}>
-                                        {chat?.chat_title}
-                                      </div>
-                                      {/* <div className="chat_response">
+                      chathistory */}
+                    {isChatHistoryOpen &&
+                      filteredChats?.length > 0 &&
+                      filteredChats.map(
+                        (
+                          chat: {
+                            chat_title:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | Iterable<React.ReactNode>
+                              | React.ReactPortal
+                              | null
+                              | undefined;
+                            flagged: any;
+                            id: number | undefined;
+                          },
+                          index: React.Key | null | undefined
+                        ) => {
+                          return (
+                            <div className="chat_item" key={index}>
+                              <div className="chat_item_inner row">
+                                <div className="left_part col-sm-8 col-md-7 col-lg-8 col-xl-7">
+                                  <div className="chat_detail">
+                                    <div
+                                      className="chat_title chat_head"
+                                      onClick={() => displayChat(chat)}
+                                    >
+                                      {chat?.chat_title}
+                                    </div>
+                                    {/* <div className="chat_response">
                                       {chat?.response}
                                     </div> */}
-                                    </div>
                                   </div>
-                                  <div className="right_part col-sm-4 col-md-5 col-lg-4 col-xl-5">
-                                    <div style={{ display: "flex", flexDirection: "row" }}>
-                                      <div style={{ marginTop: "5px" }}> {chat?.flagged ? <StarIcon color="success" /> : ""}</div>
-                                      <div className="dateandtime">
-                                        <IconButton
-                                          // onClick={()=>handleDelete(chat?.id)}
-                                          onClick={() => handleDeleteFiles(chat?.id)}
-
-                                          sx={{ width: "35px", height: "35px", color: "#201f1fb8" }}
-                                        >
-                                          <DeleteIcon />
-                                        </IconButton>
-                                      </div>
+                                </div>
+                                <div className="right_part col-sm-4 col-md-5 col-lg-4 col-xl-5">
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                      flexDirection: "row",
+                                    }}
+                                  >
+                                    <div style={{ marginTop: "5px" }}>
+                                      {" "}
+                                      {chat?.flagged ? (
+                                        <StarIcon
+                                          color={iconcolor[namecolor]}
+                                        />
+                                      ) : (
+                                        ""
+                                      )}
+                                    </div>
+                                    <div className="dateandtime">
+                                      <IconButton
+                                        // onClick={()=>handleDelete(chat?.id)}
+                                        onClick={() =>
+                                          handleDeleteFiles(chat?.id)
+                                        }
+                                        sx={{
+                                          width: "35px",
+                                          height: "35px",
+                                          color: iconcolor[namecolor],
+                                        }}
+                                      >
+                                        <DeleteIcon />
+                                      </IconButton>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                           )
-                          }
-                        )}
+                            </div>
+                          );
+                        }
+                      )}
                   </div>
                 </div>
               </div>
@@ -784,60 +1095,63 @@ const [isStarredChatOpen, setIsStarredChatOpen] = useState(false);
                           <div className="chat_title">
                             {/* {selectedchat.question} */}
                             <div className="title" style={{ fontSize: "27px" }}>
-                              Chat{" "}
+                              {/* Chat{" "} */} {Id !== undefined ? "Chat" : ""}
                             </div>
                           </div>
                           {/* <div className="aboutus_msg">lorem ipsum text</div> */}
                         </div>
                       </div>
-
-                      <div className="right_part">
-                        {/* {selectedchat && selectedchat?.question && ( */}
-                        {selectedchat && selectedchat?.length > 0 && (
-                          <div className="dropdown_content">
-                            {chatsaved ? (
-                              <span onClick={() => saveChatstar()}>
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  fill="green"
-                                  className="bi bi-flag-fill"
-                                  viewBox="0 0 16 16"
-                                  cursor="pointer"
-                                >
-                                  <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
-                                </svg>
-                              </span>
-                            ) : (
-                              <span onClick={() => saveChatstar()}>
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="16"
-                                  height="16"
-                                  fill="currentColor"
-                                  className="bi bi-flag-fill"
-                                  viewBox="0 0 16 16"
-                                  cursor="pointer"
-                                >
-                                  <title>Save Chat</title>
-                                  <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
-                                </svg>
-                              </span>
-                            )}
+                      {Id !== undefined ? (
+                        <div className="right_part">
+                          {/* {selectedchat && selectedchat?.question && ( */}
+                          {selectedchat && selectedchat?.length > 0 && (
+                            <div className="dropdown_content">
+                              {chatsaved ? (
+                                <span onClick={() => saveChatstar()}>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="green"
+                                    className="bi bi-flag-fill"
+                                    viewBox="0 0 16 16"
+                                    cursor="pointer"
+                                  >
+                                    <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                  </svg>
+                                </span>
+                              ) : (
+                                <span onClick={() => saveChatstar()}>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    className="bi bi-flag-fill"
+                                    viewBox="0 0 16 16"
+                                    cursor="pointer"
+                                  >
+                                    <title>Save Chat</title>
+                                    <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12 12 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A20 20 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a20 20 0 0 0 1.349-.476l.019-.007.004-.002h.001" />
+                                  </svg>
+                                </span>
+                              )}
+                            </div>
+                          )}
+                          {/* New Chat button start */}
+                          <div>
+                            <button
+                              className="btn btn-primary chatbutton"
+                              onClick={() => newchat()}
+                            >
+                              New Chat
+                            </button>
                           </div>
-                        )}
-                        {/* New Chat button start */}
-                        <div>
-                          <button
-                            className="btn btn-primary"
-                            onClick={() => newchat()}
-                          >
-                            New Chat
-                          </button>
+                          {/* New Chat button End */}
                         </div>
-                        {/* New Chat button End */}
-                      </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
 
                     {/* {selectedchat?.map((chat: any, index: any) => ( */}
@@ -848,7 +1162,10 @@ const [isStarredChatOpen, setIsStarredChatOpen] = useState(false);
                           <div key={index} className="chat_wrapper">
                             {chat?.question && (
                               <div className="chat_message">
-                                <div className="msg_txt BG_chat" style={{ fontSize: "15px" }}>
+                                <div
+                                  className="msg_txt BG_chat"
+                                  style={{ fontSize: "15px" }}
+                                >
                                   {chat?.question}
                                 </div>
                                 {/* <div className="date_time">Today, 2:01pm</div> */}
@@ -859,25 +1176,30 @@ const [isStarredChatOpen, setIsStarredChatOpen] = useState(false);
                               <div className="chat_message chat_message-own">
                                 <div
                                   className="msg_txt BG_chatA"
-                                //   style={{ maxWidth: "80%", fontSize: "18px" }}
+                                  //   style={{ maxWidth: "80%", fontSize: "18px" }}
                                 >
                                   <Chatbot answer={chat?.answer} />
                                   {chat?.speak}
                                 </div>
                                 {chat?.speak === true ? (
-                                  <div
-                                    className="date_time"
-                                  >
-                                    <img src={soundimg} alt="sound-img" height="50px" width="50px" className="soundimg" />
+                                  <div className="date_time">
+                                    <img
+                                      src={soundimg}
+                                      alt="sound-img"
+                                      height="50px"
+                                      width="50px"
+                                      className="soundimg"
+                                    />
                                     <svg
-                                      fill="#000000"
+                                      fill={iconcolor[namecolor]}
                                       version="1.1"
                                       id="Capa_1"
                                       xmlns="http://www.w3.org/2000/svg"
                                       width="20px"
                                       height="20px"
                                       viewBox="0 0 306.257 306.257"
-                                      cursor="pointer" onClick={() => stop(index)}
+                                      cursor="pointer"
+                                      onClick={() => stop(index)}
                                     >
                                       <title>Stop</title>
                                       <g
@@ -906,7 +1228,7 @@ const [isStarredChatOpen, setIsStarredChatOpen] = useState(false);
                                     }
                                   >
                                     <svg
-                                      fill="#000000"
+                                      fill={iconcolor[namecolor]}
                                       width="20px"
                                       height="20px"
                                       viewBox="0 -32 576 576"
@@ -929,7 +1251,6 @@ const [isStarredChatOpen, setIsStarredChatOpen] = useState(false);
                                     </svg>
                                   </div>
                                 )}
-
                               </div>
                             )}
                           </div>
@@ -937,30 +1258,31 @@ const [isStarredChatOpen, setIsStarredChatOpen] = useState(false);
                       </div>
                     </div>
                     {/* // ))} */}
-
                   </div>
                 </div>
               </div>
               <br />
               <div className="searchbar_wrap">
                 <div className="search_bar">
-                  <div className="input-group">
-                    <input
-                      type="text"
-                      ref={chatRef}
-                      className="form-control"
-                      placeholder="Search..."
-                      aria-label="Search"
-                      value={search}
-                      onChange={(e) => setSearch(e?.target?.value)}
-                      onKeyDown={handleKeyDown}
-                    />
-                    <button
-                      className="btn search_btn"
-                      type="button"
-                      onClick={() => searchData()}
-                    >
-                      {/* <svg
+                  {Id !== undefined ? (
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        ref={chatRef}
+                        className="form-control"
+                        placeholder="Search..."
+                        aria-label="Search"
+                        value={search}
+                        onChange={(e) => setSearch(e?.target?.value)}
+                        onKeyDown={handleKeyDown}
+                      />
+                      <button
+                        className="btn search_btn"
+                        type="button"
+                        onClick={() => searchData()}
+                        style={{ top: "15%" }}
+                      >
+                        {/* <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
@@ -984,9 +1306,12 @@ const [isStarredChatOpen, setIsStarredChatOpen] = useState(false);
                           strokeLinejoin="round"
                         />
                       </svg> */}
-                      <SendIcon color="primary" />
-                    </button>
-                  </div>
+                        <SendIcon className="mainsearch" />
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   {searcherr === true ? (
                     <small className="text-danger">
                       Please Enter your query!!

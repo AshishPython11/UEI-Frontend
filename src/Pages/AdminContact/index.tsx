@@ -7,9 +7,12 @@ import { FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/mater
 import { useState, useEffect } from 'react';
 import useApi from '../../hooks/useAPI';
 import { toast } from 'react-toastify';
-import { deepEqual } from '../../utils/helpers';
+import { deepEqual, inputfield, inputfieldhover, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 export default function AdmincontactDtails() {
+    const context = React.useContext(NameContext);
+    const {namecolor }:any = context;
     let adminId = localStorage.getItem('_id')
     console.log(adminId);
     const { getData, postData, putData } = useApi();
@@ -215,7 +218,7 @@ export default function AdmincontactDtails() {
                 <div className='row'>
                     <label style={{ textAlign: "left", margin: "10px" }}>Mobile Number *</label>
 
-                    <div className='col'>
+                    <div className='col form_field_wrapper'>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Country code *</InputLabel>
                             <Select
@@ -225,20 +228,42 @@ export default function AdmincontactDtails() {
                                 label="Country code"
                                 onChange={(event) => setContcodePhone(event.target.value)}
                             >
-                                <MenuItem value={"+91"}>+91</MenuItem>
-                                <MenuItem value={"+971"}>+971</MenuItem>
-                                <MenuItem value={"+1"}>+1</MenuItem>
+                                <MenuItem value={"+91"}
+                                sx={{
+                                    backgroundColor: inputfield(namecolor),
+                                    color: inputfieldtext(namecolor),
+                                    '&:hover': {
+                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                    },
+                                }} 
+                                >+91</MenuItem>
+                                <MenuItem value={"+971"}
+                                 sx={{
+                                    backgroundColor: inputfield(namecolor),
+                                    color: inputfieldtext(namecolor),
+                                    '&:hover': {
+                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                    },
+                                }}>+971</MenuItem>
+                                <MenuItem value={"+1"}
+                                 sx={{
+                                    backgroundColor: inputfield(namecolor),
+                                    color: inputfieldtext(namecolor),
+                                    '&:hover': {
+                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                    },
+                                }}>+1</MenuItem>
                             </Select>
                         </FormControl>
 
                     </div>
-                    <div className='col'>
+                    <div className='col form_field_wrapper'>
                         <TextField
 
-                            label="Enter Mobile Mumber"
+                            label="Enter Mobile Number"
 
                             type='text'
-                            placeholder='Enter mobile number'
+                            placeholder='Enter Mobile Number'
                             value={phoneNum}
                             name='phoneNum'
                             onChange={handleChange}
@@ -256,7 +281,7 @@ export default function AdmincontactDtails() {
                 <div className='row'>
                     <label style={{ textAlign: "left", margin: "10px" }}>Whatsapp Number </label>
 
-                    <div className='col'>
+                    <div className='col form_field_wrapper'>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Country code </InputLabel>
                             <Select
@@ -266,21 +291,42 @@ export default function AdmincontactDtails() {
                                 label="Country code"
                                 onChange={(event) => setContcodeWtsap(event.target.value)}
                             >
-                                <MenuItem value={"+91"}>+91</MenuItem>
-                                <MenuItem value={"+971"}>+971</MenuItem>
-                                <MenuItem value={"+1"}>+1</MenuItem>
+                                <MenuItem value={"+91"}
+                                    sx={{
+                                        backgroundColor: inputfield(namecolor),
+                                        color: inputfieldtext(namecolor),
+                                        '&:hover': {
+                                            backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                        },
+                                    }}
+                                >+91</MenuItem>
+                                <MenuItem value={"+971"}
+                                    sx={{
+                                        backgroundColor: inputfield(namecolor),
+                                        color: inputfieldtext(namecolor),
+                                        '&:hover': {
+                                            backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                        },
+                                    }}>+971</MenuItem>
+                                <MenuItem value={"+1"} sx={{
+                                    backgroundColor: inputfield(namecolor),
+                                    color: inputfieldtext(namecolor),
+                                    '&:hover': {
+                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                    },
+                                }}>+1</MenuItem>
                             </Select>
                         </FormControl>
 
                     </div>
-                    <div className='col'>
+                    <div className='col form_field_wrapper '>
 
 
                         <TextField
                             type='text'
-                            label="Enter Whatsapp number"
+                            label="Enter Whatsapp Number"
 
-                            placeholder='Enter Whatsapp number'
+                            placeholder='Enter Whatsapp Number'
                             name='whatsappNum'
                             value={whatsappNum}
                             // required
@@ -296,7 +342,7 @@ export default function AdmincontactDtails() {
             <div className="d-flex justify-content-start" style={{ margin: '25px'}}>
                 <div className="row" style={{marginLeft:"0%"}}>
 
-                    <div className="row">
+                    <div className="row form_field_wrapper">
                         <label style={{ textAlign: "left", margin: "5px" }}> Email Id </label>
                         <TextField
                             type='email'
@@ -319,7 +365,7 @@ export default function AdmincontactDtails() {
             </div>
                     {/* <div className="row" style={{ marginTop: '55px' }}> */}
                     <div className='col-6 d-flex justify-content-center mt-3'>
-                        <button className="btn btn-primary">{editFalg ? "save" : "save changes"}</button>
+                        <button className="btn btn-primary mainbutton">{editFalg ? "save" : "save changes"}</button>
                     </div>
         </form>
     );

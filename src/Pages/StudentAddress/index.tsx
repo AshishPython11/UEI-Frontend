@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
+
 import {
   TextField,
   Checkbox,
@@ -51,6 +53,48 @@ function StudentAddress() {
   const [city_col1, setcity_col1] = useState<boolean>(false)
   const [district_col1, setdistrict_col1] = useState<boolean>(false)
   const [pincode_col1, setpincode_col1] = useState<boolean>(false)
+
+
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFocusedstate, setIsFocusedstate] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownstateRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleFocus = () => setIsFocused(true);
+    const handleFocusstate = () => setIsFocusedstate(true);
+    const handleBlur = (e: FocusEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.relatedTarget as Node)) {
+        setIsFocused(false);
+      }
+    };
+    const handleBlurstate = (e: FocusEvent) => {
+      if (dropdownstateRef.current && !dropdownstateRef.current.contains(e.relatedTarget as Node)) {
+          setIsFocusedstate(false);
+      }
+    };
+  
+    const currentDropdown = dropdownRef.current;
+    if (currentDropdown) {
+      currentDropdown.addEventListener('focus', handleFocus as EventListener);
+      currentDropdown.addEventListener('blur', handleBlur as EventListener);
+    }
+    const currentDropdownstate = dropdownstateRef.current;
+    if (currentDropdownstate) {
+      currentDropdownstate.addEventListener('focus', handleFocusstate as EventListener);
+      currentDropdownstate.addEventListener('blur', handleBlurstate as EventListener);
+    }
+  
+    return () => {
+      if (currentDropdown) {
+        currentDropdown.removeEventListener('focus', handleFocus as EventListener);
+        currentDropdown.removeEventListener('blur', handleBlur as EventListener);
+      }
+      if (currentDropdownstate) {
+          currentDropdownstate.removeEventListener('focus', handleFocusstate as EventListener);
+          currentDropdownstate.removeEventListener('blur', handleBlurstate as EventListener);
+        }
+    };
+  }, []);
 
   const validatePincode = (pincode: any) => {
     const pincodePattern = /^[1-9][0-9]{5}$/;
@@ -451,16 +495,16 @@ function StudentAddress() {
   }
   return (
     <form onSubmit={SubmitHandle}>
-      <div className="row mt-5">
+      <div className="row mt-5 form_field_wrapper">
         <div className="col-12">
-          <h5 className="font-weight-bold">
+          <h5 className="font-weight-bold profiletext">
             {" "}
             <b> Current Address</b>
           </h5>
         </div>
       </div>
       <div className="row mt-5">
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Address 1 <span>*</span>
@@ -478,7 +522,7 @@ function StudentAddress() {
           )}</div>
           {/* {error.address1 && <span style={{ color: 'red' }}>{error.address1}</span>} */}
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Address 2 <span></span>
@@ -537,13 +581,12 @@ function StudentAddress() {
           )}</div>
         </div> */}
 
-        <div className="col-6 pb-3">
-          <label>
-            {" "}
-            Country <span>*</span>
-          </label>
+        <div className="col-6 pb-3 form_field_wrapper">
+        <label className={`floating-label ${isFocusedstate || studentAddress.country? "focused" : "focusedempty"}`}>
+                                            Country <span>*</span>
+                                        </label>
           <CountryDropdown
-            classes="form-control p-3"
+            classes="form-control p-3 custom-dropdown"
             defaultOptionLabel={studentAddress.country}
             value={studentAddress.country || ""}
             onChange={(e:string) => handleInputChangecountry(e, "current_address", "country")}
@@ -553,14 +596,13 @@ function StudentAddress() {
             <p style={{ color: 'red' }}>Please enter Country Name.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
-          <label>
-            {" "}
-            State <span>*</span>
-          </label>
+        <div className="col-6 pb-3 form_field_wrapper">
+        <label className={`floating-label ${isFocusedstate || studentAddress.state ? "focused" : "focusedempty"}`}>
+                                            State <span>*</span>
+                                        </label>
 
           <RegionDropdown
-            classes="form-control p-3"
+            classes="form-control p-3 custom-dropdown"
             defaultOptionLabel={studentAddress.state}
             country={studentAddress.country || ""}
             value={studentAddress.state || ""}
@@ -571,7 +613,7 @@ function StudentAddress() {
             <p style={{ color: 'red' }}>Please enter a valid state Name.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             City <span>*</span>
@@ -592,7 +634,7 @@ function StudentAddress() {
           )}</div>
           {/* {error.city && <span style={{ color: 'red' }}>{error.city}</span>} */}
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             District <span>*</span>
@@ -613,10 +655,10 @@ function StudentAddress() {
           )}</div>
           {/* {error.district && <span style={{ color: 'red' }}>{error.district}</span>} */}
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
-            Pin code <span>*</span>
+            Pincode <span>*</span>
           </label>
           <TextField
             type="text"
@@ -637,15 +679,15 @@ function StudentAddress() {
           {/* {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>} */}
         </div>
       </div>
-      <div className="row mt-5">
-        <div className="col-12">
-          <h5 className="font-weight-bold">
+      <div className="row mt-5 ">
+        <div className="col-12 ">
+          <h5 className="font-weight-bold profiletext">
             {" "}
             <b> Permanent Address</b>
           </h5>
         </div>
       </div>
-      <div className="row mt-3">
+      <div className="row mt-3 form_field_wrapper">
         <div className="col-12 mt-4 pb-3">
           <FormControl>
             <FormControlLabel
@@ -659,7 +701,7 @@ function StudentAddress() {
             />
           </FormControl>
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Address 1 <span></span>
@@ -674,7 +716,7 @@ function StudentAddress() {
           />
 
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Address 2 <span></span>
@@ -723,14 +765,13 @@ function StudentAddress() {
             <p style={{ color: 'red' }}>Please enter a valid state Name only characters allowed.</p>
           )}</div>
         </div> */}
-        <div className="col-6 pb-3">
-          <label>
-            {" "}
+        <div className="col-6 pb-3 form_field_wrapper" ref={dropdownRef}>
+        <label className={`floating-label ${isFocused || permanentAddress.country ? "focused" : "focusedempty"}`}>
             Country <span></span>
           </label>
           <CountryDropdown
-            classes="form-control p-3"
-            defaultOptionLabel={permanentAddress.country}
+            classes="form-control p-3 custom-dropdown"
+            defaultOptionLabel={permanentAddress.country || ""}
             value={permanentAddress.country || ""}
             onChange={(e:string) => handleInputChangecountry(e, "permanent_address", "country")}
 
@@ -739,15 +780,14 @@ function StudentAddress() {
             <p style={{ color: 'red' }}>Please enter Country Name.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
-          <label>
-            {" "}
+        <div className="col-6 pb-3 form_field_wrapper" ref={dropdownstateRef}>
+        <label className={`floating-label ${isFocusedstate || permanentAddress.state ? "focused" : "focusedempty"}`}>
             State <span></span>
           </label>
 
           <RegionDropdown
-            classes="form-control p-3"
-            defaultOptionLabel={permanentAddress.state}
+            classes="form-control p-3 custom-dropdown"
+            defaultOptionLabel={permanentAddress.state ||""}
             country={permanentAddress.country || ""}
             value={permanentAddress.state || ""}
             // onChange={(val) => setRegion(val)} 
@@ -757,7 +797,7 @@ function StudentAddress() {
             <p style={{ color: 'red' }}>Please enter a valid state Name.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             City <span></span>
@@ -775,7 +815,7 @@ function StudentAddress() {
           )}</div>
           {/* {error.city && <span style={{ color: 'red' }}>{error.city}</span>} */}
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             District <span></span>
@@ -793,10 +833,10 @@ function StudentAddress() {
           )}</div>
           {/* {error.district && <span style={{ color: 'red' }}>{error.district}</span>} */}
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
-            Pin code <span></span>
+            Pincode <span></span>
           </label>
           <TextField
             type="text"
@@ -815,7 +855,7 @@ function StudentAddress() {
         </div>
       </div>
       <div className="d-flex justify-content-center">
-        <Button variant="contained" color="primary" type="submit">
+        <Button className="mainbutton" variant="contained" color="primary" type="submit">
           {editFlag ? "save" : "Save Changes"}
         </Button>
       </div>
@@ -824,68 +864,3 @@ function StudentAddress() {
 }
 
 export default StudentAddress;
-
-// import { QUERY_STUDENT_PROFILE_KEYS } from '../../utils/const';
-
-// const StudentAddress = () => {
-//     return (
-//         <form >
-//             <div className='row d-flex justify-content-center'>
-//                 <div className='col-4'>
-//                     <label > address 1</label>
-//                     <TextField type="text"
-//                         name='address1'
-//                         className='form-control' />
-//                 </div>
-
-//                 <div className='col-4'>
-//                     <label >  address 2</label>
-//                     <TextField type="text"
-//                         name='address2'
-//                         className='form-control' />
-//                 </div>
-//             </div>
-//             <div className='row d-flex justify-content-center'>
-//                 <div className='col-4'>
-//                     <label > Country</label>
-//                     <TextField type="text"
-//                         name='Country'
-//                         className='form-control' />
-//                 </div>
-
-//                 <div className='col-4'>
-//                     <label > State</label>
-//                     <TextField type="text"
-//                         name='state'
-//                         className='form-control' />
-//                 </div>
-//             </div>
-//             <div className='row d-flex justify-content-center'>
-//                 <div className='col-4'>
-//                     <label > City</label>
-//                     <TextField type="text"
-//                         name='city'
-//                         className='form-control' />
-//                 </div>
-
-//                 <div className='col-4'>
-//                     <label > District</label>
-//                     <TextField type="text"
-//                         name='district'
-//                         className='form-control' />
-//                 </div>
-//                 <div className="row justify-content-center">
-//                     <div className="col-4">
-//                         <label>Pin code</label>
-//                         <TextField
-//                             type="text"
-//                             name='pincode'
-//                             className='form-control'
-//                         />
-//                     </div>
-//                 </div>
-//             </div>
-
-//         </form>
-//     );
-// }

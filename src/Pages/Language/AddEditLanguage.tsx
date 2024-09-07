@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import '../Language/Language.scss';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -10,12 +10,15 @@ import { toast } from 'react-toastify';
 import { Field, Form, Formik, FormikHelpers, setNestedObjectValues } from 'formik';
 import * as Yup from 'yup';
 import { LanguageRep0oDTO, MenuListinter } from '../../Components/Table/columns';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, inputfield, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 interface ILanguageForm {
     language_name: string
     // description:string
  }
 const AddEditLanguage = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const LanguageAddURL = QUERY_KEYS_LANGUAGE.LANGUAGE_ADD;
     const LanguageEditURL = QUERY_KEYS_LANGUAGE.LANGUAGE_EDIT;
     const LanguageURL = QUERY_KEYS_LANGUAGE.GET_LANGUAGE;
@@ -279,7 +282,7 @@ useEffect(()=>{
                                 <div className='col-md-4 mt-2'>
                                     <div className='col'>
                                         <Grid item xs={12}>
-                                            <Typography variant="h6">Upload a Photo</Typography>
+                                            <Typography variant="h6" sx={{color:inputfieldtext(namecolor)}}>Upload a Photo</Typography>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <input
@@ -287,6 +290,7 @@ useEffect(()=>{
                                                 accept="image/*"
                                                 onChange={(event) => setSelectedFile(event.target.value)}
                                                 id="file-upload"
+                                                style={{ color:inputfieldtext(namecolor)}}
                                             />
                                         </Grid>
                                     </div>
@@ -294,16 +298,17 @@ useEffect(()=>{
                             </div>
                             <div className='row mt-4'>
                                 <div className='col-md-4'>
-                                    <InputLabel className='text-secondary'>Description</InputLabel>
+                                    <InputLabel className='text-secondary'  sx={{color:inputfieldtext(namecolor)}}>Description</InputLabel>
                                     <TextareaAutosize
                                         aria-label="empty textarea"
                                         minRows={5}
-                                        style={{ width: "100%", fontSize: "1rem" }}
+                                        style={{ width: "100%", fontSize: "1rem" ,backgroundColor:inputfield(namecolor) , color:inputfieldtext(namecolor)}}
                                         placeholder="Enter your text here..."
                                         name="description"
                                         value={values.description}
                                         // onChange={handleChange}
                                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange(e, "description")}
+
                                     />
                                         {/* <div> {values.description == "" && (
                                             <p style={{ color: 'red' }}>Please enter description.</p>
@@ -318,7 +323,7 @@ useEffect(()=>{
                                 </div>
                             </div>
                             <div className='mt-3'>
-                                <button type="submit" className='btn btn-primary'  >{id ? "Update" : "Save"}</button>
+                                <button type="submit" className='btn btn-primary mainbutton'  >{id ? "Update" : "Save"}</button>
                             </div>
                         </Form>
                     )}

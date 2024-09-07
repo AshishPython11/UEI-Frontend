@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../Menu/Menu.scss';
 import TextField from '@mui/material/TextField';
 import useApi from '../../hooks/useAPI';
@@ -9,12 +9,16 @@ import { toast } from 'react-toastify';
 import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import { MenuListinter } from '../../Components/Table/columns';
+import { inputfield, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 interface IMenuForm {
   userid: string
   password: string
 }
 const SuperAdmin = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const location = useLocation();
     const signupUrl = QUERY_KEYS.POST_SIGNUP;
     const MenuAddURL = QUERY_KEYS_MENU.MENU_ADD;
@@ -244,6 +248,17 @@ const SuperAdmin = () => {
                                                     value={values?.userid}
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "userid")}
                                                     // required
+                                                    InputProps={{
+                                                        style: {
+                                                            backgroundColor: inputfield(namecolor) ,
+                                                            // backgroundColor:'red' ,
+                                                        }
+                                                    }}
+                                                    InputLabelProps={{
+                                                        style: {
+                                                            color: inputfieldtext(namecolor)
+                                                        }
+                                                    }}
                                                 />
                                                 {touched?.userid && errors?.userid ?
                                                     <p style={{ color: 'red' }}>{errors?.userid}</p> : <></>
@@ -267,6 +282,17 @@ const SuperAdmin = () => {
                                                     value={values?.password}
                                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, "password")}
                                                     // required
+                                                    InputProps={{
+                                                        style: {
+                                                            backgroundColor: inputfield(namecolor) ,
+                                                            // backgroundColor:'red' ,
+                                                        }
+                                                    }}
+                                                    InputLabelProps={{
+                                                        style: {
+                                                            color: inputfieldtext(namecolor)
+                                                        }
+                                                    }}
                                                 />
                                                 {touched?.password && errors?.password ?
                                                     <p style={{ color: 'red' }}>{errors?.password}</p> : <></>
@@ -280,7 +306,7 @@ const SuperAdmin = () => {
                                    
                                     
                                     <div className=' mt-3'>
-                                        <button className='btn btn-primary' disabled={isLoading}>{"Save"}</button>
+                                        <button className='btn btn-primary mainbutton' disabled={isLoading}>{"Save"}</button>
                                     </div>
                                    
                                 </Form>

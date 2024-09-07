@@ -12,13 +12,20 @@ import StudentContactDetails from "../StudentContactDetails";
 import StudentHobbies from "../StudentHobbies";
 import StudentSubjectPreference from "../StudentSubjectPreference";
 import PreviewStudentProfile from "../PreviewStudentProfile";
+
 import { toast } from "react-toastify";
+
 import NameContext from "../Context/NameContext";
 import useApi from "../../hooks/useAPI";
 import { QUERY_KEYS_STUDENT } from "../../utils/const";
 import { Await, useNavigate } from "react-router-dom";
+import { inputfield, inputfieldhover, inputfieldtext } from "../../utils/helpers";
+import AcademicHistory from "../AcademicHistory/AcademicHistory";
+
 
 const StudentProfile = () => {
+  const context = useContext(NameContext);
+  const {namecolor }:any = context;
   const steps = [
     "Basic Information",
     "Address",
@@ -26,6 +33,7 @@ const StudentProfile = () => {
     "Academic History",
     "Contact Details",
     "Subject preference",
+    // "Student History",
   ];
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set<number>());
@@ -44,6 +52,7 @@ const StudentProfile = () => {
   };
 
   const callAPIStudent = async () => {
+   
     if(usertype === 'student')
     {
         getData(`${profileURL}/${StudentId}`)
@@ -256,23 +265,25 @@ useEffect(() => {
   if(activeStep === 5 ){
     callAPIStudent()
   }
+
 },[activeStep])
+
   return (
     <>
       <div className="profile_section">
         <div className="card">
-          <div className="card-header">
+          <div className="card-header custom-header">
             <div className="card-header--actions d-flex justify-content-between align-items-right">
-            <Button className="float-left" onClick={viewProfileHome}>
+            <Button className="float-left custom-header" onClick={viewProfileHome}>
                 Back
               </Button>
               <div>
               {isEdit ? (
-                <Button onClick={viewProfile} className="float-right">
+                <Button onClick={viewProfile} className="float-right custom-header">
                   View Profile
                 </Button>
               ) : (
-                <Button onClick={editProfile} className="float-right">
+                <Button onClick={editProfile} className="float-right custom-header">
                   Edit Profile
                 </Button>
               )}
@@ -283,6 +294,7 @@ useEffect(() => {
             {!isEdit ? (
               <React.Fragment>
                 <PreviewStudentProfile editProfile={editProfile} handleStep={setActiveStep}/>
+
               </React.Fragment>
             ) : (
               <>
@@ -299,6 +311,17 @@ useEffect(() => {
                           {...labelProps}
                           onClick={handleStep(index)}
                           style={{ cursor: "pointer" }}
+                          sx={{
+                            '& .MuiStepLabel-label': {
+                                color: activeStep === index ? inputfieldtext(namecolor) : 'gray', 
+                            },
+                            '& .MuiStepLabel-label.Mui-active': {
+                                color: inputfieldtext(namecolor), // Active step color
+                            },
+                            // '& .MuiStepLabel-label.Mui-completed': {
+                            //     color: inputfield(namecolor), // Completed step color
+                            // },
+                        }}
                         >
                           {label}
                         </StepLabel>
@@ -312,26 +335,28 @@ useEffect(() => {
                 <div style={{display:"flex", flexDirection:"row",paddingTop:"10px",justifyContent:"space-between"}}>
                   {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}> */}
                     <Button
-                      // color="inherit"
+                      color="inherit"
                       disabled={activeStep === 0}
                       onClick={handleBack}
                       sx={{ mr: 1 }}
                       variant="contained"
+                      className={`${activeStep === 0 ? 'disabled-mainbutton' : 'mainbutton'}`}
                     >
                       Previous
                     </Button>
                     <Box sx={{ flex: "1 1 auto" }} />
                     {activeStep !== steps.length - 1 ? (
-                      <Button onClick={handleNext} variant="contained">Next</Button>
+                      <Button onClick={handleNext} variant="contained" className='mainbutton'>Next</Button>
                     ) : (
-                      <Button onClick={handleReset} variant="contained">Finish</Button>
+                      <Button onClick={handleReset} variant="contained" className='mainbutton'>Finish</Button>
                     )}
                   {/* </Box> */}
                   </div>
                   {activeStep === 0 && <StudentBasicInfo />}
                   {activeStep === 1 && <StudentAddress />}
                   {activeStep === 2 && <StudentLanguageKnown />}
-                  {activeStep === 3 && <StudentAcademicHistory />}
+                  {activeStep === 3 && <AcademicHistory />}
+                  {/* {activeStep === 3 && <StudentAcademicHistory />} */}
                   {activeStep === 4 && <StudentContactDetails />}
                   {activeStep === 5 && <StudentSubjectPreference />}
                   {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
@@ -354,6 +379,7 @@ useEffect(() => {
               </>
             )}
           </div>
+
         </div>
       </div>
     </>

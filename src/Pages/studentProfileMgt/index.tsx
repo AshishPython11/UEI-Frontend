@@ -1,30 +1,51 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import { YearCalendar } from '@mui/x-date-pickers/YearCalendar';
-import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, Grid, IconButton, InputLabel, ListItemText, MenuItem, OutlinedInput, Paper, Radio, RadioGroup, Select, SelectChangeEvent, TextField, Theme, Tooltip, useTheme } from '@mui/material';
-import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useState, useEffect } from 'react';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import useApi from '../../hooks/useAPI';
-import { toast } from 'react-toastify';
-import { log } from 'console';
-import { YearPicker } from '@mui/lab';
-import StudentAddress from '../StudentAddress';
-import StudentBasicInfo from '../StudentBasicInfo';
-import StudentAcadmicHistory from '../StudentAcademicHistory';
-import StudentcontactDetails from '../StudentContactDetails';
-import StudentHobbies from '../StudentHobbies';
-import StudentLanguage from '../StudentLanguageKnown';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import { YearCalendar } from "@mui/x-date-pickers/YearCalendar";
+import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import {
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  Grid,
+  IconButton,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
+  Paper,
+  Radio,
+  RadioGroup,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Theme,
+  Tooltip,
+  useTheme,
+} from "@mui/material";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useState, useEffect } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import useApi from "../../hooks/useAPI";
+import { toast } from "react-toastify";
+import { log } from "console";
+import { YearPicker } from "@mui/lab";
+import StudentAddress from "../StudentAddress";
+import StudentBasicInfo from "../StudentBasicInfo";
+import StudentAcadmicHistory from "../StudentAcademicHistory";
+import StudentcontactDetails from "../StudentContactDetails";
+import StudentHobbies from "../StudentHobbies";
+import StudentLanguage from "../StudentLanguageKnown";
 
-let StudentId = localStorage.getItem('_id')
+let StudentId = localStorage.getItem("_id");
 console.log(StudentId);
 
 // interface StudentBasicInformation {
@@ -59,7 +80,6 @@ console.log(StudentId);
 //     language_name: string
 // }
 
-
 //  interface StudentcontactDtails{
 //     student_id?: string,
 //   mobile_isd_call?: string,
@@ -68,126 +88,123 @@ console.log(StudentId);
 //   mobile_no_watsapp?: string
 //  }
 
-const steps = ['Student Basic Information', 'Student Address', 'Language know', 'Student Academic History', 'Student Contact Dtails', 'Hobbies/Subject preference'];
+const steps = [
+  "Student Basic Information",
+  "Student Address",
+  "Language know",
+  "Student Academic History",
+  "Student Contact Dtails",
+  "Hobbies/Subject preference",
+];
 
 export default function StudentProfileManagement() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set<number>());
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [skipped, setSkipped] = React.useState(new Set<number>());
 
-    const isStepOptional = (step: number) => {
-        return step > 0 && step < steps.length - 1;
-    };
+  const isStepOptional = (step: number) => {
+    return step > 0 && step < steps.length - 1;
+  };
 
-    const isStepSkipped = (step: number) => {
-        return skipped.has(step);
-    };
+  const isStepSkipped = (step: number) => {
+    return skipped.has(step);
+  };
 
-    const handleNext = () => {
-        let newSkipped = skipped;
-        if (isStepSkipped(activeStep)) {
-            newSkipped = new Set(newSkipped.values());
-            newSkipped.delete(activeStep);
-        }
+  const handleNext = () => {
+    let newSkipped = skipped;
+    if (isStepSkipped(activeStep)) {
+      newSkipped = new Set(newSkipped.values());
+      newSkipped.delete(activeStep);
+    }
 
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        setSkipped(newSkipped);
-    };
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    setSkipped(newSkipped);
+  };
 
-    const handleBack = () => {
-        setActiveStep((prevActiveStep) => prevActiveStep - 1);
-    };
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
-    // const handleSkip = () => {
-    //     if (!isStepOptional(activeStep)) {
-    //         // You probably want to guard against something like this,
-    //         // it should never occur unless someone's actively trying to break something.
-    //         throw new Error("You can't skip a step that isn't optional.");
-    //     }
+  // const handleSkip = () => {
+  //     if (!isStepOptional(activeStep)) {
+  //         // You probably want to guard against something like this,
+  //         // it should never occur unless someone's actively trying to break something.
+  //         throw new Error("You can't skip a step that isn't optional.");
+  //     }
 
-    //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    //     setSkipped((prevSkipped) => {
-    //         const newSkipped = new Set(prevSkipped.values());
-    //         newSkipped.add(activeStep);
-    //         return newSkipped;
-    //     });
-    // };
+  //     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //     setSkipped((prevSkipped) => {
+  //         const newSkipped = new Set(prevSkipped.values());
+  //         newSkipped.add(activeStep);
+  //         return newSkipped;
+  //     });
+  // };
 
-    const handleReset = () => {
-        setActiveStep(0);
-    };
+  const handleReset = () => {
+    setActiveStep(0);
+  };
 
-    return (
-        <Box sx={{ width: '100%' }}>
-            <Stepper activeStep={activeStep}>
-                {steps.map((label, index) => {
-                    const stepProps: { completed?: boolean } = {};
-                    const labelProps: {
-                        optional?: React.ReactNode;
-                    } = {};
-                    // if (isStepOptional(index)) {
-                    //     labelProps.optional = (
-                    //         <Typography variant="caption">Optional</Typography>
-                    //     );
-                    // }
-                    // if (isStepSkipped(index)) {
-                    //     stepProps.completed = false;
-                    // }
-                    return (
-                        <Step key={label} {...stepProps}>
-                            <StepLabel {...labelProps}>{label}</StepLabel>
-                        </Step>
-                    );
-                })}
-            </Stepper>
-            {activeStep === steps.length ? (
-                <React.Fragment>
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                        All steps completed - you&apos;re finished
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleReset}>Reset</Button>
-                    </Box>
-                </React.Fragment>
-            ) : (
-                <React.Fragment>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                        <Button
-                            color="inherit"
-                            disabled={activeStep === 0}
-                            onClick={handleBack}
-                            sx={{ mr: 1 }}
-                        >
-                            Previous
-                        </Button>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                        <Button onClick={handleNext}>
-                            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                        </Button>
-                    </Box>
-                    <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}
-                        {activeStep === 0 &&
-                            <StudentBasicInfo />
-                        }
-                        {activeStep === 1 &&
-                            <StudentAddress />
-                        }
-                        {activeStep === 2 &&
-                            <StudentLanguage />
-                        }
-                        {activeStep === 3 &&
-                            <StudentAcadmicHistory />
-
-                        }
-                        {activeStep === 4 &&
-                            <StudentcontactDetails />
-                        }
-                        {/* {
+  return (
+    <Box sx={{ width: "100%" }}>
+      <Stepper activeStep={activeStep}>
+        {steps.map((label, index) => {
+          const stepProps: { completed?: boolean } = {};
+          const labelProps: {
+            optional?: React.ReactNode;
+          } = {};
+          // if (isStepOptional(index)) {
+          //     labelProps.optional = (
+          //         <Typography variant="caption">Optional</Typography>
+          //     );
+          // }
+          // if (isStepSkipped(index)) {
+          //     stepProps.completed = false;
+          // }
+          return (
+            <Step key={label} {...stepProps}>
+              <StepLabel {...labelProps}>{label}</StepLabel>
+            </Step>
+          );
+        })}
+      </Stepper>
+      {activeStep === steps.length ? (
+        <React.Fragment>
+          <Typography sx={{ mt: 2, mb: 1 }}>
+            All steps completed - you&apos;re finished
+          </Typography>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Box sx={{ flex: "1 1 auto" }} />
+            <Button onClick={handleReset}>Reset</Button>
+          </Box>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Button
+              className={`${activeStep === 0 ? "disabled-mainbutton" : ""}`}
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              Previous
+            </Button>
+            <Box sx={{ flex: "1 1 auto" }} />
+            <Button onClick={handleNext}>
+              {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            </Button>
+          </Box>
+          <Typography sx={{ mt: 2, mb: 1 }}>
+            Step {activeStep + 1}
+            {activeStep === 0 && <StudentBasicInfo />}
+            {activeStep === 1 && <StudentAddress />}
+            {activeStep === 2 && <StudentLanguage />}
+            {activeStep === 3 && <StudentAcadmicHistory />}
+            {activeStep === 4 && <StudentcontactDetails />}
+            {/* {
                             activeStep === 5 &&
                             <StudentHobbies />
                         } */}
-                    </Typography>
-                    {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+          </Typography>
+          {/* <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                         <Button
                             color="inherit"
                             disabled={activeStep === 0}
@@ -201,10 +218,10 @@ export default function StudentProfileManagement() {
                             {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                         </Button>
                     </Box> */}
-                </React.Fragment>
-            )}
-        </Box>
-    );
+        </React.Fragment>
+      )}
+    </Box>
+  );
 }
 
 // function StudentAddress() {
@@ -212,7 +229,6 @@ export default function StudentProfileManagement() {
 //     const [studentAddress, setStudentAddress] = useState<StudentAddress>({
 //         address_type: ""
 //     });
-
 
 //     useEffect(() => {
 //         getData(`${'student_address/edit/' + StudentId}`).then((data: any) => {
@@ -276,7 +292,6 @@ export default function StudentProfileManagement() {
 //                         >
 //                             <FormControlLabel value="current" control={<Radio />} label="Current Address" />
 //                             <FormControlLabel value="permanent" control={<Radio />} label="Permanent Address" />
-
 
 //                         </RadioGroup>
 //                     </FormControl>
@@ -384,9 +399,6 @@ export default function StudentProfileManagement() {
 //         pic_path: '',
 //         aim: '',
 //     });
-
-
-
 
 //     useEffect(() => {
 //         getData(`${'student/get/' + StudentId}`, StudentId).then((data: any) => {
@@ -576,7 +588,6 @@ export default function StudentProfileManagement() {
 //     },
 // };
 
-
 // function getStyles(languageName: string, selectedLanguages: readonly Language[], theme: Theme) {
 //     return {
 //         fontWeight:
@@ -623,9 +634,8 @@ export default function StudentProfileManagement() {
 //         setBoxes(boxes.filter(box => box.id !== id));
 //     }
 
-
 //     useEffect(() => {
-      
+
 //         getData(`${'language/list'}`).then((data: any) => {
 //             if (data?.status === 200) {
 //                 setAllLanguage(data?.data);
@@ -647,7 +657,7 @@ export default function StudentProfileManagement() {
 
 //             }
 //         });
-        
+
 //     }, [])
 
 //     // const saveLanguage = (event: React.FormEvent<HTMLFormElement| typeof setSelectedLeng>) => {
@@ -676,10 +686,10 @@ export default function StudentProfileManagement() {
 //                 console.log(data);
 //             });
 //         });
-//     }; 
+//     };
 
 //     const handleChange = (event: SelectChangeEvent<HTMLSelectElement>,index:any) => {
-        
+
 //         const { value,name } = event.target;
 //         // setSelectedLeng(value);
 //         let currentbox = boxes[index]
@@ -688,8 +698,8 @@ export default function StudentProfileManagement() {
 //             currentbox.language_id = String(value)
 //         }
 //         console.log("boxes", boxes)
-//         setBoxes(prevItems => 
-//             prevItems.map(item => 
+//         setBoxes(prevItems =>
+//             prevItems.map(item =>
 //                 item.id === index ? { ...item, ['language_id']: String(value) } : item
 //             ))
 //         // setBoxes(boxes)
@@ -702,8 +712,8 @@ export default function StudentProfileManagement() {
 //         {
 //             currentbox.proficiency = String(value)
 //         }
-//         setBoxes(prevItems => 
-//             prevItems.map(item => 
+//         setBoxes(prevItems =>
+//             prevItems.map(item =>
 //                 item.id === index ? { ...item, ['proficiency']: String(value) } : item
 //             ))
 //     };
@@ -723,13 +733,13 @@ export default function StudentProfileManagement() {
 //                         label="language *"
 //                         onChange={(e)=>{handleChange(e,index)}}
 //                     >
-                        
+
 //                         {alllanguage.map((lang)=>
 //                               <MenuItem value={lang.id}>{lang.language_name}</MenuItem>
 //                               )}
-                  
+
 //                     </Select>
-                   
+
 //                 </FormControl>
 //                 </div>
 //                 <div className='col-2'>
@@ -747,7 +757,7 @@ export default function StudentProfileManagement() {
 //                         <MenuItem value={"read"}>Read</MenuItem>
 //                         <MenuItem value={"write"}>Write</MenuItem>
 //                     </Select>
-                   
+
 //                 </FormControl>
 //                 </div>
 //                 <div className="col-1">
@@ -767,11 +777,10 @@ export default function StudentProfileManagement() {
 //                     <button className='btn btn-primary' style={{ marginTop: "25px" }} >save your language</button>
 //                 </div>
 //             </div>
-           
+
 //         </form>
 //     );
 // }
-
 
 // interface Box {
 //     id: number;
@@ -798,7 +807,7 @@ export default function StudentProfileManagement() {
 //     const [boxes, setBoxes] = useState<Box[]>([{ id: 1, institution_id: '',course_id: '', starting_year: null, starting_date: null, learning_style: '' }]);
 //     const [institutes, setInstitutes] = useState<Institute[]>([]);
 //     const [courses, setCourses] = useState<Course[]>([]);
-    
+
 //     let StudentId = localStorage.getItem('_id')
 //     const addRow = () => {
 //         const newBox: Box = {
@@ -825,12 +834,12 @@ export default function StudentProfileManagement() {
 //             .catch(error => {
 //                 console.error('Error fetching institutes:', error);
 //             });
-    
+
 //         getData('/course/list')
 //             .then((response: any) => {
 //                 if (response.status === 200) {
 //                     setCourses(response.data);
-                    
+
 //                 }
 //             })
 //             .catch(error => {
@@ -849,11 +858,11 @@ export default function StudentProfileManagement() {
 //                 };
 //                 setBoxes([...boxes, newBox]);
 //                 } else {
-    
+
 //                 }
 //             });
 //     }, []);
-    
+
 //     useEffect(() => {
 
 //         getData('/student_academic_history/list')
@@ -875,7 +884,7 @@ export default function StudentProfileManagement() {
 //             });
 //     }, []);
 
-//     const saveAcademicHistory = () => { 
+//     const saveAcademicHistory = () => {
 //         boxes.forEach(box => {
 //         const payload ={
 //             student_id:StudentId,
@@ -902,7 +911,6 @@ export default function StudentProfileManagement() {
 //         newBoxes[index][field] = value;
 //         setBoxes(newBoxes);
 //     }
-   
 
 //     return (
 //         <div className="container">
@@ -1001,9 +1009,6 @@ export default function StudentProfileManagement() {
 //     );
 // }
 
-
-
-
 // interface Box {
 //     id: number;
 //     instituteName: string;
@@ -1033,7 +1038,7 @@ export default function StudentProfileManagement() {
 //     }
 
 //     useEffect(() => {
-        
+
 //         getData('student_academic_history/list')
 //             .then((response) => {
 //                 if (response?.status === 200) {
@@ -1160,8 +1165,6 @@ export default function StudentProfileManagement() {
 //         </div>
 //     );
 // }
-
-
 
 // function StudentcontactDtails() {
 //     const { getData, postData } = useApi();

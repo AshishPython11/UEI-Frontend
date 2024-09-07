@@ -22,6 +22,7 @@ import Language from '../Language/Language';
 import Hobby from '../Hobby/Hobby';
 import ChatList from '../ChatList/ChatList';
 import SuperAdmin from '../SuperAdmin/SuperAdmin';
+import Class from '../Class/Class';
 
 export const routes: RouteObject[] = [
 //   { path: "/", element: <Login /> },
@@ -46,5 +47,6 @@ export const routes: RouteObject[] = [
   { path:"/main/Hobby", element:<Hobby />},
   { path:"/main/ChatList", element:<ChatList />},
   { path:"/main/SuperAdmin", element:<SuperAdmin />},
+  { path:"/main/Class", element:<Class />},
  
  ];

@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useContext, useEffect, useState } from "react";
+
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -19,7 +21,8 @@ import useApi from "../../hooks/useAPI";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import StudentHobbies from "../StudentHobbies";
-import { deepEqual } from "../../utils/helpers";
+import { deepEqual, inputfield, inputfieldhover, inputfieldtext, tabletools } from "../../utils/helpers";
+import NameContext from "../Context/NameContext";
 
 interface Language {
   id: string;
@@ -60,6 +63,8 @@ interface Box {
 }
 
 function StudentLanguage() {
+  const context = useContext(NameContext);
+  const {namecolor }:any = context;
   let StudentId = localStorage.getItem("_id");
   const { getData, postData, putData, deleteData } = useApi();
 
@@ -240,17 +245,17 @@ function StudentLanguage() {
     <>
       <div className="row mt-5">
         <div className="col-12">
-          <h5 className="font-weight-bold">
+          <h5 className="font-weight-bold profiletext">
             <b> Hobbies</b>
           </h5>
         </div>
       </div>
-      <div className="row mt-3">
+      <div className="row mt-3 form_field_wrapper">
         <StudentHobbies save={isSave}></StudentHobbies>
       </div>
       <div className="row mt-5">
         <div className="col-12">
-          <h5 className="font-weight-bold">
+          <h5 className="font-weight-bold profiletext">
             <b> Language Known</b>
           </h5>
         </div>
@@ -258,7 +263,7 @@ function StudentLanguage() {
       <form onSubmit={saveLanguage}>
         {boxes.map((box, index) => (
           <div className="row d-flex justify-content-start align-items-center mt-4 " key={index}>
-            <div className="col-md-4 ">
+            <div className="col-md-4 form_field_wrapper ">
               <FormControl required sx={{ m: 1, minWidth: 320, width: "100%" }}>
                 <InputLabel id={`language-label-${box.id}`}>Language</InputLabel>
                 <Select
@@ -271,14 +276,21 @@ function StudentLanguage() {
                   MenuProps={MenuProps}
                 >
                   {alllanguage.map((lang) => (
-                    <MenuItem key={lang.id} value={lang.id}>
+                    <MenuItem key={lang.id} value={lang.id}
+                    sx={{
+                      backgroundColor: inputfield(namecolor),
+                      color: inputfieldtext(namecolor),
+                      '&:hover': {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                      },
+                  }}>
                       {lang.language_name}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </div>
-            <div className="col-md-4 col-sm-3">
+            <div className="col-md-4 col-sm-3 form_field_wrapper">
               <FormControl required sx={{ m: 1, minWidth: 220, width: "100%" }}>
                 <InputLabel id={`proficiency-label-${box.id}`}>Proficiency</InputLabel>
                 <Select
@@ -290,20 +302,41 @@ function StudentLanguage() {
                   onChange={(e) => handleChange1(e, index)}
                   MenuProps={MenuProps}
                 >
-                  <MenuItem value={"read"}>Read</MenuItem>
-                  <MenuItem value={"write"}>Write</MenuItem>
-                  <MenuItem value={"both"}>Both</MenuItem>
+                  <MenuItem value={"read"}
+                   sx={{
+                    backgroundColor: inputfield(namecolor),
+                    color: inputfieldtext(namecolor),
+                    '&:hover': {
+                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                    },
+                }}>Read</MenuItem>
+                  <MenuItem value={"write"}
+                   sx={{
+                    backgroundColor: inputfield(namecolor),
+                    color: inputfieldtext(namecolor),
+                    '&:hover': {
+                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                    },
+                }}>Write</MenuItem>
+                  <MenuItem value={"both"}
+                   sx={{
+                    backgroundColor: inputfield(namecolor),
+                    color: inputfieldtext(namecolor),
+                    '&:hover': {
+                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                    },
+                }}>Both</MenuItem>
                 </Select>
               </FormControl>
             </div>
-            <div className="col-md-4 col-sm-3">
-              <IconButton onClick={addRow} sx={{ width: "35px", height: "35px" }}>
+            <div className="col-md-4 col-sm-3 form_field_wrapper">
+              <IconButton onClick={addRow} sx={{ width: "35px", height: "35px" , color: tabletools(namecolor) }}>
                 <AddIcon />
               </IconButton>
               {boxes.length !== 1 && (
                 <IconButton
                   onClick={() => deleterow(box.id, index)}
-                  sx={{ width: "35px", height: "35px", color: "#f70404b8" }}
+                  sx={{ width: "35px", height: "35px",  color: tabletools(namecolor)}}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -313,7 +346,7 @@ function StudentLanguage() {
         ))}
         <div className="row justify-content-center">
           <div className="col-md-12 d-flex justify-content-center">
-            <Button className="btn btn-primary" type="submit" style={{ marginTop: "25px" }}>
+            <Button className="btn btn-primary mainbutton" type="submit" style={{ marginTop: "25px" }}>
             {editFalg ? "save" : "Save Changes"}
             </Button>
           </div>
@@ -323,4 +356,6 @@ function StudentLanguage() {
   );
 }
 
+
 export default StudentLanguage;
+

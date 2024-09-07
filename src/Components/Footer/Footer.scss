@@ -4,7 +4,7 @@
 .footer {
     padding: 10px 30px;
     // background: #afb1b0;
-    background: #003032;
+    background-color: var(--bodybackground);
     box-shadow: 0 -5px 5px -5px rgba(56, 72, 97, 0.2);
     left: 0px;
     // left: 250px;
@@ -25,10 +25,10 @@
             padding: 5px 0px;
             text-align: center;
             font-size: 13px;
-            // color: #012970;
+            color:var(--iconcolor) !important;
 
             a.text-pink {
-                color: #afb1b0 !important;
+                color:var(--iconcolor) !important;
             }
         }
 
@@ -72,7 +72,7 @@
             left: 0;
             margin: 0;
             // background: #afb1b0;
-            background: #003032;
+            background-color: var(--bodybackground);
             border-bottom: none;
         }
     }

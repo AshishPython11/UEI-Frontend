@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../Submenu/Submenu.scss';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -12,7 +12,8 @@ import { toast } from 'react-toastify';
 import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import { MenuListinter } from '../../Components/Table/columns';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, inputfield, inputfieldhover, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 interface ISubMenuForm {
     menu_name: string
@@ -20,6 +21,8 @@ interface ISubMenuForm {
     menu_master_id:string
 }
 const AddEditSubmenu = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const SubmenuMenuURL = QUERY_KEYS_SUBMENU.GET_MENU;
     const SubmenuAddURL =QUERY_KEYS_SUBMENU.SUBMENU_ADD;
     const SubmenuEditURL = QUERY_KEYS_SUBMENU.SUBMENU_EDIT;
@@ -187,6 +190,7 @@ const AddEditSubmenu = () => {
                     });
                     resetForm({ values: initialState });
                 }
+
                 else {
                     toast.error(("Please add menu first"),
                         {
@@ -195,6 +199,7 @@ const AddEditSubmenu = () => {
                         })
                 }
             }).catch((e) => {
+
                 toast.error(e?.message, {
                     hideProgressBar: true,
                     theme: "colored",
@@ -270,9 +275,29 @@ const AddEditSubmenu = () => {
                                                     name="menu_master_id"
                                                     value={values?.menu_master_id}
                                                     variant="outlined"
+                                                    sx={{
+                                                        backgroundColor: inputfield(namecolor) , 
+                                                        color: inputfieldtext(namecolor) 
+                                                    }}
+                                                    MenuProps={{
+                                                        PaperProps: {
+                                                            style: {
+                                                                backgroundColor: inputfield(namecolor),
+                                                                color: inputfieldtext(namecolor)
+                                                            },
+                                                        },
+                                                    }}
                                                 >
                                                     {dataMenu.map((item: { id: string | number | readonly string[] | undefined; menu_master_id: any; menu_name: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }, idx: number) => (
-                                                        <MenuItem value={item.id} key={`${item.menu_master_id}-${idx + 1}`}>{item.menu_name}</MenuItem>
+                                                        <MenuItem value={item.id} key={`${item.menu_master_id}-${idx + 1}`} 
+                                                        sx={{
+                                                            backgroundColor: inputfield(namecolor),
+                                                            color: inputfieldtext(namecolor),
+                                                            '&:hover': {
+                                                                backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                                            },
+                                                        }}
+                                                        >{item.menu_name}</MenuItem>
                                                     ))}
                                                 </Select>
                                             </FormControl>
@@ -335,7 +360,7 @@ const AddEditSubmenu = () => {
                                 </div>
                                 
                             </div>
-                            <button className='btn btn-primary'>{id ? "Update" : "Save"}</button>
+                            <button className='btn btn-primary mainbutton'>{id ? "Update" : "Save"}</button>
                         {/* </form> */}
                         </Form>
                          )}

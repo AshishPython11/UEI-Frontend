@@ -19,10 +19,12 @@ import dayjs, { Dayjs } from 'dayjs';
 import { DatePicker } from '@mui/x-date-pickers';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
+
 import { Field, Form, Formik, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import { deepEqual } from '../../utils/helpers';
 import NameContext from '../Context/NameContext';
+
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -58,6 +60,7 @@ interface AdminInformation {
   }
 
 export default function AdminBasicInfo() {
+
     const context = React.useContext(NameContext);
     const { setNamepro,setProImage }:any = context;
     const { getData, postData, putData, postFileData } = useApi();
@@ -484,7 +487,7 @@ useEffect(()=>{
 
         <form onSubmit={adminBasicInfo}>
             <div className='row d-flex justify-content-start' style={{ margin: "15px" }}>
-                <div className='col'>
+                <div className='col form_field_wrapper'>
                     <label > First Name <span>*</span> </label>
                     <TextField type="text"
                         name='first_name'
@@ -503,7 +506,7 @@ useEffect(()=>{
                     )}</div>
                 </div>
 
-                <div className='col'>
+                <div className='col form_field_wrapper'>
                     <label > Last Name <span>*</span> </label>
                     <TextField type="text"
                         name='last_name'
@@ -523,7 +526,7 @@ useEffect(()=>{
                 </div>
             </div>
             <div className='row d-flex justify-content-start' style={{ margin: "15px" }}>
-                <div className='col'>
+                <div className='col form_field_wrapper'>
                     <FormControl >
                         <FormLabel id="demo-row-radio-buttons-group-label">Gender <span>*</span> </FormLabel>
                         <RadioGroup
@@ -537,13 +540,13 @@ useEffect(()=>{
                             value={admin.gender}
                             onChange={(e) => handleInputChange(e)}
                         >
-                            <FormControlLabel value="Male" control={<Radio />} label="Male"/>
-                            <FormControlLabel value="Female" control={<Radio />} label="Female" />
+                            <FormControlLabel value="Male" control={<Radio className='radiobutton' />} label="Male"/>
+                            <FormControlLabel value="Female" control={<Radio  className='radiobutton'/>} label="Female" />
 
                         </RadioGroup>
                     </FormControl>
                 </div>
-                <div className='col' style={{ marginTop: "20PX" }}>
+                <div className='col form_field_wrapper' style={{ marginTop: "20PX" }}>
 
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
@@ -563,10 +566,13 @@ useEffect(()=>{
                     )}</div>
 
 
+
                 </div>
             </div>
             <div className='row d-flex justify-content-start' style={{ margin: "15px" }}>
-                <div className='col'>
+
+                <div className='col form_field_wrapper'>
+
                     <label > Father Name <span>*</span> </label>
                     <TextField type="text"
                         name='father_name'
@@ -585,7 +591,7 @@ useEffect(()=>{
                     )}</div>
                 </div>
 
-                <div className='col'>
+                <div className='col form_field_wrapper'>
                     <label > Mother Name <span>*</span> </label>
                     <TextField type="text"
                         name='mother_name'
@@ -601,10 +607,12 @@ useEffect(()=>{
                     <div> {admin.mother_name == "" && (
                         <p style={{ color: 'red' }}>Please enter Mother name.</p>
                     )}</div>
+
                 </div>
             </div>
             <div className='row d-flex justify-content-start' style={{ margin: "15px" }}>
-                <div className='col'>
+                <div className='col form_field_wrapper'>
+
                     <label > Guardian Name <span></span> </label>
                     <TextField type="text"
                         name='guardian_name'
@@ -623,9 +631,10 @@ useEffect(()=>{
                     )}</div> */}
                 </div>
 
-                <div className='col'>
+                <div className='col form_field_wrapper'>
                     {/* <Grid item xs={12}>
                         <Typography variant="h6">Upload Profile Picture *</Typography>
+
                     </Grid>
                     <Grid item xs={12}>
                         <Button
@@ -694,10 +703,12 @@ useEffect(()=>{
                     <div> {(!adminDepartment && editFalg1) && (
                         <p style={{ marginLeft: "10px", color: 'red' }}>Please select a Department name.</p>
                     )}</div>
+
                 </div>
             </div>
             <div className='row d-flex justify-content-start' style={{ margin: "15px" }}>
                 <div className='col'>
+
                     {/* <FormControl sx={{
                         m: 1, minWidth: 250, width: {
                             xs: '100%',
@@ -705,6 +716,7 @@ useEffect(()=>{
                         }, marginLeft: 0
                     }} >
                         <InputLabel id="demo-select-small-label">Department Name * </InputLabel>
+
                         <Select
 
                             labelId="demo-select-small-label"
@@ -716,6 +728,7 @@ useEffect(()=>{
                                 const selectedDepartment = allDepartment.find(dept => dept.id.toString() == selected);
                                 return selectedDepartment ? selectedDepartment.department_name : '';
                             }}
+
                               MenuProps={{
                                 sx: {
                                   "& .MuiPaper-root": {
@@ -725,6 +738,7 @@ useEffect(()=>{
                                 },
                                
                               }}
+
                         >
                             {allDepartment.map((data) => (
                                 <MenuItem key={data.id} value={data.id}>
@@ -734,6 +748,7 @@ useEffect(()=>{
 
 
                         </Select>
+
                     </FormControl> */}
                     <Grid item xs={12}>
                         <Typography variant="h6">Upload Profile Picture </Typography>
@@ -771,7 +786,8 @@ useEffect(()=>{
                     </Grid>
                 </div>
                 <div className='col' style={{marginTop:"320px"}}>
-                    <button className='btn btn-primary'>{editFalg ? "save" : "Save Changes"}</button>
+                    <button className='btn btn-primary mainbutton'>{editFalg ? "save" : "Save Changes"}</button>
+
 
                 </div>
             </div>

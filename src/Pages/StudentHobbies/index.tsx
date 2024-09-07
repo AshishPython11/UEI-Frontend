@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useContext, useEffect, useState } from "react";
+
 import {
   FormControl,
   InputLabel,
@@ -13,7 +15,8 @@ import {
 import { toast } from "react-toastify";
 import useApi from "../../hooks/useAPI";
 import "react-toastify/dist/ReactToastify.css";
-import { deepEqual } from "../../utils/helpers";
+import { deepEqual, inputfield, inputfieldhover, inputfieldtext } from "../../utils/helpers";
+import NameContext from "../Context/NameContext";
 
 interface Hobby {
   hobby_name: string;
@@ -22,6 +25,8 @@ interface Hobby {
 }
 
 const StudentHobbies = ({ save }: { save: boolean }) => {
+  const context = useContext(NameContext);
+  const {namecolor }:any = context;
   const { getData, postData, putData,deleteData } = useApi();
   const theme = useTheme();
   const [allHobbies, setAllHobbies] = useState<Hobby[]>([]);
@@ -199,9 +204,9 @@ const StudentHobbies = ({ save }: { save: boolean }) => {
   return (
     <form onSubmit={submitHandle}>
       <div className="row justify-content-start mt-5">
-        <div className="col-12 justify-content-start">
+        <div className="col-12 justify-content-start form_field_wrapper">
           <FormControl sx={{ width: 600 }}>
-            <InputLabel id="demo-multiple-checkbox-label">Hobby</InputLabel>
+            <InputLabel  id="demo-multiple-checkbox-label">Hobby</InputLabel>
             <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
@@ -224,7 +229,15 @@ const StudentHobbies = ({ save }: { save: boolean }) => {
               MenuProps={MenuProps}
             >
               {allHobbies.map((hobby: any) => (
-                <MenuItem key={hobby.id} value={hobby.id}>
+                <MenuItem key={hobby.id} value={hobby.id} 
+                sx={{
+                  backgroundColor: inputfield(namecolor),
+                  color: inputfieldtext(namecolor),
+                  '&:hover': {
+                      backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                  },
+              }}
+                >
                   <Checkbox checked={selectedHobbies.indexOf(hobby.id) > -1} 
                       onClick={(event) => handleCheckboxClick(event, hobby.id)}
                       />
@@ -246,3 +259,4 @@ const StudentHobbies = ({ save }: { save: boolean }) => {
 };
 
 export default StudentHobbies;
+

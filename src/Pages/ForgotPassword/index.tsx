@@ -91,9 +91,14 @@ const Forgotpassword = () => {
                         variant="outlined"
                         />
                     </div>
-                    <div className="form_field_wrapper forgotpass">
+                    {/* <div className="form_field_wrapper forgotpass">
                         <Link className="ato" to="/">Login</Link>
-                    </div>
+                    </div> */}
+                    <div className="form_field_wrapper signuplink_block1 forgotpass">
+                    <Link className="ato signupa" to="/">
+                      <span className="signup_txt">Login</span>
+                    </Link>
+                  </div>
           
                     <button  type="submit" className='btn btn-primary' onClick={(e) => sendLink(e)} disabled={isLoading}>
                             Send Link

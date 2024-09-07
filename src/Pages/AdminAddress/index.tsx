@@ -32,18 +32,24 @@ interface AdminAddress {
 ////start
 export default function AdminAddress() {
   let adminId = localStorage.getItem("_id");
+
   // console.log(adminId);
+
   const { getData, postData, putData } = useApi();
   const [adminAddress, setadminAddress] = useState<AdminAddress>({
     address_type: "current_address",
   });
+
   const [adminAddress1, setadminAddress1] = useState<AdminAddress>({
     address_type: "current_address",
   });
+
   const [permanentAddress, setPermanentAddress] = useState<AdminAddress>({
     address_type: "permanent_address",
   });
+ 
   const [editFlag, setEditFlag] = useState<boolean>(false);
+
   const [contry_col, setcontry_col] = useState<boolean>(false)
   const [state_col, setstate_col] = useState<boolean>(false)
   const [city_col, setcity_col] = useState<boolean>(false)
@@ -55,6 +61,47 @@ export default function AdminAddress() {
   const [district_col1, setdistrict_col1] = useState<boolean>(false)
   const [pincode_col1, setpincode_col1] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isFocused, setIsFocused] = useState(false);
+  const [isFocusedstate, setIsFocusedstate] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const dropdownstateRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleFocus = () => setIsFocused(true);
+    const handleFocusstate = () => setIsFocusedstate(true);
+    const handleBlur = (e: FocusEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.relatedTarget as Node)) {
+        setIsFocused(false);
+      }
+    };
+    const handleBlurstate = (e: FocusEvent) => {
+      if (dropdownstateRef.current && !dropdownstateRef.current.contains(e.relatedTarget as Node)) {
+          setIsFocusedstate(false);
+      }
+    };
+  
+    const currentDropdown = dropdownRef.current;
+    if (currentDropdown) {
+      currentDropdown.addEventListener('focus', handleFocus as EventListener);
+      currentDropdown.addEventListener('blur', handleBlur as EventListener);
+    }
+    const currentDropdownstate = dropdownstateRef.current;
+    if (currentDropdownstate) {
+      currentDropdownstate.addEventListener('focus', handleFocusstate as EventListener);
+      currentDropdownstate.addEventListener('blur', handleBlurstate as EventListener);
+    }
+  
+    return () => {
+      if (currentDropdown) {
+        currentDropdown.removeEventListener('focus', handleFocus as EventListener);
+        currentDropdown.removeEventListener('blur', handleBlur as EventListener);
+      }
+      if (currentDropdownstate) {
+          currentDropdownstate.removeEventListener('focus', handleFocusstate as EventListener);
+          currentDropdownstate.removeEventListener('blur', handleBlurstate as EventListener);
+        }
+    };
+  }, []);
 
   const getAddressInfo = async () => {
   getData(`${"admin_address/edit/" + adminId}`)
@@ -99,10 +146,12 @@ export default function AdminAddress() {
 
   const handleInputChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement> |SelectChangeEvent<string>,
+
     addressType: string
   ) => {
     const { name, value } = event.target;
     if (addressType === "current_address") {
+
       if (name === 'country') {
         if (!/^[a-zA-Z\s]*$/.test(value)) {
           setcontry_col(true)
@@ -179,6 +228,7 @@ export default function AdminAddress() {
           setpincode_col1(true);
         }
       }
+
       setPermanentAddress((prevState) => ({ ...prevState, [name]: value }));
     }
   };
@@ -187,6 +237,7 @@ export default function AdminAddress() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (event.target.checked) {
+
       for (const key of Object.keys(adminAddress)) {
 
         if (key === 'country') {
@@ -230,6 +281,7 @@ export default function AdminAddress() {
       setPermanentAddress({ ...adminAddress, address_type: "permanent_address" });
     } else {
       // console.log('hererert currebr')
+
       setPermanentAddress((prevPermanentAddress) => ({
         ...prevPermanentAddress,
         address1: "",
@@ -246,7 +298,9 @@ export default function AdminAddress() {
 
   const SubmitHandle = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     // console.log("test data",adminAddress?.address_type,editFlag)
+
     if (!('country' in adminAddress) || adminAddress?.country === "") {
       setcontry_col(true);
     } else {
@@ -258,6 +312,7 @@ export default function AdminAddress() {
     } else {
       setcontry_col1(false);
     }
+
     const currentAddressPayload = {
       admin_id: adminId,
       ...adminAddress,
@@ -267,6 +322,7 @@ export default function AdminAddress() {
       admin_id: adminId,
       ...permanentAddress,
     };
+
     // console.log("test data",permanentAddress,adminAddress)
     const eq = deepEqual(adminAddress1,currentAddressPayload)
     if (editFlag) {
@@ -278,10 +334,12 @@ export default function AdminAddress() {
           // console.log(data);
           if (data?.status === 200) {
             toast.success(`${addressType} Address saved successfully`, {
+
               hideProgressBar: true,
               theme: "colored",
             });
           } else {
+
             // toast.error(`Failed to add ${addressType} address`, {
             //   hideProgressBar: true,
             //   theme: "colored",
@@ -290,6 +348,7 @@ export default function AdminAddress() {
         } catch (error) {
           if (error instanceof Error) {
             toast.error(error?.message, {
+
               hideProgressBar: true,
               theme: "colored",
             });
@@ -304,7 +363,9 @@ export default function AdminAddress() {
 
       // Add current address
       if (adminAddress?.address_type === "current_address") {
+
         await addAddress("Current", currentAddressPayload);
+
       }
       // Add permanent address
       if (permanentAddress?.address_type === "permanent_address") {
@@ -317,6 +378,7 @@ export default function AdminAddress() {
             "/admin_address/edit/" + adminId,
             addressPayload
           );
+
           // console.log(data);
           if (data?.status === 200) {
             toast.success(`${addressType} Address updated successfully`, {
@@ -333,6 +395,7 @@ export default function AdminAddress() {
         } catch (error) {
           if (error instanceof Error) {
             toast.error(error?.message, {
+
               hideProgressBar: true,
               theme: "colored",
             });
@@ -347,6 +410,7 @@ export default function AdminAddress() {
 
       if (adminId !== null) {
         // Edit current address
+
         if (adminAddress?.address_type === "current_address" && adminAddress.address1 !== ""  && !contry_col && adminAddress.country !== "" && !state_col && adminAddress.state !== "" && !city_col && adminAddress.city !== "" && !district_col && adminAddress.district !== "" && !pincode_col && adminAddress.pincode !== "") {
           // if (adminAddress?.address_type === "current_address"  &&  !contry_col  && !state_col  && !city_col  && !district_col  && !pincode_col ) {
                  // eslint-disable-next-line no-lone-blocks
@@ -364,6 +428,7 @@ export default function AdminAddress() {
         
           await editAddress("Permanent", permanentAddressPayload);
          
+
         }
       } else {
         // Handle the case where adminId is null
@@ -409,16 +474,18 @@ export default function AdminAddress() {
 
   return (
     <form onSubmit={SubmitHandle}>
+
       <div className="row mt-5">
         <div className="col-12">
-          <h5 className="font-weight-bold">
+          <h5 className="font-weight-bold profiletext">
             {" "}
             <b> Current Address</b>
+
           </h5>
         </div>
       </div>
       <div className="row mt-5">
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Address 1 <span>*</span>
@@ -435,10 +502,12 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter Address 1.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
+
             Address 2 <span></span>
+
           </label>
           <TextField
             type="text"
@@ -446,7 +515,10 @@ export default function AdminAddress() {
             className="form-control"
             value={adminAddress.address2}
             onChange={(e) => handleInputChange(e, "current_address")}
+
+
             // required
+
           />
           {/* <div> {adminAddress.address2 == "" && (
             <p style={{ color: 'red' }}>Please enter Address 2.</p>
@@ -473,13 +545,12 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter Country name.</p>
           )}</div>
         </div>   */}
-        <div className="col-6 pb-3">
-          <label>
-            {" "}
-            Country <span>*</span>
-          </label>
+        <div className="col-6 pb-3 form_field_wrapper">
+        <label className={`floating-label ${isFocusedstate || adminAddress.country ? "focused" : "focusedempty"}`}>
+                                            Country <span>*</span>
+                                        </label>
           <CountryDropdown
-            classes="form-control p-3"
+            classes="form-control p-3 custom-dropdown"
             defaultOptionLabel={adminAddress.country}
             value={adminAddress.country || ""}
             onChange={(e:string) => handleInputChangecountry(e, "current_address", "country")}
@@ -489,14 +560,13 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter Country Name.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
-          <label>
-            {" "}
-            State <span>*</span>
-          </label>
+        <div className="col-6 pb-3 form_field_wrapper">
+        <label className={`floating-label ${isFocusedstate || adminAddress.state ? "focused" : "focusedempty"}`}>
+                                            State <span>*</span>
+                                        </label>
 
           <RegionDropdown
-            classes="form-control p-3"
+            classes="form-control p-3 custom-dropdown"
             defaultOptionLabel={adminAddress.state}
             country={adminAddress.country || ""}
             value={adminAddress.state || ""}
@@ -527,7 +597,7 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter State name.</p>
           )}</div>
         </div> */}
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             City <span>*</span>
@@ -547,7 +617,7 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter City name.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             District <span>*</span>
@@ -567,10 +637,10 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter District name.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
-            Pin code <span>*</span>
+            Pincode <span>*</span>
           </label>
           <TextField
             type="text"
@@ -580,6 +650,7 @@ export default function AdminAddress() {
             onChange={(e) => handleInputChange(e, "current_address")}
             required
           />
+
           <div> {pincode_col && (
             <p style={{ color: 'red' }}>Please enter a valid Pincode only numbers allowed.</p>
           )}</div>
@@ -590,14 +661,14 @@ export default function AdminAddress() {
       </div>
       <div className="row mt-5">
         <div className="col-12">
-          <h5 className="font-weight-bold">
+          <h5 className="font-weight-bold profiletext">
             {" "}
             <b> Permanent Address</b>
           </h5>
         </div>
       </div>
       <div className="row mt-3">
-        <div className="col-12 mt-4 pb-3">
+        <div className="col-12 mt-4 pb-3 form_field_wrapper">
           <FormControl>
             <FormControlLabel
               control={
@@ -610,7 +681,7 @@ export default function AdminAddress() {
             />
           </FormControl>
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Address 1 <span></span>
@@ -627,7 +698,7 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter Address 1.</p>
           )}</div> */}
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             Address 2 <span></span>
@@ -684,14 +755,13 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter State name.</p>
           )}</div>
         </div> */}
-        <div className="col-6 pb-3">
-          <label>
-            {" "}
+        <div className="col-6 pb-3 form_field_wrapper " ref={dropdownRef}>
+          <label className={`floating-label ${isFocused || permanentAddress.country ? "focused" : "focusedempty"}`}>
             Country <span></span>
           </label>
           <CountryDropdown
-            classes="form-control p-3"
-            defaultOptionLabel={permanentAddress.country}
+            classes="form-control p-3 custom-dropdown"
+            defaultOptionLabel={permanentAddress.country || ""}
             value={permanentAddress.country || ""}
             onChange={(e:string) => handleInputChangecountry(e, "permanent_address", "country")}
 
@@ -700,15 +770,14 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter Country Name.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
-          <label>
-            {" "}
+        <div className="col-6 pb-3 form_field_wrapper" ref={dropdownstateRef}>
+          <label className={`floating-label ${isFocusedstate || permanentAddress.state ? "focused" : "focusedempty"}`}>
             State <span></span>
           </label>
 
           <RegionDropdown
-            classes="form-control p-3"
-            defaultOptionLabel={permanentAddress.state}
+            classes="form-control p-3 custom-dropdown"
+            defaultOptionLabel={permanentAddress.state || ""}
             country={permanentAddress.country || ""}
             value={permanentAddress.state || ""}
             // onChange={(val) => setRegion(val)} 
@@ -718,7 +787,7 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter a valid state Name.</p>
           )}</div>
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             City <span></span>
@@ -738,7 +807,7 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter City name.</p>
           )}</div> */}
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
             District <span></span>
@@ -758,10 +827,10 @@ export default function AdminAddress() {
             <p style={{ color: 'red' }}>Please enter District name.</p>
           )}</div> */}
         </div>
-        <div className="col-6 pb-3">
+        <div className="col-6 pb-3 form_field_wrapper">
           <label>
             {" "}
-            Pin code <span></span>
+            Pincode <span></span>
           </label>
           <TextField
             type="text"
@@ -780,7 +849,7 @@ export default function AdminAddress() {
         </div>
       </div>
       <div className="d-flex justify-content-center">
-        <Button variant="contained" color="primary" type="submit">
+        <Button className='mainbutton' variant="contained" color="primary" type="submit">
         {editFlag ? "save" : "Save Changes"}
         </Button>
       </div>

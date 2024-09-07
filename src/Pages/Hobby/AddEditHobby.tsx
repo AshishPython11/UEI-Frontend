@@ -264,7 +264,7 @@ const AddEditHobby = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <button className='btn btn-primary'  >{id ? "Update" : "Save"}</button>
+                                    <button className='btn btn-primary mainbutton'  >{id ? "Update" : "Save"}</button>
                                 </Form>
                             )}
                         </Formik>

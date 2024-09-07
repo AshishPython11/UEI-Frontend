@@ -7,9 +7,9 @@ import {
   Oval,
 } from "react-loader-spinner";
 import "./FullScreenLoader.scss"; // Import CSS for styling
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress,Typography } from "@mui/material";
 
-const FullScreenLoader = () => {
+const FullScreenLoader = (props) => {
   return (
     // <div className="fullscreen-loader">
     //   <ThreeDots
@@ -24,6 +24,12 @@ const FullScreenLoader = () => {
     <Box className="fullscreen-loader" sx={{ display: 'flex' }}>
     <CircularProgress  size={50}
         thickness={3.5} />
+        <Typography 
+        variant="h6" 
+        sx={{ marginTop: 2 }} // Adds some space between the spinner and the text
+      >
+        {props.msg}
+      </Typography>
   </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../Course/Course.scss';
 import TextField from '@mui/material/TextField';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -10,9 +10,12 @@ import { toast } from 'react-toastify';
 import { CourseRep0oDTO, MenuListinter } from '../../Components/Table/columns';
 import { Field, Form, Formik, FormikProps, setNestedObjectValues } from 'formik';
 import * as Yup from 'yup';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, inputfield, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 const AddEditCourse = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const CourseAddURL = QUERY_KEYS_COURSE.COURSE_ADD;
     const CourseEditURL = QUERY_KEYS_COURSE.COURSE_EDIT;
     const { getData, postData, putData } = useApi()
@@ -235,7 +238,7 @@ const AddEditCourse = () => {
                                         <div className='col-md-4 mt-2'>
                                             <div className='col'>
                                                 <Grid item xs={12}>
-                                                    <Typography variant="h6">Upload a Photo</Typography>
+                                                    <Typography variant="h6"  sx={{color:inputfieldtext(namecolor)}}>Upload a Photo</Typography>
                                                 </Grid>
                                                 <Grid item xs={12}>
                                                     <input
@@ -244,6 +247,8 @@ const AddEditCourse = () => {
                                                         onChange={(event) => setSelectedFile(event.target.value) }
                                                         id="file-upload"
                                                         name='course_image'
+                                                        style={{ color:inputfieldtext(namecolor)}}
+
                                                     />
                                                     {/* <input
                                                         type="file"
@@ -276,11 +281,11 @@ const AddEditCourse = () => {
                                     </div>
                                     <div className='row mt-4'>
                                         <div className='col-md-4'>
-                                            <InputLabel className='text-secondary'>Description</InputLabel>
+                                            <InputLabel className='text-secondary'  sx={{color:inputfieldtext(namecolor)}}>Description</InputLabel>
                                             <TextareaAutosize
                                                 aria-label="empty textarea"
                                                 minRows={5}
-                                                style={{ width: "100%", fontSize: "1rem" }}
+                                                style={{ width: "100%", fontSize: "1rem",backgroundColor:inputfield(namecolor) , color:inputfieldtext(namecolor) }}
                                                 placeholder="Enter your text here..."
                                                 // name='course_description'
                                                 // onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleChange(e)}
@@ -288,7 +293,7 @@ const AddEditCourse = () => {
                                         </div>
                                     </div>
                                     <div className=' mt-3'>
-                                        <button className='btn btn-primary' >{id ? "Update" : "Save"}</button>
+                                        <button className='btn btn-primary mainbutton' >{id ? "Update" : "Save"}</button>
                                     </div>
                                 </Form>
                             )}

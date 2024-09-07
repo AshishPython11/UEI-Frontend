@@ -15,6 +15,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import useApi from "../../hooks/useAPI";
 import { QUERY_KEYS_MENU } from "../../utils/const";
 import { toast } from "react-toastify";
+import styled from 'styled-components';
+// import { SidebarContainer } from "./SidebarContainer";
 
 const Sidebar = () => {
   const [prescriptionsopen, setPrescriptionsopenOpen] = React.useState(false);
@@ -180,8 +182,16 @@ const Sidebar = () => {
   };
 
 // console.log("test hhh",selectedIndex1)
-
+// const SidebarContainer = styled.aside`
+//   width: 250px;
+//   background-color: ${({ theme }) => theme['--bodybackground']};
+//   color: ${({ theme }) => theme['--bodycolor']};
+//   padding: 1rem;
+//   transition: all 0.3s linear;
+// `;
+  
   return (
+    // <SidebarContainer>
     <>
       <div className="sidebar_main">
         <div
@@ -207,8 +217,8 @@ const Sidebar = () => {
                     <><ListItemButton
                       component={Link} to="/main/DashBoard"
                       selected={selectedIndex1?.toLowerCase() === "dashboard"}
-                      style={{ backgroundColor: selectedIndex1?.toLowerCase() === "dashboard" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "dashboard" ? "#fff" : "#fff" }}
-                      // style={{ backgroundColor: selectedIndex === 0 ? 'red' : 'yellow' }}
+                      className={selectedIndex1?.toLowerCase() === "dashboard" ?"selecteditem" :"unselecteditem"}
+                      // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "dashboard" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "dashboard" ? "#fff" : "#fff" }}
                       onClick={() => handleListItemClick1("Dashboard")}
                     >
                       <ListItemIcon>
@@ -217,11 +227,24 @@ const Sidebar = () => {
                       <ListItemText primary="Dashboard" />
                     </ListItemButton>
                     {profileCompletion === "100" ?
-
-                    <><ListItemButton
+                    <>
+                    <ListItemButton
+                          component={Link} to="/main/Chat/recentChat"
+                          selected={selectedIndex1?.toLowerCase() === "recentchat"}
+                          className={selectedIndex1?.toLowerCase() === "recentchat" ?"selecteditem" :"unselecteditem"}
+                          // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "recentChat" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "recentChat" ? "#fff" : "#fff" }}
+                          onClick={() => handleListItemClick1("recentChat")}
+                        >
+                            <ListItemIcon>
+                              <ChatIcon style={{ color: "#a8b0c5" }} />
+                            </ListItemIcon>
+                            <ListItemText primary="Chat" />
+                          </ListItemButton>
+                    <ListItemButton
                           component={Link} to="/main/Chat"
                           selected={selectedIndex1?.toLowerCase() === "chat"}
-                          style={{ backgroundColor: selectedIndex1?.toLowerCase() === "chat" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "chat" ? "#fff" : "#fff" }}
+                          className={selectedIndex1?.toLowerCase() === "chat" ?"selecteditem" :"unselecteditem"}
+                          // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "chat" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "chat" ? "#fff" : "#fff" }}
                           // style={{ backgroundColor: selectedIndex === 0 ? 'red' : 'yellow' }}
                           onClick={() => handleListItemClick1("Chat")}
                         >
@@ -231,55 +254,33 @@ const Sidebar = () => {
                           <ListItemText primary="Chat History" />
                           
                         </ListItemButton>
-
-                        <ListItemButton
-                          component={Link} to="/main/Chat/recentChat"
-                          selected={selectedIndex1?.toLowerCase() === "recentChat"}
-                          style={{ backgroundColor: selectedIndex1?.toLowerCase() === "recentChat" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "recentChat" ? "#fff" : "#fff" }}
+                    <ListItemButton
+                          component={Link} to="/main/student-feedback/add-student-feedback"
+                          selected={selectedIndex1?.toLowerCase() === "student-feedback"}
+                          className={selectedIndex1?.toLowerCase() === "student-feedback" ?"selecteditem" :"unselecteditem"}
+                          // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "chat" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "chat" ? "#fff" : "#fff" }}
                           // style={{ backgroundColor: selectedIndex === 0 ? 'red' : 'yellow' }}
-                          onClick={() => handleListItemClick1("recentChat")}
+                          onClick={() => handleListItemClick1("student-feedback")}
                         >
-                            <ListItemIcon>
-                              <ChatIcon style={{ color: "#a8b0c5" }} />
-                            </ListItemIcon>
-                            <ListItemText primary="Chat" />
-                          </ListItemButton></>:""}
+                          <ListItemIcon>
+                            <ChatIcon style={{ color: "#a8b0c5" }} />
+                          </ListItemIcon>
+                          <ListItemText primary="Feedback" />
+                          
+                        </ListItemButton>
+
+                        
+                          </>
+                          
+                          :""}
                       </>
                   ) : 
-                  // user_type === "teacher" ?  (
-                  //   <>
-                  //   <ListItemButton
-                  //     component={Link} to="/main/Teacher"
-                  //     selected={selectedIndex1?.toLowerCase() === "teacher"}
-                  //     style={{ backgroundColor: selectedIndex1?.toLowerCase() === "teacher" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "teacher" ? "#fff" : "#fff" }}
-                  //     // style={{ backgroundColor: selectedIndex === 0 ? 'red' : 'yellow' }}
-                  //     onClick={() => handleListItemClick1("Teacher")}
-                  //   >
-                  //       <ListItemIcon>
-                  //         <ChatIcon style={{ color: "#a8b0c5" }} />
-                  //       </ListItemIcon>
-                  //       <ListItemText primary="Upload PDF" />
-                  //     </ListItemButton> 
-                  //     <ListItemButton
-                  //     component={Link} to="/main/DashBoard"
-                  //     selected={selectedIndex1?.toLowerCase() === "dashboard"}
-                  //     style={{ backgroundColor: selectedIndex1?.toLowerCase() === "dashboard" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "dashboard" ? "#fff" : "#fff" }}
-                  //     // style={{ backgroundColor: selectedIndex === 0 ? 'red' : 'yellow' }}
-                  //     onClick={() => handleListItemClick1("Dashboard")}
-                  //   >
-                  //     <ListItemIcon>
-                  //       <Dashboard style={{ color: "#a8b0c5" }} />
-                  //     </ListItemIcon>
-                  //     <ListItemText primary="Dashboard" />
-                  //   </ListItemButton>
-                  //     </>
-                  // ):
                   (
                     <ListItemButton
                       component={Link} to="/main/DashBoard"
                       selected={selectedIndex1?.toLowerCase() === "dashboard"}
-                      style={{ backgroundColor: selectedIndex1?.toLowerCase() === "dashboard" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "dashboard" ? "#fff" : "#fff" }}
-                      // style={{ backgroundColor: selectedIndex === 0 ? 'red' : 'yellow' }}
+                      className={selectedIndex1?.toLowerCase() === "dashboard" ?"selecteditem" :"unselecteditem"}
+                      // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "dashboard" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "dashboard" ? "#fff" : "#fff" }}
                       onClick={() => handleListItemClick1("Dashboard")}
                     >
                       <ListItemIcon>
@@ -300,11 +301,12 @@ const Sidebar = () => {
 
                           let menulist = submenu.menu_name ==="Sub Menu" ? "SubMenu" : submenu.menu_name ==="Role Vs Form" ? "RoleVsForm": submenu.menu_name ==="Role Vs User" || submenu.menu_name ==='RoleVsUser' ? "RoleVsUser " : submenu.menu_name ==="Hobbies" ? "Hobby":  submenu.menu_name
                              return(
-                                <li key={submenu.id}>
+                                <li className="navhover" key={submenu.id}>
                                    <ListItemButton component={Link} to={menulist}
                                   //  <ListItemButton component={Link} to={submenu.url}
+                                  className={selectedIndex1?.toLowerCase() === menulist.toLowerCase() ?"selecteditem" :"unselecteditem"}
                                       selected={selectedIndex1?.toLowerCase() === menulist.toLowerCase()}
-                                      style={{ backgroundColor: selectedIndex1?.toLowerCase() === menulist.toLowerCase() ? '#024f52' : 'transparent',color: selectedIndex1?.toLowerCase() === menulist.toLowerCase() ? "#fff":"#fff" }}
+                                      // style={{ backgroundColor: selectedIndex1?.toLowerCase() === menulist.toLowerCase() ? '#024f52' : 'transparent',color: selectedIndex1?.toLowerCase() === menulist.toLowerCase() ? "#fff":"#fff" }}
                                       onClick={() => handleListItemClick1(menulist)}
                                     >
                                       <ListItemIcon>
@@ -339,9 +341,9 @@ const Sidebar = () => {
                     <li>
                       <ListItemButton component={Link} to={menu?.form_data?.form_url}
                                         // selected={selectedIndex === 0}
-                                        // style={{ backgroundColor: selectedIndex === 0 ? '#024f52' : 'transparent' }}
+                                        className={selectedIndex1?.toLowerCase() === menu?.form_data?.form_url?.toLowerCase() ?"selecteditem" :"unselecteditem"}
                                         selected={selectedIndex1?.toLowerCase() === menu?.form_data?.form_url.toLowerCase()}
-                                        style={{ backgroundColor: selectedIndex1?.toLowerCase() === menu?.form_data?.form_url?.toLowerCase() ? '#024f52' : 'transparent',color: selectedIndex1.toLowerCase() === menu?.form_data?.form_url.toLowerCase() ? "#fff":"#fff" }}
+                                        // style={{ backgroundColor: selectedIndex1?.toLowerCase() === menu?.form_data?.form_url?.toLowerCase() ? '#024f52' : 'transparent',color: selectedIndex1.toLowerCase() === menu?.form_data?.form_url.toLowerCase() ? "#fff":"#fff" }}
                                         onClick={() => handleListItemClick1(menu?.form_data?.form_url)}
                                       >
                       <ListItemIcon>
@@ -372,23 +374,62 @@ const Sidebar = () => {
                 })
                  : <></>
                  }
+
                  {
                   user_type === "admin"  && (
-
+                    <>
+                    <ListItemButton
+                     component={Link} to="/main/uploadpdf"
+                     selected={selectedIndex1?.toLowerCase() === "uploadpdf"}
+                     className={selectedIndex1?.toLowerCase() === "uploadpdf" ?"selecteditem" :"unselecteditem"}
+                     // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "uploadpdf" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "uploadpdf" ? "#fff" : "#fff" }}
+                     onClick={() => handleListItemClick1("uploadpdf")}
+                   >
+                       <ListItemIcon>
+                         <ChatIcon style={{ color: "#a8b0c5" }} />
+                       </ListItemIcon>
+                       <ListItemText primary="Upload PDF" />
+                     </ListItemButton>
+                    <ListItemButton
+                     component={Link} to="/main/pdflist"
+                     selected={selectedIndex1?.toLowerCase() === "pdflist"}
+                     className={selectedIndex1?.toLowerCase() === "pdflist" ?"selecteditem" :"unselecteditem"}
+                     // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "uploadpdf" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "uploadpdf" ? "#fff" : "#fff" }}
+                     onClick={() => handleListItemClick1("pdflist")}
+                    >
+                       <ListItemIcon>
+                         <ChatIcon style={{ color: "#a8b0c5" }} />
+                       </ListItemIcon>
+                       <ListItemText primary="PDF List" />
+                     </ListItemButton>
                      <ListItemButton
-                      component={Link} to="/main/uploadpdf"
-                      selected={selectedIndex1?.toLowerCase() === "uploadpdf"}
-                      style={{ backgroundColor: selectedIndex1?.toLowerCase() === "uploadpdf" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "uploadpdf" ? "#fff" : "#fff" }}
-                      // style={{ backgroundColor: selectedIndex === 0 ? 'red' : 'yellow' }}
-                      onClick={() => handleListItemClick1("uploadpdf")}
+                      component={Link} to="/main/feedback"
+                      selected={selectedIndex1?.toLowerCase() === "feedback"}
+                      className={selectedIndex1?.toLowerCase() === "feedback" ?"selecteditem" :"unselecteditem"}
+                      // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "uploadpdf" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "uploadpdf" ? "#fff" : "#fff" }}
+                      onClick={() => handleListItemClick1("feedback")}
                     >
                         <ListItemIcon>
                           <ChatIcon style={{ color: "#a8b0c5" }} />
                         </ListItemIcon>
-                        <ListItemText primary="Upload PDF" />
+
+                        <ListItemText primary="Feedback" />
                       </ListItemButton> 
-                  )
-                 
+                     <ListItemButton
+                      component={Link} to="/main/student-feedback"
+                      selected={selectedIndex1?.toLowerCase() === "student-feedback"}
+                      className={selectedIndex1?.toLowerCase() === "student-feedback" ?"selecteditem" :"unselecteditem"}
+                      // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "uploadpdf" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "uploadpdf" ? "#fff" : "#fff" }}
+                      onClick={() => handleListItemClick1("student-feedback")}
+                    >
+                        <ListItemIcon>
+                          <ChatIcon style={{ color: "#a8b0c5" }} />
+                        </ListItemIcon>
+                        <ListItemText primary="Student Feedback" />
+                      </ListItemButton> 
+                    </>
+                      
+                  )                 
                  }
                 </ul>
               </div>
@@ -397,6 +438,7 @@ const Sidebar = () => {
         </div>
       </div>
     </>
+    // </SidebarContainer>
   );
 };
 

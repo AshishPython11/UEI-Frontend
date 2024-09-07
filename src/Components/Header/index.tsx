@@ -9,11 +9,13 @@ import useApi from "../../hooks/useAPI";
 import NameContext from "../../Pages/Context/NameContext";
 import images_man from "../../assets/img/images_man.png";
 import images_female from "../../assets/img/images_female.png";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Switch } from "@mui/material";
+import ThemeModel from "../../assets/css/themes/ThemeModel";
 // import { Button } from '@mui/material';
 const Header = () => {
   const context = useContext(NameContext);
   const { namepro,logoutpro,setNamepro,proImage,setProImage,ProPercentage }:any = context;
+  const [modalOpen, setModalOpen] = useState(false);
   let StudentId = localStorage.getItem("_id");
   const navigator = useNavigate();
   const profileURL = QUERY_KEYS_STUDENT.STUDENT_GET_PROFILE;
@@ -42,11 +44,22 @@ const Header = () => {
     localStorage.removeItem("chatsaved");
     localStorage.removeItem("Profile_completion");
     localStorage.removeItem("Profile completion");
+    // localStorage.removeItem("currentQuestionIndex");
+    // localStorage.removeItem("messages");
+    // localStorage.removeItem("answers");
+    // localStorage.removeItem("selectedproficiency");
+    // localStorage.removeItem("selectedLanguage");
+    // localStorage.removeItem("setSelectedHobby");
+    // localStorage.removeItem("selectSubject");
+    // localStorage.removeItem("selectCourse");
+    // localStorage.removeItem("selectedInstitute");
+    localStorage.removeItem("tokenExpiry");
     synth.cancel();
     navigator("/");
     logoutpro()
 
   };
+
   function handleClick() {
     let main_content = document.getElementById("main-content");
     if (main_content) {
@@ -97,14 +110,16 @@ const Header = () => {
                 });
               }
 
+
+
             }
             sessionStorage.setItem('profileData',JSON.stringify(data.data))
         }
     }).catch((e:any) => {
-        toast.error(e?.message, {
-            hideProgressBar: true,
-            theme: "colored",
-            });
+        // toast.error(e?.message, {
+        //     hideProgressBar: true,
+        //     theme: "colored",
+        //     });
     });
 }
   const getAdminDetails = () => {
@@ -147,6 +162,7 @@ useEffect(()=>{
     callAPI() 
   }
 },[])
+
 const defaultImage =
 namepro?.gender === "male" || namepro?.gender === "Male"
   ? images_man
@@ -154,7 +170,106 @@ namepro?.gender === "male" || namepro?.gender === "Male"
   ? images_female
   : images_man;
 
-const profileImage1:any = proImage !== "" ? proImage : defaultImage;
+// const profileImage1:any =( proImage !== "" ||  !== 'undefined')  ? proImage : defaultImage;
+const profileImage1: any = (proImage !== "" && proImage !== undefined) ? proImage : defaultImage;
+
+const [theme, setTheme] = useState(localStorage.getItem('theme') || 'default');
+useEffect(()=>{
+  const theme = localStorage.getItem('theme');
+  if(theme){
+    // localStorage.getItem('--bodybackground');
+    // localStorage.getItem('--bghovercolor');
+    // localStorage.getItem('--bodycolor'); 
+
+    if(theme === 'default'){
+      document?.documentElement?.setAttribute('data-theme', theme);
+      // document?.documentElement?.style.setProperty('--bodybackground', '#003032');
+      // document?.documentElement?.style.setProperty('--bghovercolor', '#024f52');
+      // document?.documentElement?.style.setProperty('--bodycolor', '#fff');
+      // document?.documentElement?.style.setProperty('--buttonbgcolor','#003032');
+      
+    }else if(theme === 'light'){
+      // document?.documentElement?.setAttribute('data-theme', theme);
+      // document?.documentElement?.style.setProperty('--bodybackground', '#003032');
+      // document?.documentElement?.style.setProperty('--bghovercolor', '#024f52');
+      // document?.documentElement?.style.setProperty('--bodycolor', '#fff');
+      
+    }else if(theme === 'dark'){
+      // document?.documentElement?.setAttribute('data-theme', theme);
+      // document?.documentElement?.style.setProperty('--bodybackground', '#1d2a35');
+      // document?.documentElement?.style.setProperty('--bodycolor', ' #1d2a35');
+      // document?.documentElement?.style.setProperty('--bghovercolor', '#2a3c49');
+      // document?.documentElement?.style.setProperty('--buttonbgcolor','#1d2a35');
+    }else{
+      document?.documentElement?.setAttribute('data-theme', theme);
+      // document?.documentElement?.style.setProperty('--bodybackground', localStorage?.getItem('--bodybackground'));
+      // document?.documentElement?.style.setProperty('--bodycolor', localStorage?.getItem('--bodycolor'));
+      // document?.documentElement?.style.setProperty('--bghovercolor',  localStorage?.getItem('--bghovercolor'));
+      // document?.documentElement?.style.setProperty('--TitleColor',  localStorage?.getItem('--TitleColor'));
+      // document?.documentElement?.style.setProperty('--iconcolor',  localStorage?.getItem('--iconcolor'));
+    }
+  }
+
+},[])
+
+useEffect(() => {
+  if(theme === 'default'){
+    document?.documentElement?.setAttribute('data-theme', theme);
+    // document?.documentElement?.style.setProperty('--bodybackground', '#003032');
+    // document?.documentElement?.style.setProperty('--bghovercolor', '#024f52');
+    // document?.documentElement?.style.setProperty('--bodycolor', '#fff');
+    // document?.documentElement?.style.setProperty('--TitleColor', '#495057');
+    // document?.documentElement?.style.setProperty('--buttonbgcolor','#003032');
+    // localStorage?.setItem('--bodybackground', '#003032');
+    // localStorage?.setItem('--bghovercolor', '#024f52');
+    // localStorage?.setItem('--bodycolor', '#fff');
+    // localStorage?.setItem('--TitleColor', '#495057');
+    // localStorage?.setItem('--buttonbgcolor', '#003032');
+  }else if(theme === 'light'){
+    document?.documentElement?.setAttribute('data-theme', theme);
+    // document?.documentElement?.style.setProperty('--bodybackground', '#003032');
+    // document?.documentElement?.style.setProperty('--bghovercolor', '#024f52');
+    // document?.documentElement?.style.setProperty('--bodycolor', '#fff');
+    // document?.documentElement?.style.setProperty('--TitleColor', '#495057');
+    // localStorage?.setItem('--bodybackground', '#003032');
+    // localStorage?.setItem('--bghovercolor', '#024f52');
+    // localStorage?.setItem('--bodycolor', '#fff');
+    // localStorage?.setItem('--TitleColor', '#495057');
+  }else if(theme === 'dark'){
+    document?.documentElement?.setAttribute('data-theme', theme);
+    // document?.documentElement?.style.setProperty('--bodybackground', '#1d2a35');
+    // document?.documentElement?.style.setProperty('--bodycolor', ' #1d2a35');
+    // document?.documentElement?.style.setProperty('--bghovercolor', '#2a3c49');
+    // document?.documentElement?.style.setProperty('--TitleColor', '#495057');
+    // document?.documentElement?.style.setProperty('--buttonbgcolor','#1d2a35');
+
+    // localStorage?.setItem('--bodybackground', '#1d2a35');
+    // localStorage?.setItem('--bghovercolor', '#1d2a35');
+    // localStorage?.setItem('--bodycolor', '#2a3c49');
+    // localStorage?.setItem('--TitleColor', '#495057');
+    // localStorage?.setItem('--buttonbgcolor', '#1d2a35');
+  }
+
+  // document.documentElement.setAttribute('data-theme', theme);
+}, [theme]);
+
+// const toggleTheme = () => {
+//   setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+// };
+const toggleTheme = () => {
+  setTheme((prevTheme) => {
+    const newTheme = prevTheme === 'light' ? 'dark' : 'light';
+    // Update localStorage with the new theme
+    localStorage.setItem('theme', newTheme);
+    return newTheme;
+  });
+};
+const handleClickthemes = () => {
+  setModalOpen(true);
+};
+const handleCloseModal = () => {
+  setModalOpen(false);
+};
 
   return (
     <>
@@ -183,6 +298,7 @@ const profileImage1:any = proImage !== "" ? proImage : defaultImage;
               <span className="brand-text">Gyan Setu</span>
             </div>
             {/* <div className="search-bar" id="search-toggle">
+
                             <form
                                 className="search-form d-flex align-items-center"
                                 method="POST"
@@ -199,7 +315,9 @@ const profileImage1:any = proImage !== "" ? proImage : defaultImage;
                                 </button>
                             </form>
                         </div> */}
+
             {/* <div className="header_search_bar common_content">
+
                 <div className="input-group input_group">
                   <button className="btn search-btn search_btn">
                     <svg
@@ -243,6 +361,7 @@ const profileImage1:any = proImage !== "" ? proImage : defaultImage;
               </a>
             </div>
             {/* <div className="notification common_content">
+
                           <div className= "notification_inner" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                               aria-expanded="false">
                                <img src={notification} alt='notification'/> 
@@ -252,6 +371,14 @@ const profileImage1:any = proImage !== "" ? proImage : defaultImage;
                           </ul>
                       </div> */}
 
+
+            
+            {/* <Switch
+              checked={theme === 'dark'}
+              onChange={toggleTheme}
+              color="default"
+            /> */}
+
             <div className="user common_content">
               <div
                 className="user_inner"
@@ -260,7 +387,10 @@ const profileImage1:any = proImage !== "" ? proImage : defaultImage;
                 aria-expanded="false"
               >
                 <div className="profile_img_wrapper">
-                  <CircularProgress variant="determinate" thickness={8} size={40} color="success" value={user_type==='student' ?ProPercentage : ProPercentage} />
+
+                  <CircularProgress variant="determinate" thickness={0}  value={0} />
+                  {/* <CircularProgress variant="determinate" thickness={8} size={40} color="success" value={ProPercentage} /> */}
+
                   <img className="profile_img" src={profileImage1} alt="profile" />
                 </div>
                 {/* <div className="profile_img">
@@ -299,6 +429,14 @@ const profileImage1:any = proImage !== "" ? proImage : defaultImage;
                   </Link>
                 </li>
                 <li>
+                <button
+                    className="dropdown-item"
+                    onClick={() => handleClickthemes()}
+                  >
+                    <span className="item_text">Custom theme</span>
+                    </button>
+                </li>
+                <li>
                   <button
                     className="dropdown-item"
                     onClick={() => handlogout()}
@@ -326,9 +464,14 @@ const profileImage1:any = proImage !== "" ? proImage : defaultImage;
             </ul>
           </div>
         </div>
+        <ThemeModel
+                open={modalOpen}
+                handleClose={handleCloseModal}
+              />
       </header>
     </>
   );
 };
 
 export default Header;
+

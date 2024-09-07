@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../Institute/Institute.scss';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -12,7 +12,9 @@ import { toast } from 'react-toastify';
 import { Field, Form, Formik, FormikHelpers, FormikProps } from 'formik';
 import * as Yup from 'yup';
 import { IEntity, InstituteRep0oDTO, MenuListinter } from '../../Components/Table/columns';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, inputfield, inputfieldhover, inputfieldselect, inputfieldtext, inputfieldtextselect } from '../../utils/helpers';
+import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
+import NameContext from '../Context/NameContext';
 
 interface IInstituteForm {
     institution_name: string
@@ -29,6 +31,8 @@ interface IInstituteForm {
 }
 
 const AddEditInstitute = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const InstituteEntityURL = QUERY_KEYS.ENTITY_LIST;
     const InstituteAddURL = QUERY_KEYS.INSTITUTE_ADD;
     const InstituteEditURL = QUERY_KEYS.INSTITUTE_EDIT;
@@ -84,21 +88,8 @@ const AddEditInstitute = () => {
     const pathSegments = location.pathname.split('/').filter(Boolean);    
     const lastSegment =  id ? pathSegments[pathSegments.length - 3].toLowerCase(): pathSegments[pathSegments.length - 2].toLowerCase();
     const [filteredData, setFilteredData] = useState<MenuListinter | any>([]);
-   
-    // const GetDataList = () => {
-    //     JSON.parse(Menulist)?.map((data: any) => {
-    //         const fistMach = data?.menu_name.toLowerCase() === lastSegment && data;
-    //         if (fistMach.length > 0) {
-    //             setFilteredData(fistMach)
-    //         }
-    //         const result = data?.submenus?.filter((menu: any) => menu.menu_name.toLowerCase() === lastSegment)
-    //         if (result.length > 0) {
-    //             setFilteredData(result)
-    //         }
-    //     })
-    // }
-
-
+    const [contry_col, setcontry_col] = useState<boolean>(false)
+    const [state_col, setstate_col] = useState<boolean>(false)
     useEffect(() => {
         // GetDataList()
         setFilteredData(dataaccess(Menulist, lastSegment, { urlcheck: ""},{ datatest: "" }));
@@ -157,6 +148,50 @@ const AddEditInstitute = () => {
         }
     };
 
+    const handleInputChangecountry = async (value: string, addressType: string, name: string) => {
+        if (addressType === "current_address") {
+          if (name === "country") {
+            // setStudentAddress((prevState) => ({ ...prevState, ["country"]: value }));
+            // setStudentAddress((prevState) => ({ ...prevState, ["state"]: "" }));
+            // setstate_col(true)
+            // setcontry_col(false);
+            setInstitute((prevInstitute) => {
+                return {
+                    ...prevInstitute,
+                    ["country"]: value,
+                };
+            });
+            setInstitute((prevInstitute) => {
+                return {
+                    ...prevInstitute,
+                    ["state"]: "",
+                };
+            });
+            setstate_col(true)
+            setcontry_col(false);
+            // formRef?.current?.setFieldValue("country", value);
+            // await formRef?.current?.validateField("country")
+            // if (formRef?.current?.errors?.["country" as keyof IInstituteForm] !== undefined) {
+            //     formRef?.current?.setFieldError("country", formRef?.current?.errors?.["country"as keyof IInstituteForm])
+            //     formRef?.current?.setFieldTouched("country", true)
+            // }
+          } else if (name === "state") {
+            // setStudentAddress((prevState) => ({ ...prevState, ["state"]: value }));
+            // setstate_col(false)
+            setInstitute((prevInstitute) => {
+                return {
+                    ...prevInstitute,
+                    ["state"]: value,
+                };
+            });
+            setstate_col(false)
+          } else {
+            return;
+          }
+    
+        } 
+      }
+
     // const handleSubmit = async (instituteData: IInstituteForm) => {
         const handleSubmit = async (
             instituteData: IInstituteForm, 
@@ -166,7 +201,7 @@ const AddEditInstitute = () => {
             putData(`${InstituteEditURL}/${id}`, instituteData).then((data: { status: number; message:string }) => {
                 if (data.status === 200) {
                     navigator('/main/Institute')
-                    toast.success(data.message, {
+                    toast.success("Institute updated successfully", {
                         hideProgressBar: true,
                         theme: "colored",
                     });
@@ -189,11 +224,18 @@ const AddEditInstitute = () => {
             postData(`${InstituteAddURL}`, instituteData).then((data: { status: number; message:string }) => {
                 if (data.status === 200) {
                     // navigator('/main/Institute')
-                    toast.success(data.message, {
+                    toast.success("Institute save successfully", {
                         hideProgressBar: true,
                         theme: "colored",
                     });
                     resetForm({ values: initialState });
+                    setInstitute((prevInstitute) => {
+                        return {
+                            ...prevInstitute,
+                            ["state"]: "",
+                            ["country"]: "",
+                        };
+                    });
                     
                 }else {
                     toast.error(data.message, {
@@ -259,16 +301,16 @@ const AddEditInstitute = () => {
                 .matches(addressPattern, 'Please enter a valid Address only characters allowed.'),
             city: Yup.string()
                 .required("Please enter City")
-                .matches(charPattern, 'Please enter a valid City only characters allowed.'),
+                .matches(charPattern, 'Please enter a valid City name only characters allowed.'),
             country: Yup.string()
                 .required("Please enter Country")
                 .matches(charPattern, 'Please enter a valid Contry name only characters allowed.'),
             state: Yup.string()
                 .required("Please enter State")
-                .matches(charPattern, 'Please enter a valid State only characters allowed.'),
+                .matches(charPattern, 'Please enter a valid State name only characters allowed.'),
             district: Yup.string()
                 .required("Please enter District")
-                .matches(charPattern, 'Please enter a valid District only characters allowed.'),
+                .matches(charPattern, 'Please enter a valid District name only characters allowed.'),
             pincode: Yup.string()
                 .required("Please enter Pincode")
                 .matches(pincodePattern, 'Enter valid pincode number.'),
@@ -320,16 +362,16 @@ const AddEditInstitute = () => {
                 .matches(addressPattern, 'Please enter a valid Address only characters allowed.'),
             city: Yup.string()
                 .required("Please enter City")
-                .matches(charPattern, 'Please enter a valid City only characters allowed.'),
+                .matches(charPattern, 'Please enter a valid City name only characters allowed.'),
             country: Yup.string()
                 .required("Please enter Country")
                 .matches(charPattern, 'Please enter a valid Contry name only characters allowed.'),
             state: Yup.string()
                 .required("Please enter State")
-                .matches(charPattern, 'Please enter a valid State only characters allowed.'),
+                .matches(charPattern, 'Please enter a valid State name only characters allowed.'),
             district: Yup.string()
                 .required("Please enter District")
-                .matches(charPattern, 'Please enter a valid District only characters allowed.'),
+                .matches(charPattern, 'Please enter a valid District name only characters allowed.'),
             pincode: Yup.string()
                 .required("Please enter Pincode")
                 .matches(pincodePattern, 'Enter valid pincode number.'),
@@ -350,6 +392,47 @@ const AddEditInstitute = () => {
     }
 }
  
+const [isFocused, setIsFocused] = useState(false);
+const [isFocusedstate, setIsFocusedstate] = useState(false);
+const dropdownRef = useRef<HTMLDivElement>(null);
+const dropdownstateRef = useRef<HTMLDivElement>(null);
+
+useEffect(() => {
+  const handleFocus = () => setIsFocused(true);
+  const handleFocusstate = () => setIsFocusedstate(true);
+  const handleBlur = (e: FocusEvent) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(e.relatedTarget as Node)) {
+      setIsFocused(false);
+    }
+  };
+  const handleBlurstate = (e: FocusEvent) => {
+    if (dropdownstateRef.current && !dropdownstateRef.current.contains(e.relatedTarget as Node)) {
+        setIsFocusedstate(false);
+    }
+  };
+
+  const currentDropdown = dropdownRef.current;
+  if (currentDropdown) {
+    currentDropdown.addEventListener('focus', handleFocus as EventListener);
+    currentDropdown.addEventListener('blur', handleBlur as EventListener);
+  }
+  const currentDropdownstate = dropdownstateRef.current;
+  if (currentDropdownstate) {
+    currentDropdownstate.addEventListener('focus', handleFocusstate as EventListener);
+    currentDropdownstate.addEventListener('blur', handleBlurstate as EventListener);
+  }
+
+  return () => {
+    if (currentDropdown) {
+      currentDropdown.removeEventListener('focus', handleFocus as EventListener);
+      currentDropdown.removeEventListener('blur', handleBlur as EventListener);
+    }
+    if (currentDropdownstate) {
+        currentDropdownstate.removeEventListener('focus', handleFocusstate as EventListener);
+        currentDropdownstate.removeEventListener('blur', handleBlurstate as EventListener);
+      }
+  };
+}, []);
 
     return (
         <div className='profile_section'>
@@ -391,15 +474,73 @@ const AddEditInstitute = () => {
                                                     name="entity_id"
                                                     value={values?.entity_id}
                                                     variant="outlined"
+                                                    sx={{
+                                                        backgroundColor: inputfield(namecolor) , 
+                                                        color: inputfieldtext(namecolor) 
+                                                    }}
+                                                    MenuProps={{
+                                                        PaperProps: {
+                                                            style: {
+                                                                backgroundColor: inputfield(namecolor),
+                                                                color: inputfieldtext(namecolor)
+                                                            },
+                                                        },
+                                                    }}
                                                 >
                                                     {dataEntity.map((item, idx) => (
-                                                        <MenuItem value={item.id} key={`${item.entity_type}-${idx + 1}`}>{item.entity_type}</MenuItem>
+                                                        <MenuItem value={item.id} key={`${item.entity_type}-${idx + 1}`} 
+                                                        
+                                                        sx={{
+                                                            backgroundColor: inputfield(namecolor),
+                                                                color: inputfieldtext(namecolor),
+                                                            '&:hover': {
+                                                                backgroundColor:  inputfieldhover(namecolor),
+                                                            },
+                                                        }}
+                                                        >{item.entity_type}</MenuItem>
                                                     ))}
                                                 </Select>
                                             </FormControl>
                                             {touched?.entity_id && errors?.entity_id ?
                                                 <p style={{ color: 'red' }}>{errors?.entity_id}</p> : <></>
                                             }
+                                        </div>
+                                    </div>
+                                    <div className="floating-label-container col-md-4" ref={dropdownRef}>
+                                        <label className={`floating-label ${isFocused || values?.country ? "focused" : "focusedempty"}`}>
+                                            Country <span>*</span>
+                                        </label>
+                                        <div className="form_field_wrapper">
+                                            <CountryDropdown
+                                                classes="form-control p-3 custom-dropdown"
+                                                defaultOptionLabel={values?.country || ""}
+                                                value={values?.country || ""}
+                                                onChange={(e) => handleInputChangecountry(e, "current_address", "country")}   
+                                            />
+                                            {/* {contry_col && <p style={{ color: "red" }}>Please enter Country Name.</p>} */}
+                                            {touched?.country && errors?.country ?
+                                                <p style={{ color: 'red' }}>Please enter Country Name.</p> : <></>
+                                            }
+                                        </div>
+                                    </div>
+
+
+                                    <div className='floating-label-container col-md-4' ref={dropdownstateRef}>
+                                    <label className={`floating-label ${isFocusedstate || values?.state ? "focused" : "focusedempty"}`}>
+                                            State <span>*</span>
+                                        </label>
+                                        <div className="form_field_wrapper">
+                                            <RegionDropdown
+                                                classes="form-control p-3 custom-dropdown"
+                                                defaultOptionLabel={values?.state || ""}
+                                                country={values?.country || ""}
+                                                value={values?.state || ""}
+                                                // onChange={(val) => setRegion(val)} 
+                                                onChange={(e: string) => handleInputChangecountry(e, "current_address", "state")}
+                                            />
+                                            <div> {state_col && (
+                                                <p style={{ color: 'red' }}>Please enter a valid state Name.</p>
+                                            )}</div>
                                         </div>
                                     </div>
                                     <div className='col-md-4'>
@@ -447,8 +588,8 @@ const AddEditInstitute = () => {
                                             }
                                         </div>
                                     </div>
-                                    <div className='col-md-4'>
-                                        <div className="form_field_wrapper">
+                                    {/* <div className='col-md-4'>
+                                         <div className="form_field_wrapper">
                                             <Field
                                                 component={TextField}
                                                 label="Country *"
@@ -459,8 +600,10 @@ const AddEditInstitute = () => {
                                             {touched?.country && errors?.country ?
                                                 <p style={{ color: 'red' }}>{errors?.country}</p> : <></>
                                             }
-                                        </div>
-                                    </div>
+                                        </div> 
+                                    </div> */}
+                                    
+                                   
                                     <div className='col-md-4'>
                                         <div className="form_field_wrapper">
                                             <Field
@@ -489,7 +632,7 @@ const AddEditInstitute = () => {
                                             }
                                         </div>
                                     </div>
-                                    <div className='col-md-4'>
+                                    {/* <div className='col-md-4'>
                                         <div className="form_field_wrapper">
                                             <Field
                                                 component={TextField}
@@ -502,7 +645,7 @@ const AddEditInstitute = () => {
                                                 <p style={{ color: 'red' }}>{errors?.state}</p> : <></>
                                             }
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className='col-md-4'>
                                         <div className="form_field_wrapper">
                                             <Field
@@ -547,7 +690,7 @@ const AddEditInstitute = () => {
                                     </div>
                                     
                                 </div>
-                                <button className='btn btn-primary'  >{id ? "Update" : "Save"}</button>
+                                <button className='btn btn-primary mainbutton'  >{id ? "Update" : "Save"}</button>
                             </Form>
                         )}
                     </Formik>

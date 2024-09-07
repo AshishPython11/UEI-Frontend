@@ -1,4 +1,5 @@
 @import 'variable/variable';
+// @import '../css/themes/themes.css';
 
 // @font-face {
 //     font-family: $font_family_body;
@@ -1199,13 +1200,20 @@
     margin-bottom: 15px;
 }
 
+// body {
+//     font-family: $font_family_body;
+//     font-weight: 400;
+//     line-height: 22px;
+//     color: $bodycolor;
+//     background-color: $bodybackground;
+//     font-size: $font_body;
+// }
 body {
-    font-family: $font_family_body;
-    font-weight: 400;
-    line-height: 22px;
-    color: $bodycolor;
-    background-color: $bodybackground;
-    font-size: $font_body;
+    font-family: var(--font-family);
+    font-weight: var(--font-weight);
+    line-height: var(--line-height);
+    color: var(--color);
+    background-color: var(--bodycolor);
 }
 img{
     max-width: 100%;
@@ -1237,7 +1245,12 @@ hr{
     font-size: 22px;
     line-height: 26px;
     margin: 0 0 15px;
-    color: #495057;
+    // color: #495057;
+    color: var(--TitleColor);
+}
+.main_title_dashboard{
+    color: var(--TitleColor);
+    
 }
 
 a {
@@ -1251,7 +1264,8 @@ a:focus {
     color: $linkhovercolor;
 }
 .dashboard_main_content{
-    padding: 100px 20px;
+    padding: 100px 20px 67px 20px;
+    background-color: var(--dashboardcolor);
 }
 .white_box {
     background: $white_color;
@@ -1270,9 +1284,14 @@ a:focus {
 .card{
     border: none;
     box-shadow: 0 2px 3px #e6e8eb;
-    margin-bottom: 20px;
+    // margin-bottom: 20px;
+    .profilebody{
+        background-color: var(--profilebody) !important;
+        color: var(--profiletext) !important;
+    }
     .card-body {
         min-height: calc(100vh - 200px);
+        background-color: var(--cardbodycolor);
         form {
             padding-bottom: 40px;
         }
@@ -1418,6 +1437,26 @@ a:focus {
                                     }
                                 }
                             }
+                            &.signuplink_block1{
+                                margin: 20px 0 0;
+                                .signupa{
+                                    font-size: $font_large;
+                                    font-weight: 500; 
+                                    color: $bodycolor;
+                                    // display: flex;
+                                    // align-items: center;
+                                    // justify-content: center;
+                                    // text-decoration: unset;
+                                    margin: 0 0 30px;
+                                    .signup_txt{
+                                        color: $bodyhovercolor;
+                                        font-weight: 600;
+                                        &:hover{
+                                            color:$bodycolor;
+                                        }
+                                    }
+                                }
+                            }
                             &.backtologin_block{
                                 margin: 25px 0 0;
                             }
@@ -1466,13 +1505,12 @@ a:focus {
             }
     }
 }
-
 // Common form fields
-.form_field_wrapper{
+.form_field_wrapper-login{
     margin: 0 0 15px;
     position: relative;
     label{
-        color: $labelcolor;
+        color: var(--inputlablecolor) !important;
         font-weight: 500;
         font-size: $font_medium;
         line-height: 19px;
@@ -1488,6 +1526,7 @@ a:focus {
             outline: none;
         }
     }
+ 
     // &.date_picker{
     //     .MuiTextField-root{
     //         display: block;
@@ -1510,8 +1549,145 @@ a:focus {
     // }
     .MuiFormControl-root{
         display: flex;
-        background-color: $formfiledbackgroundcolor;
+        // background-color: var(--inputbackcolor) !important;
+        // color: var(--inputlablecolor) !important;
         .MuiInputBase-root{
+            // background-color: var(--inputbackcolor) !important;
+            // color: var(--inputlablecolor) !important;
+            .MuiInputBase-input{
+                // height: 50px;
+                // box-sizing: border-box;
+                // padding: 12px 15px 12px 52px;
+            }
+            .MuiOutlinedInput-notchedOutline{
+                border-radius: 8px;
+                border: 1px solid rgba(0, 0, 0, 0.12);
+            }
+        }
+    }
+    textarea{
+        background-color: $formfiledbackgroundcolor;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        padding: 16px 14px;
+        width: 100%;
+        min-height: 60px;
+        &:focus{
+            outline: none;
+        }
+    }
+    .form_upload_control{
+        padding: 25px;
+        position: relative;
+        .file_upload_control{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .file_upload{
+                margin: 0 0 7px;
+            }
+            .label{
+                font-size: $font_small;
+                font-weight: 500;
+                color: $bodyopacitycolor;
+                margin: 0 0 10px;
+            }
+            .browse{
+                border: 1px solid #495057;
+                border-radius: 2px; 
+                font-size: $font_small;
+                font-weight: 500;
+                color: $bodycolor;   
+                display: inline-block;
+                padding: 2px 10px;
+            }
+            .file_upload_input{
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                opacity: 0;
+                cursor: pointer;
+            }
+        }
+    }
+}
+// Common form fields
+.form_field_wrapper{
+    margin: 0 0 15px;
+    position: relative;
+    label{
+        color: var(--inputlablecolor) !important;
+        font-weight: 500;
+        font-size: $font_medium;
+        line-height: 19px;
+        margin: 0 0 5px;
+        display: block;
+    }
+    select{
+        @include formfield;
+        width: 100%;
+        display: block;
+        padding: 10px 15px;
+        &:focus-visible{
+            outline: none;
+        }
+    }
+ 
+    // &.date_picker{
+    //     .MuiTextField-root{
+    //         display: block;
+    //         .MuiInputBase-root{
+    //             width: 100%;
+    //             .MuiInputBase-input{
+    //                 height: auto;
+    //                 padding: 13px 15px;
+    //                 line-height: 24px;
+    //             }
+    //             fieldset{
+    //                 border-color: rgba(14, 59, 89, 0.2);
+    //                 margin: 0 !important;
+    //             }
+    //             button{
+    //                 min-width: auto;
+    //             }
+    //         }
+    //     }
+    // }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:focus,
+        textarea:-webkit-autofill,
+        textarea:-webkit-autofill:focus {
+            background-color: var(--inputbackcolor) !important;
+            color: var(--inputlablecolor) !important;
+            -webkit-box-shadow: 0 0 0px 1000px var(--inputbackcolor) inset !important;
+            box-shadow: 0 0 0px 1000px var(--inputbackcolor) inset !important;
+            -webkit-text-fill-color: var(--inputlablecolor) !important;
+        }
+    
+        textarea {
+            background-color: var(--inputbackcolor) !important;
+            color: var(--inputlablecolor) !important;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            padding: 16px 14px;
+            width: 100%;
+            min-height: 60px;
+    
+            &:focus {
+                outline: none;
+            }
+        }
+    .MuiFormControl-root{
+        display: flex;
+        background-color: var(--inputbackcolor) !important;
+        color: var(--inputlablecolor) !important;
+        .MuiInputBase-root{
+            background-color: var(--inputbackcolor) !important;
+            color: var(--inputlablecolor) !important;
             .MuiInputBase-input{
                 // height: 50px;
                 // box-sizing: border-box;
@@ -1577,9 +1753,10 @@ a:focus {
 // Searchbar css
 .search_bar{
     .input-group{
-        background: $white_color;
-        border: 1px solid rgba(14, 59, 89, 0.2);
+        background: var(--chatbodyinnercolor);
+        // border: 1px solid rgba(14, 59, 89, 0.2);
         border-radius: 0.375rem;
+        
         .form-control{
             background-color: transparent;
             padding: 15px 50px 15px 15px;
@@ -1587,11 +1764,12 @@ a:focus {
             border: none;
             font-size: $font_small;
             line-height: 20px;
+            color: var(--chattitlecolor);
             &::placeholder{
                 font-size: $font_small;
                 font-weight: 400;
                 line-height: 24px;
-                color: rgba(14, 59, 89, 0.5);
+                color: var(--chattitlecolor);
             }
             &:focus{
                 box-shadow: none;
@@ -1651,6 +1829,10 @@ a:focus {
 // Table css start
 .table_wrapper{
     .table_inner{
+       .MuiBox-root{
+
+            background-color: var(--tabletoolscolor);
+        } 
         .MuiTableContainer-root {
             box-shadow: none;
             border-radius: unset;
@@ -1658,9 +1840,9 @@ a:focus {
                 margin-bottom: 0;
                 thead{
                     .MuiTableRow-head {
-                        background: #f8f9fa ;
+                        background: var(--tabletoolscolor) !important ;
                         .MuiTableCell-root{
-                            color: $bodycolor;
+                            color: var(--tabletextcolor);
                             font-weight: 600;
                             font-size: $font_small;
                             border-bottom:none;
@@ -1678,13 +1860,14 @@ a:focus {
                 tbody{
                     .MuiTableRow-root{
                         .MuiTableCell-root{
-                            color: #212C2D;
+                            color:var(--tabletextcolor);
+                            background-color:var(--tablebodycolor);
                             font-weight: 500;
                             font-size: $font_small;
                             font-family: $font_family_body;
                             position: relative;
                             padding: 0.8rem;
-                            border-width: 0 1px;
+                            border-width: 0px 1px;
                             border-color: #dee2e6;
                             // &:first-child{
                             //     border-radius: 5px 0 0 5px;
@@ -1726,6 +1909,9 @@ a:focus {
                     }
                 }
             }
+        }
+        .table-unordered-list::marker {
+            color:#003032
         }
 
     }
@@ -2028,7 +2214,7 @@ a:focus {
         width: 240px;
         border-color: $common_border;
         // background: #afb1b0;
-        background: #003032;
+        background-color: var(--bodybackground);
         z-index: 999;
         // .offcanvas-header {
         //     //   padding: 15px 0 0 0;
@@ -2082,21 +2268,24 @@ a:focus {
 // Chat module css start
 
 .chat{
-    background-color: $white_color;
-    border: 1px solid rgba(14, 59, 89, 0.2);
+    // background-color: $white_color;
+    // border: 1px solid rgba(14, 59, 89, 0.2);
     border-radius: 0.375rem;
     .title{
         font-weight: 600;
         font-size: $font_medium;
         line-height: 22px;
-        color: $bodycolor;
+        // color: $bodycolor;
+        color: var(--chattitlecolor);
         padding: 15px 20px 10px;
         text-transform: capitalize;
+        background-color: var(--chatbodyinnercolor);
     }
     .chat_inner{
         overflow-y: auto;
         height: calc(100vh - 320px);
         min-height: 100%;
+        background-color: var(--chatbodyinnercolor);
         &::-webkit-scrollbar{
             width: 3px; 
         }
@@ -2134,7 +2323,7 @@ a:focus {
                             font-weight: 600;
                             font-size: $font_medium;
                             line-height: 20px;
-                            color: $bodycolor;
+                            color: var(--chathistorytextcolor);
                             margin: 0 0 5px;
                             text-transform: capitalize;
                         }
@@ -2167,8 +2356,8 @@ a:focus {
 
             &.active,
             &:hover {
-                background-color: #F3F8FF;
-                border-color:  #F3F8FF;
+                background-color:var(--chatlisthovercolor);
+                border-color: var(--chatlisthovercolor);
             }
         }
     }
@@ -2176,8 +2365,8 @@ a:focus {
 }
 
 .message{
-    background-color: $white_color;
-    border: 1px solid rgba(14, 59, 89, 0.2);
+    background-color: var(--chatbodyinnercolor);
+    // border: 1px solid rgba(14, 59, 89, 0.2);
     border-radius: 0.375rem;
     // padding: 25px;
     .message_inner {   
@@ -2186,6 +2375,8 @@ a:focus {
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid rgba(38, 50, 60, 0.25);
+            background-color: var(--chatbodyinnercolor);
+            color: var(--chattitlecolor);
             padding: 20px;
             .left_part{
                 width: auto;
@@ -2213,7 +2404,7 @@ a:focus {
                         font-weight: 700;
                         font-size: $font_large;
                         line-height: 20px;
-                        color: $bodycolor;
+                        color:var(--chattitlecolor);
                         margin: 0 0 5px;
                     }
                     .aboutus_msg{
@@ -2252,7 +2443,7 @@ a:focus {
         }
         .profile_bottom{
             .chat {
-                background-color: transparent;
+                background-color:var(--chatbodyinnercolor);
                 border: none;
                 box-shadow: none;
                 width: 100%;
@@ -2497,3 +2688,47 @@ a:focus {
         }
     }
 }
+.mainbutton{
+    background-color:var(--buttonbgcolor) !important
+}
+
+.disabled-mainbutton {
+    color: rgba(0, 0, 0, 0.26) !important;
+    box-shadow: none !important;
+    background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.chatbutton{
+    background-color:var(--chatcolor) !important
+}
+.mainbutton:hover{
+    background-color:var(--bghovercolor) !important;
+    color:var(--sidebartextcolor) !important;
+}
+.sectionbody{
+    // background-color: red;
+}
+.custom-progress-bar{
+    background-color:var(--buttonbgcolor) !important; 
+}
+.profileinnertext{
+  color: var( --profileinnertext) !important;
+}
+.profiletext{
+    color: var(--profiletext) !important;
+}
+.custom-header{
+    background-color:var(--profilebody) !important; 
+    color:var(--buttonbgcolor) !important;  
+}
+.description{
+    background-color:var(--profilebody) !important; 
+    color: var(--profiletext) !important;
+}
+.radiobutton {
+    color: var(--buttonbgcolor) !important;
+  }
+  
+  .radiobutton.Mui-checked {
+    color:var(--buttonbgcolor) !important;
+  }

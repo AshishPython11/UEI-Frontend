@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import '../Form/Form.scss';
 import TextField from '@mui/material/TextField';
 import useApi from '../../hooks/useAPI';
@@ -10,7 +10,8 @@ import { Field, Form, Formik, FormikHelpers, setNestedObjectValues } from 'formi
 import * as Yup from 'yup';
 import { MenuListinter } from '../../Components/Table/columns';
 import { routes } from '../NotFound/routesConfig';
-import { dataaccess } from '../../utils/helpers';
+import { dataaccess, inputfield, inputfieldhover, inputfieldtext } from '../../utils/helpers';
+import NameContext from '../Context/NameContext';
 
 interface IForm {
     form_name: string
@@ -22,6 +23,8 @@ interface IForm {
 }
 
 const AddEditForm = () => {
+    const context = useContext(NameContext);
+    const {namecolor }:any = context;
     const FormAddURL = QUERY_KEYS_FORM.FORM_ADD;
     const FormEditURL = QUERY_KEYS_FORM.FORM_EDIT;
     const MenuURL = QUERY_KEYS_MENU.GET_MENU;
@@ -310,10 +313,30 @@ const AddEditForm = () => {
                                                         name="menu_master_id"
                                                         value={values?.menu_master_id}
                                                         variant="outlined"
+                                                        sx={{
+                                                            backgroundColor: inputfield(namecolor) , 
+                                                            color: inputfieldtext(namecolor) 
+                                                        }}
+                                                        MenuProps={{
+                                                            PaperProps: {
+                                                                style: {
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor)
+                                                                },
+                                                            },
+                                                        }}
                                                     >
                                                         {
                                                             dataMenu?.map((item: any) => (
-                                                                <MenuItem value={item.id}>{item.menu_name}</MenuItem>
+                                                                <MenuItem value={item.id}
+                                                                sx={{
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor),
+                                                                    '&:hover': {
+                                                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                                                    },
+                                                                }}
+                                                                >{item.menu_name}</MenuItem>
                                                             ))
                                                         }
 
@@ -334,10 +357,30 @@ const AddEditForm = () => {
                                                         name="sub_menu_master_id"
                                                         value={values?.sub_menu_master_id}
                                                         variant="outlined"
+                                                        sx={{
+                                                            backgroundColor: inputfield(namecolor) , 
+                                                            color: inputfieldtext(namecolor) 
+                                                        }}
+                                                        MenuProps={{
+                                                            PaperProps: {
+                                                                style: {
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor)
+                                                                },
+                                                            },
+                                                        }}
                                                     >
                                                         {
                                                             dataSubMenu?.map((item: any) => (
-                                                                <MenuItem value={item.id}>{item.menu_name}</MenuItem>
+                                                                <MenuItem value={item.id}
+                                                                sx={{
+                                                                    backgroundColor: inputfield(namecolor),
+                                                                    color: inputfieldtext(namecolor),
+                                                                    '&:hover': {
+                                                                        backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                                                                    },
+                                                                }}
+                                                                >{item.menu_name}</MenuItem>
                                                             ))
                                                         }
 
@@ -375,7 +418,7 @@ const AddEditForm = () => {
                                                     onChange={handleChange}
                                                 />
                                             </div>
-                                            <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                                            <Typography variant="body2" color="textSecondary" sx={{ mt: 1, color:inputfieldtext(namecolor)}}>
                                                 URL Example: <strong>/main/SubMenu</strong>
                                             </Typography>
                                             {errors.form_url &&  touched.form_url ? 
@@ -393,6 +436,8 @@ const AddEditForm = () => {
                                                     value={values.form_description}
                                                     variant="outlined"
                                                     onChange={handleChange}
+                                                   
+                                                   
                                                 />
                                             </div>
                                             {/* {errors.form_description &&  touched.form_description ? 
@@ -401,28 +446,28 @@ const AddEditForm = () => {
                                         </div>
                                         <div className='col-md-4'>
                                             <div className="form_field_wrapper">
-                                                <Typography sx={{ marginLeft: "15px", display: "flex", alignItems: "flex-start" }}>Menu Visible</Typography>
+                                                <Typography sx={{ marginLeft: "15px", display: "flex", alignItems: "flex-start",color:inputfieldtext(namecolor) }}>Menu Visible</Typography>
                                                 <RadioGroup
                                                     row
                                                     name="is_menu_visible"
                                                     value={values.is_menu_visible}
                                                     onChange={handleChangemenuVisible}
                                                 >
-                                                    <FormControlLabel value={true} control={<Radio />} label="Yes" />
-                                                    <FormControlLabel value={false} control={<Radio />} label="No" />
+                                                    <FormControlLabel value={true} control={<Radio className='radiobutton'  />} label="Yes" />
+                                                    <FormControlLabel value={false} control={<Radio className='radiobutton' />} label="No" />
                                                 </RadioGroup>
                                             </div>
                                         </div>
                                     </div>
                                    
-                                    <button className='btn btn-primary'  style={{marginTop:"10px"  }} >{id ? "Update" : "Save"}</button>
+                                    <button className='btn btn-primary mainbutton'  style={{marginTop:"10px"  }} >{id ? "Update" : "Save"}</button>
                                     {/* <button className='btn btn-primary btn-xs' type="button" style={{marginLeft:"10px", marginTop:"10px"}}  onClick={privewurl} > Preivew</button> */}
                                     <Button
                                      variant="contained"
                                     //  size='large'
                                      sx={{ml:2,mt:2 , backgroundColor:"#3980c0", }}
                                          onClick={privewurl}
-                                        className="float-right">
+                                        className="float-right mainbutton">
                                         Preivew
                                     </Button>
                                 </Form>
