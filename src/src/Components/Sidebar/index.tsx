@@ -375,7 +375,7 @@ const Sidebar = () => {
                  : <></>
                  }
 
-                 {
+                 {/* {
                   user_type === "admin"  && (
                     <>
                     <ListItemButton
@@ -424,7 +424,7 @@ const Sidebar = () => {
                       
                   )
                  
-                 }
+                 } */}
                 </ul>
 
               </div>

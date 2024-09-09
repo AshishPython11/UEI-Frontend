@@ -99,7 +99,7 @@ const PDFList = () => {
   useEffect(() => {
     if (selectedClass && !dataDelete) {
       getData(
-        `http://13.232.96.204:5000/display-files?class_name=${selectedClass}`
+        `https://uatllm.gyansetu.ai/display-files?class_name=${selectedClass}`
       )
         .then((response: any) => {
           if (response.status === 200) {
@@ -155,7 +155,7 @@ const PDFList = () => {
       file_name: selectedFile?.pdf_file_name,
       class_name: selectedClass,
     };
-    deleteFileData(`http://13.232.96.204:5000/delete-files`, payload)
+    deleteFileData(`https://uatllm.gyansetu.ai/delete-files`, payload)
       .then((data: any) => {
         console.log("DELETED FILES", data);
         if (data.status === 200) {
@@ -363,7 +363,7 @@ const PDFList = () => {
                       >
                         <Tooltip arrow placement="bottom" title="View">
                           <a
-                            href={`http://13.232.96.204:5000/files${row?.row?.original?.pdf_path}`}
+                            href={`https://uatllm.gyansetu.ai/files${row?.row?.original?.pdf_path}`}
                             target="_blank"
                           >
                             <IconButton

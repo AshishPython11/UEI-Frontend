@@ -372,6 +372,8 @@ const Chat = () => {
     }
     const handleResponse = (data: { data: any }) => {
       const newData = data?.data ? data?.data : data;
+      console.log("newData", newData);
+
       newData.speak = false;
       setFilteredProducts(newData);
       setSelectedChat((prevState: any) => [...prevState, newData]);
@@ -453,11 +455,35 @@ const Chat = () => {
           // );
           if (studentDetail?.academic_history?.institution_type == "school") {
             return getData(
-              `http://13.232.96.204:5000/rag-model-class?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.class?.name}`
-            );
+              `https://uatllm.gyansetu.ai/rag-model-class?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.class?.name}`
+            )
+              .then(() => console.log("Successfully called rag model api"))
+              .catch(() =>
+                getData(
+                  // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+                  `https://uatllm.gyansetu.ai/ollama-chat?user_query=${search}`
+                )
+                  .then((response) => handleResponse(response))
+                  .catch(() => {
+                    postData(`${ChatURLAI}`, payload)
+                      .then((response) => handleResponse(response))
+                      .catch((error) => handleError(error));
+                  })
+              );
           } else {
             return getData(
-              `http://13.232.96.204:5000/rag-model?user_query=${search}&student_id=${userid}`
+              `https://uatllm.gyansetu.ai/rag-model?user_query=${search}&student_id=${userid}`
+            ).catch(() =>
+              getData(
+                // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+                `https://uatllm.gyansetu.ai/ollama-chat?user_query=${search}`
+              )
+                .then((response) => handleResponse(response))
+                .catch(() => {
+                  postData(`${ChatURLAI}`, payload)
+                    .then((response) => handleResponse(response))
+                    .catch((error) => handleError(error));
+                })
             );
           }
         } else {
@@ -490,7 +516,7 @@ const Chat = () => {
           // return postData(`${ChatURLOLLAMA}`, Ollamapayload);
           setLoaderMsg("Fetching Data from Ollama model.");
           return getData(
-            `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+            `https://uatllm.gyansetu.ai/ollama-chat?user_query=${search}`
           );
         } else if (data) {
           handleError(data);
@@ -856,7 +882,11 @@ const Chat = () => {
       )
     : chathistory;
 
-    console.log("test details",studentDetail,studentDetail?.academic_history?.class_name)
+  console.log(
+    "test details",
+    studentDetail,
+    studentDetail?.academic_history?.class_name
+  );
   return (
     <>
       {loading && <FullScreenLoader msg={loaderMsg} />}
