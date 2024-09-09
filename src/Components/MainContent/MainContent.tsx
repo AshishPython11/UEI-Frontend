@@ -49,7 +49,7 @@ function MainContent() {
     useState<number>(0);
   const [desctiptionPercentage, setdesctiptionPercentage] = useState<number>(0);
   const [profileImage, setprofileImage] = useState<any>();
-  const [dataCompleted, setDataCompleted] = useState(true);
+  const [dataCompleted, setDataCompleted] = useState(false);
 
   const usertype: any = localStorage.getItem("user_type");
   // const userdata = JSON.parse(localStorage?.getItem("userdata") || "/{/}/");
@@ -312,8 +312,8 @@ function MainContent() {
               );
               console.log("OverallPercentage", overallPercentage);
 
-              if (overallPercentage === 100) {
-                setDataCompleted(false);
+              if (overallPercentage !== 100) {
+                setDataCompleted(true);
               }
               setStats1({
                 Student_Profile: overallPercentage,

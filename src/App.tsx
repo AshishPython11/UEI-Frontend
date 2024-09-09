@@ -72,7 +72,7 @@ import PDFList from './Pages/PDFList/PDFList';
 // import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 function App() {
-  // const loginUrl = `http://13.202.29.139:5000/auth/login`;
+
   // const loginUrl = `https://13.235.239.244/auth/login`;
    const loginUrl = "https://qaapi.gyansetu.ai/" || "http://localhost:3000";
 
