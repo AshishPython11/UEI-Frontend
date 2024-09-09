@@ -129,7 +129,7 @@ const Uploadpdf = () => {
       // formData.append('subject_id', selectedSubject);
     }
     await postFileData(
-      `${"http://13.232.96.204:5000/upload-pdf-class"}`,
+      `${"https://uatllm.gyansetu.ai/upload-pdf-class"}`,
       formData
     )
       .then((data: any) => {

@@ -25,8 +25,6 @@ import NameContext from '../Context/NameContext';
 
 const steps = ['Admin Basic Information', 'Admin Address', 'Language known', 'Admin Description', 'Admin Contact Details', 'Admin Profession'];
 
-
-
 export default function AdminProfile() {
   const context = React.useContext(NameContext);
   const {namecolor }:any = context;

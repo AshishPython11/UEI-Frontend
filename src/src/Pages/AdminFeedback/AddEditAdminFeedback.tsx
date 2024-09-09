@@ -77,7 +77,7 @@ const AddEditAdminFeedback = () => {
     if (id) {
       putData(`${FeedbackEditURL}/${id}`, payload).then((response) => {
         if (response.status === 200) {
-          toast.success("question added successfully", {
+          toast.success("Question updated successfully", {
             hideProgressBar: true,
             theme: "colored",
           });
@@ -90,7 +90,7 @@ const AddEditAdminFeedback = () => {
     } else {
       postData(`${FeedbackAddURL}`, payload).then((response) => {
         if (response.status === 200) {
-          toast.success("question added successfully", {
+          toast.success("Question added successfully", {
             hideProgressBar: true,
             theme: "colored",
           });
