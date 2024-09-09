@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import "../Uploadpdf/Uploadpdf.scss";
-import useApi from "../../hooks/useAPI";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { MaterialReactTable } from "material-react-table";
 import {
   Box,
   Button,
@@ -9,17 +10,24 @@ import {
   MenuItem,
   Select,
   Typography,
+  IconButton,
+  Tooltip,
 } from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { QUERY_KEYS_COURSE, QUERY_KEYS_SUBJECT } from "../../utils/const";
 import FullScreenLoader from "../Loader/FullScreenLoader";
-import { toast } from "react-toastify";
-import { useLocation, useNavigate } from "react-router-dom";
 import NameContext from "../Context/NameContext";
+import { tabletools } from "../../utils/helpers";
+import { DeleteDialog } from "../../Components/Dailog/DeleteDialog";
 import {
   inputfield,
   inputfieldhover,
   inputfieldtext,
 } from "../../utils/helpers";
+import { TrashIcon } from "../../assets";
+import useApi from "../../hooks/useAPI";
+import { PDF_LIST_COLUMNS, IPDFList } from "../../Components/Table/columns";
+import "../Uploadpdf/Uploadpdf.scss";
 
 interface Classes {
   id: number;
@@ -39,7 +47,7 @@ const PDFList = () => {
   const context = useContext(NameContext);
   const { namecolor }: any = context;
   const location = useLocation();
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const pathSegments = location.pathname.split("/").filter(Boolean);
   const SubjectURL = QUERY_KEYS_SUBJECT.GET_SUBJECT;
   const usertype: any = localStorage.getItem("user_type");
@@ -51,24 +59,13 @@ const PDFList = () => {
   const [dataSubject, setDataSubject] = useState([]);
   const [classes, setClasses] = useState<Classes[]>([]);
   const [fileList, setFileList] = useState<FileList[]>([]);
-  const [selectedFile, setSelectedFile] = useState("");
+  const [selectedFile, setSelectedFile] = useState<IPDFList>();
+  const [dataDelete, setDataDelete] = useState(false);
+  const [dataDeleteId, setDataDeleteId] = useState<number>();
 
   const { getData, loading, deleteFileData } = useApi();
+  const columns = PDF_LIST_COLUMNS;
 
-  const callAPI = async () => {
-    getData(`${SubjectURL}`)
-      .then((data: any) => {
-        if (data.data) {
-          setDataSubject(data?.data);
-        }
-      })
-      .catch((e) => {
-        toast.error(e?.message, {
-          hideProgressBar: true,
-          theme: "colored",
-        });
-      });
-  };
   useEffect(() => {
     callAPI();
 
@@ -100,66 +97,7 @@ const PDFList = () => {
   }, []);
 
   useEffect(() => {
-    const tempData = [
-      {
-        pdf_file_name: "class_10_geo1.pdf",
-        pdf_path:
-          "/home/ubuntu/llama-model/pdf_files/class_10/class_10_geo1.pdf",
-        upload_by: 513,
-        upload_date_time: "Mon, 02 Sep 2024 08:32:33 GMT",
-      },
-      {
-        pdf_file_name: "class_10_geo2.pdf",
-        pdf_path:
-          "/home/ubuntu/llama-model/pdf_files/class_10/class_10_geo2.pdf",
-        upload_by: 513,
-        upload_date_time: "Mon, 02 Sep 2024 08:32:33 GMT",
-      },
-      {
-        pdf_file_name: "class_10_geo3.pdf",
-        pdf_path:
-          "/home/ubuntu/llama-model/pdf_files/class_10/class_10_geo3.pdf",
-        upload_by: 513,
-        upload_date_time: "Mon, 02 Sep 2024 08:32:33 GMT",
-      },
-      {
-        pdf_file_name: "class_10_geo4.pdf",
-        pdf_path:
-          "/home/ubuntu/llama-model/pdf_files/class_10/class_10_geo4.pdf",
-        upload_by: 513,
-        upload_date_time: "Mon, 02 Sep 2024 08:32:33 GMT",
-      },
-      {
-        pdf_file_name: "class_10_geo5.pdf",
-        pdf_path:
-          "/home/ubuntu/llama-model/pdf_files/class_10/class_10_geo5.pdf",
-        upload_by: 513,
-        upload_date_time: "Mon, 02 Sep 2024 08:32:33 GMT",
-      },
-      {
-        pdf_file_name: "class_10_geo6.pdf",
-        pdf_path:
-          "/home/ubuntu/llama-model/pdf_files/class_10/class_10_geo6.pdf",
-        upload_by: 513,
-        upload_date_time: "Mon, 02 Sep 2024 08:32:33 GMT",
-      },
-      {
-        pdf_file_name: "class_10_geo7.pdf",
-        pdf_path:
-          "/home/ubuntu/llama-model/pdf_files/class_10/class_10_geo7.pdf",
-        upload_by: 513,
-        upload_date_time: "Mon, 02 Sep 2024 08:32:33 GMT",
-      },
-      {
-        pdf_file_name: "class_10_geo8.pdf",
-        pdf_path:
-          "/home/ubuntu/llama-model/pdf_files/class_10/class_10_geo8.pdf",
-        upload_by: 513,
-        upload_date_time: "Mon, 02 Sep 2024 08:32:33 GMT",
-      },
-    ];
-
-    if (selectedClass) {
+    if (selectedClass && !dataDelete) {
       getData(
         `http://13.232.96.204:5000/display-files?class_name=${selectedClass}`
       )
@@ -175,10 +113,25 @@ const PDFList = () => {
           });
         });
     }
-  }, [selectedClass]);
+  }, [selectedClass, dataDelete]);
+
+  const callAPI = async () => {
+    getData(`${SubjectURL}`)
+      .then((data: any) => {
+        if (data.data) {
+          setDataSubject(data?.data);
+        }
+      })
+      .catch((e) => {
+        toast.error(e?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      });
+  };
 
   if (usertype !== "admin") {
-    navigator("/main/*");
+    navigate("/main/*");
   }
 
   const handleChange = (event: any) => {
@@ -187,20 +140,26 @@ const PDFList = () => {
     else setSelectedFile(value);
   };
 
-  const deleteFile = () => {
-    const fileName = fileList.reduce((acc, crr) => {
-      if (crr.pdf_path === selectedFile) acc = crr.pdf_file_name;
-      return acc;
-    }, "");
+  const handlecancel = () => {
+    setDataDelete(false);
+  };
+
+  const handleDeleteFiles = (fileData: any) => {
+    setSelectedFile(fileData);
+    setDataDelete(true);
+  };
+
+  const handleDelete = () => {
     const payload = {
-      file_path: selectedFile,
-      file_name: fileName,
+      file_path: selectedFile?.pdf_path,
+      file_name: selectedFile?.pdf_file_name,
       class_name: selectedClass,
     };
     deleteFileData(`http://13.232.96.204:5000/delete-files`, payload)
       .then((data: any) => {
-        setSelectedFile("");
+        console.log("DELETED FILES", data);
         if (data.status === 200) {
+          setDataDelete(false);
           toast.success("File deleted successfully", {
             hideProgressBar: true,
             theme: "colored",
@@ -208,6 +167,9 @@ const PDFList = () => {
         }
       })
       .catch((e) => {
+        if (e?.response?.status === 401) {
+          navigate("/");
+        }
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
@@ -290,7 +252,7 @@ const PDFList = () => {
                       </Select>
                     </FormControl>
                   </div>
-                  <div>
+                  {/* <div>
                     <FormControl sx={{ minWidth: 300 }}>
                       <InputLabel
                         id="select-file-label"
@@ -358,8 +320,8 @@ const PDFList = () => {
                         Preview
                       </Button>
                     </a>
-                  </div>
-                  <div>
+                  </div> */}
+                  {/* <div>
                     <Button
                       variant="contained"
                       component="label"
@@ -367,62 +329,83 @@ const PDFList = () => {
                         !selectedFile ? "disabled-mainbutton" : "mainbutton"
                       }`}
                       disabled={!selectedFile}
-                      onClick={deleteFile}
+                      onClick={handleDelete}
                     >
                       Delete
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
-                {/* {selectedFiles.length > 0 && (
-                  <div className="file-list-container">
-                    <div className="file-columns">
-                      <div className="file-column">
-                        {firstBatch.map((file, index) => (
-                          <div
-                            key={index}
-                            className="file-item"
-                            //  onClick={() => setSelectedPdf(URL.createObjectURL(file))}
+                <Box marginTop="10px">
+                  <MaterialReactTable
+                    columns={columns}
+                    data={fileList}
+                    enableRowVirtualization
+                    positionActionsColumn="first"
+                    muiTablePaperProps={{
+                      elevation: 0,
+                    }}
+                    enableRowActions
+                    displayColumnDefOptions={{
+                      "mrt-row-actions": {
+                        header: "Actions",
+                        size: 150,
+                      },
+                    }}
+                    renderRowActions={(row) => (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexWrap: "nowrap",
+                          gap: "0.5",
+                          marginLeft: "-5px",
+                          width: "140px",
+                        }}
+                      >
+                        <Tooltip arrow placement="bottom" title="View">
+                          <a
+                            href={`http://13.232.96.204:5000/files${row?.row?.original?.pdf_path}`}
+                            target="_blank"
                           >
-                            {file.name}
-                          </div>
-                        ))}
-                      </div>
-                      <div className="file-column">
-                        {secondBatch.map((file, index) => (
-                          <div
-                            key={index}
-                            className="file-item"
-                            // onClick={() => setSelectedPdf(URL.createObjectURL(file))}
+                            <IconButton
+                              sx={{
+                                width: "35px",
+                                height: "35px",
+                                color: tabletools(namecolor),
+                              }}
+                            >
+                              <VisibilityIcon />
+                            </IconButton>
+                          </a>
+                        </Tooltip>
+                        <Tooltip arrow placement="bottom" title="Delete">
+                          <IconButton
+                            sx={{
+                              width: "35px",
+                              height: "35px",
+                              color: tabletools(namecolor),
+                            }}
+                            onClick={() => {
+                              handleDeleteFiles(row?.row?.original);
+                            }}
                           >
-                            {file.name}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )} */}
-                {/* <Button
-                  className={"mainbutton"}
-                  sx={{ marginTop: 5 }}
-                  variant="contained"
-                  // onClick={handleFileUpload}
-                  // disabled={selectedFiles.length === 0}
-                >
-                  Submit
-                </Button> */}
+                            <TrashIcon />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    )}
+                  />
+                </Box>
               </div>
-              {/* {selectedPdf && (
-                                    <div className='pdfView'>
-                                    <button onClick={handleClose} className='closeButton'>
-                                      &times; 
-                                    </button>
-                                    <iframe src={selectedPdf} width="100%" height="800px" />
-                                  </div>
-                                     )} */}
             </div>
           </div>
         </div>
       </div>
+      <DeleteDialog
+        isOpen={dataDelete}
+        onCancel={handlecancel}
+        onDeleteClick={handleDelete}
+        title="Delete documents?"
+      />
     </>
   );
 };

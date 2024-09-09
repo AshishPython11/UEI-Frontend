@@ -363,7 +363,7 @@ const PreviewStudentProfile: React.FC<PreviewStudentProfileProps> = ({ editProfi
                               //     : (profileData?.gender === "Male" || profileData?.gender === "male") ? "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" :(profileData?.gender === "female" || profileData?.gender === "Female") ? "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava4-bg.webp" :"https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
                               // }
                               // src={loading ? '' : profileImage ? profileImage : getDefaultImage(profileData?.gender)}
-                              src={loading ? '' : profileImage ? profileImage : getDefaultImage(profileData?.gender)}
+                              src={loading ? '' : profileImage ? profileImage : getDefaultImage(profileData?.basic_info?.gender)}
                               alt=""
                               className="rounded-circle img"
                               width="150px"

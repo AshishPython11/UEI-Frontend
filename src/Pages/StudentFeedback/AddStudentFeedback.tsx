@@ -53,7 +53,7 @@ const AddStudentFeedback = () => {
         }
       }
     });
-  }, []);
+  }, [studentFlag]);
 
   useEffect(() => {
     let question_list: any = [];
@@ -71,59 +71,38 @@ const AddStudentFeedback = () => {
         }
       });
     });
-    console.log("Final List", question_list);
+
     setFinalList(question_list);
   }, [questions]);
+
+  useEffect(() => {
+    if (selectAnswer) {
+      let newValue: any = [];
+      questions.forEach((question: any) => {
+        if (selectAnswer[question.id]) {
+          newValue.push({
+            question: question.question,
+            answer: selectAnswer[question.id],
+          });
+        }
+      });
+      setAnsweredQuestions(newValue);
+    }
+  }, [selectAnswer]);
 
   const handleSelectedOption = (id: number, value: string, question: any) => {
     setSelectAnswer((prevAnswers: any) => ({
       ...prevAnswers,
       [id]: value,
       question: question,
+      answer: value,
     }));
-
     // Clear the error for this question if a value is selected
     setErrors((prevErrors: any) => ({
       ...prevErrors,
       [id]: "",
     }));
     // setSelectAnswer(value);
-    console.log("answer", selectAnswer);
-  };
-
-  const handleNextQuestion = () => {
-    if (selectAnswer) {
-      const updatedAnswers = [
-        ...answeredQuestions.slice(0, currentQuestionIndex),
-        { question: question.question, answer: selectAnswer },
-        ...answeredQuestions.slice(currentQuestionIndex + 1),
-      ];
-      setAnsweredQuestions(updatedAnswers);
-
-      if (currentQuestionIndex + 1 <= questions.length) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-        setQuestion(questions[currentQuestionIndex + 1]);
-        if (currentQuestionIndex + 1 < questions.length) {
-          setOptions(questions[currentQuestionIndex + 1].options);
-        }
-        setSelectAnswer("");
-      } else {
-        alert("You have reached the end of the questions");
-      }
-    } else {
-      alert("Please select an answer before proceeding to the next question.");
-    }
-  };
-
-  const handleBackQuestion = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setQuestion(questions[currentQuestionIndex - 1]);
-      setOptions(questions[currentQuestionIndex - 1].options); //.replace(/{|}/g, '').split(',')
-      const previousAnswer =
-        answeredQuestions[currentQuestionIndex - 1]?.answer || "";
-      setSelectAnswer(previousAnswer);
-    }
   };
 
   // Validation function
@@ -147,27 +126,25 @@ const AddStudentFeedback = () => {
         // ...answeredQuestions.slice(currentQuestionIndex + 1),
       ];
       setAnsweredQuestions(updatedAnswers);
-
+      
+      // alert("Form submitted successfully");
       // console.log(answeredQuestions, message);
-      alert("Form submitted successfully");
       // Handle submission logic here
-      console.log(updatedAnswers);
       let payload = {
-        student_id: StudentId,
+        student_id: Number(StudentId),
         feedbacks: updatedAnswers,
       };
-      console.log("payload====>", payload);
       postData("/feedback/student_feedback", payload)
-        .then((response) => {
-          console.log("Feedback submitted successfully:", response);
-          if (response.status === 200) {
-            toast.success("feedback sent successfully", {
-              hideProgressBar: true,
-              theme: "colored",
-            });
-          }
-          setMessage("");
-          setAnsweredQuestions([]);
+      .then((response) => {
+        console.log("Feedback submitted successfully:", response);
+        if (response.status === 200) {
+          toast.success("Feedback sent successfully", {
+            hideProgressBar: true,
+            theme: "colored",
+          });
+        }
+        setMessage("");
+        setAnsweredQuestions([]);
           setCurrentQuestionIndex(0);
           setQuestion(questions[0]);
           setStudentFlag(false);
@@ -183,6 +160,7 @@ const AddStudentFeedback = () => {
     e.preventDefault();
     setMessage(e.target.value);
   };
+
   return (
     <>
       {studentFlag ? (
@@ -371,7 +349,7 @@ const AddStudentFeedback = () => {
             </div>
           ))}
           <CommonModal
-            message={"You have already given your feedback."}
+            message={"You have already submitted your feedback."}
             isOpen={isOpen}
             setIsOpen={setIsOpen}
           />

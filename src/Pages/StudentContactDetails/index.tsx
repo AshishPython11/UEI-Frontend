@@ -238,7 +238,7 @@ function StudentcontactDetails() {
             <TextField
               className="form-control"
               type='text'
-              placeholder='Enter mobile number'
+              placeholder='Enter Mobile number'
               name='phoneNum'
               value={phoneNum}
               onChange={handleChange}

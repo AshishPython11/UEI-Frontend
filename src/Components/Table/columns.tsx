@@ -217,6 +217,11 @@ export interface IFeedbackResponse {
   id: number;
   question: string;
 }
+export interface IPDFList {
+  pdf_file_name: string;
+  pdf_path: string;
+  upload_date_time: string;
+}
 export const INSITUTION_COLUMNS: MRT_ColumnDef<InstituteRep0oDTO>[] = [
   // const columns: any[] = [
   {
@@ -1946,3 +1951,23 @@ export const CHATLIST_COLUMNS: MRT_ColumnDef<ChatListRep0oDTO>[] = [
     size: 150,
   },
 ];
+
+export const PDF_LIST_COLUMNS: MRT_ColumnDef<IPDFList>[] = [
+  {
+    accessorKey: "pdf_file_name",
+    header: "File Name",
+    size: 150,
+  },
+  {
+    accessorKey: "pdf_path",
+    header: "File Path",
+    enableSorting: false,
+    enableColumnActions:false,
+    size: 150,
+  },
+  {
+    accessorKey: "upload_date_time",
+    header: "Uploaded At",
+    size: 150,
+  }
+]
