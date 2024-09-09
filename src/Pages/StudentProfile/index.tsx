@@ -29,10 +29,10 @@ const StudentProfile = () => {
   const steps = [
     "Basic Information",
     "Address",
-    "Hobbies / Language known",
+    "Hobbies / Language Known",
     "Academic History",
     "Contact Details",
-    "Subject preference",
+    "Subject Preference",
     // "Student History",
   ];
   const [activeStep, setActiveStep] = useState(0);
@@ -335,7 +335,6 @@ useEffect(() => {
                 <div style={{display:"flex", flexDirection:"row",paddingTop:"10px",justifyContent:"space-between"}}>
                   {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}> */}
                     <Button
-                      color="inherit"
                       disabled={activeStep === 0}
                       onClick={handleBack}
                       sx={{ mr: 1 }}

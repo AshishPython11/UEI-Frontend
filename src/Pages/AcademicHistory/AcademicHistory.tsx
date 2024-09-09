@@ -561,7 +561,7 @@ const AcademicHistory = () => {
                   >
                     College
                   </MenuItem>
-                  <MenuItem
+                  {/* <MenuItem
                     value="competition_exams"
                     sx={{
                       backgroundColor: inputfield(namecolor),
@@ -572,7 +572,7 @@ const AcademicHistory = () => {
                     }}
                   >
                     Competition Exams
-                  </MenuItem>
+                  </MenuItem> */}
                 </Select>
               </FormControl>
             </div>

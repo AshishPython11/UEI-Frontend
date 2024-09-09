@@ -126,6 +126,9 @@ interface Option {
   value: string;
   label: string;
 }
+interface Mapping {
+  [key: string]: string[];
+}
 
 export const ProfileDialog: FunctionComponent<{
   isOpen: boolean;
@@ -183,6 +186,7 @@ export const ProfileDialog: FunctionComponent<{
   const [checked, setchecked] = useState(false);
   const [closemodel, setclosemodel] = useState(false);
   const [datejoin, setdatejoin] = useState<any>();
+  const [answeredData, setAnsweredData] = useState<any>();
   // const [open, setOpen] = useState(true);
 
   const errordata = [
@@ -215,13 +219,13 @@ export const ProfileDialog: FunctionComponent<{
   ];
   const profileURL = QUERY_KEYS_STUDENT.STUDENT_GET_PROFILE;
   const callAPI = async () => {
-    
     if (usertype === "student") {
       getData(`${profileURL}/${StudentId}`)
         .then((data: any) => {
           console.log("ALL DATA ===>>>>", data);
           if (data.status === 200) {
             //  navigate("/main/Dashboard");
+            setAnsweredData(data.data);
           }
         })
         .catch((e: any) => {
@@ -295,6 +299,84 @@ export const ProfileDialog: FunctionComponent<{
 
   useEffect(() => {
     if (currentSection) {
+      const mapping: Mapping = {
+        // Basic Info
+        "What is your full name?": ["basic_info", "first_name", "last_name"],
+        "What is your gender?": ["basic_info", "gender"],
+        "What is your DOB?": ["basic_info", "dob"],
+        "What is your mother's name?": ["basic_info", "mother_name"],
+        "What is your father's name?": ["basic_info", "father_name"],
+        "What is your guardian's name?": ["basic_info", "guardian_name"],
+        "Upload your profile picture": ["basic_info", "pic_path"],
+        "What is your main learning goal or interest for visiting our application?":
+          ["basic_info", "aim"],
+
+        // Address
+        "What is your first address?": ["address", "address1"],
+        "What is your second address?": ["address", "address2"],
+        "Which city do you live in?": ["address", "city"],
+        "Which district do you currently live in?": ["address", "district"],
+        "Which state do you currently reside in?": ["address", "state"],
+        "Please select your current country of residence": [
+          "address",
+          "country",
+        ],
+        "What is your Pin code?": ["address", "pincode"],
+
+        // Contact
+        "Please select your mobile number country code": [
+          "contact",
+          "mobile_isd_call",
+          "mobile_isd_watsapp",
+        ],
+        "What is your mobile number?": ["contact", "mobile_no_call"],
+        "What is your WhatsApp number?": ["contact", "mobile_no_watsapp"],
+
+        //Subject
+        "Hi, Please provide your subject preference information! what is your course name to which your subject belongs?":
+          ["subject_preference", "course_name"],
+        "Select your preference subject name": [
+          "subject_preference",
+          "subject_name",
+        ],
+        "What is your preference?": ["subject_preference", "preference"],
+        "Add your score in percentage": [
+          "subject_preference",
+          "score_in_percentage",
+        ],
+
+        //Language Known
+        "Select your known language": ["language_known", "language_id"],
+        "What is your proficiency in the selected language?": [
+          "language_known",
+          "proficiency",
+        ],
+
+        //Hobby
+        "Hi, Please choose your hobbies": ["hobby", "hobby_id"],
+
+        // Academic Information
+        // "Hi! Please provide your academic information! What is your course name?":
+        //   ["academic_history", "course_id"],
+        // "What is your institute name?": [
+        //   "academic_history",
+        //   "institution_name",
+        // ],
+        // "When did you join this course?": ["academic_history", "year"], // Example for the year, adjust if necessary
+        // "When did you complete this course?": ["academic_history", "year"], // Adjust based on end year if available
+      };
+
+      // const filteredQuestions = initialQuestions[currentSection].filter(
+      //   (question: string) => {
+      //     const keys: any = mapping[question];
+      //     if (!keys) return true; // If no mapping exists, keep the question
+
+      //     const [section, ...fields] = keys;
+      //     const sectionData = answeredData[section];
+
+      //     return !fields.every((field: any) => sectionData[field]); // Remove the question if all fields have values
+      //   }
+      // );
       setMessages([
         { text: initialQuestions[currentSection][0], type: "question" },
       ]);
@@ -1129,7 +1211,7 @@ export const ProfileDialog: FunctionComponent<{
       saveAnswerForLanguage([...answers]);
     }
   }, [selectedproficiency]);
-  
+
   const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       if (
