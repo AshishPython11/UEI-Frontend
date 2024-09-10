@@ -233,7 +233,7 @@ const AddEditForm = () => {
                         })
                         setDataUrl(false)
                     }else {
-                        toast.error(data.message, {
+                        toast.error(data.message || "Something went wrong!", {
                             hideProgressBar: true,
                             theme: "colored",
                         });

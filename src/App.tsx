@@ -74,7 +74,7 @@ import PDFList from './Pages/PDFList/PDFList';
 function App() {
 
   // const loginUrl = `https://13.235.239.244/auth/login`;
-   const loginUrl = "https://qaapi.gyansetu.ai/" || "http://localhost:3000";
+   const loginUrl = "https://uatapi.gyansetu.ai/";
 
   // const loginUrl = `http://127.0.0.1:5000/login`;
   const { postData } = useApi();
@@ -331,6 +331,10 @@ function App() {
             <Route path="edit-feedback/:id" element={<Protected Component={AddEditAdminFeedback} menuName="feedback" />} />
           </Route>
           <Route path="/main/student-feedback">
+            <Route path="" element={<Protected Component={StudentFeedback} menuName="student-feedback" />} />
+            <Route path="add-student-feedback" element={<Protected Component={AddStudentFeedback} menuName="student-feedback" />} />
+          </Route>
+          <Route path="/main/Studentfeedback">
             <Route path="" element={<Protected Component={StudentFeedback} menuName="student-feedback" />} />
             <Route path="add-student-feedback" element={<Protected Component={AddStudentFeedback} menuName="student-feedback" />} />
           </Route>
