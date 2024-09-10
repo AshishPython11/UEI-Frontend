@@ -159,6 +159,7 @@ const Login = () => {
             theme: "colored",
           });
         } else {
+          setLoading(false);
           toast.error(data?.message, {
             hideProgressBar: true,
             theme: "colored",

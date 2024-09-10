@@ -327,6 +327,7 @@ const Chat = () => {
   };
 
   const searchData = () => {
+    setSearch("");
     if (search === "") {
       setSearchErr(true);
       return;
@@ -453,11 +454,26 @@ const Chat = () => {
           // return getData(
           //   `http://13.232.96.204:5000/rag-model?user_query=${search}&student_id=${userid}`
           // );
-          if (studentDetail?.academic_history?.institution_type == "school") {
+          if (studentDetail?.academic_history?.institution_type === "school") {
             return getData(
               `https://uatllm.gyansetu.ai/rag-model-class?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.class?.name}`
             )
-              .then(() => console.log("Successfully called rag model api"))
+              .then((response) => {
+                if (response?.status === 200) {
+                  handleResponse(response);   
+                } else {
+                  getData(
+                    // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+                    `https://uatllm.gyansetu.ai/ollama-chat?user_query=${search}`
+                  )
+                    .then((response) => handleResponse(response))
+                    .catch(() => {
+                      postData(`${ChatURLAI}`, payload)
+                        .then((response) => handleResponse(response))
+                        .catch((error) => handleError(error));
+                    });
+                }
+              })
               .catch(() =>
                 getData(
                   // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
