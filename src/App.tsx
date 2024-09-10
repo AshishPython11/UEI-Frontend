@@ -335,8 +335,8 @@ function App() {
             <Route path="add-student-feedback" element={<Protected Component={AddStudentFeedback} menuName="student-feedback" />} />
           </Route>
           <Route path="/main/Studentfeedback">
-            <Route path="" element={<Protected Component={StudentFeedback} menuName="student-feedback" />} />
-            <Route path="add-student-feedback" element={<Protected Component={AddStudentFeedback} menuName="student-feedback" />} />
+            <Route path="" element={<Protected Component={StudentFeedback} menuName="Studentfeedback" />} />
+            <Route path="add-student-feedback" element={<Protected Component={AddStudentFeedback} menuName="Studentfeedback" />} />
           </Route>
         </Route>
         <Route path="profile" element={<Profile />} />
