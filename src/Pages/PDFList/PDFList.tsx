@@ -363,7 +363,7 @@ const PDFList = () => {
                       >
                         <Tooltip arrow placement="bottom" title="View">
                           <a
-                            href={`https://uatllm.gyansetu.ai/files${row?.row?.original?.pdf_path}`}
+                            href={`https://uatllm.gyansetu.ai/files/${row?.row?.original?.pdf_path}`}
                             target="_blank"
                           >
                             <IconButton
