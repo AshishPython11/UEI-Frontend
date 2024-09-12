@@ -356,8 +356,8 @@ const AcademicHistory = () => {
           institution_type: box.institute_type,
           board: box.board,
           state_for_stateboard: box.state_for_stateboard,
-          institute_id: String(!box.institute_id ? 95 : box.institute_id),
-          course_id: String(!box.course_id ? 18 : box.course_id),
+          institute_id: String(!box.institute_id ? 1 : box.institute_id),
+          course_id: String(!box.course_id ? 1 : box.course_id),
           learning_style: box.learning_style,
           class_id: String(!box.class_id ? 1 : box.class_id),
           year: String(box?.year?.$y), // Assuming 'year' is a string
