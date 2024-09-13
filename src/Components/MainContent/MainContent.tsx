@@ -186,14 +186,7 @@ function MainContent() {
               language_id: data?.data?.language_known?.language_id,
               proficiency: data?.data?.language_known?.proficiency,
             };
-            let academic_history = {
-              institution_name: data?.data?.academic_history?.institution_name,
-              course_name: data?.data?.academic_history?.course_name,
-              starting_date: data?.data?.academic_history?.starting_date,
-              ending_date: data?.data?.academic_history?.ending_date,
-              learning_style: data?.data?.academic_history?.learning_style,
-              class_name: data?.data?.academic_history?.class_name,
-            };
+            let academic_history = data?.data?.academic_history
             //   let contact = data.data.contact;
             let contact = {
               // email_id: data?.data?.contact?.email_id,
@@ -203,13 +196,7 @@ function MainContent() {
               mobile_no_call: data?.data?.contact?.mobile_no_call,
               // mobile_no_watsapp: data?.data?.contact?.mobile_no_watsapp,
             };
-            let subject_preference = {
-              course_name: data?.data?.subject_preference?.course_name,
-              subject_name: data?.data?.subject_preference?.subject_name,
-              preference: data?.data?.subject_preference?.preference,
-              score_in_percentage:
-                data?.data?.subject_preference?.score_in_percentage,
-            };
+            let subject_preference = data?.data?.subject_preference
             //   let hobby = data.data.hobby;
 
             let totalPercentage = 0;
@@ -263,16 +250,30 @@ function MainContent() {
               sectionCount++;
             }
 
-            // if (academic_history && Object.keys(academic_history).length > 0) {
-            //   let totalcount = Object.keys(academic_history).length;
-            //   let filledCount = countKeysWithValue(academic_history);
-            //   let percentage = (filledCount / totalcount) * 100;
-            //   setacademichistoryPercentage(percentage);
-            //   totalPercentage += percentage;
-            //   sectionCount++;
-            // } else {
-            //   sectionCount++;
-            // }
+            if (academic_history && Object.keys(academic_history).length > 0) {
+              if (academic_history?.institution_type === "school") {
+                delete academic_history?.course_id;
+                delete academic_history?.institute_id;
+                delete academic_history?.institution_name;
+                delete academic_history?.learning_style;
+                delete academic_history?.university_name;
+                delete academic_history?.year;
+                academic_history?.board !== "state_board" &&
+                  delete academic_history?.state_for_stateboard;
+              } else {
+                delete academic_history?.board;
+                delete academic_history?.class_id;
+                delete academic_history?.state_for_stateboard;
+              }
+              let totalcount = Object.keys(academic_history).length;
+              let filledCount = countKeysWithValue(academic_history);
+              let percentage = (filledCount / totalcount) * 100;
+              setacademichistoryPercentage(percentage);
+              totalPercentage += percentage;
+              sectionCount++;
+            } else {
+              sectionCount++;
+            }
 
             if (contact && Object.keys(contact).length > 0) {
               let totalcount = Object.keys(contact).length;
@@ -285,19 +286,19 @@ function MainContent() {
               sectionCount++;
             }
 
-            // if (
-            //   subject_preference &&
-            //   Object.keys(subject_preference)?.length > 0
-            // ) {
-            //   let totalcount = Object.keys(subject_preference)?.length;
-            //   let filledCount = countKeysWithValue(subject_preference);
-            //   let percentage = (filledCount / totalcount) * 100;
-            //   setsubjectPercentage(percentage);
-            //   totalPercentage += percentage;
-            //   sectionCount++;
-            // } else {
-            //   sectionCount++;
-            // }
+            if (
+              subject_preference &&
+              Object.keys(subject_preference)?.length > 0
+            ) {
+              let totalcount = Object.keys(subject_preference)?.length;
+              let filledCount = countKeysWithValue(subject_preference);
+              let percentage = (filledCount / totalcount) * 100;
+              setsubjectPercentage(percentage);
+              totalPercentage += percentage;
+              sectionCount++;
+            } else {
+              sectionCount++;
+            }
 
             if (sectionCount > 0) {
               let overallPercentage = totalPercentage / sectionCount;
@@ -305,13 +306,10 @@ function MainContent() {
               overallPercentage = Math.round(overallPercentage);
               const nandata = 100 - overallPercentage;
 
-              // console.log("overallPercentage sss", nandata,overallPercentage);
               localStorage.setItem(
                 "Profile_completion",
                 JSON.stringify(overallPercentage)
               );
-              console.log("OverallPercentage", overallPercentage);
-
               if (overallPercentage !== 100) {
                 setDataCompleted(true);
               }

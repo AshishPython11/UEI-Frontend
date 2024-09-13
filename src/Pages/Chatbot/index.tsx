@@ -396,7 +396,6 @@ const Chatbot: React.FC<IChatBot> = ({ answer }) => {
             return () => clearTimeout(timer); // Cleanup the timer on component unmount
         }
     }, [currentIndex, elements]);
-    // console.log('displaytext',displayText)
 
     const lastElementRef = useRef<HTMLSpanElement>(null);
 
