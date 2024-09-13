@@ -94,7 +94,6 @@ const AcademicHistory = () => {
 
   useEffect(() => {
     const states = State.getStatesOfCountry("IN");
-    // console.log("contry ==s",states)
     const stateOptions = states.map((state) => ({
       value: state.isoCode,
       label: state.name,
@@ -146,7 +145,6 @@ const AcademicHistory = () => {
             const filteredData = await response?.data?.filter(
               (item: any) => item?.is_active === 1
             );
-            console.log("filteredData", filteredData);
             setInstitutes(filteredData || []);
             // setInstitutes(response.data);
             // return filteredData || []
@@ -259,7 +257,6 @@ const AcademicHistory = () => {
     getData(`${"new_student_academic_history/get/" + StudentId}`)
       .then((data: any) => {
         if (data?.status === 200) {
-          console.log("dtat", data,boxes);
 
           data?.data?.forEach((item: any) => {
             const newBox = {
@@ -356,8 +353,8 @@ const AcademicHistory = () => {
           institution_type: box.institute_type,
           board: box.board,
           state_for_stateboard: box.state_for_stateboard,
-          institute_id: String(!box.institute_id ? 1 : box.institute_id),
-          course_id: String(!box.course_id ? 1 : box.course_id),
+          institute_id: String(!box.institute_id ? 95 : box.institute_id),
+          course_id: String(!box.course_id ? 18 : box.course_id),
           learning_style: box.learning_style,
           class_id: String(!box.class_id ? 1 : box.class_id),
           year: String(box?.year?.$y), // Assuming 'year' is a string
@@ -460,7 +457,6 @@ const AcademicHistory = () => {
         ]);
         // setBoxes((prevBoxes) => [...prevBoxes, { institute_id: responses[0]?.institution?.id }]);
 
-        console.log("response", responses[0].institution.id);
         await listData();
         toast.success("Institution name saved successfully", {
           hideProgressBar: true,
@@ -514,7 +510,6 @@ const AcademicHistory = () => {
     setBoxes1(newBoxes);
   };
 
-  console.log("NEW VALUE===>", boxes);
   return (
     <div className="mt-5">
       <form onSubmit={saveAcademicHistory}>

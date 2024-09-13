@@ -109,12 +109,10 @@ const Sidebar = () => {
         // console.log("test data 11",profileData !== null,basicinfo?.basic_info !== null)
          callAPI1(); 
       }
-  
-  
-    
-
   }, [profileData]);
+
   useEffect(() => {
+    
     const handleProfileCompletionChange = () => {
       const newProfileCompletion = localStorage.getItem("Profile_completion") || "0";
       setProfileCompletion(newProfileCompletion);

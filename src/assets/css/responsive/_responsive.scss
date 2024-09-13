@@ -10,6 +10,46 @@
         width: 700px;
     } 
 }
+
+@media (max-width:1024px){
+    .access-card{
+      
+      box-shadow: none;
+      padding: .4rem;
+      background: url('../../../assets/img/mobile-effect.jpg'), white;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top right;
+    }
+    body.without-login {
+      background-color: white!important;
+    }
+    
+  }
+  .form-label{
+    font-weight: 600;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 7px;
+  }
+  
+  
+  .otp-container {
+    display: flex;
+    gap: 10px;
+  
+    .otp-input {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      font-size: 24px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+    }
+    
+  }  
+
 @media screen and (min-width:$desktop_pro_up) {
     .container{
         padding: 0;

@@ -74,7 +74,7 @@ import PDFList from './Pages/PDFList/PDFList';
 function App() {
 
   // const loginUrl = `https://13.235.239.244/auth/login`;
-   const loginUrl = "https://uatapi.gyansetu.ai/";
+   const loginUrl = "https://qaapi.gyansetu.ai/";
 
   // const loginUrl = `http://127.0.0.1:5000/login`;
   const { postData } = useApi();
@@ -165,7 +165,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="App h-100">
        <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/profile-chat" element={<ProfileChat />} />
