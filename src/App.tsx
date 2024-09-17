@@ -165,7 +165,7 @@ function App() {
   };
 
   return (
-    <div className="App h-100">
+    <div className="App">
        <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/profile-chat" element={<ProfileChat />} />
