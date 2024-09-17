@@ -366,7 +366,7 @@ const ChangePassword = () => {
             </div>
           </div>
         </header>
-        <section className="container mb-5">
+        <section className="container pb-5">
           <div className="row ">
             <div className="col-lg-6 d-none d-lg-block">
               <Swiper

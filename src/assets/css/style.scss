@@ -1205,6 +1205,11 @@ $body-bg: #FAF5FE;
     height: 100%;
 }
 
+.App {
+    position: relative;
+    height: 100%;
+}
+
 .alert {
     margin-top: 15px;
     padding: 10px;
@@ -1228,7 +1233,7 @@ body {
     line-height: var(--line-height);
     color: var(--color);
     background-color: var(--bodycolor);
-    height: 100vh;
+    height: 100%;
 }
 img{
     max-width: 100%;
@@ -1329,7 +1334,8 @@ a:focus {
 .without-login {
     background-color: $body-bg;
     font-family: "Inter", sans-serif;
-    min-height: 100%;
+    height: 100%;
+    position: relative;
 }
 
 .fs-14{
