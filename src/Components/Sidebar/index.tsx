@@ -1,8 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
-import sidebarlog from "../../assets/img/logo.svg";
-import "../Sidebar/Sidebar.scss";
 import List from "@mui/material/List";
+import { toast } from "react-toastify";
+import SimpleBar from "simplebar-react";
+import styled from "styled-components";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
+import LocalLibraryOutlinedIcon from "@mui/icons-material/LocalLibraryOutlined";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -10,12 +16,20 @@ import Collapse from "@mui/material/Collapse";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { Dashboard, Language, MenuOpen } from "@mui/icons-material";
-import ChatIcon from '@mui/icons-material/Chat';
-import MenuIcon from '@mui/icons-material/Menu';
+import ChatIcon from "@mui/icons-material/Chat";
+import MenuIcon from "@mui/icons-material/Menu";
+import MetisMenu from "@metismenu/react";
+// import 'metismenujs/dist/metismenujs.css';
 import useApi from "../../hooks/useAPI";
+import gyansetuLogo from "../../assets/img/logo-white.svg";
 import { QUERY_KEYS_MENU } from "../../utils/const";
-import { toast } from "react-toastify";
-import styled from 'styled-components';
+import sidebarlog from "../../assets/img/logo.svg";
+import "../Sidebar/Sidebar.scss";
+import "../../assets/css/newstyle.min.css";
+import "../../assets/css/main.min.css";
+// import "../../assets/css/main.css";
+import "../../../node_modules/metismenujs/dist/metismenujs.css";
+import "simplebar-react/dist/simplebar.min.css";
 // import { SidebarContainer } from "./SidebarContainer";
 
 const Sidebar = () => {
@@ -29,16 +43,17 @@ const Sidebar = () => {
   const defaultSelectedIndex = 0;
   const [open, setOpen] = React.useState(true);
   const user_type = localStorage.getItem("user_type");
-  const [profileCompletion, setProfileCompletion] = useState(localStorage.getItem("Profile_completion") || "0");
-  const MenuListURL = QUERY_KEYS_MENU.GET_MENU 
-  const MenuListURL1 = QUERY_KEYS_MENU.GET_MENULIST 
+  const [profileCompletion, setProfileCompletion] = useState(
+    localStorage.getItem("Profile_completion") || "0"
+  );
+  const MenuListURL = QUERY_KEYS_MENU.GET_MENU;
+  const MenuListURL1 = QUERY_KEYS_MENU.GET_MENULIST;
 
-  const {getData} = useApi()
-  const profileData:any = sessionStorage.getItem('profileData')
-  let basicinfo:any = {}
-  if(profileData!==null)
-  {
-    basicinfo = JSON.parse(profileData)
+  const { getData } = useApi();
+  const profileData: any = sessionStorage.getItem("profileData");
+  let basicinfo: any = {};
+  if (profileData !== null) {
+    basicinfo = JSON.parse(profileData);
   }
   // const defaultUserType = localStorage.getItem("user_type");
   // const defaultSelectedPath = (user_type === "student" ? "/main/chat" : "/main/Dashboard");
@@ -46,15 +61,25 @@ const Sidebar = () => {
   // const [selectedPath, setSelectedPath] = useState(defaultSelectedPath);
   const [selectedIndex, setSelectedIndex] = useState(defaultSelectedIndex);
   const location = useLocation();
-  const pathSegments = location.pathname.split('/').filter(Boolean);
+  const pathSegments = location.pathname.split("/").filter(Boolean);
   const lastSegment = pathSegments[pathSegments.length - 1].toLowerCase();
-// console.log("==========menulistt", pathSegments, lastSegment)
+  // console.log("==========menulistt", pathSegments, lastSegment)
   // const defaultSelectedIndex1 = "Dashboard";
   const [selectedIndex1, setSelectedIndex1] = useState(lastSegment);
   // const [userType, setUserType] = useState(defaultUserType);
 
-  useEffect(() => {
+  const menuItems = [
+    {
+      label: "Menu 1",
+      children: [
+        { label: "Submenu 1", href: "#" },
+        { label: "Submenu 2", href: "#" },
+      ],
+    },
+    { label: "Menu 2", href: "#" },
+  ];
 
+  useEffect(() => {
     setSelectedIndex(defaultSelectedIndex);
     // setUserType(defaultUserType);
     // setSelectedPath(selectedPath);
@@ -62,20 +87,20 @@ const Sidebar = () => {
   }, []);
 
   const callAPI = async () => {
-    getData(`${MenuListURL}/${user_type}`).then((data:any) => {
-        if(data.data)
-        {
-          setMenuList(data.data)
-          localStorage.setItem('menulist',JSON.stringify(data?.data));
+    getData(`${MenuListURL}/${user_type}`)
+      .then((data: any) => {
+        if (data.data) {
+          setMenuList(data.data);
+          localStorage.setItem("menulist", JSON.stringify(data?.data));
         }
-    }).catch((e:any) => {
+      })
+      .catch((e: any) => {
         toast.error(e?.message, {
-            hideProgressBar: true,
-            theme: "colored",
-            });
-    });
-   
-  }
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      });
+  };
   const handleListItemClick1 = (index: any) => {
     // console.log("handleListItem", index);
     setSelectedIndex1(index);
@@ -83,38 +108,37 @@ const Sidebar = () => {
   ///
 
   const callAPI1 = async () => {
-    if(basicinfo?.basic_info !==null){
-      
-      getData(`${MenuListURL1}/${basicinfo?.basic_info?.id}`).then((data:any) => {
-        if(data.data)
-        {
-          setMenuList1(data.data)
-          localStorage.setItem('menulist1',JSON.stringify(data?.data));
-        }
-    }).catch((e:any) => {
-        toast.error(e?.message, {
+    if (basicinfo?.basic_info !== null) {
+      getData(`${MenuListURL1}/${basicinfo?.basic_info?.id}`)
+        .then((data: any) => {
+          if (data.data) {
+            setMenuList1(data.data);
+            localStorage.setItem("menulist1", JSON.stringify(data?.data));
+          }
+        })
+        .catch((e: any) => {
+          toast.error(e?.message, {
             hideProgressBar: true,
             theme: "colored",
-            });
-    });
+          });
+        });
     }
-  }
+  };
   useEffect(() => {
-
     // console.log("test data",profileData !== null,basicinfo?.basic_info !== null)
-   
-      setSelectedIndex(defaultSelectedIndex);
-      
-      if (profileData !== null && basicinfo?.basic_info !== null) {
-        // console.log("test data 11",profileData !== null,basicinfo?.basic_info !== null)
-         callAPI1(); 
-      }
+
+    setSelectedIndex(defaultSelectedIndex);
+
+    if (profileData !== null && basicinfo?.basic_info !== null) {
+      // console.log("test data 11",profileData !== null,basicinfo?.basic_info !== null)
+      callAPI1();
+    }
   }, [profileData]);
 
   useEffect(() => {
-    
     const handleProfileCompletionChange = () => {
-      const newProfileCompletion = localStorage.getItem("Profile_completion") || "0";
+      const newProfileCompletion =
+        localStorage.getItem("Profile_completion") || "0";
       setProfileCompletion(newProfileCompletion);
     };
 
@@ -125,35 +149,34 @@ const Sidebar = () => {
     return () => clearInterval(intervalId);
   }, []);
 
-//  const callAPI1 = useCallback(() => {
-//   const profileData1:any = sessionStorage.getItem('profileData')
-//   if(profileData1!==null)
-//   {
-//     basicinfo = JSON.parse(profileData1)
-//   }
-//   const fetchData = async () => {
-//        await  getData(`${MenuListURL1}/${basicinfo?.basic_info?.id}`).then((data:any) => {
-//         if(data.data)
-//         {
-//           setMenuList1(data.data)
-//           localStorage.setItem('menulist1',JSON.stringify(data?.data));
-//         }
-//     }).catch((e:any) => {
-//         toast.error(e?.message, {
-//             hideProgressBar: true,
-//             theme: "colored",
-//             });
-//     });
-//   }
-//   if (basicinfo?.basic_info?.id !== undefined) {
-//   fetchData();
-//   }
-//     }, [basicinfo?.basic_info?.id]);
+  //  const callAPI1 = useCallback(() => {
+  //   const profileData1:any = sessionStorage.getItem('profileData')
+  //   if(profileData1!==null)
+  //   {
+  //     basicinfo = JSON.parse(profileData1)
+  //   }
+  //   const fetchData = async () => {
+  //        await  getData(`${MenuListURL1}/${basicinfo?.basic_info?.id}`).then((data:any) => {
+  //         if(data.data)
+  //         {
+  //           setMenuList1(data.data)
+  //           localStorage.setItem('menulist1',JSON.stringify(data?.data));
+  //         }
+  //     }).catch((e:any) => {
+  //         toast.error(e?.message, {
+  //             hideProgressBar: true,
+  //             theme: "colored",
+  //             });
+  //     });
+  //   }
+  //   if (basicinfo?.basic_info?.id !== undefined) {
+  //   fetchData();
+  //   }
+  //     }, [basicinfo?.basic_info?.id]);
 
-//     useEffect(() => {
-//         callAPI1();
-//     }, [callAPI1]);
- 
+  //     useEffect(() => {
+  //         callAPI1();
+  //     }, [callAPI1]);
 
   const handleClickp = () => {
     setPrescriptionsopenOpen(!prescriptionsopen);
@@ -179,19 +202,27 @@ const Sidebar = () => {
     setOpen(!open);
   };
 
-// console.log("test hhh",selectedIndex1)
-// const SidebarContainer = styled.aside`
-//   width: 250px;
-//   background-color: ${({ theme }) => theme['--bodybackground']};
-//   color: ${({ theme }) => theme['--bodycolor']};
-//   padding: 1rem;
-//   transition: all 0.3s linear;
-// `;
-  
+  const handleMouseEnter = () => {
+    document.body.classList.add("sidebar-hovered");
+  };
+
+  const handleMouseLeave = () => {
+    document.body.classList.remove("sidebar-hovered");
+  };
+
+  // console.log("test hhh",selectedIndex1)
+  // const SidebarContainer = styled.aside`
+  //   width: 250px;
+  //   background-color: ${({ theme }) => theme['--bodybackground']};
+  //   color: ${({ theme }) => theme['--bodycolor']};
+  //   padding: 1rem;
+  //   transition: all 0.3s linear;
+  // `;
+
   return (
     // <SidebarContainer>
     <>
-      <div className="sidebar_main">
+      {/* <div className="sidebar_main">
         <div
           className="offcanvas offcanvas-start"
           data-bs-scroll="true"
@@ -199,15 +230,15 @@ const Sidebar = () => {
           tab-index="-1"
           id="offcanvasExample"
           aria-labelledby="offcanvasExampleLabel"
-        >
-          {/* <div className="offcanvas_header">
+        > */}
+      {/* <div className="offcanvas_header">
             <div className="header_logo">
               <img src={sidebarlog} alt="logo" />
               <span className="logo_txt">Symox</span>
             </div>
           </div> */}
 
-          <div className="offcanvas-body">
+      {/* <div className="offcanvas-body">
             <div className="inner_sidebar">
               <div className="menu_list" id="sidebar">
               <ul className="sidebar-nav" id="sidebar-nav">
@@ -215,7 +246,7 @@ const Sidebar = () => {
                     <><ListItemButton
                       component={Link} to="/main/DashBoard"
                       selected={selectedIndex1?.toLowerCase() === "dashboard"}
-                      className={selectedIndex1?.toLowerCase() === "dashboard" ?"selecteditem" :"unselecteditem"}
+                      className={selectedIndex1?.toLowerCase() === "dashboard" ? "selecteditem" : "unselecteditem"}
                       // style={{ backgroundColor: selectedIndex1?.toLowerCase() === "dashboard" ? '#024f52' : 'transparent', color: selectedIndex1?.toLowerCase() === "dashboard" ? "#fff" : "#fff" }}
                       onClick={() => handleListItemClick1("Dashboard")}
                     >
@@ -323,12 +354,12 @@ const Sidebar = () => {
                                             />
                                           </svg>
                                         </div>
-                                      </ListItemIcon>
-                                      {/* <ListItemText primary={submenu.menu_name} /> */}
-                                      <ListItemText primary={menulist} />
-                                    </ListItemButton>
-                                    {/* <a href={getPath(submenu.url)}> <i className="bi bi-circle"></i><span>{submenu.menu_name}</span> </a> */}
-                                </li>
+                                      </ListItemIcon> */}
+      {/* <ListItemText primary={submenu.menu_name} /> */}
+      {/* <ListItemText primary={menulist} />
+                                    </ListItemButton> */}
+      {/* <a href={getPath(submenu.url)}> <i className="bi bi-circle"></i><span>{submenu.menu_name}</span> </a> */}
+      {/* </li>
                              )
 
                         })}
@@ -362,18 +393,18 @@ const Sidebar = () => {
                           </div>
                       </ListItemIcon>
                       <ListItemText primary={menu.menu_name} />
-                      </ListItemButton>
-                    {/* <a href={getPath(menu.url)}> <i className="bi bi-circle"></i><span>{menu.menu_name}</span> </a> */}
-                    </li>
+                      </ListItemButton> */}
+      {/* <a href={getPath(menu.url)}> <i className="bi bi-circle"></i><span>{menu.menu_name}</span> </a> */}
+      {/* </li>
                     </>
                     }
                   </li>
                   )
                 })
                  : <></>
-                 }
+                 } */}
 
-                 {/* {
+      {/* {
                   user_type === "admin"  && (
                     <>
                     <ListItemButton
@@ -429,12 +460,69 @@ const Sidebar = () => {
                       
                   )                 
                  } */}
-                </ul>
+      {/* </ul>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+      <aside
+        className="sidebar-wrapper"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <SimpleBar>
+          <div className="sidebar-header">
+            <div className="logo-icon">
+              <img src={gyansetuLogo} className="logo-img" alt="" />
+            </div>
+            <div className="logo-name flex-grow-1">
+              <h5 className="mb-0">Gyansetu</h5>
+            </div>
+            <div className="sidebar-close">
+              <CloseOutlinedIcon onClick={() => document.body.classList.remove("toggled")} />
+            </div>
+          </div>
+          <div className="sidebar-nav">
+            <MetisMenu>
+              {/* <ul id="sidenav"> */}
+              <li>
+                <a href="#">
+                  <div className="parent-icon">
+                    <HomeOutlinedIcon />
+                  </div>
+                  <div className="menu-title">Dashboard</div>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <div className="parent-icon">
+                    <ChatOutlinedIcon />
+                  </div>
+                  <div className="menu-title">Chat</div>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <div className="parent-icon">
+                    <LocalLibraryOutlinedIcon />
+                  </div>
+                  <div className="menu-title">Chat History</div>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <div className="parent-icon">
+                    <InfoOutlinedIcon />
+                  </div>
+                  <div className="menu-title">Feedback</div>
+                </a>
+              </li>
+              {/* </ul> */}
+            </MetisMenu>
+          </div>
+        </SimpleBar>
+      </aside>
     </>
     // </SidebarContainer>
   );

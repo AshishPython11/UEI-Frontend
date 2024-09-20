@@ -48,6 +48,7 @@ const ThemeModel = ({ open, handleClose }: any) => {
   };
 
   const handleClickthem = (themes: string) => {
+     document?.documentElement?.setAttribute('data-bs-theme', themes);
     if (themes === "default") {
       // document.documentElement.style.setProperty('--bodybackground', "#346885");
       // document.documentElement.style.setProperty('--bghovercolor', "yellow");
@@ -59,7 +60,7 @@ const ThemeModel = ({ open, handleClose }: any) => {
       // localStorage.setItem('--bodycolor', ' blue');
       // localStorage.setItem('--TitleColor', "orange");
       // localStorage.setItem('--iconcolor', "#fff");
-      document?.documentElement?.setAttribute('data-theme', themes);
+      // document?.documentElement?.setAttribute('data-theme', themes);
       // document?.documentElement?.style.setProperty('--bodybackground', '#003032');
       // document?.documentElement?.style.setProperty('--bghovercolor', '#024f52');
       // document?.documentElement?.style.setProperty('--bodycolor', '#fff');
@@ -71,7 +72,7 @@ const ThemeModel = ({ open, handleClose }: any) => {
       // localStorage?.setItem('--TitleColor', '#495057');
       // localStorage?.setItem('--buttonbgcolor', '#003032');
     } else if (themes === "light") {
-      document?.documentElement?.setAttribute('data-theme', themes);
+      // document?.documentElement?.setAttribute('data-theme', themes);
       // document.documentElement.style.setProperty('--bodybackground', "#6f8187");
       // document.documentElement.style.setProperty('--bghovercolor', formData.bghovercolor);
       // document.documentElement?.style.setProperty('--bodycolor', ' #fff');
@@ -85,7 +86,7 @@ const ThemeModel = ({ open, handleClose }: any) => {
     } 
     
     else if (themes === "dark") {
-      document?.documentElement?.setAttribute('data-theme', themes);
+      // document?.documentElement?.setAttribute('data-theme', themes);
       // document.documentElement.style.setProperty('--bodybackground', formData.bodybackground);
       // document.documentElement.style.setProperty('--bghovercolor', formData.bghovercolor);
       // document.documentElement?.style.setProperty('--bodycolor', ' #fff');
@@ -180,20 +181,30 @@ const handleMouseLeave = (e: React.MouseEvent<HTMLParagraphElement>) => {
                         </FormControl> */}
           <div>
             <p style={{ cursor: "pointer", transition: "color 0.3s" }}  
-            onClick={() => handleClickthem("default")}
+            onClick={() => handleClickthem("light")}
             onMouseEnter={handleMouseEnter} 
                 onMouseLeave={handleMouseLeave}
-            >Default </p>
-            <p  style={{ cursor: "pointer", transition: "color 0.3s" }} 
-             onClick={() => handleClickthem("light")}
-             onMouseEnter={handleMouseEnter} 
-             onMouseLeave={handleMouseLeave}
-             >Light</p>
+            >Light </p>
             <p  style={{ cursor: "pointer", transition: "color 0.3s" }} 
              onClick={() => handleClickthem("dark")}
              onMouseEnter={handleMouseEnter} 
              onMouseLeave={handleMouseLeave}
              >Dark</p>
+            <p  style={{ cursor: "pointer", transition: "color 0.3s" }} 
+             onClick={() => handleClickthem("semi-dark")}
+             onMouseEnter={handleMouseEnter} 
+             onMouseLeave={handleMouseLeave}
+             >Semi-Dark</p>
+            <p  style={{ cursor: "pointer", transition: "color 0.3s" }} 
+             onClick={() => handleClickthem("blue-theme")}
+             onMouseEnter={handleMouseEnter} 
+             onMouseLeave={handleMouseLeave}
+             >Blue Theme</p>
+            <p  style={{ cursor: "pointer", transition: "color 0.3s" }} 
+             onClick={() => handleClickthem("bordered-theme")}
+             onMouseEnter={handleMouseEnter} 
+             onMouseLeave={handleMouseLeave}
+             >Bordered Theme</p>
           
           </div>
         </div>

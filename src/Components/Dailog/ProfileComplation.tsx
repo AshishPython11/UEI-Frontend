@@ -1823,7 +1823,7 @@ export const ProfileDialog: FunctionComponent<{
   const handleChange = (themes: any) => {
     setchecked(!checked);
 
-    document?.documentElement?.setAttribute("data-theme", themes);
+    document?.documentElement?.setAttribute("data-bs-theme", themes);
     setNamecolor(themes);
     localStorage.setItem("theme", themes);
   };
