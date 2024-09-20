@@ -218,7 +218,7 @@ body {
   line-height: var(---body-line-height);
   color: var(---body-color);
   text-align: var(---body-text-align);
-  background-color: var(---body-bg);
+  background-color: var(---body-bg) !important;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
