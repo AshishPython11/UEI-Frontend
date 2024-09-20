@@ -47,7 +47,8 @@ import { tuple } from "yup";
 import NameContext from "../../Pages/Context/NameContext";
 import Teacher from "../../Pages/Uploadpdf/Uploadpdf";
 import { ProfileDialog } from "../Dailog/ProfileComplation";
-import "react-perfect-scrollbar/dist/css/styles.css";
+import "../../../node_modules/react-perfect-scrollbar/dist/css/styles.css";
+// import "../react-perfect-scrollbar/dist/css/styles.css";
 
 function MainContent() {
   const context = useContext(NameContext);
