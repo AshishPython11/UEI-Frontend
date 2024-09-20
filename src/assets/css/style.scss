@@ -1201,6 +1201,10 @@ $body-bg: #FAF5FE;
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+html,body { 
+    height: 100%;
+}
+
 #root {
     height: 100%;
 }
@@ -1228,12 +1232,12 @@ $body-bg: #FAF5FE;
 //     font-size: $font_body;
 // }
 body {
-    font-family: var(--font-family);
+    // font-family: var(--font-family);
     font-weight: var(--font-weight);
     line-height: var(--line-height);
     color: var(--color);
     background-color: var(--bodycolor);
-    height: 100%;
+    // height: 100%;
 }
 img{
     max-width: 100%;
@@ -1301,31 +1305,31 @@ a:focus {
     color: $bodycolor;
     margin: 0 0 15px;
 }
-.card{
-    border: none;
-    box-shadow: 0 2px 3px #e6e8eb;
-    // margin-bottom: 20px;
-    .profilebody{
-        background-color: var(--profilebody) !important;
-        color: var(--profiletext) !important;
-    }
-    .card-body {
-        min-height: calc(100vh - 200px);
-        background-color: var(--cardbodycolor);
-        form {
-            padding-bottom: 40px;
-        }
-        &.student-card-body {
-            .MuiBox-root{
-                position: absolute;
-                bottom: 10px;
-                width: 98%;
-                justify-content: space-between;
-            }
-        }
+// .card{
+//     border: none;
+//     box-shadow: 0 2px 3px #e6e8eb;
+//     // margin-bottom: 20px;
+//     .profilebody{
+//         background-color: var(--profilebody) !important;
+//         color: var(--profiletext) !important;
+//     }
+//     .card-body {
+//         min-height: calc(100vh - 200px);
+//         background-color: var(--cardbodycolor);
+//         form {
+//             padding-bottom: 40px;
+//         }
+//         &.student-card-body {
+//             .MuiBox-root{
+//                 position: absolute;
+//                 bottom: 10px;
+//                 width: 98%;
+//                 justify-content: space-between;
+//             }
+//         }
       
-    }
-}
+//     }
+// }
 // .container{
 //     outline: 1px solid red;
 // }

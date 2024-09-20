@@ -68,7 +68,7 @@ const Chat = () => {
   const [statredchat, setstatredchat] = useState<any>([]);
   const [chathistory, setchathistory] = useState<any>([]);
   const [chathistoryrecent, setchathistoryrecent] = useState<any>();
-  const [chatsaved, setChatSaved] = useState<boolean>();
+  const [chatsaved, setChatSaved] = useState<boolean>(false);
   const { postData, getData, deleteData } = useApi();
   const navigate = useNavigate();
   const [profileCompletion, setProfileCompletion] = useState(
@@ -464,7 +464,7 @@ const Chat = () => {
                   let ChatStorepayload = {
                     student_id: userid,
                     chat_question: search,
-                    response: data?.answer,
+                    response: response?.answer,
                   };
                   postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
                 } else {
@@ -527,7 +527,7 @@ const Chat = () => {
                   let ChatStorepayload = {
                     student_id: userid,
                     chat_question: search,
-                    response: data?.answer,
+                    response: response?.answer,
                   };
                   postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
                 } else {
@@ -661,9 +661,12 @@ const Chat = () => {
   }, [dataflagged]);
 
   useEffect(() => {
+    console.log("Chat", chat);
+    console.log("Chat Saved", chatsaved);
     if (chat.length > 0) {
       localStorage.setItem("chatData", JSON.stringify(chat));
       localStorage.setItem("chatsaved", JSON.stringify(chatsaved));
+      saveChatlocal();
     }
   }, [chat, chatsaved]);
 
@@ -683,6 +686,7 @@ const Chat = () => {
   }, [chatData]);
 
   const saveChatlocal = async () => {
+
     const chatDataString = localStorage?.getItem("chatData");
     const chatflagged = localStorage?.getItem("chatsaved");
     // console.log("chatData testing save",chatDataString);

@@ -5,7 +5,8 @@ import '../Footer/Footer.scss';
 const Footer = () => {
   return (
     <>
-      <footer className="footer">
+      {/* <footer className="footer"> */}
+      <footer className="page-footer">
         {/* <div className="footer_inner">
                     <div className="left_part">
                         <div className='copyright'>© Copyright 2023 Symox. All rights reserved.</div>
@@ -14,7 +15,9 @@ const Footer = () => {
                         <div className='develop_by'>Crafted with &#10084; by Symox</div>
                     </div>    
                 </div> */}
-        <div className="credits text-white">Designed & developed by <a href="#" target="_blank" className="text-pink"> Sakshem IT Solution Pvt. Ltd.</a></div>
+        {/* <div className="credits text-white">Designed & developed by <a href="#" target="_blank" className="text-pink"> Sakshem IT Solution Pvt. Ltd.</a></div> */}
+        <p className="mb-0">Designed & developed by <a href="#" target="_blank" className="text-pink text-decoration-none"> Sakshem IT Solution Pvt. Ltd.</a></p>
+        {/* <p className="mb-0">Copyright © 2024. All right reserved.</p> */}
       </footer>
     </>
   )
