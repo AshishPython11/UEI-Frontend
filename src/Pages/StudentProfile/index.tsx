@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -12,6 +12,7 @@ import StudentContactDetails from "../StudentContactDetails";
 import StudentHobbies from "../StudentHobbies";
 import StudentSubjectPreference from "../StudentSubjectPreference";
 import PreviewStudentProfile from "../PreviewStudentProfile";
+import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 
 import { toast } from "react-toastify";
 
@@ -25,6 +26,11 @@ import {
   inputfieldtext,
 } from "../../utils/helpers";
 import AcademicHistory from "../AcademicHistory/AcademicHistory";
+import "../../assets/css/main.min.css";
+import "../../assets/css/newstyle.min.css";
+export interface ChildComponentProps {
+  setActiveForm: React.Dispatch<React.SetStateAction<number>>;
+}
 
 const StudentProfile = () => {
   const context = useContext(NameContext);
@@ -39,10 +45,12 @@ const StudentProfile = () => {
     // "Student History",
   ];
   const [activeStep, setActiveStep] = useState(0);
+  const [studentData, setStudentData] = useState<any>({});
   const [skipped, setSkipped] = useState(new Set<number>());
   const [isEdit, setIsEdit] = useState(false);
   const [isProComplate, setIsProComplate] = useState(0);
   const [isProComplate1, setIsProComplate1] = useState(false);
+  const [activeForm, setActiveForm] = useState(0);
   const usertype: any = localStorage.getItem("user_type");
   const { getData } = useApi();
   let StudentId = localStorage.getItem("_id");
@@ -54,12 +62,79 @@ const StudentProfile = () => {
     ).length;
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+  const totalSteps = 6;
+  const stepsRef = useRef<HTMLDivElement[]>([]);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const progressLineRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    callAPIStudent();
+    const handleResize = () => {
+      setIsMobile(window.matchMedia("(max-width: 1024px)").matches);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check on component mount
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    updateWizard();
+  }, [activeForm, isMobile]);
+
+  // Function to update the progress line based on the screen size
+  const updateWizard = () => {
+    if (progressRef.current && progressLineRef.current) {
+      if (isMobile) {
+        // Horizontal progress for mobile
+        progressRef.current.style.width = `${
+          ((activeForm + 1) / totalSteps) * 100
+        }%`;
+        progressLineRef.current.style.width = `${
+          ((activeForm + 1) / totalSteps) * 100
+        }%`;
+        progressLineRef.current.style.height = "2px";
+        progressLineRef.current.style.top = "auto";
+      } else {
+        // Vertical progress for desktop
+        progressRef.current.style.width = `${
+          ((activeForm + 1) / totalSteps) * 100
+        }%`;
+
+        const stepHeight = stepsRef.current[activeForm]?.offsetHeight || 0;
+        const computedStyle = window.getComputedStyle(
+          stepsRef.current[activeForm]
+        );
+
+        // Extract margin-top and margin-bottom
+        const marginTop = parseFloat(computedStyle.marginTop) || 0;
+        const marginBottom = parseFloat(computedStyle.marginBottom) || 0;
+
+        // Calculate total height including margins
+        const totalHeight =
+          activeForm === totalSteps - 1
+            ? stepHeight + 30
+            : stepHeight + marginTop + marginBottom;
+        const currentHeight = totalHeight * (activeForm + 1);
+
+        progressLineRef.current.style.height = `${currentHeight - 62}px`;
+        progressLineRef.current.style.width = "2px";
+        progressLineRef.current.style.top = "0px";
+      }
+    }
+  };
+
   const callAPIStudent = async () => {
     if (usertype === "student") {
       getData(`${profileURL}/${StudentId}`)
         .then((data: any) => {
           if (data.data) {
             // setProfileDatas(data?.data);
+            setStudentData(data?.data);
             //   let basic_info = data.data.basic_info;
             let basic_info = {
               aim: data?.data?.basic_info?.aim,
@@ -286,12 +361,12 @@ const StudentProfile = () => {
     setIsEdit(false);
   };
   useEffect(() => {
-    if (activeStep === 5) callAPIStudent();
-  }, [activeStep]);
+    if (activeStep === 5 || activeForm === 5) callAPIStudent();
+  }, [activeStep, activeForm]);
 
   return (
     <>
-      <div className="profile_section">
+      {/* <div className="profile_section">
         <div className="card">
           <div className="card-header custom-header">
             <div className="card-header--actions d-flex justify-content-between align-items-right">
@@ -374,7 +449,6 @@ const StudentProfile = () => {
                       justifyContent: "space-between",
                     }}
                   >
-                    {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}> */}
                     <Button
                       disabled={activeStep === 0}
                       onClick={handleBack}
@@ -404,34 +478,229 @@ const StudentProfile = () => {
                         Finish
                       </Button>
                     )}
-                    {/* </Box> */}
                   </div>
-                  {activeStep === 0 && <StudentBasicInfo />}
+                  {activeStep === 0 && <StudentBasicInfo setActiveForm={setActiveForm} />}
                   {activeStep === 1 && <StudentAddress />}
                   {activeStep === 2 && <StudentLanguageKnown />}
                   {activeStep === 3 && <AcademicHistory />}
-                  {/* {activeStep === 3 && <StudentAcademicHistory />} */}
                   {activeStep === 4 && <StudentContactDetails />}
                   {activeStep === 5 && <StudentSubjectPreference />}
-                  {/* <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                    <Button
-                      color="inherit"
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
-                      sx={{ mr: 1 }}
-                    >
-                      Back
-                    </Button>
-                    <Box sx={{ flex: "1 1 auto" }} />
-                    {activeStep !== steps.length - 1 ? (
-                      <Button onClick={handleNext}>Next</Button>
-                    ) : (
-                      <Button onClick={handleReset}>Finish</Button>
-                    )}
-                  </Box> */}
+                
                 </React.Fragment>
               </>
             )}
+          </div>
+        </div>
+      </div> */}
+      <div className="main-wrapper">
+        <div className="main-content">
+          <div className="container mb-5">
+            <div className="row align-items-center">
+              <div className="col-lg-6">
+                <h4 className="fs-1 fw-bold d-none d-xxl-block">
+                  Complete Your{" "}
+                  <span style={{ color: "#9943EC" }}> Account </span>
+                </h4>
+
+                <h4 className="fs-1 d-xxl-none fw-bold mb-0">
+                  {`Hey, ${studentData?.basic_info?.first_name || "User"} ${
+                    studentData?.basic_info?.last_name || ""
+                  }`}
+                  <small className="mt-1 fs-14 d-block opacity-50 fw-normal">
+                    Please Complete Your Profile
+                  </small>
+                </h4>
+              </div>
+              <div className="col-lg-6 d-none d-xxl-block">
+                <div className="wizard-content">
+                  <p className="mb-0">
+                    <span className="crntstep">{activeForm + 1}</span> of 6
+                    Completed{" "}
+                  </p>
+                  <div className="progress-bar">
+                    <div ref={progressRef} className="progress"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className="card rounded-5 mt-4 bg-transparent-mb"
+              style={{ border: "0" }}
+            >
+              <div className="card-body p-0">
+                <div className="row">
+                  <div className="col-xxl-12">
+                    <div className="myform-wizard">
+                      <div className="wizard-sidebar">
+                        <div className="steps-container">
+                          <div className="progress-background"></div>
+                          <div
+                            ref={progressLineRef}
+                            className="progress-line"
+                          ></div>
+                          <div
+                            ref={(el) => (stepsRef.current[0] = el!)}
+                            className={`step ${
+                              activeForm === 0 ? "active" : ""
+                            }`}
+                          >
+                            <div
+                              className={`step-circle ${
+                                activeForm >= 0 ? "filled" : ""
+                              }`}
+                            >
+                              <CheckOutlinedIcon />
+                            </div>
+                            <div className="step-label">Basic Information</div>
+                          </div>
+                          <div
+                            ref={(el) => (stepsRef.current[1] = el!)}
+                            className={`step ${
+                              activeForm === 1 ? "active" : ""
+                            }`}
+                          >
+                            <div
+                              className={`step-circle ${
+                                activeForm >= 1 ? "filled" : ""
+                              }`}
+                            >
+                              <CheckOutlinedIcon />
+                            </div>
+                            <div className="step-label">Address</div>
+                          </div>
+                          <div
+                            ref={(el) => (stepsRef.current[2] = el!)}
+                            className={`step ${
+                              activeForm === 2 ? "active" : ""
+                            }`}
+                          >
+                            <div
+                              className={`step-circle ${
+                                activeForm >= 2 ? "filled" : ""
+                              }`}
+                            >
+                              <CheckOutlinedIcon />
+                            </div>
+                            <div className="step-label">
+                              Hobbies / Language known
+                            </div>
+                          </div>
+                          <div
+                            ref={(el) => (stepsRef.current[3] = el!)}
+                            className={`step ${
+                              activeForm === 3 ? "active" : ""
+                            }`}
+                          >
+                            <div
+                              className={`step-circle ${
+                                activeForm >= 3 ? "filled" : ""
+                              }`}
+                            >
+                              <CheckOutlinedIcon />
+                            </div>
+                            <div className="step-label">Academic History</div>
+                          </div>
+
+                          <div
+                            ref={(el) => (stepsRef.current[4] = el!)}
+                            className={`step ${
+                              activeForm === 4 ? "active" : ""
+                            }`}
+                          >
+                            <div
+                              className={`step-circle ${
+                                activeForm >= 4 ? "filled" : ""
+                              }`}
+                            >
+                              <CheckOutlinedIcon />
+                            </div>
+                            <div className="step-label">Contact Details</div>
+                          </div>
+
+                          <div
+                            ref={(el) => (stepsRef.current[5] = el!)}
+                            className={`step ${
+                              activeForm === 5 ? "active" : ""
+                            }`}
+                          >
+                            <div
+                              className={`step-circle ${
+                                activeForm >= 5 ? "filled" : ""
+                              }`}
+                            >
+                              <CheckOutlinedIcon />
+                            </div>
+                            <div className="step-label">Subject preference</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="wizard-content">
+                        <form id="wizard-form">
+                          <div
+                            className={`form-step ${
+                              activeForm === 0 ? "active" : ""
+                            }`}
+                          >
+                            <StudentBasicInfo setActiveForm={setActiveForm} />
+                          </div>
+                          <div
+                            className={`form-step ${
+                              activeForm === 1 ? "active" : ""
+                            }`}
+                          >
+                            <StudentAddress setActiveForm={setActiveForm} />
+                          </div>
+                          <div
+                            className={`form-step ${
+                              activeForm === 2 ? "active" : ""
+                            }`}
+                          >
+                            <StudentLanguageKnown
+                              setActiveForm={setActiveForm}
+                            />
+                          </div>
+                          <div
+                            className={`form-step ${
+                              activeForm === 3 ? "active" : ""
+                            }`}
+                          >
+                            <div>
+                              <div>
+                                <AcademicHistory
+                                  setActiveForm={setActiveForm}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            className={`form-step ${
+                              activeForm === 4 ? "active" : ""
+                            }`}
+                          >
+                            <StudentContactDetails
+                              setActiveForm={setActiveForm}
+                            />
+                          </div>
+                          <div
+                            className={`form-step ${
+                              activeForm === 5 ? "active" : ""
+                            }`}
+                          >
+                            <div>
+                              <div>
+                                <StudentSubjectPreference
+                                  setActiveForm={setActiveForm}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

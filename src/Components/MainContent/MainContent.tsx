@@ -399,7 +399,6 @@ function MainContent() {
     if (usertype === "student") {
       getData(`${profileURL}/${StudentId}`)
         .then((data: any) => {
-          console.log("Profile", data?.data);
 
           if (data.data) {
             setProfileDatas(data?.data);
@@ -496,16 +495,18 @@ function MainContent() {
 
             if (academic_history && Object.keys(academic_history).length > 0) {
               if (academic_history?.institution_type === "school") {
-                getData(`class/get/${academic_history?.class_id}`).then(
-                  (response) =>
-                    setStudentClass(
-                      response.data.class_name
-                        .replace("_", " ")
-                        .charAt(0)
-                        .toUpperCase() +
-                        response.data.class_name.replace("_", " ").slice(1)
-                    )
-                );
+                if (academic_history?.class_id) {
+                  getData(`class/get/${academic_history?.class_id}`).then(
+                    (response) =>
+                      setStudentClass(
+                        response.data.class_name
+                          .replace("_", " ")
+                          .charAt(0)
+                          .toUpperCase() +
+                          response.data.class_name.replace("_", " ").slice(1)
+                      )
+                  );
+                }
                 delete academic_history?.course_id;
                 delete academic_history?.institute_id;
                 delete academic_history?.institution_name;
@@ -515,16 +516,18 @@ function MainContent() {
                 academic_history?.board !== "state_board" &&
                   delete academic_history?.state_for_stateboard;
               } else {
-                getData(`class/get/${academic_history?.course_id}`).then(
-                  (response) =>
-                    setStudentCourse(
-                      response.data.course_name
-                        .replace("_", " ")
-                        .charAt(0)
-                        .toUpperCase() +
-                        response.data.course_name.replace("_", " ").slice(1)
-                    )
-                );
+                if (academic_history?.course_id) {
+                  getData(`class/get/${academic_history?.course_id}`).then(
+                    (response) =>
+                      setStudentCourse(
+                        response.data.course_name
+                          .replace("_", " ")
+                          .charAt(0)
+                          .toUpperCase() +
+                          response.data.course_name.replace("_", " ").slice(1)
+                      )
+                  );
+                }
                 delete academic_history?.board;
                 delete academic_history?.class_id;
                 delete academic_history?.state_for_stateboard;
@@ -1129,7 +1132,7 @@ function MainContent() {
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb mb-0 p-0">
                       <li className="breadcrumb-item">
-                        <a href="javascript:;">
+                        <a href="#">
                           <i className="bx bx-home-alt"></i>
                         </a>
                       </li>
@@ -1173,9 +1176,8 @@ function MainContent() {
                             <div className="w-100">
                               <p className="mb-0 fw-semibold">Welcome back</p>
                               <h4 className="fw-semibold mb-0 fs-4 mb-0">
-                                {profileDatas?.basic_info?.first_name &&
-                                profileDatas?.basic_info?.last_name
-                                  ? `${profileDatas?.basic_info?.first_name} ${profileDatas?.basic_info?.last_name}`
+                                {profileDatas?.basic_info?.first_name
+                                  ? `${profileDatas?.basic_info?.first_name}`
                                   : ""}
                               </h4>
                               <small className="mb-3 d-block">
@@ -1275,7 +1277,7 @@ function MainContent() {
                         </div>
                         <div className="dropdown">
                           <a
-                            href="javascript:;"
+                            href="#"
                             className="dropdown-toggle-nocaret options dropdown-toggle"
                             data-bs-toggle="dropdown"
                           >
@@ -1283,17 +1285,17 @@ function MainContent() {
                           </a>
                           <ul className="dropdown-menu">
                             <li>
-                              <a className="dropdown-item" href="javascript:;">
+                              <a className="dropdown-item" href="#">
                                 Action
                               </a>
                             </li>
                             <li>
-                              <a className="dropdown-item" href="javascript:;">
+                              <a className="dropdown-item" href="#">
                                 Another action
                               </a>
                             </li>
                             <li>
-                              <a className="dropdown-item" href="javascript:;">
+                              <a className="dropdown-item" href="#">
                                 Something else here
                               </a>
                             </li>
@@ -1391,7 +1393,7 @@ function MainContent() {
                       </div>
                       <div className="chat-top-header-menu ms-auto">
                         <a
-                          href="javascript:;"
+                          href="#"
                           className="btn-outline-light btn-circle rounded-circle d-flex gap-2 wh-48"
                         >
                           <OpenInFullOutlinedIcon sx={{ fontSize: "24px" }} />
@@ -1510,7 +1512,7 @@ function MainContent() {
                       </div>
                       <div className="chat-footer-menu">
                         <a
-                          href="javascript:;"
+                          href="#"
                           className="btn-outline-light btn-circle rounded-circle d-flex gap-2 wh-48"
                         >
                           <SendOutlinedIcon />
@@ -1561,7 +1563,7 @@ function MainContent() {
                         </div>
                         <div className="dropdown">
                           <a
-                            href="javascript:;"
+                            href="#"
                             className="dropdown-toggle-nocaret options dropdown-toggle"
                             data-bs-toggle="dropdown"
                           >
@@ -1572,17 +1574,17 @@ function MainContent() {
                           </a>
                           <ul className="dropdown-menu">
                             <li>
-                              <a className="dropdown-item" href="javascript:;">
+                              <a className="dropdown-item" href="#">
                                 Action
                               </a>
                             </li>
                             <li>
-                              <a className="dropdown-item" href="javascript:;">
+                              <a className="dropdown-item" href="#">
                                 Another action
                               </a>
                             </li>
                             <li>
-                              <a className="dropdown-item" href="javascript:;">
+                              <a className="dropdown-item" href="#">
                                 Something else here
                               </a>
                             </li>
@@ -1615,7 +1617,7 @@ function MainContent() {
                         </div>
                         <div className="dropdown">
                           <a
-                            href="javascript:;"
+                            href="#"
                             className="dropdown-toggle-nocaret options dropdown-toggle"
                             data-bs-toggle="dropdown"
                           >
@@ -1625,17 +1627,17 @@ function MainContent() {
                           </a>
                           <ul className="dropdown-menu">
                             <li>
-                              <a className="dropdown-item" href="javascript:;">
+                              <a className="dropdown-item" href="#">
                                 Action
                               </a>
                             </li>
                             <li>
-                              <a className="dropdown-item" href="javascript:;">
+                              <a className="dropdown-item" href="#">
                                 Another action
                               </a>
                             </li>
                             <li>
-                              <a className="dropdown-item" href="javascript:;">
+                              <a className="dropdown-item" href="#">
                                 Something else here
                               </a>
                             </li>
@@ -1743,7 +1745,7 @@ function MainContent() {
                 <p className="mb-0">Customize your theme</p>
               </div>
               <a
-                href="javascript:;"
+                href="#"
                 className="primaery-menu-close"
                 data-bs-dismiss="offcanvas"
               >

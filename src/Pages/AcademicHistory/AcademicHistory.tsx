@@ -33,6 +33,7 @@ import {
   tabletools,
 } from "../../utils/helpers";
 import { Country, State, City } from "country-state-city";
+import { ChildComponentProps } from "../StudentProfile";
 
 interface Box {
   id: number;
@@ -75,7 +76,7 @@ interface Option {
   label: string;
 }
 
-const AcademicHistory = () => {
+const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
   const context = useContext(NameContext);
   const { namecolor }: any = context;
   const { getData, postData, putData, deleteData } = useApi();
@@ -257,7 +258,6 @@ const AcademicHistory = () => {
     getData(`${"new_student_academic_history/get/" + StudentId}`)
       .then((data: any) => {
         if (data?.status === 200) {
-
           data?.data?.forEach((item: any) => {
             const newBox = {
               id: item?.id,
@@ -301,10 +301,9 @@ const AcademicHistory = () => {
       });
   }, []);
 
-  const saveAcademicHistory = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
-    event.preventDefault();
+  const saveAcademicHistory = async () => {
+    // event: React.FormEvent<HTMLFormElement>
+    // event.preventDefault();
     // const validatePayload = (
     //   payload: { [s: string]: unknown } | ArrayLike<unknown>
     // ) => {
@@ -388,6 +387,7 @@ const AcademicHistory = () => {
             hideProgressBar: true,
             theme: "colored",
           });
+          setActiveForm((prev) => prev + 1);
         } else {
           toast.error("An error occurred while saving", {
             hideProgressBar: true,
@@ -512,7 +512,7 @@ const AcademicHistory = () => {
 
   return (
     <div className="mt-5">
-      <form onSubmit={saveAcademicHistory}>
+      <form>
         {boxes?.map((box, index) => (
           <div
             className="row align-items-center"
@@ -527,6 +527,9 @@ const AcademicHistory = () => {
                 <InputLabel>Institute Type</InputLabel>
                 <Select
                   value={box.institute_type}
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                  }}
                   onChange={(e) =>
                     handleInputChange(index, "institute_type", e.target.value)
                   }
@@ -580,6 +583,9 @@ const AcademicHistory = () => {
                   <InputLabel>Board</InputLabel>
                   <Select
                     value={box.board}
+                    sx={{
+                      backgroundColor: "#f5f5f5",
+                    }}
                     onChange={(e) =>
                       handleInputChange(index, "board", e.target.value)
                     }
@@ -635,6 +641,9 @@ const AcademicHistory = () => {
                   <Select
                     name="state_for_stateboard"
                     value={box.state_for_stateboard}
+                    sx={{
+                      backgroundColor: "#f5f5f5",
+                    }}
                     onChange={(e) =>
                       handleInputChange(
                         index,
@@ -685,6 +694,9 @@ const AcademicHistory = () => {
                   <InputLabel>Course</InputLabel>
                   <Select
                     value={box.course_id}
+                    sx={{
+                      backgroundColor: "#f5f5f5",
+                    }}
                     onChange={(e) =>
                       handleInputChange(index, "course_id", e.target.value)
                     }
@@ -718,6 +730,9 @@ const AcademicHistory = () => {
                   <InputLabel>Class</InputLabel>
                   <Select
                     value={box.class_id}
+                    sx={{
+                      backgroundColor: "#f5f5f5",
+                    }}
                     onChange={(e) =>
                       handleInputChange(index, "class_id", e.target.value)
                     }
@@ -752,6 +767,9 @@ const AcademicHistory = () => {
                   <Select
                     name="institute_id"
                     value={box.institute_id}
+                    sx={{
+                      backgroundColor: "#f5f5f5",
+                    }}
                     onChange={(e) =>
                       handleInputChange(index, "institute_id", e.target.value)
                     }
@@ -833,6 +851,9 @@ const AcademicHistory = () => {
                     <InputLabel>Learning Style</InputLabel>
                     <Select
                       value={box.learning_style}
+                      sx={{
+                        backgroundColor: "#f5f5f5",
+                      }}
                       onChange={(e) =>
                         handleInputChange(
                           index,
@@ -872,7 +893,7 @@ const AcademicHistory = () => {
                           backgroundColor: inputfield(namecolor),
                           color: inputfieldtext(namecolor),
                           "&:hover": {
-                            backgroundColor: inputfieldhover(namecolor), 
+                            backgroundColor: inputfieldhover(namecolor),
                           },
                         }}
                       >
@@ -887,13 +908,20 @@ const AcademicHistory = () => {
                 <div className="col form_field_wrapper">
                   <FormControl
                     required
-                    sx={{ m: 1, minWidth: 180, width: "100%" }}
+                    sx={{
+                      m: 1,
+                      minWidth: 180,
+                      width: "100%",
+                    }}
                   >
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
                         views={["year"]}
                         format="YYYY"
                         label="Year *"
+                        sx={{
+                          backgroundColor: "#f5f5f5",
+                        }}
                         value={dayjs(box.year)}
                         onChange={(date) =>
                           handleInputChange(index, "year", date)
@@ -905,7 +933,7 @@ const AcademicHistory = () => {
               )}
           </div>
         ))}
-        <div className="row justify-content-center">
+        {/* <div className="row justify-content-center">
           <div className="col-3">
             <Button
               className="mainbutton"
@@ -918,6 +946,22 @@ const AcademicHistory = () => {
               Save Academic History
             </Button>
           </div>
+        </div> */}
+        <div className="mt-3 d-flex align-items-center justify-content-between">
+          <button
+            type="button"
+            className="new-btn btn-outline-dark prev-btn px-lg-4 rounded-pill"
+            onClick={() => setActiveForm((prev) => prev - 1)}
+          >
+            Previous
+          </button>
+          <button
+            type="button"
+            className="new-btn btn-dark px-lg-5 ms-auto d-block rounded-pill next-btn"
+            onClick={saveAcademicHistory}
+          >
+            Next
+          </button>
         </div>
       </form>
     </div>

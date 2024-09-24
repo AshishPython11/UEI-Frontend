@@ -105,9 +105,7 @@ const Header = () => {
   };
 
   function handleClick() {
-    console.log("Side Bar Toggle");
     let main_content = document.querySelector("body");
-    console.log("TOGGLED", main_content);
 
     if (main_content) {
       if (main_content.classList.contains("toggled")) {
@@ -121,7 +119,6 @@ const Header = () => {
   }
   function handleSearchClick() {
     let main_content = document.getElementById("search-toggle");
-    console.log(main_content);
     if (main_content) {
       if (main_content.classList.contains("search-bar-show")) {
         main_content.classList.remove("search-bar-show");
@@ -136,7 +133,8 @@ const Header = () => {
         if (data.data) {
           let basic_info = data.data.basic_info;
           if (basic_info && Object.keys(basic_info).length > 0) {
-            let name = basic_info.first_name + " " + basic_info.last_name;
+            // let name = basic_info.first_name + " " + basic_info.last_name;
+            let name = basic_info.first_name;
             setprofileName(name);
             // setGender(basic_info?.gender)
             setNamepro({
@@ -451,7 +449,7 @@ const Header = () => {
       <header className="top-header">
         <nav className="navbar navbar-expand align-items-center gap-lg-4">
           <div className="btn-toggle">
-            {/* <a href="javascript:;"> */}
+            {/* <a href="#"> */}
             <MenuIcon onClick={handleClick} />
             {/* </a> */}
           </div>
@@ -490,31 +488,31 @@ const Header = () => {
                     <div className="card-body search-content">
                       <p className="search-title">Recent Searches</p>
                       <div className="d-flex align-items-start flex-wrap gap-2 kewords-wrapper">
-                        <a href="javascript:;" className="kewords">
+                        <a href="#" className="kewords">
                           <span>Class 10th Science</span>
                           <SearchOutlinedIcon sx={{ fontSize: "1rem" }} />
                         </a>
-                        <a href="javascript:;" className="kewords">
+                        <a href="#" className="kewords">
                           <span>Economics</span>
                           <SearchOutlinedIcon sx={{ fontSize: "1rem" }} />
                         </a>
-                        <a href="javascript:;" className="kewords">
+                        <a href="#" className="kewords">
                           <span>History of India</span>
                           <SearchOutlinedIcon sx={{ fontSize: "1rem" }} />
                         </a>
-                        <a href="javascript:;" className="kewords">
+                        <a href="#" className="kewords">
                           <span>First className math</span>
                           <SearchOutlinedIcon sx={{ fontSize: "1rem" }} />
                         </a>
-                        <a href="javascript:;" className="kewords">
+                        <a href="#" className="kewords">
                           <span>physcology</span>
                           <SearchOutlinedIcon sx={{ fontSize: "1rem" }} />
                         </a>
-                        <a href="javascript:;" className="kewords">
+                        <a href="#" className="kewords">
                           <span>Physics</span>
                           <SearchOutlinedIcon sx={{ fontSize: "1rem" }} />
                         </a>
-                        <a href="javascript:;" className="kewords">
+                        <a href="#" className="kewords">
                           <span>Class 10th Assignments</span>
                           <SearchOutlinedIcon sx={{ fontSize: "1rem" }} />
                         </a>
@@ -566,7 +564,7 @@ const Header = () => {
           </div>
           <ul className="navbar-nav gap-1 nav-right-links align-items-center">
             <li className="nav-item d-lg-none mobile-search-btn">
-              <a className="nav-link" href="javascript:;">
+              <a className="nav-link" href="#">
                 <SearchOutlinedIcon onClick={displaySearchPopup} />
               </a>
             </li>
@@ -587,7 +585,7 @@ const Header = () => {
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle dropdown-toggle-nocaret"
-                href="javascript:;"
+                href="#"
                 data-bs-toggle="dropdown"
               >
                 <img src={Country2} width="22" height="22" alt="" />
@@ -596,7 +594,7 @@ const Header = () => {
                 <li>
                   <a
                     className="dropdown-item d-flex align-items-center py-2"
-                    href="javascript:;"
+                    href="#"
                   >
                     <img src={Country1} width="20" height="20" alt="" />
                     <span className="ms-2">English</span>
@@ -605,7 +603,7 @@ const Header = () => {
                 <li>
                   <a
                     className="dropdown-item d-flex align-items-center py-2"
-                    href="javascript:;"
+                    href="#"
                   >
                     <img src={Country2} width="20" height="20" alt="" />
                     <span className="ms-2">Catalan</span>
@@ -614,7 +612,7 @@ const Header = () => {
                 <li>
                   <a
                     className="dropdown-item d-flex align-items-center py-2"
-                    href="javascript:;"
+                    href="#"
                   >
                     <img src={Country3} width="20" height="20" alt="" />
                     <span className="ms-2">French</span>
@@ -623,7 +621,7 @@ const Header = () => {
                 <li>
                   <a
                     className="dropdown-item d-flex align-items-center py-2"
-                    href="javascript:;"
+                    href="#"
                   >
                     <img src={Country4} width="20" height="20" alt="" />
                     <span className="ms-2">Belize</span>
@@ -632,7 +630,7 @@ const Header = () => {
                 <li>
                   <a
                     className="dropdown-item d-flex align-items-center py-2"
-                    href="javascript:;"
+                    href="#"
                   >
                     <img src={Country5} width="20" height="20" alt="" />
                     <span className="ms-2">Colombia</span>
@@ -641,7 +639,7 @@ const Header = () => {
                 <li>
                   <a
                     className="dropdown-item d-flex align-items-center py-2"
-                    href="javascript:;"
+                    href="#"
                   >
                     <img src={Country6} width="20" height="20" alt="" />
                     <span className="ms-2">Spanish</span>
@@ -650,7 +648,7 @@ const Header = () => {
                 <li>
                   <a
                     className="dropdown-item d-flex align-items-center py-2"
-                    href="javascript:;"
+                    href="#"
                   >
                     <img src={Country7} width="20" height="20" alt="" />
                     <span className="ms-2">Georgian</span>
@@ -659,7 +657,7 @@ const Header = () => {
                 <li>
                   <a
                     className="dropdown-item d-flex align-items-center py-2"
-                    href="javascript:;"
+                    href="#"
                   >
                     <img src={Country8} width="20" height="20" alt="" />
                     <span className="ms-2">Hindi</span>
@@ -673,7 +671,7 @@ const Header = () => {
                 className="nav-link dropdown-toggle dropdown-toggle-nocaret position-relative"
                 data-bs-auto-close="outside"
                 data-bs-toggle="dropdown"
-                href="javascript:;"
+                href="#"
               >
                 <NotificationsOutlinedIcon />
                 <span className="badge-notify">5</span>
@@ -696,7 +694,7 @@ const Header = () => {
                       <div>
                         <a
                           className="dropdown-item d-flex align-items-center gap-2 py-2"
-                          href="javascript:;"
+                          href="#"
                         >
                           <Inventory2OutlinedIcon
                             style={{ fontSize: "1rem" }}
@@ -707,7 +705,7 @@ const Header = () => {
                       <div>
                         <a
                           className="dropdown-item d-flex align-items-center gap-2 py-2"
-                          href="javascript:;"
+                          href="#"
                         >
                           <DoneAllOutlinedIcon style={{ fontSize: "1rem" }} />
                           Mark all as read
@@ -716,7 +714,7 @@ const Header = () => {
                       <div>
                         <a
                           className="dropdown-item d-flex align-items-center gap-2 py-2"
-                          href="javascript:;"
+                          href="#"
                         >
                           <MicOffOutlinedIcon style={{ fontSize: "1rem" }} />
                           Disable Notifications
@@ -725,7 +723,7 @@ const Header = () => {
                       <div>
                         <a
                           className="dropdown-item d-flex align-items-center gap-2 py-2"
-                          href="javascript:;"
+                          href="#"
                         >
                           <GradeOutlinedIcon style={{ fontSize: "1rem" }} />
                           What's new ?
@@ -737,7 +735,7 @@ const Header = () => {
                       <div>
                         <a
                           className="dropdown-item d-flex align-items-center gap-2 py-2"
-                          href="javascript:;"
+                          href="#"
                         >
                           <LeaderboardOutlinedIcon
                             style={{ fontSize: "1rem" }}
@@ -753,7 +751,7 @@ const Header = () => {
                     <div>
                       <a
                         className="dropdown-item border-bottom py-2"
-                        href="javascript:;"
+                        href="#"
                       >
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
@@ -783,7 +781,7 @@ const Header = () => {
                     <div>
                       <a
                         className="dropdown-item border-bottom py-2"
-                        href="javascript:;"
+                        href="#"
                       >
                         <div className="d-flex align-items-center gap-3">
                           <div className="user-wrapper bg-primary text-primary bg-opacity-10">
@@ -807,7 +805,7 @@ const Header = () => {
                     <div>
                       <a
                         className="dropdown-item border-bottom py-2"
-                        href="javascript:;"
+                        href="#"
                       >
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
@@ -835,7 +833,7 @@ const Header = () => {
                     <div>
                       <a
                         className="dropdown-item border-bottom py-2"
-                        href="javascript:;"
+                        href="#"
                       >
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
@@ -863,7 +861,7 @@ const Header = () => {
                     <div>
                       <a
                         className="dropdown-item border-bottom py-2"
-                        href="javascript:;"
+                        href="#"
                       >
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
@@ -891,7 +889,7 @@ const Header = () => {
                       </a>
                     </div>
                     <div>
-                      <a className="dropdown-item py-2" href="javascript:;">
+                      <a className="dropdown-item py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="user-wrapper bg-danger text-danger bg-opacity-10">
                             <span>PK</span>
@@ -931,7 +929,7 @@ const Header = () => {
                 />
               </a>
               <div className="dropdown-menu dropdown-user dropdown-menu-end shadow">
-                <a className="dropdown-item  gap-2 py-2" href="javascript:;">
+                <a className="dropdown-item  gap-2 py-2" href="#">
                   <div className="text-center">
                     <img
                       src={personImage}
@@ -940,27 +938,27 @@ const Header = () => {
                       height="90"
                       alt=""
                     />
-                    <h5 className="user-name mb-0 fw-bold">Hello, Amit</h5>
+                    <h5 className="user-name mb-0 fw-bold">{`Hello, ${profileName || "User"}`}</h5>
                   </div>
                 </a>
                 <hr className="dropdown-divider" />
-                <a
+                <Link
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
-                  href="javascript:;"
+                  to="/main/StudentProfile"
                 >
                   <PersonOutlineOutlinedIcon />
                   Profile
-                </a>
+                </Link>
                 <a
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
-                  href="javascript:;"
+                  href="#"
                 >
                   <LocalBarOutlinedIcon />
                   Setting
                 </a>
                 <a
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
-                  href="javascript:;"
+                  href="#"
                 >
                   <DashboardOutlinedIcon />
                   Dashboard

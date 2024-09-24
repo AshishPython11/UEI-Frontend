@@ -487,12 +487,12 @@ const Sidebar = () => {
             <MetisMenu>
               {/* <ul id="sidenav"> */}
               <li>
-                <a href="#">
+                <Link to="/main/DashBoard">
                   <div className="parent-icon">
                     <HomeOutlinedIcon />
                   </div>
                   <div className="menu-title">Dashboard</div>
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#">

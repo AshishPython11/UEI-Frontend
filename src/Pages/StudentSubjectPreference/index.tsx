@@ -14,8 +14,15 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useApi from "../../hooks/useAPI";
 import { toast } from "react-toastify";
-import { deepEqual, inputfield, inputfieldhover, inputfieldtext, tabletools } from "../../utils/helpers";
+import {
+  deepEqual,
+  inputfield,
+  inputfieldhover,
+  inputfieldtext,
+  tabletools,
+} from "../../utils/helpers";
 import NameContext from "../Context/NameContext";
+import { ChildComponentProps } from "../StudentProfile";
 
 // Define interfaces for Box, Course, and Subject
 interface Box {
@@ -38,9 +45,11 @@ interface Subject {
   subject_id: string;
 }
 
-const StudentSubjectPreference = () => {
+const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
+  setActiveForm,
+}) => {
   const context = useContext(NameContext);
-  const {namecolor }:any = context;
+  const { namecolor }: any = context;
   const { getData, postData, putData, deleteData } = useApi();
   const [boxes, setBoxes] = useState<Box[]>([]);
   const [boxes11, setBoxes11] = useState<Box[]>([]);
@@ -50,111 +59,115 @@ const StudentSubjectPreference = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   // const [pervalidet, setpervalidet] = useState(false);
-  const [validationErrors, setValidationErrors] = useState<{ [key: number]: { [key: string]: boolean } }>({});
+  const [validationErrors, setValidationErrors] = useState<{
+    [key: number]: { [key: string]: boolean };
+  }>({});
   const [initialState, setInitialState] = useState<any | null>({});
 
   // Fetch data from the endpoints
   const getCourse = async () => {
-  getData("/course/list")
-    .then((response: any) => {
-      if (response.status === 200) {
-        const filteredData = response?.data?.filter((item:any) => item?.is_active === 1);
-        setCourses(filteredData ||[]);
-        // setCourses(response.data);
-      }
-    })
-    .catch((e) => {
-      toast.error(e?.message, {
-        hideProgressBar: true,
-        theme: "colored",
+    getData("/course/list")
+      .then((response: any) => {
+        if (response.status === 200) {
+          const filteredData = response?.data?.filter(
+            (item: any) => item?.is_active === 1
+          );
+          setCourses(filteredData || []);
+          // setCourses(response.data);
+        }
+      })
+      .catch((e) => {
+        toast.error(e?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
       });
-    });
-  }
+  };
   const getSubject = async () => {
-  getData("/subject/list")
-    .then((response: any) => {
-      if (response.status === 200) {
-        const filteredData = response?.data?.filter((item:any) => item?.is_active === 1);
-        setSubjects(filteredData ||[]);
-        // setSubjects(response.data);
-      }
-    })
-    .catch((e) => {
-      toast.error(e?.message, {
-        hideProgressBar: true,
-        theme: "colored",
+    getData("/subject/list")
+      .then((response: any) => {
+        if (response.status === 200) {
+          const filteredData = response?.data?.filter(
+            (item: any) => item?.is_active === 1
+          );
+          setSubjects(filteredData || []);
+          // setSubjects(response.data);
+        }
+      })
+      .catch((e) => {
+        toast.error(e?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
       });
-    });
-  }
+  };
   const getPrefrence = async () => {
-  getData("/subject_preference/list")
-    .then((response: any) => {
-      if (response.status === 200) {
-        setSubjectPreferences(response.data);
-      }
-    })
-    .catch((e) => {
-      toast.error(e?.message, {
-        hideProgressBar: true,
-        theme: "colored",
+    getData("/subject_preference/list")
+      .then((response: any) => {
+        if (response.status === 200) {
+          setSubjectPreferences(response.data);
+        }
+      })
+      .catch((e) => {
+        toast.error(e?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
       });
-    });
-  }
+  };
   const getPrefrencelist = async () => {
-  getData("/subject_preference/edit/" + StudentId)
-    .then((data: any) => {
-      console.log(data);
-      if (data?.status === 200) {
-        data.data.map((item: any, index: number) => {
-          const newBox: Box = {
-            id: item.id,
-            course_id: item?.course_id,
-            subject_id: item?.subject_id,
-            preference: item?.preference,
-            score_in_percentage: item?.score_in_percentage,
-          };
-          if (!boxes.some((box) => box.id === newBox.id)) {
-            // setBoxes([...boxes, newBox]);
-            setBoxes((prevBoxes) => [...prevBoxes, newBox]);
-            setInitialState({
-              course_id: String(item?.course_id),
-              subject_id: String(item?.subject_id),
+    getData("/subject_preference/edit/" + StudentId)
+      .then((data: any) => {
+        console.log(data);
+        if (data?.status === 200) {
+          data.data.map((item: any, index: number) => {
+            const newBox: Box = {
+              id: item.id,
+              course_id: item?.course_id,
+              subject_id: item?.subject_id,
               preference: item?.preference,
               score_in_percentage: item?.score_in_percentage,
-              student_id:String(item?.student_id)
-
-            })
-            setBoxes11((prevBoxes) => [...prevBoxes, newBox]);
-          }
+            };
+            if (!boxes.some((box) => box.id === newBox.id)) {
+              // setBoxes([...boxes, newBox]);
+              setBoxes((prevBoxes) => [...prevBoxes, newBox]);
+              setInitialState({
+                course_id: String(item?.course_id),
+                subject_id: String(item?.subject_id),
+                preference: item?.preference,
+                score_in_percentage: item?.score_in_percentage,
+                student_id: String(item?.student_id),
+              });
+              setBoxes11((prevBoxes) => [...prevBoxes, newBox]);
+            }
+          });
+        } else if (data?.status === 404) {
+          setBoxes([
+            {
+              id: 0,
+              course_id: "",
+              subject_id: "",
+              preference: "",
+              score_in_percentage: "",
+            },
+          ]);
+          setEditFlag(true);
+        } else {
+          // empty
+        }
+      })
+      .catch((e) => {
+        toast.error(e?.message, {
+          hideProgressBar: true,
+          theme: "colored",
         });
-      } else if (data?.status === 404) {
-        setBoxes([
-          {
-            id: 0,
-            course_id: "",
-            subject_id: "",
-            preference: "",
-            score_in_percentage: "",
-          },
-        ]);
-        setEditFlag(true);
-      }else{
-        // empty
-      }
-    })
-    .catch((e) => {
-      toast.error(e?.message, {
-        hideProgressBar: true,
-        theme: "colored",
       });
-    });
-  }
+  };
   useEffect(() => {
-    getCourse()
-    getSubject()
-    getPrefrence()
-    getPrefrencelist()
-
+    getCourse();
+    getSubject();
+    getPrefrence();
+    getPrefrencelist();
   }, []);
 
   const handleInputChange = (index: number, field: string, value: string) => {
@@ -192,7 +205,6 @@ const StudentSubjectPreference = () => {
     }
     newBoxes[index][field] = value;
     setBoxes(newBoxes);
-    
   };
 
   const addRow = () => {
@@ -227,7 +239,7 @@ const StudentSubjectPreference = () => {
         hideProgressBar: true,
         theme: "colored",
       });
-      console.log("Data Deleted Successfully", boxes,indx)
+      console.log("Data Deleted Successfully", boxes, indx);
       setBoxes(boxes.filter((box, index) => index !== indx));
     }
   };
@@ -306,14 +318,15 @@ const StudentSubjectPreference = () => {
   //     });
   //   }
   // };
-// console.log("Loading",validationErrors)
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-   
+  // console.log("Loading",validationErrors)
+  const handleSubmit = async () => {
+    // e: React.FormEvent
+    // e.preventDefault();
+
     // const eqq = deepEqual(boxes11,boxes)
     // console.log("test data11111",boxes11,boxes,eqq)
     // if(!eqq === true)  {
-    let initial = {}
+    let initial = {};
     try {
       const promises = boxes.map(async (box) => {
         const submissionData = {
@@ -323,59 +336,66 @@ const StudentSubjectPreference = () => {
           preference: box.preference,
           score_in_percentage: box.score_in_percentage,
         };
-        initial = submissionData
-        const eq = deepEqual(initialState,submissionData)
-        console.log("test data",eq,initialState,submissionData,editFalg,box.id)
+        initial = submissionData;
+        const eq = deepEqual(initialState, submissionData);
+        console.log(
+          "test data",
+          eq,
+          initialState,
+          submissionData,
+          editFalg,
+          box.id
+        );
         if (editFalg) {
           return postData("/subject_preference/add", submissionData);
         } else {
           if (box.id === 0) {
-            if(!eq === true)  {
-            
-            return postData("/subject_preference/add", submissionData);
+            if (!eq === true) {
+              return postData("/subject_preference/add", submissionData);
             }
           } else {
-             // eslint-disable-next-line no-lone-blocks
-             {if(!eq === true)  {
-             
-               return putData("/subject_preference/edit/" + box.id, submissionData)
-
-             }else{
-           
+            // eslint-disable-next-line no-lone-blocks
+            {
+              if (!eq === true) {
+                return putData(
+                  "/subject_preference/edit/" + box.id,
+                  submissionData
+                );
+              } else {
                 return Promise.resolve(undefined); // Skip update, return null
-           
-
-               
-             }
-          }
+              }
+            }
           }
         }
       });
-  
+
       // Wait for all API calls to complete
       const results = await Promise.all(promises);
-  
+
       // Check if all calls were successful
-      const filteredResults = results.filter(result => result !== null && result !== undefined);
-      const allSuccessful = filteredResults.every(result => result?.status === 200);
-      
-      console.log("test data allSuccessful",allSuccessful,results)
+      const filteredResults = results.filter(
+        (result) => result !== null && result !== undefined
+      );
+      const allSuccessful = filteredResults.every(
+        (result) => result?.status === 200
+      );
+
+      console.log("test data allSuccessful", allSuccessful, results);
       if (allSuccessful) {
         toast.success("Subject Preference save successfully", {
           hideProgressBar: true,
           theme: "colored",
-        })
-        setInitialState(initial)
+        });
+        setInitialState(initial);
         // getPrefrencelist()
         // setBoxes11(boxes)
-        
       } else {
         // toast.error("Some entries failed to save", {
         //   hideProgressBar: true,
         //   theme: "colored",
         // });
         // getPrefrencelist()
-        setInitialState(initial)
+        setInitialState(initial);
         // setBoxes11(boxes)
       }
     } catch (error: any) {
@@ -383,13 +403,13 @@ const StudentSubjectPreference = () => {
         hideProgressBar: true,
         theme: "colored",
       });
-    // }
-  }
+      // }
+    }
   };
-  
+
   return (
-    <div className="mt-5">
-      <form onSubmit={handleSubmit}>
+    <div>
+      <form>
         {boxes.map((box, index) => (
           <div
             className="row d-flex align-items-center"
@@ -402,20 +422,25 @@ const StudentSubjectPreference = () => {
                 <Select
                   name="course_id"
                   value={box.course_id}
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                  }}
                   onChange={(e) =>
                     handleInputChange(index, "course_id", e.target.value)
                   }
                   label="Course"
                 >
                   {courses.map((course) => (
-                    <MenuItem key={course.id} value={course.id}
-                    sx={{
-                      backgroundColor: inputfield(namecolor),
-                      color: inputfieldtext(namecolor),
-                      '&:hover': {
+                    <MenuItem
+                      key={course.id}
+                      value={course.id}
+                      sx={{
+                        backgroundColor: inputfield(namecolor),
+                        color: inputfieldtext(namecolor),
+                        "&:hover": {
                           backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
-                      },
-                  }}
+                        },
+                      }}
                     >
                       {course.course_name}
                     </MenuItem>
@@ -429,20 +454,25 @@ const StudentSubjectPreference = () => {
                 <Select
                   name="subject_id"
                   value={box.subject_id}
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                  }}
                   onChange={(e) =>
                     handleInputChange(index, "subject_id", e.target.value)
                   }
                   label="Subject"
                 >
                   {subjects.map((subject) => (
-                    <MenuItem key={subject.id} value={subject.id}
-                    sx={{
-                      backgroundColor: inputfield(namecolor),
-                      color: inputfieldtext(namecolor),
-                      '&:hover': {
+                    <MenuItem
+                      key={subject.id}
+                      value={subject.id}
+                      sx={{
+                        backgroundColor: inputfield(namecolor),
+                        color: inputfieldtext(namecolor),
+                        "&:hover": {
                           backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
-                      },
-                  }}
+                        },
+                      }}
                     >
                       {subject.subject_name}
                     </MenuItem>
@@ -455,6 +485,9 @@ const StudentSubjectPreference = () => {
                 <TextField
                   name="preference"
                   value={box.preference}
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                  }}
                   onChange={(e) =>
                     handleInputChange(index, "preference", e.target.value)
                   }
@@ -463,11 +496,20 @@ const StudentSubjectPreference = () => {
                 />
               </FormControl>
             </div>
-            <div className="col form_field_wrapper" style={{paddingTop:validationErrors[index]?.score_in_percentage ? 78 : ""}}>
+            <div
+              className="col form_field_wrapper"
+              style={{
+                paddingTop: validationErrors[index]?.score_in_percentage
+                  ? 78
+                  : "",
+              }}
+            >
               <FormControl sx={{ m: 1, minWidth: 180, width: "100%" }}>
                 <TextField
-               
                   name="score_in_percentage"
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                  }}
                   value={box.score_in_percentage}
                   onChange={(e) =>
                     handleInputChange(
@@ -479,25 +521,33 @@ const StudentSubjectPreference = () => {
                   label="Score in Percentage"
                   required
                 />
-                    {validationErrors[index]?.score_in_percentage && (
-                  <p style={{ color: 'red' }}>
-                    Score in Percentage must be a number between 0 and 100 with up to two decimal places.
+                {validationErrors[index]?.score_in_percentage && (
+                  <p style={{ color: "red" }}>
+                    Score in Percentage must be a number between 0 and 100 with
+                    up to two decimal places.
                   </p>
                 )}
               </FormControl>
-            
             </div>
             <div className="col form_field_wrapper">
               <IconButton
                 onClick={addRow}
-                sx={{ width: "35px", height: "35px", color: tabletools(namecolor) }}
+                sx={{
+                  width: "35px",
+                  height: "35px",
+                  color: tabletools(namecolor),
+                }}
               >
                 <AddIcon />
               </IconButton>
               {boxes.length !== 1 && (
                 <IconButton
                   onClick={() => deleteRow(box.id, index)}
-                  sx={{ width: "35px", height: "35px",  color: tabletools(namecolor) }}
+                  sx={{
+                    width: "35px",
+                    height: "35px",
+                    color: tabletools(namecolor),
+                  }}
                 >
                   <DeleteIcon />
                 </IconButton>
@@ -506,7 +556,7 @@ const StudentSubjectPreference = () => {
           </div>
         ))}
         <div className="row justify-content-center">
-          <div className="col-3">
+          {/* <div className="col-3">
             <Button
             className="mainbutton"
               variant="contained"
@@ -516,6 +566,24 @@ const StudentSubjectPreference = () => {
             >
               Save Subject Preference
             </Button>
+          </div> */}
+          <div className="mt-3 d-flex align-items-center justify-content-between">
+            <button
+              type="button"
+              className="new-btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
+              onClick={() => {
+                setActiveForm((prev) => prev - 1);
+              }}
+            >
+              Previous
+            </button>
+            <button
+              type="button"
+              className="new-btn btn-dark px-lg-5  ms-auto d-block rounded-pill submit-btn"
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
           </div>
         </div>
       </form>
@@ -523,6 +591,4 @@ const StudentSubjectPreference = () => {
   );
 };
 
-
 export default StudentSubjectPreference;
-
