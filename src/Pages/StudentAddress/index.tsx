@@ -277,10 +277,6 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
     }
   };
 
-  useEffect(() => {
-    console.log("Student Address", studentAddress);
-  }, [studentAddress]);
-
   const changeHendels = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -924,12 +920,12 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               handleInputChangecountry(e, "permanent_address", "country")
             }
           />
-          <div>
+          {/* <div>
             {" "}
             {contry_col1 && (
               <p style={{ color: "red" }}>Please enter Country Name.</p>
             )}
-          </div>
+          </div> */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper" ref={dropdownstateRef}>
           <label
