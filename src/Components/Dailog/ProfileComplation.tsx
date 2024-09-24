@@ -616,10 +616,10 @@ export const ProfileDialog: FunctionComponent<{
 
   const saveAnswersforBasic = (answers: string[]) => {
     const birthdate = parseDate(answers[2]);
-    const fullName = answers[0];
+    const fullName = answers?.[0];
     let nameParts: string[] = fullName?.split(" ");
-    const firstname = nameParts[0];
-    const lastname = nameParts[1];
+    const firstname = nameParts?.[0];
+    const lastname = nameParts?.[1];
     let payload = {
       student_login_id: StudentId,
       first_name: answeredData?.basic_info?.first_name || firstname,
@@ -627,7 +627,7 @@ export const ProfileDialog: FunctionComponent<{
       // gender: answers[1],
       gender: answeredData?.basic_info?.gender || answers[1] || selectedgender,
       dob: answeredData?.basic_info?.dob || birthdate,
-      father_name: answeredData?.basic_info?.father_nae || answers[3],
+      father_name: answeredData?.basic_info?.father_name || answers[3],
       mother_name: answeredData?.basic_info?.mother_name || answers[4],
       guardian_name: answeredData?.basic_info?.guardian_name || answers[5],
       aim: answeredData?.basic_info?.aim || answers[6],
