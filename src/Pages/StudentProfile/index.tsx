@@ -26,8 +26,10 @@ import {
   inputfieldtext,
 } from "../../utils/helpers";
 import AcademicHistory from "../AcademicHistory/AcademicHistory";
-import "../../assets/css/main.min.css";
-import "../../assets/css/newstyle.min.css";
+// import "../../assets/css/main.min.css";
+// import "../../assets/css/newstyle.min.css";
+import "../../assets/css/main.scss";
+import "../../assets/css/newstyle.scss";
 export interface ChildComponentProps {
   setActiveForm: React.Dispatch<React.SetStateAction<number>>;
 }

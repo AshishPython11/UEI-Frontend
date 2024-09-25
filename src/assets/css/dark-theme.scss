@@ -12,15 +12,32 @@
   input::placeholder {
     color: #fff !important;
   }
-
+.chat-card{
+  background-color: $headerbg!important;
+}
+.chat-panel .left-side-history .history-list li::before{
+  background-image: url("../img/light-search.svg")!important;
+}
   .bg-light {
     background-color: #32363b !important;
   }
-
+  .chat-suggestion{
+    li{
+      background-color: $headerbg!important;
+    }
+  }
+  .chat-panel .left-side-history{
+    background-color:  $headerbg!important;
+  }
   .card-title {
     color: #dee2e6;
   }
-
+  .chat-panel .main-chat-panel .mobile-chat-header{
+    background-color: #32363b!important;
+    i{
+      color: #dee2e6!important;
+    }
+  }
   .chat-content-leftside .chat-left-msg{
     background-image: linear-gradient(310deg, #32363b 0%, #32363b 100%) !important;
     color: white;
@@ -39,7 +56,11 @@
 
   }
 
-
+  @media (min-width: 1024px){
+    .main-chat-panel{
+      border-left: 1px solid rgba(white, 0.1)!important;
+    }
+  }
 
 
   /*header*/

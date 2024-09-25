@@ -25,8 +25,10 @@ import gyansetuLogo from "../../assets/img/logo-white.svg";
 import { QUERY_KEYS_MENU } from "../../utils/const";
 import sidebarlog from "../../assets/img/logo.svg";
 import "../Sidebar/Sidebar.scss";
-import "../../assets/css/newstyle.min.css";
-import "../../assets/css/main.min.css";
+// import "../../assets/css/newstyle.min.css";
+// import "../../assets/css/main.min.css";
+import "../../assets/css/newstyle.scss";
+import "../../assets/css/main.scss";
 // import "../../assets/css/main.css";
 import "../../../node_modules/metismenujs/dist/metismenujs.css";
 import "simplebar-react/dist/simplebar.min.css";
@@ -480,7 +482,9 @@ const Sidebar = () => {
               <h5 className="mb-0">Gyansetu</h5>
             </div>
             <div className="sidebar-close">
-              <CloseOutlinedIcon onClick={() => document.body.classList.remove("toggled")} />
+              <CloseOutlinedIcon
+                onClick={() => document.body.classList.remove("toggled")}
+              />
             </div>
           </div>
           <div className="sidebar-nav">
@@ -495,28 +499,28 @@ const Sidebar = () => {
                 </Link>
               </li>
               <li>
-                <a href="#">
+                <Link to="/main/Chat/recentChat">
                   <div className="parent-icon">
                     <ChatOutlinedIcon />
                   </div>
                   <div className="menu-title">Chat</div>
-                </a>
+                </Link>
               </li>
-              <li>
-                <a href="#">
+              {/* <li>
+                <Link to="/main/DashBoard">
                   <div className="parent-icon">
                     <LocalLibraryOutlinedIcon />
                   </div>
                   <div className="menu-title">Chat History</div>
-                </a>
-              </li>
+                </Link>
+              </li> */}
               <li>
-                <a href="#">
+                <Link to="/main/DashBoard">
                   <div className="parent-icon">
                     <InfoOutlinedIcon />
                   </div>
                   <div className="menu-title">Feedback</div>
-                </a>
+                </Link>
               </li>
               {/* </ul> */}
             </MetisMenu>

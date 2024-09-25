@@ -149,7 +149,7 @@ const Header = () => {
                   // setprofileImage(imgdata.data)
                   setProImage(imgdata.data);
                 })
-                .catch((e) => {});
+                .catch((e) => { });
             }
           }
           sessionStorage.setItem("profileData", JSON.stringify(data.data));
@@ -183,7 +183,7 @@ const Header = () => {
                   // setprofileImage(imgdata.data)
                   setProImage(imgdata.data);
                 })
-                .catch((e) => {});
+                .catch((e) => { });
             }
           }
         }
@@ -207,8 +207,8 @@ const Header = () => {
     namepro?.gender === "male" || namepro?.gender === "Male"
       ? images_man
       : namepro?.gender === "female" || namepro?.gender === "Female"
-      ? images_female
-      : images_man;
+        ? images_female
+        : images_man;
 
   // const profileImage1:any =( proImage !== "" ||  !== 'undefined')  ? proImage : defaultImage;
   const profileImage1: any =
@@ -569,7 +569,7 @@ const Header = () => {
               </a>
             </li>
             <li className="nav-item d-none d-lg-flex">
-              <button className="new-btn btn-primary rounded-pill px-lg-4">
+              <button onClick={() => navigator("/main/Chat/recentChat")} className="new-btn btn-primary rounded-pill px-lg-4">
                 New Chat
               </button>
             </li>
@@ -956,13 +956,13 @@ const Header = () => {
                   <LocalBarOutlinedIcon />
                   Setting
                 </a>
-                <a
+                <Link
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
-                  href="#"
+                  to="/main/DashBoard"
                 >
                   <DashboardOutlinedIcon />
                   Dashboard
-                </a>
+                </Link>
 
                 <hr className="dropdown-divider" />
                 <button

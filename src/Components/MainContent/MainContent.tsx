@@ -1392,12 +1392,12 @@ function MainContent() {
                         <img src={robotImage} className="chatroboimg" alt="" />
                       </div>
                       <div className="chat-top-header-menu ms-auto">
-                        <a
-                          href="#"
+                        <Link
+                          to={"/main/Chat/recentChat"}
                           className="btn-outline-light btn-circle rounded-circle d-flex gap-2 wh-48"
                         >
                           <OpenInFullOutlinedIcon sx={{ fontSize: "24px" }} />
-                        </a>
+                        </Link>
                       </div>
                     </div>
                     {/* <div className="chat-content ms-0 rounded-top-4"> */}

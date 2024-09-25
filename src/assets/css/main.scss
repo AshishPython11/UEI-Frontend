@@ -5,13 +5,13 @@
 
 /* Genral*/
 $light-bg: #F5EBFF;
-
+$primary: #9943EC;
 body {
   position: relative;
   font-size: 14px;
   font-family: 'Inter', sans-serif;
   letter-spacing: 0.5px;
-
+  min-height: 92vh;
 }
 
 [data-bs-theme=light] body {
@@ -135,7 +135,7 @@ $dropdownAnimation: .6s cubic-bezier(.25, .8, .25, 1) 0s normal forwards 1 animd
     left: 260px;
     right: 0;
     top: 0;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
     z-index: 10;
     transition: ease-out .3s;
     box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.044), 0 2px 6px 0 rgba(0, 0, 0, 0.049);
@@ -445,7 +445,7 @@ $dropdownAnimation: .6s cubic-bezier(.25, .8, .25, 1) 0s normal forwards 1 animd
   width: 260px;
   height: 100%;
   background-color: #ffffff;
-  border-right: 1px solid var(--bs-border-color);
+  border-right: 1px solid rgba($primary, 0.1);
   z-index: 12;
   transition: ease-out .3s;
   box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.044), 0 2px 6px 0 rgba(0, 0, 0, 0.049);
@@ -490,7 +490,7 @@ $dropdownAnimation: .6s cubic-bezier(.25, .8, .25, 1) 0s normal forwards 1 animd
   /* Metis Menu */
 
   $menuLink_Color: #5f5f5f;
-  $menuLink_Hover_Color: #008cff;
+  $menuLink_Hover_Color: $primary;
   $menu_lable_color: #b0afaf;
   $menu_bg_color: rgb(0 140 255 / 5%);
   $border-color_1: initial;
@@ -665,7 +665,7 @@ $dropdownAnimation: .6s cubic-bezier(.25, .8, .25, 1) 0s normal forwards 1 animd
 
 @media screen and (min-width:1199px) {
 
-  .toggled {
+  body.toggled {
     .sidebar-wrapper {
       &:hover {
         box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 15%);
@@ -792,7 +792,7 @@ $dropdownAnimation: .6s cubic-bezier(.25, .8, .25, 1) 0s normal forwards 1 animd
   transition: ease-out .3s;
 
   .main-content {
-    padding: 1.5rem;
+    padding: 1rem;
 
     .breadcrumb-title {
       font-size: 20px;
@@ -999,7 +999,7 @@ $dropdownAnimation: .6s cubic-bezier(.25, .8, .25, 1) 0s normal forwards 1 animd
 
 .page-footer {
   @include alignContent();
-  background-color: $headerbg;
+  background-color: $light-bg;
   border-top: 1px solid var(--bs-border-color);
   height: 40px;
   position: absolute;
@@ -1155,7 +1155,7 @@ form select.error:focus {
 
 .alert-border-primary {
   border: 1px solid var(--bs-gray-400);
-  border-left: 5px solid #008cff;
+  border-left: 5px solid $primary;
 }
 
 .alert-border-secondary {
@@ -1189,7 +1189,7 @@ form select.error:focus {
 }
 
 .bg-error {
-  background-image: url("../assets/images/auth/error-bg.png");
+  // background-image: url("assets/img/auth/error-bg.png");
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
@@ -1256,7 +1256,7 @@ form select.error:focus {
 }
 
 .bg-login {
-  background-image: url(../assets/images/auth/bg-login.png);
+  // background-image: url(../assets/images/auth/bg-login.png);
   background-attachment: fixed;
   background-repeat: no-repeat;
   background-size: cover;
@@ -1264,17 +1264,17 @@ form select.error:focus {
 
 .bg-register {
   @extend .bg-login;
-  background-image: url(../assets/images/auth/bg-register.png);
+  // background-image: url(../assets/images/auth/bg-register.png);
 }
 
 .bg-forgot-password {
   @extend .bg-login;
-  background-image: url(../assets/images/auth/bg-forgot.png);
+  // background-image: url(../assets/images/auth/bg-forgot.png);
 }
 
 .bg-reset-password {
   @extend .bg-login;
-  background-image: url(../assets/images/auth/bg-reset-password.png);
+  // background-image: url(../assets/images/auth/bg-reset-password.png);
 }
 
 
@@ -1651,7 +1651,7 @@ form select.error:focus {
 
 .chat-tab-menu .nav-pills .nav-link.active,
 .chat-tab-menu .nav-pills .show>.nav-link {
-  color: #008cff;
+  color: $primary;
   background-color: rgb(0 123 255 / 0%);
 }
 
@@ -1754,7 +1754,7 @@ form select.error:focus {
       }
 
       &:hover {
-        background: #008cff;
+        background: $primary;
         color: #fff;
         transition: all .2s ease-out;
       }
