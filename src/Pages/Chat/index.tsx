@@ -351,6 +351,7 @@ const Chat = () => {
 
   const searchData = () => {
     setSearch("");
+    setShowInitialPage(false)
     if (search === "") {
       setSearchErr(true);
       return;
