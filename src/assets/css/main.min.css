@@ -82,7 +82,7 @@
   ---body-line-height: 1.5;
   ---body-color: #212529;
   ---body-color-rgb: 33, 37, 41;
-  ---body-bg: #faf5fe;
+  ---body-bg: #f5ebff;
   ---body-bg-rgb: 250, 245, 254;
   ---emphasis-color: #000;
   ---emphasis-color-rgb: 0, 0, 0;
@@ -10077,7 +10077,7 @@ img {
   height: 52px;
 }
 .new-btn {
-  min-height: 52px;
+  /* min-height: 52px; */
   line-height: 37px;
 }
 .swiper-pagination {

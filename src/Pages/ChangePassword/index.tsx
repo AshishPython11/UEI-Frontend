@@ -35,7 +35,8 @@ import {
 } from "../../assets";
 import "swiper/css";
 import "swiper/css/pagination";
-import "../../assets/css/main.min.css";
+// import "../../assets/css/main.min.css";
+import "../../assets/css/main.scss";
 import "react-toastify/dist/ReactToastify.css";
 import { QUERY_KEYS } from "../../utils/const";
 interface changepasswordform {

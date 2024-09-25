@@ -1,6 +1,6 @@
 // primary btn
-$btn_primary_color: #3980c0;
-$btn_primary_hover_color: rgba(201, 146, 174, 0.1);
+$btn_primary_color: #9943EC;
+$btn_primary_hover_color: #8239c9;
 
 // secondary btn
 $btn_secondary_color: rgba(201, 146, 174, 0.1);
@@ -121,7 +121,7 @@ $btn-link_hover_color: $bodyhovercolor;
   &:hover{
     background-color: $btn_primary_hover_color;
     border: 1px solid $btn_secondary_color;
-    color: $btn_primary_color;
+    color: $white_color;
   }
 }
 

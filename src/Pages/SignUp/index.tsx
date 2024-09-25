@@ -30,7 +30,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { QUERY_KEYS } from "../../utils/const";
 import FullScreenLoader from "../Loader/FullScreenLoader";
 import registerHero from "../../assets/img/register-hero.png";
-import "../../assets/css/main.min.css";
+// import "../../assets/css/main.min.css";
+import "../../assets/css/main.scss";
 
 interface State extends SnackbarOrigin {
   open: boolean;

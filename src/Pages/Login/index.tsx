@@ -36,7 +36,8 @@ import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "react-toastify/dist/ReactToastify.css";
-import "../../assets/css/main.min.css";
+// import "../../assets/css/main.min.css";
+import "../../assets/css/main.scss";
 
 const Login = () => {
   const navigate = useNavigate();

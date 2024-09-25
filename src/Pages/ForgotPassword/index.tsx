@@ -18,7 +18,8 @@ import {
 } from "../../assets";
 import "swiper/css";
 import "swiper/css/pagination";
-import "../../assets/css/main.min.css";
+// import "../../assets/css/main.min.css";
+import "../../assets/css/main.scss";
 import FullScreenLoader from "../Loader/FullScreenLoader";
 
 const Forgotpassword = () => {
