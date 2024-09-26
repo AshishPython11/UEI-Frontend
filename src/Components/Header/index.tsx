@@ -216,6 +216,7 @@ const Header = () => {
 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   useEffect(() => {
+    // document.querySelector("body")?.classList.add("toggled")
     const theme = localStorage.getItem("theme");
     if (theme) {
       // localStorage.getItem('--bodybackground');

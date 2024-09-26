@@ -29,12 +29,6 @@ import MicOutlinedIcon from "@mui/icons-material/MicOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
-import ContactlessOutlinedIcon from "@mui/icons-material/ContactlessOutlined";
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import ContrastOutlinedIcon from "@mui/icons-material/ContrastOutlined";
-import BorderStyleOutlinedIcon from "@mui/icons-material/BorderStyleOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { toast } from "react-toastify";
@@ -48,6 +42,7 @@ import NameContext from "../../Pages/Context/NameContext";
 import Teacher from "../../Pages/Uploadpdf/Uploadpdf";
 import { ProfileDialog } from "../Dailog/ProfileComplation";
 import "../../../node_modules/react-perfect-scrollbar/dist/css/styles.css";
+import ThemeSidebar from "../ThemeSidebar/ThemeSidebar";
 // import "../react-perfect-scrollbar/dist/css/styles.css";
 
 function MainContent() {
@@ -503,7 +498,7 @@ function MainContent() {
                           .replace("_", " ")
                           .charAt(0)
                           .toUpperCase() +
-                          response.data.class_name.replace("_", " ").slice(1)
+                        response.data.class_name.replace("_", " ").slice(1)
                       )
                   );
                 }
@@ -524,7 +519,7 @@ function MainContent() {
                           .replace("_", " ")
                           .charAt(0)
                           .toUpperCase() +
-                          response.data.course_name.replace("_", " ").slice(1)
+                        response.data.course_name.replace("_", " ").slice(1)
                       )
                   );
                 }
@@ -678,7 +673,7 @@ function MainContent() {
                   .then((imgdata: any) => {
                     // setprofileImage(imgdata?.data)
                   })
-                  .catch((e) => {});
+                  .catch((e) => { });
               }
 
               let totalcount = Object.keys(basic_info)?.length;
@@ -874,11 +869,6 @@ function MainContent() {
 
     // fetchstucount();
   }, []);
-
-  const onThemeChange = (e: any) => {
-    setThemeMode(e.target.value);
-    document?.documentElement?.setAttribute("data-bs-theme", e.target.value);
-  };
 
   const pieData = [
     { id: 0, value: stats.entityCount, label: "Entity" },
@@ -1320,7 +1310,7 @@ function MainContent() {
                               {profileDatas?.subject_preference
                                 ?.score_in_percentage
                                 ? profileDatas?.subject_preference
-                                    ?.score_in_percentage
+                                  ?.score_in_percentage
                                 : ""}
                             </p>
                           </div>
@@ -1733,134 +1723,7 @@ function MainContent() {
               </div>
             </div>
           </main>
-          <div
-            className="offcanvas offcanvas-end"
-            data-bs-scroll="true"
-            tabIndex={-1}
-            id="staticBackdrop"
-          >
-            <div className="offcanvas-header border-bottom h-70">
-              <div className="">
-                <h5 className="mb-0">Theme Customizer</h5>
-                <p className="mb-0">Customize your theme</p>
-              </div>
-              <a
-                href="#"
-                className="primaery-menu-close"
-                data-bs-dismiss="offcanvas"
-              >
-                <CloseOutlinedIcon />
-              </a>
-            </div>
-            <div className="offcanvas-body">
-              <div>
-                <p>Theme variation</p>
-
-                <div className="row g-3">
-                  <div className="col-12 col-xl-6">
-                    <input
-                      type="radio"
-                      value={"blue-theme"}
-                      className="btn-check"
-                      name="theme-options"
-                      id="BlueTheme"
-                      checked={themeMode === "blue-theme"}
-                      onChange={(e) => onThemeChange(e)}
-                    />
-                    <label
-                      className="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
-                      htmlFor="BlueTheme"
-                    >
-                      <span>
-                        <ContactlessOutlinedIcon />
-                      </span>
-                      <span>Blue</span>
-                    </label>
-                  </div>
-                  <div className="col-12 col-xl-6">
-                    <input
-                      type="radio"
-                      value={"light"}
-                      className="btn-check"
-                      name="theme-options"
-                      id="LightTheme"
-                      checked={themeMode === "light"}
-                      onChange={(e) => onThemeChange(e)}
-                    />
-                    <label
-                      className="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
-                      htmlFor="LightTheme"
-                    >
-                      <span>
-                        <LightModeOutlinedIcon />
-                      </span>
-                      <span>Light</span>
-                    </label>
-                  </div>
-                  <div className="col-12 col-xl-6">
-                    <input
-                      type="radio"
-                      value={"dark"}
-                      className="btn-check"
-                      name="theme-options"
-                      id="DarkTheme"
-                      checked={themeMode === "dark"}
-                      onChange={(e) => onThemeChange(e)}
-                    />
-                    <label
-                      className="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
-                      htmlFor="DarkTheme"
-                    >
-                      <span>
-                        <DarkModeOutlinedIcon />
-                      </span>
-                      <span>Dark</span>
-                    </label>
-                  </div>
-                  <div className="col-12 col-xl-6">
-                    <input
-                      type="radio"
-                      value={"semi-dark"}
-                      className="btn-check"
-                      name="theme-options"
-                      id="SemiDarkTheme"
-                      checked={themeMode === "semi-dark"}
-                      onChange={(e) => onThemeChange(e)}
-                    />
-                    <label
-                      className="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
-                      htmlFor="SemiDarkTheme"
-                    >
-                      <span>
-                        <ContrastOutlinedIcon />
-                      </span>
-                      <span>Semi Dark</span>
-                    </label>
-                  </div>
-                  <div className="col-12 col-xl-6">
-                    <input
-                      type="radio"
-                      value={"bordered-theme"}
-                      className="btn-check"
-                      name="theme-options"
-                      id="BoderedTheme"
-                      checked={themeMode === "bordered-theme"}
-                      onChange={(e) => onThemeChange(e)}
-                    />
-                    <label
-                      className="btn btn-outline-secondary d-flex flex-column gap-1 align-items-center justify-content-center p-4"
-                      htmlFor="BoderedTheme"
-                    >
-                      <span>
-                        <BorderStyleOutlinedIcon />
-                      </span>
-                      <span>Bordered</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ThemeSidebar themeMode={themeMode} setThemeMode={setThemeMode} />
         </>
       ) : (
         // :

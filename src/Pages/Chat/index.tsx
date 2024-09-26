@@ -24,6 +24,7 @@ import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
+import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
 import CachedOutlinedIcon from "@mui/icons-material/CachedOutlined";
 import SyncAltOutlinedIcon from '@mui/icons-material/SyncAltOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
@@ -101,6 +102,7 @@ const Chat = () => {
   const [isChatHistoryOpen, setIsChatHistoryOpen] = useState(false);
   const [showInitialPage, setShowInitialPage] = useState(true);
   const [loaderMsg, setLoaderMsg] = useState("");
+  const [isTextCopied, setIsTextCopied] = useState<any>({});
   let synth: SpeechSynthesis;
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   let selectedvoice: SpeechSynthesisVoice | null = null;
@@ -132,6 +134,10 @@ const Chat = () => {
       }
     }, 500);
   }, [Id]);
+
+  useEffect(() => {
+    console.log("Selected Chat", selectedchat);
+  }, [selectedchat])
 
   const callAPI = async () => {
     getData(`${StudentGETURL}${userdata ? `/${userdata?.id}` : ""}`)
@@ -1018,6 +1024,26 @@ const Chat = () => {
     return formattedTime;
   }
 
+  const copyText = (index: number) => {
+    console.log("Text Copied");
+
+    // Get the text content of the div with the specific inline styles
+    const textToCopy = (document.getElementById(`answer-${index}`) as HTMLDivElement)?.innerText;
+
+    // Use the Clipboard API to copy the text
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        const updatedState = {
+          ...isTextCopied,
+          [`answer-${index}`]: true
+        }
+        setIsTextCopied(updatedState)
+      })
+      .catch((err) => {
+        console.error('Error copying text: ', err);
+      });
+  };
+
   return (
     <>
       {loading && <FullScreenLoader msg={loaderMsg} />}
@@ -1438,7 +1464,7 @@ const Chat = () => {
       </div> */}
       <main className="main-wrapper">
         <div className="main-content">
-          <div className={`chat-panel ${showInitialPage? 'new-chat' : ''}`}>
+          <div className={`chat-panel ${showInitialPage ? 'new-chat' : ''}`}>
             <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
               <div className="d-lg-none mb-4 ms-auto d-flex">
                 <button className="new-btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
@@ -1588,14 +1614,17 @@ const Chat = () => {
                                 <strong>Raphael</strong>
                                 <p>Known for his graceful and harmonious style, Raphael's works include "The
                                   School of Athens" and numerous Madonna and Child paintings.</p> */}
-                                    <p><Chatbot answer={chat?.answer} /></p>
+                                    <p><Chatbot answer={chat?.answer} index={index} /></p>
                                   </div>
                                   <ul className="ansfooter">
                                     <li><ThumbUpAltOutlinedIcon sx={{ fontSize: '14px' }} /></li>
                                     <li><ThumbDownOutlinedIcon sx={{ fontSize: '14px' }} /></li>
-                                    <li><ContentCopyOutlinedIcon sx={{ fontSize: '14px' }} /><span>Copy</span>
+                                    <li onClick={() => copyText(index)}><ContentCopyOutlinedIcon sx={{ fontSize: '14px' }} /><span>{isTextCopied[`answer-${index}`] ? "Copied" : "Copy"}</span>
                                     </li>
-                                    <li><VolumeUpOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Read</span></li>
+                                    {!chat?.speak ? <li onClick={() =>
+                                      speak(chat && chat?.answer, index)
+                                    }><VolumeUpOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Read</span>
+                                    </li> : <li onClick={() => stop(index)} ><VolumeOffOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Stop</span></li>}
                                     <li><CachedOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Regenerate</span>
                                     </li>
                                   </ul>
@@ -1630,7 +1659,7 @@ const Chat = () => {
                     onChange={(e) => setSearch(e?.target?.value)}
                     onKeyDown={handleKeyDown}
                   />
-                  <button type="button" onClick={() => searchData()} className="btn btn-primary p-0"><ArrowUpwardOutlinedIcon /></button>
+                  <button type="button" onClick={() => searchData()} className="new-btn btn-primary p-0"><ArrowUpwardOutlinedIcon /></button>
                 </div>
                 {searcherr === true && (
                   <small className="text-danger">
