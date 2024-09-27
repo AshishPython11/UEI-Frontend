@@ -68,9 +68,12 @@ import AddStudentFeedback from './Pages/StudentFeedback/AddStudentFeedback';
 import Class from './Pages/Class/Class';
 import AddEditClass from './Pages/Class/AddEditClass';
 import PDFList from './Pages/PDFList/PDFList';
-import "./assets/css/main.min.css";
-import "./assets/css/newstyle.min.css";
 
+
+// import "./assets/css/main.min.css";
+// import "./assets/css/newstyle.min.css";
+// import "./assets/css/main.min.css";
+// import "./assets/css/newstyle.min.css";
 // import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 function App() {

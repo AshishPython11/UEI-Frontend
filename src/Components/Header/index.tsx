@@ -45,8 +45,8 @@ import LaptopOutlinedIcon from "@mui/icons-material/LaptopOutlined";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { CircularProgress, Switch } from "@mui/material";
 import ThemeModel from "../../assets/css/themes/ThemeModel";
-import "../../assets/css/newstyle.min.css";
-import "../../assets/css/main.min.css";
+// import "../../assets/css/newstyle.min.css";
+// import "../../assets/css/main.min.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
 // import { Button } from '@mui/material';
 
@@ -216,6 +216,22 @@ const Header = () => {
 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   useEffect(() => {
+
+
+
+function toggleOnDesktop() {
+  if (window.innerWidth >= 1024) {
+      document.querySelector("body")?.classList.add("toggled");
+  } else {
+      document.querySelector("body")?.classList.remove("toggled");
+  }
+}
+
+// Run the function on load and on resize
+toggleOnDesktop();
+window.addEventListener("resize", toggleOnDesktop);
+
+
     const theme = localStorage.getItem("theme");
     if (theme) {
       // localStorage.getItem('--bodybackground');
@@ -569,7 +585,7 @@ const Header = () => {
               </a>
             </li>
             <li className="nav-item d-none d-lg-flex">
-              <button className="new-btn btn-primary rounded-pill px-lg-4">
+              <button className="btn btn-primary rounded-pill px-lg-4">
                 New Chat
               </button>
             </li>

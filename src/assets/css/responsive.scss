@@ -152,16 +152,16 @@
 		white-space: nowrap;
 	}
 	.sidebar-wrapper {
-		left: -260px;
+		left: -260px!important;
 		.sidebar-header {
 			.sidebar-close {
-				display: flex;
+				display: flex!important;
 			}
 		}
 	}
 	.top-header {
 		.navbar {
-			left: 0;
+			left: 0!important;
 		}
 	}
 	.page-content {
@@ -170,7 +170,7 @@
 	.toggled {
 		.sidebar-wrapper {
 			width: 260px;
-			left: 0px;
+			left: 0px!important;
 			.sidebar-header {
 				width: 260px;
 			}
@@ -183,14 +183,14 @@
 		}
 		.top-header {
 			.navbar {
-				left: 0px;
+				left: 0px!important;
 			}
 		}
 		.page-footer {
-			left: 0px;
+			left: 0px!important;
 		}
 		.main-wrapper {
-			margin-left: 0;
+			margin-left: 0!important;
 		}
 		.overlay {
 			position: fixed;
@@ -218,7 +218,7 @@
 
     .top-header { 
       .navbar {
-        left: 0;
+        left: 0!important;
         .dropdown {
             position: static;
             .dropdown-menu {
@@ -239,14 +239,17 @@
     }
 
     .main-wrapper {
-      margin-left: 0;
+      margin-left: 0!important;
     }
 
     /*page footer*/
 
     .page-footer {
     
-        left: 0px;
+        left: 0px!important;
+		text-align: center;
+		padding: .5rem;
+		height: auto!important;
     }
 
     /*mini sidebar*/

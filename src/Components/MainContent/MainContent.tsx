@@ -36,6 +36,7 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import ContrastOutlinedIcon from "@mui/icons-material/ContrastOutlined";
 import BorderStyleOutlinedIcon from "@mui/icons-material/BorderStyleOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { toast } from "react-toastify";
 import logo from "../../assets/img/g-logo-white.svg";
@@ -399,7 +400,6 @@ function MainContent() {
     if (usertype === "student") {
       getData(`${profileURL}/${StudentId}`)
         .then((data: any) => {
-
           if (data.data) {
             setProfileDatas(data?.data);
             //   let basic_info = data.data.basic_info;
@@ -1126,7 +1126,7 @@ function MainContent() {
           </main> */}
           <main className="main-wrapper">
             <div className="main-content">
-              <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+              {/* <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
                 <div className="breadcrumb-title pe-3">Dashboard</div>
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
@@ -1149,7 +1149,7 @@ function MainContent() {
                   <div className="btn-group">
                     <button
                       type="button"
-                      className="new-btn btn-outline-primary rounded-pill px-lg-4"
+                      className="btn btn-outline-primary rounded-pill px-lg-4"
                       data-bs-toggle="offcanvas"
                       data-bs-target="#staticBackdrop"
                     >
@@ -1157,15 +1157,15 @@ function MainContent() {
                     </button>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
-              <div className="row">
+              <div className="row mt-lg-5">
                 <div className="col-xxl-3 col-xl-6 d-flex align-items-stretch">
-                  <div className="card w-100 overflow-hidden rounded-4">
-                    <div className="card-header">
+                  <div className="card w-100 overflow-hidden rounded-4 shadow-none desk-card">
+                    <div className="card-header bg-primary-20 border-bottom-0">
                       <div className="row">
                         <div className="col-12">
-                          <div className="d-flex align-items-center gap-3 py-2">
+                          <div className="d-flex align-items-center gap-lg-3 gap-2 mobile-profile">
                             <img
                               src={personImage}
                               className="rounded-circle bg-grd-info p-1"
@@ -1174,16 +1174,30 @@ function MainContent() {
                               alt="user"
                             />
                             <div className="w-100">
-                              <p className="mb-0 fw-semibold">Welcome back</p>
-                              <h4 className="fw-semibold mb-0 fs-4 mb-0">
-                                {profileDatas?.basic_info?.first_name
-                                  ? `${profileDatas?.basic_info?.first_name}`
-                                  : ""}
-                              </h4>
-                              <small className="mb-3 d-block">
-                                {studentClass || studentCourse}
-                              </small>
-                              <div className="">
+                              <div className="d-flex justify-content-between align-items-start">
+                                <div className="">
+                                  <h4 className="fw-semibold mb-0 fs-4 mb-0">
+                                    {profileDatas?.basic_info?.first_name
+                                      ? `${profileDatas?.basic_info?.first_name}`
+                                      : ""}
+                                  </h4>
+                                  <small className="mb-lg-3 mb-1 d-block">
+                                    {studentClass || studentCourse}
+                                  </small>
+                                </div>
+                                <a href="" className="text-dark link-underline">
+                                  Edit Profile
+                                </a>
+                              </div>
+
+                              <div className="d-flex justify-content-between gap-2 flex-wrap flex-lg-nowrap">
+                                <i>Student Standard Account</i>
+                                <button className="btn btn-primary rounded-pill btn-sm  text-nowrap px-lg-4">
+                                  Upgrade <KeyboardArrowRightIcon />
+                                </button>
+                              </div>
+
+                              {/* <div className="">
                                 <div
                                   className="progress mb-0"
                                   style={{ height: "5px" }}
@@ -1199,7 +1213,7 @@ function MainContent() {
                                     aria-valuemax={100}
                                   ></div>
                                 </div>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </div>
@@ -1208,7 +1222,7 @@ function MainContent() {
                     <div className="card-body position-relative p-4">
                       <div className="d-flex align-items-center justify-content-between gap-2 mb-3">
                         <div>
-                          <h6 className="mb-0 fw-normal">Status</h6>
+                          <h6 className="mb-0 fw-normal fs-14">Status</h6>
                         </div>
 
                         <div className="form-check form-switch mb-0 ">
@@ -1223,7 +1237,7 @@ function MainContent() {
 
                       <div className="d-flex align-items-center gap-3 mb-3">
                         <div className="flex-grow-1">
-                          <h6 className="mb-0 fw-normal">Chat History</h6>
+                          <h6 className="mb-0 fw-normal fs-14">Chat History</h6>
                         </div>
                         <div style={{ color: `#9943EC` }}>
                           {student?.chatCount}
@@ -1232,7 +1246,7 @@ function MainContent() {
 
                       <div className="d-flex align-items-center gap-3 mb-3">
                         <div className="flex-grow-1">
-                          <h6 className="mb-0 fw-normal">Saved Chat</h6>
+                          <h6 className="mb-0 fw-normal fs-14">Saved Chat</h6>
                         </div>
                         <div style={{ color: `#9943EC` }}>
                           {student?.chatHistory}
@@ -1241,7 +1255,9 @@ function MainContent() {
 
                       <div className="d-flex align-items-center gap-3 mb-3">
                         <div className="flex-grow-1">
-                          <h6 className="mb-0 fw-normal">Profile Completed</h6>
+                          <h6 className="mb-0 fw-normal fs-14">
+                            Profile Completed
+                          </h6>
                         </div>
                         <div
                           style={{ color: `#9943EC` }}
@@ -1250,60 +1266,44 @@ function MainContent() {
 
                       <div className="d-flex align-items-center gap-3 mb-3">
                         <div className="flex-grow-1">
-                          <h6 className="mb-0 fw-normal">Adhar KYC</h6>
+                          <h6 className="mb-0 fw-normal fs-14">Adhar KYC</h6>
                         </div>
                         <div style={{ color: `#9943EC` }}>Pending</div>
                       </div>
 
-                      <div className="d-flex align-items-center gap-3">
+                      {/* <div className="d-flex align-items-center gap-3">
                         <div className="flex-grow-1">
                           <h6 className="mb-0 fw-normal">
                             Student Standard Account
                           </h6>
                         </div>
                         <div style={{ color: `#9943EC` }}>Upgrade</div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
-                <div className="col-xxl-3 col-xl-6 d-flex align-items-stretch">
-                  <div className="card w-100 rounded-4">
+                <div className="col-xxl-3 col-xl-6 d-flex align-items-stretch ">
+                  <div className="card w-100 rounded-4 shadow-none desk-card">
                     <div className="card-body">
-                      <div className="d-flex align-items-start justify-content-between mb-3">
+                      <div className="d-flex align-items-start justify-content-between mb-3 gap-4">
                         <div className="">
-                          <h5 className="mb-0 fw-semibold fs-6">
+                          <h5 className="mb-2 fw-semibold fs-6">
                             Your Preferred Subject
                           </h5>
+                          <small className="fs-12">
+                            Learning journey with our comprehensive lesson
+                            exercise courses,{" "}
+                          </small>
                         </div>
-                        <div className="dropdown">
-                          <a
-                            href="#"
-                            className="dropdown-toggle-nocaret options dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                          >
-                            <MoreVertOutlinedIcon />
-                          </a>
-                          <ul className="dropdown-menu">
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Another action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Something else here
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
+                        <a
+                          href=""
+                          className="fw-semibold text-nowrap text-dark"
+                        >
+                          See All
+                        </a>
                       </div>
                       <div className="d-flex flex-column justify-content-between gap-4">
-                        <div className="d-flex align-items-center gap-4">
+                        <div className="d-flex align-items-center gap-4  show-seprate">
                           <a
                             href="#"
                             className="d-flex gap-0 flex-grow-1 flex-column text-start nav-link"
@@ -1386,8 +1386,8 @@ function MainContent() {
                   </div>
                 </div>
                 <div className="col-xxl-6 d-flex align-items-stretch mb-xl-4">
-                  <div className="chat-wrapper desk-chat-wrapper rounded-4">
-                    <div className="chat-header d-flex align-items-center start-0 rounded-top-4">
+                  <div className="chat-wrapper desk-chat-wrapper  shadow-none rounded-5">
+                    <div className="chat-header d-flex align-items-center start-0 rounded-top-5">
                       <div>
                         <img src={robotImage} className="chatroboimg" alt="" />
                       </div>
@@ -1401,7 +1401,7 @@ function MainContent() {
                       </div>
                     </div>
                     {/* <div className="chat-content ms-0 rounded-top-4"> */}
-                    <PerfectScrollbar className="chat-content ms-0 rounded-top-4">
+                    <PerfectScrollbar className="chat-content ms-0 rounded-top-5">
                       <div className="chat-content-rightside">
                         <div className="d-flex ms-auto">
                           <div className="flex-grow-1 me-2">
@@ -1497,15 +1497,15 @@ function MainContent() {
                       </div>
                       {/* </div> */}
                     </PerfectScrollbar>
-                    <div className="chat-footer d-flex align-items-center start-0 rounded-bottom-4">
+                    <div className="chat-footer d-flex align-items-center start-0 rounded-bottom-5 bg-white border-0 ">
                       <div className="flex-grow-1 pe-2">
                         <div className="input-group">
-                          <span className="input-group-text">
+                          {/* <span className="input-group-text">
                             <MicOutlinedIcon />
-                          </span>
+                          </span> */}
                           <input
                             type="text"
-                            className="form-control"
+                            className="form-control rounded-pill"
                             placeholder="Type a message"
                           />
                         </div>
@@ -1524,151 +1524,155 @@ function MainContent() {
                 </div>
 
                 <div className="col-xl-6 d-flex align-items-stretch">
-                  <div className="card w-100 rounded-4 mt-lg-0 mt-4">
-                    <div className="card-body">
-                      <div className="text-center">
-                        <h6 className="mb-0">Study Chart</h6>
-                      </div>
-                      <div className="mt-4">
-                        <Chart
-                          options={barChartOptions}
-                          series={barChartSeries}
-                          type="bar"
-                          height={"280px"}
-                        />
-                      </div>
-                      <p>Your Total Time Spend & Study Chart</p>
-                      <div className="d-flex align-items-center gap-3 mt-4">
-                        <div className="">
-                          <h1 className="mb-0 text-primary">79h 2m </h1>
-                          <small>time spend</small>
+                  <div className="row mt-4 mt-lg-0">
+                    <div className="col-lg-12 d-flex align-items-stretch">
+                      <div className="card w-100 rounded-4 desk-card ">
+                        <div className="card-body">
+                          <div className="text-center">
+                            <h6 className="mb-0">Study Chart</h6>
+                          </div>
+                          <div className="mt-4">
+                            <Chart
+                              options={barChartOptions}
+                              series={barChartSeries}
+                              type="bar"
+                              height={"280px"}
+                            />
+                          </div>
+                          <p>Your Total Time Spend & Study Chart</p>
+                          <div className="d-flex align-items-center gap-3 mt-4">
+                            <div className="">
+                              <h1 className="mb-0 text-primary">79h 2m </h1>
+                              <small>time spend</small>
+                            </div>
+                            <div className="d-flex align-items-center align-self-end">
+                              <p className="mb-0 text-success">34.5%</p>
+                              <span className="text-success">
+                                <ExpandLessOutlinedIcon />
+                              </span>
+                            </div>
+                          </div>
                         </div>
-                        <div className="d-flex align-items-center align-self-end">
-                          <p className="mb-0 text-success">34.5%</p>
-                          <span className="text-success">
-                            <ExpandLessOutlinedIcon />
-                          </span>
+                      </div>
+                    </div>
+                    <div className="col-lg-6 d-flex align-items-stretch">
+                      <div className="card w-100 rounded-4 desk-card">
+                        <div className="card-body">
+                          <div className="d-flex align-items-start justify-content-between mb-1">
+                            <div className="">
+                              <h5 className="mb-0">20</h5>
+                              <p className="mb-0">Topics Attended</p>
+                            </div>
+                            <div className="dropdown">
+                              <a
+                                href="#"
+                                className="dropdown-toggle-nocaret options dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                              >
+                                {" "}
+                                <span className="fs-5">
+                                  <MoreVertOutlinedIcon />
+                                </span>
+                              </a>
+                              <ul className="dropdown-menu">
+                                <li>
+                                  <a className="dropdown-item" href="#">
+                                    Action
+                                  </a>
+                                </li>
+                                <li>
+                                  <a className="dropdown-item" href="#">
+                                    Another action
+                                  </a>
+                                </li>
+                                <li>
+                                  <a className="dropdown-item" href="#">
+                                    Something else here
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="chart-container2">
+                            <Chart
+                              options={radialChartOptions}
+                              series={[78]}
+                              type="radialBar"
+                              height={"200px"}
+                            />
+                          </div>
+                          <div className="text-center">
+                            <p className="mb-0 font-12">
+                              You have attended 20 of 30 classes
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-lg-6 d-flex align-items-stretch">
+                      <div className="card w-100 rounded-4 desk-card">
+                        <div className="card-body">
+                          <div className="d-flex align-items-start justify-content-between mb-3">
+                            <div className="">
+                              <h5 className="mb-0">12</h5>
+                              <p className="mb-0">Assignment</p>
+                            </div>
+                            <div className="dropdown">
+                              <a
+                                href="#"
+                                className="dropdown-toggle-nocaret options dropdown-toggle"
+                                data-bs-toggle="dropdown"
+                              >
+                                <span className="fs-5">
+                                  <MoreVertOutlinedIcon />
+                                </span>
+                              </a>
+                              <ul className="dropdown-menu">
+                                <li>
+                                  <a className="dropdown-item" href="#">
+                                    Action
+                                  </a>
+                                </li>
+                                <li>
+                                  <a className="dropdown-item" href="#">
+                                    Another action
+                                  </a>
+                                </li>
+                                <li>
+                                  <a className="dropdown-item" href="#">
+                                    Something else here
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="chart-container2">
+                            <Chart
+                              options={lineChartOptions}
+                              series={[
+                                {
+                                  data: [4, 10, 25, 12, 25, 18, 40, 22, 7],
+                                },
+                              ]}
+                              type="area"
+                              height={"100%"}
+                            />
+                          </div>
+                          <div className="text-center">
+                            <p className="mb-0 font-12">
+                              {" "}
+                              You have done{" "}
+                              <span className="text-success me-1">12</span>
+                              assignments out of 67
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-6 col-xxl-2 d-flex align-items-stretch">
-                  <div className="card w-100 rounded-4">
-                    <div className="card-body">
-                      <div className="d-flex align-items-start justify-content-between mb-1">
-                        <div className="">
-                          <h5 className="mb-0">20</h5>
-                          <p className="mb-0">Topics Attended</p>
-                        </div>
-                        <div className="dropdown">
-                          <a
-                            href="#"
-                            className="dropdown-toggle-nocaret options dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                          >
-                            {" "}
-                            <span className="fs-5">
-                              <MoreVertOutlinedIcon />
-                            </span>
-                          </a>
-                          <ul className="dropdown-menu">
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Another action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Something else here
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="chart-container2">
-                        <Chart
-                          options={radialChartOptions}
-                          series={[78]}
-                          type="radialBar"
-                          height={"200px"}
-                        />
-                      </div>
-                      <div className="text-center">
-                        <p className="mb-0 font-12">
-                          You have attended 20 of 30 classes
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-6 col-xxl-2 d-flex align-items-stretch">
-                  <div className="card w-100 rounded-4">
-                    <div className="card-body">
-                      <div className="d-flex align-items-start justify-content-between mb-3">
-                        <div className="">
-                          <h5 className="mb-0">12</h5>
-                          <p className="mb-0">Assignment</p>
-                        </div>
-                        <div className="dropdown">
-                          <a
-                            href="#"
-                            className="dropdown-toggle-nocaret options dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                          >
-                            <span className="fs-5">
-                              <MoreVertOutlinedIcon />
-                            </span>
-                          </a>
-                          <ul className="dropdown-menu">
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Another action
-                              </a>
-                            </li>
-                            <li>
-                              <a className="dropdown-item" href="#">
-                                Something else here
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                      <div className="chart-container2">
-                        <Chart
-                          options={lineChartOptions}
-                          series={[
-                            {
-                              data: [4, 10, 25, 12, 25, 18, 40, 22, 7],
-                            },
-                          ]}
-                          type="area"
-                          height={"100%"}
-                        />
-                      </div>
-                      <div className="text-center">
-                        <p className="mb-0 font-12">
-                          {" "}
-                          You have done{" "}
-                          <span className="text-success me-1">12</span>
-                          assignments out of 67
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="col-xl-6 col-xxl-4 d-flex align-items-stretch">
-                  <div className="card w-100 rounded-4">
+                <div className="col-xl-6  d-flex align-items-stretch">
+                  <div className="card w-100 rounded-4 desk-card">
                     <div className="card-body">
                       <Chart
                         options={secondLineChartOptions}

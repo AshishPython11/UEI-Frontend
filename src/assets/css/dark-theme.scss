@@ -12,8 +12,23 @@
   input::placeholder {
     color: #fff !important;
   }
-
-  .bg-light {
+.bg-primary-20{
+  background-color:  #32363b !important;
+}
+.show-seprate{
+  border: 1px solid #878d96!important;
+}
+.link-underline, .text-dark{
+  color: #dee2e6!important;
+  &::after{
+    background-color: #939aa0!important;
+  }
+}
+.btn-outline-light{
+  background-color: #212529!important;
+  color: #d5d5d5!important;
+}
+  .bg-light, .chat-header, .chat-footer {
     background-color: #32363b !important;
   }
 

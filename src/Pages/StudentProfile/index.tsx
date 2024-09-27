@@ -26,8 +26,8 @@ import {
   inputfieldtext,
 } from "../../utils/helpers";
 import AcademicHistory from "../AcademicHistory/AcademicHistory";
-import "../../assets/css/main.min.css";
-import "../../assets/css/newstyle.min.css";
+// import "../../assets/css/main.min.css";
+// import "../../assets/css/newstyle.min.css";
 export interface ChildComponentProps {
   setActiveForm: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -496,7 +496,7 @@ const StudentProfile = () => {
         <div className="main-content">
           <div className="container mb-5">
             <div className="row align-items-center">
-              <div className="col-lg-6">
+              <div className="col-lg-6 px-0">
                 <h4 className="fs-1 fw-bold d-none d-xxl-block">
                   Complete Your{" "}
                   <span style={{ color: "#9943EC" }}> Account </span>
@@ -511,7 +511,7 @@ const StudentProfile = () => {
                   </small>
                 </h4>
               </div>
-              <div className="col-lg-6 d-none d-xxl-block">
+              <div className="col-lg-6 d-none d-xxl-block px-0">
                 <div className="wizard-content">
                   <p className="mb-0">
                     <span className="crntstep">{activeForm + 1}</span> of 6
@@ -523,178 +523,192 @@ const StudentProfile = () => {
                 </div>
               </div>
             </div>
-            <div
-              className="card rounded-5 mt-4 bg-transparent-mb"
-              style={{ border: "0" }}
-            >
-              <div className="card-body p-0">
-                <div className="row">
-                  <div className="col-xxl-12">
-                    <div className="myform-wizard">
-                      <div className="wizard-sidebar">
-                        <div className="steps-container">
-                          <div className="progress-background"></div>
-                          <div
-                            ref={progressLineRef}
-                            className="progress-line"
-                          ></div>
-                          <div
-                            ref={(el) => (stepsRef.current[0] = el!)}
-                            className={`step ${
-                              activeForm === 0 ? "active" : ""
-                            }`}
-                          >
-                            <div
-                              className={`step-circle ${
-                                activeForm >= 0 ? "filled" : ""
-                              }`}
-                            >
-                              <CheckOutlinedIcon />
-                            </div>
-                            <div className="step-label">Basic Information</div>
-                          </div>
-                          <div
-                            ref={(el) => (stepsRef.current[1] = el!)}
-                            className={`step ${
-                              activeForm === 1 ? "active" : ""
-                            }`}
-                          >
-                            <div
-                              className={`step-circle ${
-                                activeForm >= 1 ? "filled" : ""
-                              }`}
-                            >
-                              <CheckOutlinedIcon />
-                            </div>
-                            <div className="step-label">Address</div>
-                          </div>
-                          <div
-                            ref={(el) => (stepsRef.current[2] = el!)}
-                            className={`step ${
-                              activeForm === 2 ? "active" : ""
-                            }`}
-                          >
-                            <div
-                              className={`step-circle ${
-                                activeForm >= 2 ? "filled" : ""
-                              }`}
-                            >
-                              <CheckOutlinedIcon />
-                            </div>
-                            <div className="step-label">
-                              Hobbies / Language known
-                            </div>
-                          </div>
-                          <div
-                            ref={(el) => (stepsRef.current[3] = el!)}
-                            className={`step ${
-                              activeForm === 3 ? "active" : ""
-                            }`}
-                          >
-                            <div
-                              className={`step-circle ${
-                                activeForm >= 3 ? "filled" : ""
-                              }`}
-                            >
-                              <CheckOutlinedIcon />
-                            </div>
-                            <div className="step-label">Academic History</div>
-                          </div>
+            <div className="row">
+              <div className="col-lg-12 px-0">
+                <div
+                  className="card rounded-5 mt-4 bg-transparent-mb"
+                  style={{ border: "0" }}
+                >
+                  <div className="card-body p-0">
+                    <div className="row">
+                      <div className="col-xxl-12">
+                        <div className="myform-wizard">
+                          <div className="wizard-sidebar">
+                            <div className="steps-container">
+                              <div className="progress-background"></div>
+                              <div
+                                ref={progressLineRef}
+                                className="progress-line"
+                              ></div>
+                              <div
+                                ref={(el) => (stepsRef.current[0] = el!)}
+                                className={`step ${
+                                  activeForm === 0 ? "active" : ""
+                                }`}
+                              >
+                                <div
+                                  className={`step-circle ${
+                                    activeForm >= 0 ? "filled" : ""
+                                  }`}
+                                >
+                                  <CheckOutlinedIcon />
+                                </div>
+                                <div className="step-label">
+                                  Basic Information
+                                </div>
+                              </div>
+                              <div
+                                ref={(el) => (stepsRef.current[1] = el!)}
+                                className={`step ${
+                                  activeForm === 1 ? "active" : ""
+                                }`}
+                              >
+                                <div
+                                  className={`step-circle ${
+                                    activeForm >= 1 ? "filled" : ""
+                                  }`}
+                                >
+                                  <CheckOutlinedIcon />
+                                </div>
+                                <div className="step-label">Address</div>
+                              </div>
+                              <div
+                                ref={(el) => (stepsRef.current[2] = el!)}
+                                className={`step ${
+                                  activeForm === 2 ? "active" : ""
+                                }`}
+                              >
+                                <div
+                                  className={`step-circle ${
+                                    activeForm >= 2 ? "filled" : ""
+                                  }`}
+                                >
+                                  <CheckOutlinedIcon />
+                                </div>
+                                <div className="step-label">
+                                  Hobbies / Language known
+                                </div>
+                              </div>
+                              <div
+                                ref={(el) => (stepsRef.current[3] = el!)}
+                                className={`step ${
+                                  activeForm === 3 ? "active" : ""
+                                }`}
+                              >
+                                <div
+                                  className={`step-circle ${
+                                    activeForm >= 3 ? "filled" : ""
+                                  }`}
+                                >
+                                  <CheckOutlinedIcon />
+                                </div>
+                                <div className="step-label">
+                                  Academic History
+                                </div>
+                              </div>
 
-                          <div
-                            ref={(el) => (stepsRef.current[4] = el!)}
-                            className={`step ${
-                              activeForm === 4 ? "active" : ""
-                            }`}
-                          >
-                            <div
-                              className={`step-circle ${
-                                activeForm >= 4 ? "filled" : ""
-                              }`}
-                            >
-                              <CheckOutlinedIcon />
-                            </div>
-                            <div className="step-label">Contact Details</div>
-                          </div>
+                              <div
+                                ref={(el) => (stepsRef.current[4] = el!)}
+                                className={`step ${
+                                  activeForm === 4 ? "active" : ""
+                                }`}
+                              >
+                                <div
+                                  className={`step-circle ${
+                                    activeForm >= 4 ? "filled" : ""
+                                  }`}
+                                >
+                                  <CheckOutlinedIcon />
+                                </div>
+                                <div className="step-label">
+                                  Contact Details
+                                </div>
+                              </div>
 
-                          <div
-                            ref={(el) => (stepsRef.current[5] = el!)}
-                            className={`step ${
-                              activeForm === 5 ? "active" : ""
-                            }`}
-                          >
-                            <div
-                              className={`step-circle ${
-                                activeForm >= 5 ? "filled" : ""
-                              }`}
-                            >
-                              <CheckOutlinedIcon />
+                              <div
+                                ref={(el) => (stepsRef.current[5] = el!)}
+                                className={`step ${
+                                  activeForm === 5 ? "active" : ""
+                                }`}
+                              >
+                                <div
+                                  className={`step-circle ${
+                                    activeForm >= 5 ? "filled" : ""
+                                  }`}
+                                >
+                                  <CheckOutlinedIcon />
+                                </div>
+                                <div className="step-label">
+                                  Subject preference
+                                </div>
+                              </div>
                             </div>
-                            <div className="step-label">Subject preference</div>
+                          </div>
+                          <div className="wizard-content">
+                            <form id="wizard-form">
+                              <div
+                                className={`form-step ${
+                                  activeForm === 0 ? "active" : ""
+                                }`}
+                              >
+                                <StudentBasicInfo
+                                  setActiveForm={setActiveForm}
+                                />
+                              </div>
+                              <div
+                                className={`form-step ${
+                                  activeForm === 1 ? "active" : ""
+                                }`}
+                              >
+                                <StudentAddress setActiveForm={setActiveForm} />
+                              </div>
+                              <div
+                                className={`form-step ${
+                                  activeForm === 2 ? "active" : ""
+                                }`}
+                              >
+                                <StudentLanguageKnown
+                                  setActiveForm={setActiveForm}
+                                />
+                              </div>
+                              <div
+                                className={`form-step ${
+                                  activeForm === 3 ? "active" : ""
+                                }`}
+                              >
+                                <div>
+                                  <div>
+                                    <AcademicHistory
+                                      setActiveForm={setActiveForm}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <div
+                                className={`form-step ${
+                                  activeForm === 4 ? "active" : ""
+                                }`}
+                              >
+                                <StudentContactDetails
+                                  setActiveForm={setActiveForm}
+                                />
+                              </div>
+                              <div
+                                className={`form-step ${
+                                  activeForm === 5 ? "active" : ""
+                                }`}
+                              >
+                                <div>
+                                  <div>
+                                    <StudentSubjectPreference
+                                      setActiveForm={setActiveForm}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
                           </div>
                         </div>
-                      </div>
-                      <div className="wizard-content">
-                        <form id="wizard-form">
-                          <div
-                            className={`form-step ${
-                              activeForm === 0 ? "active" : ""
-                            }`}
-                          >
-                            <StudentBasicInfo setActiveForm={setActiveForm} />
-                          </div>
-                          <div
-                            className={`form-step ${
-                              activeForm === 1 ? "active" : ""
-                            }`}
-                          >
-                            <StudentAddress setActiveForm={setActiveForm} />
-                          </div>
-                          <div
-                            className={`form-step ${
-                              activeForm === 2 ? "active" : ""
-                            }`}
-                          >
-                            <StudentLanguageKnown
-                              setActiveForm={setActiveForm}
-                            />
-                          </div>
-                          <div
-                            className={`form-step ${
-                              activeForm === 3 ? "active" : ""
-                            }`}
-                          >
-                            <div>
-                              <div>
-                                <AcademicHistory
-                                  setActiveForm={setActiveForm}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div
-                            className={`form-step ${
-                              activeForm === 4 ? "active" : ""
-                            }`}
-                          >
-                            <StudentContactDetails
-                              setActiveForm={setActiveForm}
-                            />
-                          </div>
-                          <div
-                            className={`form-step ${
-                              activeForm === 5 ? "active" : ""
-                            }`}
-                          >
-                            <div>
-                              <div>
-                                <StudentSubjectPreference
-                                  setActiveForm={setActiveForm}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </form>
                       </div>
                     </div>
                   </div>

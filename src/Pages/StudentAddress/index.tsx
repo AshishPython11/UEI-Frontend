@@ -528,7 +528,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
   return (
     <form>
       <div className="row form_field_wrapper">
-        <div className="col-12 p-0">
+        <div className="col-12">
           <h5 className="font-weight-bold profiletext">
             {" "}
             <b>Current Address</b>
@@ -537,7 +537,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       </div>
       <div className="row">
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Address 1 <span>*</span>
           </label>
@@ -566,7 +566,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.address1 && <span style={{ color: 'red' }}>{error.address1}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label> Address 2</label>
+          <label className="col-form-label"> Address 2</label>
           {/* <TextField
             type="text"
             name="address2"
@@ -632,7 +632,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         <div className="col-6 pb-3 form_field_wrapper">
           {studentAddress.country && (
             <label
-              className={`floating-label ${
+              className={`col-form-label  ${
                 isFocusedstate || studentAddress.country
                   ? "focused"
                   : "focusedempty"
@@ -659,7 +659,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
           <label
-            className={`floating-label ${
+            className={`col-form-label ${
               isFocusedstate || studentAddress.state
                 ? "focused"
                 : "focusedempty"
@@ -687,7 +687,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           </div>
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             City <span>*</span>
           </label>
@@ -724,7 +724,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.city && <span style={{ color: 'red' }}>{error.city}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             District <span>*</span>
           </label>
@@ -761,7 +761,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.district && <span style={{ color: 'red' }}>{error.district}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Pincode <span>*</span>
           </label>
@@ -802,7 +802,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>} */}
         </div>
       </div>
-      <div className="row">
+      <div className="row mt-4">
         <div className="col-12 ">
           <h5 className="font-weight-bold profiletext">
             {" "}
@@ -825,7 +825,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           </FormControl>
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Address 1 <span></span>
           </label>
@@ -847,7 +847,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           />
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Address 2 <span></span>
           </label>
@@ -905,7 +905,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div> */}
         <div className="col-6 pb-3 form_field_wrapper" ref={dropdownRef}>
           <label
-            className={`floating-label ${
+            className={`col-form-label ${
               isFocused || permanentAddress.country ? "focused" : "focusedempty"
             }`}
             style={{ fontSize: "14px" }}
@@ -929,7 +929,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
         <div className="col-6 pb-3 form_field_wrapper" ref={dropdownstateRef}>
           <label
-            className={`floating-label ${
+            className={`col-form-label ${
               isFocusedstate || permanentAddress.state
                 ? "focused"
                 : "focusedempty"
@@ -957,7 +957,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           </div>
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             City <span></span>
           </label>
@@ -988,7 +988,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.city && <span style={{ color: 'red' }}>{error.city}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             District <span></span>
           </label>
@@ -1019,7 +1019,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.district && <span style={{ color: 'red' }}>{error.district}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Pincode <span></span>
           </label>
@@ -1057,7 +1057,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           <div className="mt-3 d-flex align-items-center justify-content-between">
             <button
               type="button"
-              className="new-btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
+              className="btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
               onClick={() => {
                 setActiveForm((prev) => prev - 1);
               }}
@@ -1066,7 +1066,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             </button>
             <button
               type="button"
-              className="new-btn btn-dark px-lg-5  ms-auto d-block rounded-pill next-btn px-4"
+              className="btn btn-dark px-lg-5  ms-auto d-block rounded-pill next-btn px-4"
               onClick={SubmitHandle}
             >
               Next
