@@ -509,14 +509,14 @@ const Sidebar = () => {
                       <div className="menu-title">Chat</div>
                     </Link>
                   </li>
-                  {/* <li>
-                <Link to="/main/DashBoard">
-                  <div className="parent-icon">
-                    <LocalLibraryOutlinedIcon />
-                  </div>
-                  <div className="menu-title">Chat History</div>
-                </Link>
-              </li> */}
+                  <li>
+                    <Link to="/main/Chat">
+                      <div className="parent-icon">
+                        <LocalLibraryOutlinedIcon />
+                      </div>
+                      <div className="menu-title">Chat History</div>
+                    </Link>
+                  </li>
                   <li>
                     <Link to="/main/student-feedback/add-student-feedback">
                       <div className="parent-icon">
@@ -526,14 +526,14 @@ const Sidebar = () => {
                     </Link>
                   </li>
                 </> : ''}
-                <li>
-                    <Link to="/main/faq">
-                      <div className="parent-icon">
-                        <LiveHelpOutlinedIcon />
-                      </div>
-                      <div className="menu-title">FAQs</div>
-                    </Link>
-                  </li>
+              <li>
+                <Link to="/main/faq">
+                  <div className="parent-icon">
+                    <LiveHelpOutlinedIcon />
+                  </div>
+                  <div className="menu-title">FAQs</div>
+                </Link>
+              </li>
               {/* </ul> */}
             </MetisMenu>
           </div>

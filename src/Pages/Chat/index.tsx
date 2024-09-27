@@ -17,6 +17,7 @@ import { DeleteDialog } from "../../Components/Dailog/DeleteDialog";
 import StarIcon from "@mui/icons-material/Star";
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -28,6 +29,9 @@ import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
 import CachedOutlinedIcon from "@mui/icons-material/CachedOutlined";
 import SyncAltOutlinedIcon from '@mui/icons-material/SyncAltOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
+import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
+import FlagIcon from '@mui/icons-material/Flag';
 import NameContext from "../Context/NameContext";
 import searchWhite from '../../assets/icons/search-white.svg'
 import primaryLogo from '../../assets/icons/logo-primary.png'
@@ -123,11 +127,13 @@ const Chat = () => {
     setSelectedChat([]);
     setTimeout(() => {
       if (Id !== undefined) {
+        setShowInitialPage(true)
         // setSelectedChat([intials]);
         setSelectedChat([]);
         setSearchQuery("");
         setSearchQuerystarred("");
       } else {
+        setShowInitialPage(false)
         setSelectedChat([]);
         setSearchQuery("");
         setSearchQuerystarred("");
@@ -234,6 +240,7 @@ const Chat = () => {
     if (Id === "recentChat") {
       filterdataCall();
     } else {
+      setShowInitialPage(false);
       setchathistory(chathistoryrecent);
     }
   }, [Id, chatlist]);
@@ -294,7 +301,7 @@ const Chat = () => {
       // let address  = studentDetail.address.address1 +","+studentDetail.address.address2 +","+studentDetail.address.district +","+studentDetail.address.city +","+studentDetail.address.state +","+studentDetail.address.country +","+studentDetail.address.pincode
       // let prompt = "Hi I am"+studentDetail.first_name+" "+ studentDetail.last_name + ".Currenly I am studying at "+ studentDetail.institution +" at "+address+ " in "+studentDetail.course+ " and persuing "+studentDetail.subject+" can you please provide "+search+" based on given course and subject"
       setLoading(true);
-      setLoaderMsg("Fetching data from Database.");
+      setLoaderMsg("Searching result from knowledge base.");
       setSearchErr(false);
       // newchat();
 
@@ -364,7 +371,7 @@ const Chat = () => {
     }
 
     setLoading(true);
-    setLoaderMsg("Fetching data from Database.");
+    setLoaderMsg("Searching result from knowledge base");
     setSearchErr(false);
 
     let prompt = studentDetail?.prompt?.replace("**question**", "answer");
@@ -480,7 +487,7 @@ const Chat = () => {
         } else if (data.status === 404) {
           // return postData(`${ChatURLAI}`, payload);
           // return postData(`${ChatURLRAG}`, rag_payload);
-          setLoaderMsg("Fetching data from PDF.");
+          setLoaderMsg("Searching result from knowledge base");
           // return getData(
           //   `http://13.232.96.204:5000/rag-model?user_query=${search}&student_id=${userid}`
           // );
@@ -697,7 +704,7 @@ const Chat = () => {
     if (chat.length > 0) {
       localStorage.setItem("chatData", JSON.stringify(chat));
       localStorage.setItem("chatsaved", JSON.stringify(chatsaved));
-      saveChatlocal();
+      chatsaved && saveChatlocal();
     }
   }, [chat, chatsaved]);
 
@@ -734,7 +741,7 @@ const Chat = () => {
     if (chatlist !== undefined) {
       datatest = chatlist?.filter(
         (chatitem: { chat_title: any }) =>
-          chatitem?.chat_title === chatData[0]?.question
+          chatitem?.chat_title === chatData?.[0]?.question
       );
     }
 
@@ -747,14 +754,14 @@ const Chat = () => {
       // chatData?.shift();
       chat_payload = {
         student_id: userdata.id,
-        chat_title: chatData[0]?.question,
+        chat_title: chatData?.[0]?.question,
         chat_conversation: JSON.stringify(chatData),
         flagged: isChatFlagged,
       };
     } else {
       chat_payload = {
         student_id: userdata.id,
-        chat_title: chatData[0]?.question,
+        chat_title: chatData?.[0]?.question,
         chat_conversation: JSON.stringify(chatData),
         flagged: isChatFlagged,
       };
@@ -762,7 +769,7 @@ const Chat = () => {
     // postData(`${chataddurl}`, chat_payload)
     await postData(`${chataddconversationurl}`, chat_payload)
       .then((chatdata: any) => {
-        setChatSaved(false);
+        // setChatSaved(false);
         // toast.success(chatdata?.message, {
         //   hideProgressBar: true,
         //   theme: "colored",
@@ -830,6 +837,10 @@ const Chat = () => {
   //   saveChat()
   // }, [])
 
+  useEffect(() => {
+    console.log("INITIAL PAGE", showInitialPage);
+  }, [showInitialPage])
+
   const checkifchatsaved = (ques: any) => {
     let chat = chatlist.filter();
   };
@@ -844,6 +855,7 @@ const Chat = () => {
   };
 
   const newchat = async () => {
+    setShowInitialPage(true);
     if (chat.length > 0) {
       await saveChat();
     }
@@ -957,7 +969,6 @@ const Chat = () => {
 
   const saveChatstar = () => {
     setChatSaved(!chatsaved);
-    // saveChatlocal();
   };
 
   const isSmallScreen = useMediaQuery("(max-width:600px)");
@@ -1002,11 +1013,16 @@ const Chat = () => {
   };
 
   // Filter chats based on search query, or show all if query is blank
+  // const filteredChatsstarred = searchQuery
+  //   ? statredchat?.filter((chat: { chat_title: string }) =>
+  //     chat?.chat_title.toLowerCase().includes(searchQuery?.toLowerCase())
+  //   )
+  //   : statredchat;
   const filteredChatsstarred = searchQuery
-    ? statredchat?.filter((chat: { chat_title: string }) =>
+    ? chatlist?.filter((chat: { chat_title: string }) =>
       chat?.chat_title.toLowerCase().includes(searchQuery?.toLowerCase())
-    )
-    : statredchat;
+    ).sort((a: any, b: any) => b.flagged - a.flagged)
+    : chatlist?.sort((a: any, b: any) => b.flagged - a.flagged);
   const filteredChats = searchQuerystarred
     ? chathistory?.filter((chat: { chat_title: string }) =>
       chat?.chat_title
@@ -1016,7 +1032,9 @@ const Chat = () => {
     : chathistory;
 
   const extractTime = (chatDate: string) => {
-    const date = new Date(chatDate);
+    console.log("extractTime", chatDate);
+
+    const date = chatDate ? new Date(chatDate) : new Date();
 
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -1465,7 +1483,7 @@ const Chat = () => {
       <main className="main-wrapper">
         <div className="main-content">
           <div className={`chat-panel ${showInitialPage ? 'new-chat' : ''}`}>
-            <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
+            {Id ? <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
               <div className="d-lg-none mb-4 ms-auto d-flex">
                 <button className="new-btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
                   <CloseOutlinedIcon onClick={() => setShowHistory(false)} /></button>
@@ -1507,7 +1525,7 @@ const Chat = () => {
                       },
                       index: React.Key | null | undefined
                     ) => (
-                      <li onClick={() => displayChat(chat)} key={`chat_${index}`}>
+                      <li onClick={() => displayChat(chat)} key={`recent_chat_${index}`}>
                         <div className="d-flex flex-column " role="button">
                           <div className="date">{extractTime(chat?.created_at)}</div>
                           <div className="question">{chat?.chat_title}</div>
@@ -1517,46 +1535,75 @@ const Chat = () => {
                             e.stopPropagation()
                             handleDeleteFiles(chat?.id)
                           }} sx={{ fontSize: "18px" }} /></li>
-                          <li role="button"><BookmarkOutlinedIcon sx={{ fontSize: "18px" }} /></li>
                         </ul>
                       </li>
                     ))
                   }
-                  {/* // <li>
-                //   <div className="d-flex flex-column " role="button">
-                //     <div className="date">11:02, Yesterday</div>
-                //     <div className="question">Give me another idea for this</div>
-                //   </div>
-
-                //   <ul className="action-button">
-                //     <li role="button"><DeleteOutlineOutlinedIcon sx={{ fontSize: "18px" }} /></li>
-                //     <li className="active" role="button"><BookmarkOutlinedIcon sx={{ fontSize: "18px" }} /></li>
-                //   </ul>
-                // </li>
-                // <li>
-                //   <div className="d-flex flex-column " role="button">
-                //     <div className="date">11:02, Yesterday</div>
-                //     <div className="question">Give me another idea for this</div>
-                //   </div>
-                //   <ul className="action-button">
-                //     <li role="button"><DeleteOutlineOutlinedIcon sx={{ fontSize: "18px" }} /></li>
-                //     <li role="button"><BookmarkOutlinedIcon sx={{ fontSize: "18px" }} /></li>
-                //   </ul>
-                // </li>
-
-                // <li>
-                //   <div className="d-flex flex-column " role="button">
-                //     <div className="date">11:02, Yesterday</div>
-                //     <div className="question">Give me another idea for this</div>
-                //   </div>
-                //   <ul className="action-button">
-                //     <li role="button"><DeleteOutlineOutlinedIcon sx={{ fontSize: "18px" }} /></li>
-                //     <li role="button"><BookmarkOutlinedIcon sx={{ fontSize: "18px" }} /></li>
-                //   </ul>
-                // </li> */}
                 </>
               </ul>
-            </div>
+            </div> :
+              <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
+                <div className="d-lg-none mb-4 ms-auto d-flex">
+                  <button className="new-btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
+                    <CloseOutlinedIcon onClick={() => setShowHistory(false)} /></button>
+                </div>
+                <div className="search-filter">
+                  <input type="text" className="form-control" placeholder="Search..."
+                    name="query" //question add
+                    title="Enter search keyword"
+                    value={searchQuery}
+                    onChange={handleSearchChange} />
+                  <button className="new-btn btn-primary">
+                    <img src={searchWhite} alt="" />
+                  </button>
+                </div>
+
+                <div className="history-label">
+                  Chat History
+                </div>
+                <PerfectScrollbar className="history-list">
+                  <>
+                    {filteredChatsstarred?.length > 0 && filteredChatsstarred?.map(
+                      (
+                        chat: {
+                          chat_title:
+                          | string
+                          | number
+                          | boolean
+                          | React.ReactElement<
+                            any,
+                            string | React.JSXElementConstructor<any>
+                          >
+                          | Iterable<React.ReactNode>
+                          | React.ReactPortal
+                          | null
+                          | undefined;
+                          flagged: any;
+                          id: number | undefined;
+                          created_at: string;
+                        },
+                        index: React.Key | null | undefined
+                      ) => (
+                        <li onClick={() => displayChat(chat)} key={`chat_${index}`}>
+                          <div className="d-flex flex-column " role="button">
+                            <div className="date">{extractTime(chat?.created_at)}</div>
+                            <div className="question">{chat?.chat_title}</div>
+                          </div>
+                          <ul className="action-button">
+                            <li role="button"><DeleteOutlineOutlinedIcon onClick={(e) => {
+                              e.stopPropagation()
+                              handleDeleteFiles(chat?.id)
+                            }} sx={{ fontSize: "18px" }} /></li>
+                            {chat?.flagged && <li className={`${chat?.flagged ? "active" : ""}`} role="button"><BookmarkIcon sx={{ fontSize: "18px", color: "#9943ec" }} />
+                            </li>}
+                          </ul>
+                        </li>
+                      ))
+                    }
+                  </>
+                </PerfectScrollbar>
+              </div>
+            }
             <div className="main-chat-panel">
               <div className="mobile-chat-header d-lg-none">
                 <ul>
@@ -1564,80 +1611,65 @@ const Chat = () => {
                 </ul>
               </div>
               <div className="inner-panel">
-                {/* <div className="chat-result">
-                  <div className="welcome-box">
-                    <img src={chatLogo} alt="" />
-                    <h1>Hi, How can I help you today?</h1>
-                  </div>
-                </div> */}
-                <PerfectScrollbar>
-                  <div className="chat-result">
-                    {selectedchat?.length && selectedchat?.length > 0 ?
-                      <ul>
-                        {selectedchat?.map((chat: any, index: any) => (
-                          <>
-                            {chat?.question && (
-                              <li key={`question_${index}`} className="right-chat">
-                                <div className="chat-card">
-                                  <div className="chat-card-header">
-                                    <span className="anstext"><SearchOutlinedIcon sx={{ fontSize: '14px' }} /> Question</span>
-                                  </div>
-                                  <div className="chat-card-body">
-                                    <p>{chat?.question}</p>
-                                  </div>
+                {Id !== undefined ? <div className="chat-header2">
+                  <button className="btn btn-primary btn-sm d-flex align-items-center gap-1 rounded-pill" onClick={newchat}><AddOutlinedIcon /> New Chat</button>
+                  {!showInitialPage ? chatsaved ? <FlagIcon style={{ color: "#9943ec" }} /> : <FlagOutlinedIcon onClick={saveChatstar} /> : <></>}
+                </div> : <></>}
+                {/* <div className="chat-result"> */}
+                <PerfectScrollbar className="chat-result">
+                  {selectedchat?.length && selectedchat?.length > 0 ?
+                    <ul>
+                      {selectedchat?.map((chat: any, index: any) => (
+                        <>
+                          {chat?.question && (
+                            <li key={`question_${index}`} className="right-chat">
+                              <div className="chat-card">
+                                <div className="chat-card-header">
+                                  <span className="anstext"><SearchOutlinedIcon sx={{ fontSize: '14px' }} /> Question</span>
+                                </div>
+                                <div className="chat-card-body">
+                                  <p>{chat?.question}</p>
+                                </div>
 
+                              </div>
+                              <div className="profile-icon">
+                                <img src={primaryLogo} alt="" />
+                              </div>
+                            </li>)}
+                          {chat?.answer &&
+                            (<li key={`answer_${index}`} className="left-chat">
+                              <div className="profile-icon">
+                                <img src={primaryLogo} alt="" />
+                              </div>
+                              <div className="chat-card">
+                                <div className="chat-card-header">
+                                  <span className="anstext"><DescriptionOutlinedIcon sx={{ fontSize: '14px' }} /> Answer</span>
                                 </div>
-                                <div className="profile-icon">
-                                  <img src={primaryLogo} alt="" />
+                                <div className="chat-card-body">
+                                  <p><Chatbot answer={chat?.answer} index={index} /></p>
                                 </div>
-                              </li>)}
-                            {chat?.answer &&
-                              (<li key={`answer_${index}`} className="left-chat">
-                                <div className="profile-icon">
-                                  <img src={primaryLogo} alt="" />
-                                </div>
-                                <div className="chat-card">
-                                  <div className="chat-card-header">
-                                    <span className="anstext"><DescriptionOutlinedIcon sx={{ fontSize: '14px' }} /> Answer</span>
-                                  </div>
-                                  <div className="chat-card-body">
-                                    {/* <p>Certainly! Here's a brief description of each of the famous Renaissance
-                                  painters listed:</p>
-                                <strong>Leonardo da Vinci</strong>
-                                <p>A polymath known for his mastery in various fields including painting,
-                                  sculpture, architecture, science, and engineering. His iconic works
-                                  include the "Mona Lisa" and "The Last Supper”.</p>
-                                <strong>Michelangelo Buonarroti</strong>
-                                <p>Renowned for his skill in sculpture, painting, and architecture. His
-                                  masterpieces include the ceiling of the Sistine Chapel and the sculpture
-                                  of "David."</p>
-                                <strong>Raphael</strong>
-                                <p>Known for his graceful and harmonious style, Raphael's works include "The
-                                  School of Athens" and numerous Madonna and Child paintings.</p> */}
-                                    <p><Chatbot answer={chat?.answer} index={index} /></p>
-                                  </div>
-                                  <ul className="ansfooter">
-                                    <li><ThumbUpAltOutlinedIcon sx={{ fontSize: '14px' }} /></li>
-                                    <li><ThumbDownOutlinedIcon sx={{ fontSize: '14px' }} /></li>
-                                    <li onClick={() => copyText(index)}><ContentCopyOutlinedIcon sx={{ fontSize: '14px' }} /><span>{isTextCopied[`answer-${index}`] ? "Copied" : "Copy"}</span>
-                                    </li>
-                                    {!chat?.speak ? <li onClick={() =>
-                                      speak(chat && chat?.answer, index)
-                                    }><VolumeUpOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Read</span>
-                                    </li> : <li onClick={() => stop(index)} ><VolumeOffOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Stop</span></li>}
-                                    <li><CachedOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Regenerate</span>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </li>)}
-                          </>))}
-                      </ul>
-                      : showInitialPage && <div className="welcome-box">
-                        <img src={chatLogo} alt="" />
-                        <h1>Hi, How can I help you today?</h1>
-                      </div>}
-                  </div>
+                                <ul className="ansfooter">
+                                  <li><ThumbUpAltOutlinedIcon sx={{ fontSize: '14px' }} /></li>
+                                  <li><ThumbDownOutlinedIcon sx={{ fontSize: '14px' }} /></li>
+                                  <li onClick={() => copyText(index)}><ContentCopyOutlinedIcon sx={{ fontSize: '14px' }} /><span>{isTextCopied[`answer-${index}`] ? "Copied" : "Copy"}</span>
+                                  </li>
+                                  {!chat?.speak ? <li onClick={() =>
+                                    speak(chat && chat?.answer, index)
+                                  }><VolumeUpOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Read</span>
+                                  </li> : <li onClick={() => stop(index)} ><VolumeOffOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Stop</span></li>}
+                                  <li><CachedOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Regenerate</span>
+                                  </li>
+                                </ul>
+                              </div>
+                            </li>)}
+                        </>))}
+                    </ul>
+                    : showInitialPage && <div className="welcome-box">
+                      <img src={chatLogo} alt="" />
+                      <h1>Hi, How can I help you today?</h1>
+                    </div>}
                 </PerfectScrollbar>
+                {/* </div> */}
                 {/* <div className="chat-suggestion">
                   <h4>Suggestions</h4>
                   <ul className="slider">
@@ -1647,25 +1679,29 @@ const Chat = () => {
                   </ul>
                   <div className="dots"></div>
                 </div> */}
-                <div className="chat-input">
-                  {/* <input type="text" className="form-control" placeholder="Type your question" /> */}
-                  <input
-                    type="text"
-                    ref={chatRef}
-                    className="form-control"
-                    placeholder="Type your question"
-                    aria-label="Search"
-                    value={search}
-                    onChange={(e) => setSearch(e?.target?.value)}
-                    onKeyDown={handleKeyDown}
-                  />
-                  <button type="button" onClick={() => searchData()} className="new-btn btn-primary p-0"><ArrowUpwardOutlinedIcon /></button>
-                </div>
-                {searcherr === true && (
-                  <small className="text-danger">
-                    Please Enter your query!!
-                  </small>
-                )}
+                {Id !== undefined ?
+                  <>
+                    <div className="chat-input">
+                      {/* <input type="text" className="form-control" placeholder="Type your question" /> */}
+                      <input
+                        type="text"
+                        ref={chatRef}
+                        className="form-control"
+                        placeholder="Type your question"
+                        aria-label="Search"
+                        value={search}
+                        onChange={(e) => setSearch(e?.target?.value)}
+                        onKeyDown={handleKeyDown}
+                      />
+                      <button type="button" onClick={() => searchData()} className="new-btn btn-primary p-0"><ArrowUpwardOutlinedIcon /></button>
+                    </div>
+                    {searcherr === true && (
+                      <small className="text-danger">
+                        Please Enter your query!!
+                      </small>
+                    )}
+                  </> : <></>
+                }
                 {/* <div className="change-instructor">
                   <select name="" className="form-select" id="">
                     <option value="">Change Instructor</option>
