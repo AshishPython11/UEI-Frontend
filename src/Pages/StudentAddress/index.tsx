@@ -387,7 +387,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       ...permanentAddress,
     };
     const eq = deepEqual(studentAddress1, currentAddressPayload);
-      if (editFlag) {
+    if (editFlag) {
       const addAddress = async (addressType: string, addressPayload: any) => {
         try {
           const data = await postData("/student_address/add", addressPayload);
@@ -467,9 +467,9 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         // Edit current address
         if (studentAddress?.address_type === "current") {
           // eslint-disable-next-line no-lone-blocks
-          
-          if(!eq) (await editAddress("Current", currentAddressPayload));
-          
+
+          if (!eq) (await editAddress("Current", currentAddressPayload));
+
         }
         // Edit permanent address
         if (permanentAddress?.address_type === "permanent") {
@@ -782,8 +782,8 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             value={studentAddress.pincode}
             onChange={(e) => handleInputChange(e, "current")}
             required
-            // error={!!errors.currentpin}
-            // helperText={errors.currentpin}
+          // error={!!errors.currentpin}
+          // helperText={errors.currentpin}
           />
           <div>
             {" "}
@@ -843,7 +843,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             className="form-control"
             value={permanentAddress.address1}
             onChange={(e) => handleInputChange(e, "permanent")}
-            // required
+          // required
           />
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
@@ -865,7 +865,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             className="form-control"
             value={permanentAddress.address2}
             onChange={(e) => handleInputChange(e, "permanent")}
-            // required
+          // required
           />
           {/* {error.address2 && <span style={{ color: 'red' }}>{error.address2}</span>} */}
         </div>
@@ -975,7 +975,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             className="form-control"
             value={permanentAddress.city}
             onChange={(e) => handleInputChange(e, "permanent")}
-            // required
+          // required
           />
           <div>
             {" "}
@@ -1006,7 +1006,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             className="form-control"
             value={permanentAddress.district}
             onChange={(e) => handleInputChange(e, "permanent")}
-            // required
+          // required
           />
           <div>
             {" "}
@@ -1039,9 +1039,9 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             className="form-control"
             value={permanentAddress.pincode}
             onChange={(e) => handleInputChange(e, "permanent")}
-            // required
-            // error={!!errors.permanentpin}
-            // helperText={errors.permanentpin}
+          // required
+          // error={!!errors.permanentpin}
+          // helperText={errors.permanentpin}
           />
           <div>
             {" "}

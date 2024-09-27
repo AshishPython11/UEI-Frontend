@@ -263,7 +263,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           </p>
         </div>
       </div>
-      <div className="row form_field_wrapper">
+      <div className="row form_field_wrapper mb-4">
         <StudentHobbies save={isSave} />
       </div>
       

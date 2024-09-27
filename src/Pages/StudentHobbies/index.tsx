@@ -210,14 +210,17 @@ const StudentHobbies = ({ save }: { save: boolean }) => {
     <form onSubmit={submitHandle}>
       <div className="row justify-content-start">
         <div className="col-12 justify-content-start form_field_wrapper">
-          <FormControl>
+          <FormControl sx={{
+               maxWidth: "300px",
+               width: "100%",
+          }}>
             <InputLabel id="demo-multiple-checkbox-label">Hobby</InputLabel>
             <Select
               labelId="demo-multiple-checkbox-label"
               id="demo-multiple-checkbox"
               multiple
               sx={{
-                backgroundColor: "#f5f5f5",
+                backgroundColor: "#f5f5f5",             
               }}
               value={selectedHobbies}
               onChange={handleChange}

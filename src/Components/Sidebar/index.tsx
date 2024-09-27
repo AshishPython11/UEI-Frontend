@@ -9,6 +9,7 @@ import ChatOutlinedIcon from "@mui/icons-material/ChatOutlined";
 import LocalLibraryOutlinedIcon from "@mui/icons-material/LocalLibraryOutlined";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import LiveHelpOutlinedIcon from '@mui/icons-material/LiveHelpOutlined';
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
@@ -24,7 +25,7 @@ import useApi from "../../hooks/useAPI";
 import gyansetuLogo from "../../assets/img/logo-white.svg";
 import { QUERY_KEYS_MENU } from "../../utils/const";
 import sidebarlog from "../../assets/img/logo.svg";
-import "../Sidebar/Sidebar.scss";
+// import "../Sidebar/Sidebar.scss";
 // import "../../assets/css/newstyle.min.css";
 // import "../../assets/css/main.min.css";
 // import "../../assets/css/main.css";
@@ -33,15 +34,15 @@ import "simplebar-react/dist/simplebar.min.css";
 // import { SidebarContainer } from "./SidebarContainer";
 
 const Sidebar = () => {
-  const [prescriptionsopen, setPrescriptionsopenOpen] = React.useState(false);
-  const [testopen, setTestOpen] = React.useState(false);
-  const [test, setTest] = React.useState(false);
-  const [bill, setBill] = React.useState(false);
-  const [menuList, setMenuList] = React.useState<any>([]);
-  const [menuList1, setMenuList1] = React.useState<any>([]);
-  const [setting, setSetting] = React.useState(false);
+  const [prescriptionsopen, setPrescriptionsopenOpen] = useState(false);
+  const [testopen, setTestOpen] = useState(false);
+  const [test, setTest] = useState(false);
+  const [bill, setBill] = useState(false);
+  const [menuList, setMenuList] = useState<any>([]);
+  const [menuList1, setMenuList1] = useState<any>([]);
+  const [setting, setSetting] = useState(false);
   const defaultSelectedIndex = 0;
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const user_type = localStorage.getItem("user_type");
   const [profileCompletion, setProfileCompletion] = useState(
     localStorage.getItem("Profile_completion") || "0"
@@ -480,7 +481,9 @@ const Sidebar = () => {
               <h5 className="mb-0">Gyansetu</h5>
             </div>
             <div className="sidebar-close">
-              <CloseOutlinedIcon onClick={() => document.body.classList.remove("toggled")} />
+              <CloseOutlinedIcon
+                onClick={() => document.body.classList.remove("toggled")}
+              />
             </div>
           </div>
           <div className="sidebar-nav">
@@ -494,29 +497,40 @@ const Sidebar = () => {
                   <div className="menu-title">Dashboard</div>
                 </Link>
               </li>
+              {profileCompletion === "100" ?
+                <>
+                  <li>
+                    <Link to="/main/Chat/recentChat">
+                      <div className="parent-icon">
+                        <ChatOutlinedIcon />
+                      </div>
+                      <div className="menu-title">Chat</div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/main/Chat">
+                      <div className="parent-icon">
+                        <LocalLibraryOutlinedIcon />
+                      </div>
+                      <div className="menu-title">Chat History</div>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/main/student-feedback/add-student-feedback">
+                      <div className="parent-icon">
+                        <InfoOutlinedIcon />
+                      </div>
+                      <div className="menu-title">Feedback</div>
+                    </Link>
+                  </li>
+                </> : ''}
               <li>
-                <a href="#">
+                <Link to="/main/faq">
                   <div className="parent-icon">
-                    <ChatOutlinedIcon />
+                    <LiveHelpOutlinedIcon />
                   </div>
-                  <div className="menu-title">Chat</div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <div className="parent-icon">
-                    <LocalLibraryOutlinedIcon />
-                  </div>
-                  <div className="menu-title">Chat History</div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <div className="parent-icon">
-                    <InfoOutlinedIcon />
-                  </div>
-                  <div className="menu-title">Feedback</div>
-                </a>
+                  <div className="menu-title">FAQs</div>
+                </Link>
               </li>
               {/* </ul> */}
             </MetisMenu>

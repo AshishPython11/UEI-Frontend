@@ -49,7 +49,7 @@ $form-check-input-border: 1px solid rgba($primary, 0.4);
 // @import "bootstrap/forms/form-control";
 // @import "bootstrap/forms/form-check";
 // @import "bootstrap/bootstrap.scss";
-@import "~bootstrap/scss/bootstrap";
+//@import "css/bootstrap/bootstrap.scss";
 @import "responsive";
 @import "blue-theme";
 @import "dark-theme";
@@ -67,6 +67,13 @@ body {
 .btn-primary{
   background-color: $primary !important;
   border-color: $primary !important;
+  &:hover{
+    color: white !important;
+  }
+}
+.btn-secondary{
+  background-color: $secondary !important;
+  border-color: $secondary !important;
   &:hover{
     color: white !important;
   }
@@ -170,7 +177,7 @@ img {
   align-items: center;
   gap: 0.7rem;
   justify-content: center;
-  
+  line-height: 2.5rem!important;
   font-weight: 600;
   width: 100%;
   min-height: 3.5rem;
@@ -743,10 +750,10 @@ img {
 
 /* components */
 
-.desk-card {
+body .desk-card {
   margin-bottom: 1.5rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  border: 0;
+  box-shadow: none!important;
+  border: 0 !important;
   border-radius: 2.5rem !important;
 
   .card-header {
@@ -1940,6 +1947,8 @@ img {
       list-style: none;
       padding: 0;
       margin: 0;
+      max-height: 550px;
+      height: 100%;
 
       li {
         padding-left: 48px;
@@ -2055,9 +2064,13 @@ img {
       margin: 0 auto;
 
       .chat-result {
-       max-height: 60vh;
-       position: relative;
-      padding: 1rem;
+        background-color: rgba(white, 0.4);
+        max-height: 70vh;
+        min-height: 65vh;
+        position: relative;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 1rem;
         ul {
           padding: 0;
           margin: 0;
@@ -2065,7 +2078,6 @@ img {
           display: flex;
           gap: 1rem;
           flex-direction: column;
-         
 
           li {
             span.anstext {
@@ -2342,13 +2354,16 @@ img {
   }
 }
 
-
+a{
+  text-decoration: none!important;
+}
 .bg-primary-20{
-  background-color: #F2E5FF;
+  background-color: #F2E5FF!important;
 }
 .link-underline{
   position: relative;
   font-weight: 500;
+  text-decoration: none;
   &:after{
     position: absolute;
     left: 0;

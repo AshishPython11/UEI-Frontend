@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../Header/Header.scss";
+// import "../Header/Header.scss";
 import notification from "../../assets/img/notification.svg";
 import profile from "../../assets/img/profile_img.svg";
 import { toast } from "react-toastify";
@@ -44,7 +44,7 @@ import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlin
 import LaptopOutlinedIcon from "@mui/icons-material/LaptopOutlined";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { CircularProgress, Switch } from "@mui/material";
-import ThemeModel from "../../assets/css/themes/ThemeModel";
+// import ThemeModel from "../../assets/css/themes/ThemeModel";
 // import "../../assets/css/newstyle.min.css";
 // import "../../assets/css/main.min.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
@@ -149,7 +149,7 @@ const Header = () => {
                   // setprofileImage(imgdata.data)
                   setProImage(imgdata.data);
                 })
-                .catch((e) => {});
+                .catch((e) => { });
             }
           }
           sessionStorage.setItem("profileData", JSON.stringify(data.data));
@@ -183,7 +183,7 @@ const Header = () => {
                   // setprofileImage(imgdata.data)
                   setProImage(imgdata.data);
                 })
-                .catch((e) => {});
+                .catch((e) => { });
             }
           }
         }
@@ -207,8 +207,8 @@ const Header = () => {
     namepro?.gender === "male" || namepro?.gender === "Male"
       ? images_man
       : namepro?.gender === "female" || namepro?.gender === "Female"
-      ? images_female
-      : images_man;
+        ? images_female
+        : images_man;
 
   // const profileImage1:any =( proImage !== "" ||  !== 'undefined')  ? proImage : defaultImage;
   const profileImage1: any =
@@ -584,11 +584,11 @@ window.addEventListener("resize", toggleOnDesktop);
                 <SearchOutlinedIcon onClick={displaySearchPopup} />
               </a>
             </li>
-            <li className="nav-item d-none d-lg-flex">
-              <button className="btn btn-primary rounded-pill px-lg-4">
+            {/* <li className="nav-item d-none d-lg-flex">
+              <button onClick={() => navigator("/main/Chat/recentChat")} className="new-btn btn-primary rounded-pill px-lg-4">
                 New Chat
               </button>
-            </li>
+            </li> */}
             <li className="nav-item">
               <div className="toggle-mode nav-link" role="button">
                 <DarkModeOutlinedIcon
@@ -972,13 +972,13 @@ window.addEventListener("resize", toggleOnDesktop);
                   <LocalBarOutlinedIcon />
                   Setting
                 </a>
-                <a
+                <Link
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
-                  href="#"
+                  to="/main/DashBoard"
                 >
                   <DashboardOutlinedIcon />
                   Dashboard
-                </a>
+                </Link>
 
                 <hr className="dropdown-divider" />
                 <button
