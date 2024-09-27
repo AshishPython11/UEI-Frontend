@@ -569,11 +569,11 @@ const Header = () => {
                 <SearchOutlinedIcon onClick={displaySearchPopup} />
               </a>
             </li>
-            <li className="nav-item d-none d-lg-flex">
+            {/* <li className="nav-item d-none d-lg-flex">
               <button onClick={() => navigator("/main/Chat/recentChat")} className="new-btn btn-primary rounded-pill px-lg-4">
                 New Chat
               </button>
-            </li>
+            </li> */}
             <li className="nav-item">
               <div className="toggle-mode nav-link" role="button">
                 <DarkModeOutlinedIcon

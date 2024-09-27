@@ -112,7 +112,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               .then((imgdata: any) => {
                 setFilePreview(imgdata.data);
               })
-              .catch((e) => {});
+              .catch((e) => { });
           }
           setBasicInfo(data?.data);
           setInitialState({
@@ -420,82 +420,35 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
 
     const eq = deepEqual(initialAdminState, payload);
 
-    if (editFalg) {
-      postData(`${"student/add"}`, payload)
-        .then((data: any) => {
-          if (data.status == 200) {
-            toast.success("Basic information saved successfully", {
-              hideProgressBar: true,
-              theme: "colored",
-            });
-            setActiveForm((prev) => prev + 1);
-            setNamepro({
-              first_name: basicInfo?.first_name,
-              last_name: basicInfo?.last_name,
-              gender: basicInfo?.gender,
-            });
-            getData(
-              `${"upload_file/get_image/"}${
-                selectedFile ? selectedFile : basicInfo?.pic_path
-              }`
-            )
-              .then((data: any) => {
-                // setprofileImage(imgdata.data)
-                if (data.status == 200) {
-                  setProImage(data.data);
-                } else {
-                }
-              })
-              .catch((e) => {
-                console.log("------------- e -------------", e);
-              });
-          } else {
-            toast.error(data?.message, {
-              hideProgressBar: true,
-              theme: "colored",
-            });
-          }
-        })
-        .catch((e) => {
-          toast.error(e?.message, {
-            hideProgressBar: true,
-            theme: "colored",
-          });
-        });
-    } else {
-      const editData = async () => {
-        putData(`${"student/edit/"}${StudentId}`, payload)
+    if (!fname_col && !lname_col && !fathername_col && !mothername_col) {
+      if (editFalg) {
+        postData(`${"student/add"}`, payload)
           .then((data: any) => {
-            // console.log("----- res ----", data);
             if (data.status == 200) {
-              toast.success("Basic information updated successfully", {
+              toast.success("Basic information saved successfully", {
                 hideProgressBar: true,
                 theme: "colored",
               });
               setActiveForm((prev) => prev + 1);
-              // getStudentBasicInfo()
               setNamepro({
                 first_name: basicInfo?.first_name,
                 last_name: basicInfo?.last_name,
                 gender: basicInfo?.gender,
               });
-              if (selectedFile ? selectedFile : basicInfo?.pic_path) {
-                getData(
-                  `${"upload_file/get_image/"}${
-                    selectedFile ? selectedFile : basicInfo?.pic_path
-                  }`
-                )
-                  .then((data: any) => {
-                    // setprofileImage(imgdata.data)
-                    if (data.status == 200) {
-                      setProImage(data.data);
-                    } else {
-                    }
-                  })
-                  .catch((e) => {
-                    console.log("------------- e -------------", e);
-                  });
-              }
+              getData(
+                `${"upload_file/get_image/"}${selectedFile ? selectedFile : basicInfo?.pic_path
+                }`
+              )
+                .then((data: any) => {
+                  // setprofileImage(imgdata.data)
+                  if (data.status == 200) {
+                    setProImage(data.data);
+                  } else {
+                  }
+                })
+                .catch((e) => {
+                  console.log("------------- e -------------", e);
+                });
             } else {
               toast.error(data?.message, {
                 hideProgressBar: true,
@@ -503,64 +456,111 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               });
             }
           })
-          .catch((e: any) => {
-            console.log("--------- e --------", e);
-
-            // toast.error(e?.message, {
-            //   hideProgressBar: true,
-            //   theme: "colored",
-            // });
+          .catch((e) => {
+            toast.error(e?.message, {
+              hideProgressBar: true,
+              theme: "colored",
+            });
           });
-        // .then((data: any) => {
-        //   console.log("---------- data.data.pic_path -----------", data.data.pic_path);
+      } else {
+        const editData = async () => {
+          putData(`${"student/edit/"}${StudentId}`, payload)
+            .then((data: any) => {
+              // console.log("----- res ----", data);
+              if (data.status == 200) {
+                toast.success("Basic information updated successfully", {
+                  hideProgressBar: true,
+                  theme: "colored",
+                });
+                setActiveForm((prev) => prev + 1);
+                // getStudentBasicInfo()
+                setNamepro({
+                  first_name: basicInfo?.first_name,
+                  last_name: basicInfo?.last_name,
+                  gender: basicInfo?.gender,
+                });
+                if (selectedFile ? selectedFile : basicInfo?.pic_path) {
+                  getData(
+                    `${"upload_file/get_image/"}${selectedFile ? selectedFile : basicInfo?.pic_path
+                    }`
+                  )
+                    .then((data: any) => {
+                      // setprofileImage(imgdata.data)
+                      if (data.status == 200) {
+                        setProImage(data.data);
+                      } else {
+                      }
+                    })
+                    .catch((e) => {
+                      console.log("------------- e -------------", e);
+                    });
+                }
+              } else {
+                toast.error(data?.message, {
+                  hideProgressBar: true,
+                  theme: "colored",
+                });
+              }
+            })
+            .catch((e: any) => {
+              console.log("--------- e --------", e);
 
-        //   if(data.status == 200)
-        //     {
-        //       toast.success(data?.message, {
-        //         hideProgressBar: true,
-        //         theme: "colored",
-        //       });
-        //       getStudentBasicInfo()
-        //       setNamepro({
-        //         first_name: basicInfo?.first_name,
-        //         last_name: basicInfo?.last_name,
-        //         gender: basicInfo?.gender,})
-        //         getData(`${"upload_file/get_image/"}${data.data.pic_path}`)
-        //         .then((data: any) => {
-        //           console.log("immmmmm",data)
-        //           // setprofileImage(imgdata.data)
-        //           if(data.status == 200){
+              // toast.error(e?.message, {
+              //   hideProgressBar: true,
+              //   theme: "colored",
+              // });
+            });
+          // .then((data: any) => {
+          //   console.log("---------- data.data.pic_path -----------", data.data.pic_path);
 
-        //             setProImage(data.data)
-        //           }else{
+          //   if(data.status == 200)
+          //     {
+          //       toast.success(data?.message, {
+          //         hideProgressBar: true,
+          //         theme: "colored",
+          //       });
+          //       getStudentBasicInfo()
+          //       setNamepro({
+          //         first_name: basicInfo?.first_name,
+          //         last_name: basicInfo?.last_name,
+          //         gender: basicInfo?.gender,})
+          //         getData(`${"upload_file/get_image/"}${data.data.pic_path}`)
+          //         .then((data: any) => {
+          //           console.log("immmmmm",data)
+          //           // setprofileImage(imgdata.data)
+          //           if(data.status == 200){
 
-        //           }
-        //         }).catch((e) => {
-        //           console.log("------------- e -------------", e);
+          //             setProImage(data.data)
+          //           }else{
 
-        //         })
+          //           }
+          //         }).catch((e) => {
+          //           console.log("------------- e -------------", e);
 
-        //     }
-        //     else
-        //     {
-        //       toast.error(data?.message, {
-        //         hideProgressBar: true,
-        //         theme: "colored",
-        //       });
-        //     }
-        // })
-        // .catch((e) => {
-        //   console.log("---------- e top data ------------",e);
+          //         })
 
-        //   toast.error(e?.message, {
-        //     hideProgressBar: true,
-        //     theme: "colored",
-        //   });
-        // });
-      };
-      // eslint-disable-next-line no-lone-blocks
-      if(!eq) editData();
-      else setActiveForm((prev) => prev + 1);
+          //     }
+          //     else
+          //     {
+          //       toast.error(data?.message, {
+          //         hideProgressBar: true,
+          //         theme: "colored",
+          //       });
+          //     }
+          // })
+          // .catch((e) => {
+          //   console.log("---------- e top data ------------",e);
+
+          //   toast.error(e?.message, {
+          //     hideProgressBar: true,
+          //     theme: "colored",
+          //   });
+          // });
+        };
+        // eslint-disable-next-line no-lone-blocks
+        if (!eq) editData();
+        else setActiveForm((prev) => prev + 1);
+      }
     }
     // console.log(payload);
     // }
