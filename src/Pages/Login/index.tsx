@@ -37,7 +37,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "react-toastify/dist/ReactToastify.css";
 // import "../../assets/css/main.min.css";
-import "../../assets/css/main.scss";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -276,7 +275,7 @@ const Login = () => {
             </div>
             <div className="col-6">
               <div className="d-flex justify-content-end">
-                <Link to="/signup" className="new-btn new-btn-secondary px-4">
+                <Link to="/signup" className="btn btn-secondary px-4">
                   Register
                 </Link>
               </div>
@@ -498,7 +497,7 @@ const Login = () => {
                           </div>
                           <button
                             type="submit"
-                            className="new-btn btn-primary w-100 mb-4"
+                            className="btn btn-secondary w-100 mb-4 mh-56 rounded-pill"
                             onClick={(e) => {
                               e.preventDefault();
                               login(e as any);
@@ -549,7 +548,7 @@ const Login = () => {
                         <div className="d-flex align-items-center gap-3">
                           <div
                             onClick={() => setShowForm(true)}
-                            className="new-btn new-btn-secondary w-100 outsecbtn"
+                            className="btn btn-secondary w-100 outsecbtn rounded-pill"
                           >
                             Sign in with Email / Phone
                           </div>
@@ -561,12 +560,12 @@ const Login = () => {
                         </div>
                       </div>
                       <div className="col-lg-12">
-                        <button className="new-btn btn-outline-secondary outsecbtn">
+                        <button className="btn btn-outline-secondary outsecbtn rounded-pill">
                           <FacebookIcon /> Login with Facebook
                         </button>
                       </div>
                       <div className="col-lg-12">
-                        <button className="new-btn btn-outline-secondary outsecbtn">
+                        <button className="btn btn-outline-secondary outsecbtn rounded-pill">
                           <GoogleIcon /> Login with Google
                         </button>
                       </div>

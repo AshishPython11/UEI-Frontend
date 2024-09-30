@@ -571,7 +571,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
     <form>
       <div className="row d-flex">
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             First Name <span>*</span>
           </label>
@@ -609,7 +609,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Last Name <span>*</span>
           </label>
@@ -709,7 +709,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Father Name <span>*</span>
           </label>
@@ -747,7 +747,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Mother Name <span>*</span>
           </label>
@@ -785,7 +785,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Guardian Name <span></span>
           </label>
@@ -816,7 +816,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Aim <span></span>
           </label>
@@ -935,7 +935,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         <div className="col-lg-12">
           <button
             type="button"
-            className="new-btn btn-dark px-lg-5 mt-3 ms-auto d-block rounded-pill next-btn px-4"
+            className="btn btn-dark px-lg-5 mt-3 ms-auto d-block rounded-pill next-btn px-4"
             onClick={() => submitHandel()}
           >
             Next

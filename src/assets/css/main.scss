@@ -1200,7 +1200,6 @@ form select.error:focus {
 }
 
 
-
 .error-title {
   font-size: 140px;
   line-height: 140px;
@@ -1477,8 +1476,7 @@ form select.error:focus {
 /* chat box */
 
 .chat-wrapper {
-  width: auto;
-  height: 600px;
+  width: 100%;
   border-radius: .25rem;
   position: relative;
   background: #fff;
@@ -1688,7 +1686,7 @@ form select.error:focus {
     max-width: 480px;
     text-align: left;
     border-top-left-radius: 0;
-    color: #fff;
+   // color: #fff;
   }
 }
 

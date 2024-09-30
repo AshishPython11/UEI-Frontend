@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+
 // import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 // import '../src/assets/css/style.scss';
-// import '../src/assets/css/newstyle.min.css';
-// import '../src/assets/css/main.min.css';
 import '../src/assets/css/newstyle.scss';
 import '../src/assets/css/main.scss';
 import 'bootstrap-icons/font/bootstrap-icons.css';

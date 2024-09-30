@@ -4,8 +4,8 @@ import Footer from "../Footer/index";
 import Sidebar from "../Sidebar/index";
 // import "../Main/Main.scss";
 import { Outlet } from "react-router-dom";
-import "../../assets/css/main.min.css";
-import "../../assets/css/newstyle.min.css";
+// import "../../assets/css/main.min.css";
+// import "../../assets/css/newstyle.min.css";
 // import "../../assets/css/newstyle.scss";
 
 const Main = () => {

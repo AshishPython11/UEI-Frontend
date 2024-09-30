@@ -266,14 +266,11 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       <div className="row form_field_wrapper mb-4">
         <StudentHobbies save={isSave} />
       </div>
-      <div className="row">
-        <div className="col-12">
-          <p className="font-weight-bold profiletext">
+      
+      <form>
+          <p className="font-weight-bold profiletext mt-4">
             <b> Language Known</b>
           </p>
-        </div>
-      </div>
-      <form>
         {boxes.map((box, index) => (
           <div
             className="row d-flex justify-content-start align-items-center mt-4 "
@@ -410,7 +407,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             <div className="mt-3 d-flex align-items-center justify-content-between">
               <button
                 type="button"
-                className="new-btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
+                className="btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
                 onClick={() => {
                   setActiveForm((prev) => prev - 1);
                 }}
@@ -419,7 +416,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               </button>
               <button
                 type="button"
-                className="new-btn btn-dark px-lg-5 px-4  ms-auto d-block rounded-pill next-btn"
+                className="btn btn-dark px-lg-5 px-4  ms-auto d-block rounded-pill next-btn"
                 onClick={saveLanguage}
               >
                 Next

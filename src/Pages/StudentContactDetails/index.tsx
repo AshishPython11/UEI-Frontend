@@ -418,7 +418,7 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
         <div className="mt-3 d-flex align-items-center justify-content-between">
           <button
             type="button"
-            className="new-btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
+            className="btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
             onClick={() => {
               setActiveForm((prev) => prev - 1);
             }}
@@ -427,7 +427,7 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
           </button>
           <button
             type="button"
-            className="new-btn btn-dark px-lg-5  ms-auto d-block rounded-pill next-btn"
+            className="btn btn-dark px-lg-5  ms-auto d-block rounded-pill next-btn"
             onClick={submitHandel}
           >
             Next

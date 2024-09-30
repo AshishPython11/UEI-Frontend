@@ -2,8 +2,6 @@ import React, { useEffect } from 'react'
 import MainContent from '../../Components/MainContent/MainContent'
 // import "../../assets/css/newstyle.min.css";
 // import "../../assets/css/main.min.css";
-import "../../assets/css/newstyle.scss";
-import "../../assets/css/main.scss";
 
 function Dashboard() {
     return (

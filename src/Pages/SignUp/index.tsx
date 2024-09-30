@@ -31,7 +31,6 @@ import { QUERY_KEYS } from "../../utils/const";
 import FullScreenLoader from "../Loader/FullScreenLoader";
 import registerHero from "../../assets/img/register-hero.png";
 // import "../../assets/css/main.min.css";
-import "../../assets/css/main.scss";
 
 interface State extends SnackbarOrigin {
   open: boolean;
@@ -662,7 +661,7 @@ const Signup = () => {
                           <a href=""> Terms and Condition</a>
                         </label>
                       </div>
-                      <button className="new-btn btn-primary w-100">
+                      <button className="btn btn-secondary w-100 mh-56 rounded-pill">
                         Sign Up Now
                       </button>
                       <p className="my-4 text-center">

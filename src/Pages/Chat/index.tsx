@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import "../Chat/Chat.scss";
+// import "../Chat/Chat.scss";
 import data from "./data.json";
 import axios from "axios";
 import useApi from "../../hooks/useAPI";
