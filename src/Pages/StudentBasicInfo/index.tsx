@@ -135,6 +135,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.warning("Please add your information", {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         } else {
           // console.log("error comes from api");
@@ -144,6 +145,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -288,16 +290,19 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               toast.success(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
             } else if (data?.status === 404) {
               toast.error(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
             } else {
               toast.error(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
             }
           })
@@ -305,6 +310,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(e?.message, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           });
       }
@@ -428,6 +434,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               toast.success("Basic information saved successfully", {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
               setActiveForm((prev) => prev + 1);
               setNamepro({
@@ -453,6 +460,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               toast.error(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
             }
           })
@@ -460,6 +468,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(e?.message, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           });
       } else {
@@ -471,6 +480,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 toast.success("Basic information updated successfully", {
                   hideProgressBar: true,
                   theme: "colored",
+                  position: "top-center"
                 });
                 setActiveForm((prev) => prev + 1);
                 // getStudentBasicInfo()
@@ -499,6 +509,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 toast.error(data?.message, {
                   hideProgressBar: true,
                   theme: "colored",
+                  position: "top-center"
                 });
               }
             })

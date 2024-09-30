@@ -48,6 +48,7 @@ const Chat = () => {
   const userid = localStorage.getItem("_id") || "";
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const [regenerateSearch, setRegenerateSearch] = useState("");
   const [studentDetail, setStudentData] = useState<any>();
   const [searcherr, setSearchErr] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
@@ -141,10 +142,6 @@ const Chat = () => {
     }, 500);
   }, [Id]);
 
-  useEffect(() => {
-    console.log("Selected Chat", selectedchat);
-  }, [selectedchat])
-
   const callAPI = async () => {
     getData(`${StudentGETURL}${userdata ? `/${userdata?.id}` : ""}`)
       .then((data: any) => {
@@ -235,6 +232,10 @@ const Chat = () => {
       }
     }
   };
+
+
+ 
+
 
   useEffect(() => {
     if (Id === "recentChat") {
@@ -362,7 +363,55 @@ const Chat = () => {
     }
   };
 
+  const handleResponse = (data: { data: any }) => {
+    const newData = data?.data ? data?.data : data;
+    console.log("newData", newData);
+
+    newData.speak = false;
+    setFilteredProducts(newData);
+    setSelectedChat((prevState: any) => [...prevState, newData]);
+    setChatSaved(false);
+    setchatData((prevState: any) => [...prevState, newData]);
+    setLoading(false);
+    setSearch("");
+    getData(`${chatlisturl}/${userdata?.id}`)
+      .then((data: any) => {
+        setchatlistData(data?.data);
+        setstatredchat(data?.data?.filter((chat: any) => chat?.flagged));
+        setchathistory(data?.data?.filter((chat: any) => !chat?.flagged));
+        setchathistoryrecent(
+          data?.data?.filter((chat: any) => !chat?.flagged)
+        );
+      })
+      .catch((e) => {
+        toast.error(e?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      });
+  };
+
+  const handleError = (e: {
+    message:
+    | string
+    | number
+    | boolean
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | Iterable<React.ReactNode>
+    | React.ReactPortal
+    | ((props: ToastContentProps<unknown>) => React.ReactNode)
+    | null
+    | undefined;
+  }) => {
+    setLoading(false);
+    toast.error(e?.message, {
+      hideProgressBar: true,
+      theme: "colored",
+    });
+  };
+
   const searchData = () => {
+    setRegenerateSearch(search)
     setSearch("");
     setShowInitialPage(false)
     if (search === "") {
@@ -408,33 +457,6 @@ const Chat = () => {
         student_id: userid,
       };
     }
-    const handleResponse = (data: { data: any }) => {
-      const newData = data?.data ? data?.data : data;
-      console.log("newData", newData);
-
-      newData.speak = false;
-      setFilteredProducts(newData);
-      setSelectedChat((prevState: any) => [...prevState, newData]);
-      setChatSaved(false);
-      setchatData((prevState: any) => [...prevState, newData]);
-      setLoading(false);
-      setSearch("");
-      getData(`${chatlisturl}/${userdata?.id}`)
-        .then((data: any) => {
-          setchatlistData(data?.data);
-          setstatredchat(data?.data?.filter((chat: any) => chat?.flagged));
-          setchathistory(data?.data?.filter((chat: any) => !chat?.flagged));
-          setchathistoryrecent(
-            data?.data?.filter((chat: any) => !chat?.flagged)
-          );
-        })
-        .catch((e) => {
-          toast.error(e?.message, {
-            hideProgressBar: true,
-            theme: "colored",
-          });
-        });
-    };
 
     const handleResponsereg = (data: { data: any }) => {
       const newData = data;
@@ -462,24 +484,6 @@ const Chat = () => {
         });
     };
 
-    const handleError = (e: {
-      message:
-      | string
-      | number
-      | boolean
-      | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-      | Iterable<React.ReactNode>
-      | React.ReactPortal
-      | ((props: ToastContentProps<unknown>) => React.ReactNode)
-      | null
-      | undefined;
-    }) => {
-      setLoading(false);
-      toast.error(e?.message, {
-        hideProgressBar: true,
-        theme: "colored",
-      });
-    };
     postData(`${ChatURL}`, payload)
       .then((data) => {
         if (data.status === 200) {
@@ -837,10 +841,6 @@ const Chat = () => {
   //   saveChat()
   // }, [])
 
-  useEffect(() => {
-    console.log("INITIAL PAGE", showInitialPage);
-  }, [showInitialPage])
-
   const checkifchatsaved = (ques: any) => {
     let chat = chatlist.filter();
   };
@@ -995,8 +995,69 @@ const Chat = () => {
   // },[chatlist,statredchat,chathistory])
   // console.log("test starred",statredchat,chatlist,selectedchat)
 
+ 
+ 
+
   const toggleStarredChat = () => setIsStarredChatOpen(!isStarredChatOpen);
   const toggleChatHistory = () => setIsChatHistoryOpen(!isChatHistoryOpen);
+
+  const regenerateChat = () => {
+    
+    setLoading(true);
+    setLoaderMsg("Fetching Data from Ollama model.");
+    setSearchErr(false);
+   
+    let prompt = studentDetail?.prompt?.replace("**question**", "answer");
+    let payload = {};
+    console.log("studentDetail", studentDetail);
+
+    if (selectedchat?.question !== "") {
+      payload = {
+        question: regenerateSearch,
+        prompt: prompt,
+        // course: studentDetail?.course === null ? "" : studentDetail?.course,
+        course: "class_10",
+        stream: studentDetail?.subject,
+        chat_hostory: [
+          { role: "user", content: selectedchat?.question },
+          {
+            role: "assistant",
+            content: selectedchat?.answer,
+          },
+        ],
+      };
+    } else {
+      payload = {
+        question: regenerateSearch,
+        prompt: prompt,
+        course: studentDetail?.course === null ? "" : studentDetail?.course,
+        stream: studentDetail?.subject,
+      };
+    }
+
+    getData(
+      // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+      `https://uatllm.gyansetu.ai/ollama-chat?user_query=${regenerateSearch}`
+    )
+      .then((response) => {
+        if (response?.status === 200) {
+          handleResponse(response);
+          let ChatStorepayload = {
+            student_id: userid,
+            chat_question: regenerateSearch,
+            response: response?.answer,
+          };
+          postData(`${ChatStore}`, ChatStorepayload).catch(
+            handleError
+          );
+        }
+      })
+      .catch(() => {
+        postData(`${ChatURLAI}`, payload)
+          .then((response) => handleResponse(response))
+          .catch((error) => handleError(error));
+      });
+  }
 
   const iconcolor: any = {
     light: "#003032",
@@ -1032,8 +1093,6 @@ const Chat = () => {
     : chathistory;
 
   const extractTime = (chatDate: string) => {
-    console.log("extractTime", chatDate);
-
     const date = chatDate ? new Date(chatDate) : new Date();
 
     const hours = date.getHours().toString().padStart(2, '0');
@@ -1043,8 +1102,6 @@ const Chat = () => {
   }
 
   const copyText = (index: number) => {
-    console.log("Text Copied");
-
     // Get the text content of the div with the specific inline styles
     const textToCopy = (document.getElementById(`answer-${index}`) as HTMLDivElement)?.innerText;
 
@@ -1482,7 +1539,7 @@ const Chat = () => {
       </div> */}
       <main className="main-wrapper">
         <div className="main-content">
-          <div className={`chat-panel ${showInitialPage ? 'new-chat' : ''}`}>
+          <div className={`chat-panel ${!(filteredChats?.length > 0) ? 'new-chat' : ''}`}>
             {Id ? <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
               <div className="d-lg-none mb-4 ms-auto d-flex">
                 <button className="btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
@@ -1612,11 +1669,11 @@ const Chat = () => {
               </div>
               <div className="inner-panel">
                 {Id !== undefined ? <div className="chat-header2">
-                  <button className="btn btn-primary btn-sm d-flex align-items-center gap-1 rounded-pill" onClick={newchat}><AddOutlinedIcon /> New Chat</button>
+                  {!showInitialPage && <button className="btn btn-primary btn-sm d-flex align-items-center gap-1 rounded-pill" onClick={newchat}><AddOutlinedIcon /> New Chat</button>}
                   {!showInitialPage ? chatsaved ? <FlagIcon style={{ color: "#9943ec" }} /> : <FlagOutlinedIcon onClick={saveChatstar} /> : <></>}
                 </div> : <></>}
                 {/* <div className="chat-result"> */}
-                <PerfectScrollbar className="chat-result">
+                <div className="chat-result">
                   {selectedchat?.length && selectedchat?.length > 0 ?
                     <ul>
                       {selectedchat?.map((chat: any, index: any) => (
@@ -1657,18 +1714,18 @@ const Chat = () => {
                                     speak(chat && chat?.answer, index)
                                   }><VolumeUpOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Read</span>
                                   </li> : <li onClick={() => stop(index)} ><VolumeOffOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Stop</span></li>}
-                                  <li><CachedOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Regenerate</span>
+                                  <li onClick={regenerateChat}><CachedOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Regenerate</span>
                                   </li>
                                 </ul>
                               </div>
                             </li>)}
                         </>))}
                     </ul>
-                    : showInitialPage && <div className="welcome-box">
+                    : showInitialPage && <div className="welcome-box d-flex flex-column justify-content-center">
                       <img src={chatLogo} alt="" />
-                      <h1>Hi, How can I help you today?</h1>
+                      <h3>Hi, How can I help you today?</h3>
                     </div>}
-                </PerfectScrollbar>
+                </div>
                 {/* </div> */}
                 {/* <div className="chat-suggestion">
                   <h4>Suggestions</h4>

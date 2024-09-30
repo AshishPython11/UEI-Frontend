@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./MainContent.css";
 import { Bar, Line } from "react-chartjs-2";
 import Chart from "react-apexcharts";
@@ -24,6 +24,7 @@ import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
+import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
 import CachedOutlinedIcon from "@mui/icons-material/CachedOutlined";
 import MicOutlinedIcon from "@mui/icons-material/MicOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
@@ -32,9 +33,11 @@ import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import { toast } from "react-toastify";
+import { toast, ToastContentProps } from "react-toastify";
 import logo from "../../assets/img/g-logo-white.svg";
-import personImage from "../../assets/img/profile.png";
+import chatLogo from "../../assets/img/chat-logo.svg";
+import maleImage from "../../assets/img/avatars/male.png";
+import femaleImage from "../../assets/img/avatars/female.png";
 import robotImage from "../../assets/img/robot.png";
 import { hasSubMenu } from "../../utils/helpers";
 import FullScreenLoader from "../../Pages/Loader/FullScreenLoader";
@@ -44,6 +47,8 @@ import Teacher from "../../Pages/Uploadpdf/Uploadpdf";
 import { ProfileDialog } from "../Dailog/ProfileComplation";
 import "../../../node_modules/react-perfect-scrollbar/dist/css/styles.css";
 import ThemeSidebar from "../ThemeSidebar/ThemeSidebar";
+import Chatbot from "../../Pages/Chatbot";
+import CommonModal from "../CommonModal";
 // import "../react-perfect-scrollbar/dist/css/styles.css";
 
 function MainContent() {
@@ -59,6 +64,11 @@ function MainContent() {
   }
   const profileURL = QUERY_KEYS_STUDENT.STUDENT_GET_PROFILE;
   const profileURLadmin = QUERY_KEYS_ADMIN_BASIC_INFO.ADMIN_GET_PROFILE;
+  const ChatURL = QUERY_KEYS.CHATADD;
+  const ChatStore = QUERY_KEYS.CHAT_STORE;
+  const ChatDELETEURL = QUERY_KEYS.CHATDELETE;
+  const chatlisturl = QUERY_KEYS.CHAT_LIST;
+  const ChatURLAI = QUERY_KEYS.CHATADDAI;
   const [profileDatas, setProfileDatas] = useState<any>({});
   const [basicinfoPercentage, setbasicinfoPercentage] = useState<number>(0);
   const [addressPercentage, setaddressPercentage] = useState<number>(0);
@@ -76,12 +86,31 @@ function MainContent() {
   const [themeMode, setThemeMode] = useState("");
   const [studentClass, setStudentClass] = useState("");
   const [studentCourse, setStudentCourse] = useState("");
+  const [search, setSearch] = useState("");
+  const [regenerateSearch, setRegenerateSearch] = useState("");
+  const [searcherr, setSearchErr] = useState(false);
+  const [loaderMsg, setLoaderMsg] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [selectedchat, setSelectedChat] = useState<any>([]);
+  const [chatsaved, setChatSaved] = useState<boolean>(false);
+  const [chat, setchatData] = useState<any>([]);
+  const [chatlist, setchatlistData] = useState<any>();
+  const [chathistory, setchathistory] = useState<any>([]);
+  const [chathistoryrecent, setchathistoryrecent] = useState<any>();
+  const [isTextCopied, setIsTextCopied] = useState<any>({});
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  let synth: SpeechSynthesis;
+  synth = window?.speechSynthesis;
+  synth.onvoiceschanged = () => {
+    getVoices();
+  };
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const chatRef = useRef<HTMLInputElement>(null);
 
   const usertype: any = localStorage.getItem("user_type");
   // const userdata = JSON.parse(localStorage?.getItem("userdata") || "/{/}/");
   const userdata = JSON.parse(localStorage?.getItem("userdata") || "{}");
 
-  const chatlisturl = QUERY_KEYS.CHAT_LIST;
   const barChartOptions = {
     chart: {
       id: "chart5",
@@ -315,7 +344,7 @@ function MainContent() {
     basicinfo = JSON.parse(profileData);
   }
 
-  const { getData, loading } = useApi();
+  const { postData, getData, deleteData, loading } = useApi();
   const [stats, setStats] = useState({
     institutionCount: 0,
     studentCount: 0,
@@ -384,6 +413,10 @@ function MainContent() {
       },
     ],
   };
+
+  useEffect(() => {
+    setLoader(loading)
+  }, [loading])
 
   const countKeysWithValue = (obj: any): number => {
     return Object.keys(obj).filter(
@@ -515,8 +548,7 @@ function MainContent() {
                   getData(`class/get/${academic_history?.course_id}`).then(
                     (response) =>
                       setStudentCourse(
-                        response.data.course_name
-                          .replace("_", " ")
+                        response.data.course_name?.replace("_", " ")
                           .charAt(0)
                           .toUpperCase() +
                         response.data.course_name.replace("_", " ").slice(1)
@@ -671,7 +703,7 @@ function MainContent() {
               if (data?.data?.pic_path !== "") {
                 getData(`${"upload_file/get_image/" + data?.data?.pic_path}`)
                   .then((imgdata: any) => {
-                    // setprofileImage(imgdata?.data)
+                    setprofileImage(imgdata?.data)
                   })
                   .catch((e) => { });
               }
@@ -866,9 +898,338 @@ function MainContent() {
     // }
 
     fetchData();
-
+    getVoices();
     // fetchstucount();
   }, []);
+
+  const handleResponse = (data: { data: any }) => {
+    const newData = data?.data ? data?.data : data;
+
+    newData.speak = false;
+    setSelectedChat((prevState: any) => [...prevState, newData]);
+    setChatSaved(false);
+    setchatData((prevState: any) => [...prevState, newData]);
+    setLoader(false);
+    setSearch("");
+    getData(`${chatlisturl}/${userdata?.id}`)
+      .then((data: any) => {
+        setchatlistData(data?.data);
+        setchathistory(data?.data?.filter((chat: any) => !chat?.flagged));
+        setchathistoryrecent(
+          data?.data?.filter((chat: any) => !chat?.flagged)
+        );
+      })
+      .catch((e) => {
+        toast.error(e?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      });
+  };
+
+  const handleError = (e: {
+    message:
+    | string
+    | number
+    | boolean
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | Iterable<React.ReactNode>
+    | React.ReactPortal
+    | ((props: ToastContentProps<unknown>) => React.ReactNode)
+    | null
+    | undefined;
+  }) => {
+    setLoader(false);
+    toast.error(e?.message, {
+      hideProgressBar: true,
+      theme: "colored",
+    });
+  };
+
+
+  const searchData = () => {
+    setRegenerateSearch(search)
+    setSearch("");
+    // setShowInitialPage(false)
+    if (search === "") {
+      setSearchErr(true);
+      return;
+    }
+
+    setLoader(true);
+    setLoaderMsg("Searching result from knowledge base");
+    setSearchErr(false);
+
+    let prompt = profileDatas?.prompt?.replace("**question**", "answer");
+    let payload = {};
+    let rag_payload = {};
+    if (selectedchat?.question !== "") {
+      payload = {
+        question: search,
+        prompt: prompt,
+        // course: studentDetail?.course === null ? "" : studentDetail?.course,
+        course: "class_10",
+        stream: profileDatas?.subject,
+        chat_hostory: [
+          { role: "user", content: selectedchat?.question },
+          {
+            role: "assistant",
+            content: selectedchat?.answer,
+          },
+        ],
+      };
+      rag_payload = {
+        user_query: search,
+        student_id: StudentId,
+      };
+    } else {
+      payload = {
+        question: search,
+        prompt: prompt,
+        course: profileDatas?.course === null ? "" : profileDatas?.course,
+        stream: profileDatas?.subject,
+      };
+      rag_payload = {
+        user_query: search,
+        student_id: StudentId,
+      };
+    }
+
+    const handleResponsereg = (data: { data: any }) => {
+      const newData = data;
+      // newData.speak = false;
+      // setFilteredProducts(newData);
+      setSelectedChat((prevState: any) => [...prevState, newData]);
+      setChatSaved(false);
+      setchatData((prevState: any) => [...prevState, newData]);
+      setLoader(false);
+      setSearch("");
+      getData(`${chatlisturl}/${userdata?.id}`)
+        .then((data: any) => {
+          setchatlistData(data?.data);
+          setchathistory(data?.data?.filter((chat: any) => !chat?.flagged));
+          setchathistoryrecent(
+            data?.data?.filter((chat: any) => !chat?.flagged)
+          );
+        })
+        .catch((e) => {
+          toast.error(e?.message, {
+            hideProgressBar: true,
+            theme: "colored",
+          });
+        });
+    };
+
+    postData(`${ChatURL}`, payload)
+      .then((data) => {
+        if (data.status === 200) {
+          handleResponse(data);
+        } else if (data.status === 404) {
+          // return postData(`${ChatURLAI}`, payload);
+          // return postData(`${ChatURLRAG}`, rag_payload);
+          setLoaderMsg("Searching result from knowledge base");
+          // return getData(
+          //   `http://13.232.96.204:5000/rag-model?user_query=${search}&student_id=${userid}`
+          // );
+          if (profileDatas?.academic_history?.institution_type === "school") {
+            return getData(
+              `https://uatllm.gyansetu.ai/rag-model-className?user_query=${search}&student_id=${StudentId}&class_name=${profileDatas?.class?.name}`
+            )
+              .then((response) => {
+                if (response?.status === 200) {
+                  handleResponse(response);
+                  let ChatStorepayload = {
+                    student_id: StudentId,
+                    chat_question: search,
+                    response: response?.answer,
+                  };
+                  postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                } else {
+                  setLoaderMsg("Fetching Data from Ollama model.");
+                  getData(
+                    // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+                    `https://uatllm.gyansetu.ai/ollama-chat?user_query=${search}`
+                  )
+                    .then((response) => {
+                      if (response?.status === 200) {
+                        handleResponse(response);
+                        let ChatStorepayload = {
+                          student_id: StudentId,
+                          chat_question: search,
+                          response: response?.answer,
+                        };
+                        postData(`${ChatStore}`, ChatStorepayload).catch(
+                          handleError
+                        );
+                      }
+                    })
+                    .catch(() => {
+                      postData(`${ChatURLAI}`, payload)
+                        .then((response) => handleResponse(response))
+                        .catch((error) => handleError(error));
+                    });
+                }
+              })
+              .catch(() =>
+                getData(
+                  // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+                  `https://uatllm.gyansetu.ai/ollama-chat?user_query=${search}`
+                )
+                  .then((response) => {
+                    if (response?.status === 200) {
+                      handleResponse(response);
+                      let ChatStorepayload = {
+                        student_id: StudentId,
+                        chat_question: search,
+                        response: response?.answer,
+                      };
+                      postData(`${ChatStore}`, ChatStorepayload).catch(
+                        handleError
+                      );
+                    }
+                  })
+                  .catch(() => {
+                    postData(`${ChatURLAI}`, payload)
+                      .then((response) => handleResponse(response))
+                      .catch((error) => handleError(error));
+                  })
+              );
+          } else {
+            return getData(
+              `https://uatllm.gyansetu.ai/rag-model?user_query=${search}&student_id=${StudentId}`
+            )
+              .then((response) => {
+                if (response?.status === 200) {
+                  handleResponse(response);
+                  let ChatStorepayload = {
+                    student_id: StudentId,
+                    chat_question: search,
+                    response: response?.answer,
+                  };
+                  postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                } else {
+                  setLoaderMsg("Fetching Data from Ollama model.");
+                  getData(
+                    // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+                    `https://uatllm.gyansetu.ai/ollama-chat?user_query=${search}`
+                  )
+                    .then((response) => {
+                      if (response?.status === 200) {
+                        handleResponse(response);
+                        let ChatStorepayload = {
+                          student_id: StudentId,
+                          chat_question: search,
+                          response: response?.answer,
+                        };
+                        postData(`${ChatStore}`, ChatStorepayload).catch(
+                          handleError
+                        );
+                      }
+                    })
+                    .catch(() => {
+                      postData(`${ChatURLAI}`, payload)
+                        .then((response) => handleResponse(response))
+                        .catch((error) => handleError(error));
+                    });
+                }
+              })
+              .catch(() => {
+                setLoaderMsg("Fetching Data from Ollama model.");
+                getData(
+                  // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+                  `https://uatllm.gyansetu.ai/ollama-chat?user_query=${search}`
+                )
+                  .then((response) => {
+                    if (response?.status === 200) {
+                      handleResponse(response);
+                      let ChatStorepayload = {
+                        student_id: StudentId,
+                        chat_question: search,
+                        response: response?.answer,
+                      };
+                      postData(`${ChatStore}`, ChatStorepayload).catch(
+                        handleError
+                      );
+                    }
+                  })
+                  .catch(() => {
+                    postData(`${ChatURLAI}`, payload)
+                      .then((response) => handleResponse(response))
+                      .catch((error) => handleError(error));
+                  });
+              });
+          }
+        } else {
+          handleError(data);
+        }
+      })
+      .then((data: any) => {
+        if (data?.status === 200) {
+          let ChatStorepayload = {
+            student_id: StudentId,
+            chat_question: search,
+            response: data?.answer,
+          };
+
+          postData(`${ChatStore}`, ChatStorepayload)
+            .then((data) => {
+              if (data?.status === 200) {
+                // handleResponse(data);
+              } else if (data) {
+                // handleError(data);
+              }
+            })
+            .catch(handleError);
+
+          handleResponsereg(data);
+        } else if (data?.status === 404) {
+          let Ollamapayload = {
+            user_query: search,
+          };
+          // return postData(`${ChatURLOLLAMA}`, Ollamapayload);
+          setLoaderMsg("Fetching Data from Ollama model.");
+          return getData(
+            `https://uatllm.gyansetu.ai/ollama-chat?user_query=${search}`
+          );
+        } else if (data) {
+          handleError(data);
+        }
+      })
+      .then((data) => {
+        if (data?.status === 200) {
+          // handleResponse(data);
+          let ChatStorepayload = {
+            student_id: StudentId,
+            chat_question: search,
+            response: data?.answer,
+          };
+
+          postData(`${ChatStore}`, ChatStorepayload)
+            .then((data) => {
+              if (data?.status === 200) {
+                // handleResponse(data);
+              } else if (data) {
+                // handleError(data);
+              }
+            })
+            .catch(handleError);
+          handleResponsereg(data);
+        } else if (data?.status === 404) {
+          setLoaderMsg("Fetching data from Chat-GPT API.");
+          return postData(`${ChatURLAI}`, payload);
+        } else if (data) {
+          handleError(data);
+        }
+      })
+      .then((data) => {
+        if (data?.status === 200) {
+          handleResponse(data);
+        } else if (data) {
+          handleError(data);
+        }
+      })
+      .catch(handleError);
+  };
 
   const pieData = [
     { id: 0, value: stats.entityCount, label: "Entity" },
@@ -911,9 +1272,154 @@ function MainContent() {
     }
     return null;
   };
+
+  const handleKeyDown = (e: { key: string }) => {
+    if (e.key === "Enter") {
+      searchData();
+    }
+  };
+
+  const getVoices = () => {
+    setVoices(synth.getVoices());
+    console.log("voices", voices);
+    // filterVoicesByGender("Google UK English Female");
+    // filterVoicesByGender("Microsoft Zira - English (United States)");
+    // filterVoicesByGender('Microsoft Mark - English (United States)');
+  };
+
+  const speak = (text: string, index: number) => {
+    console.log("SPEAK", text, index);
+
+    const textArray = Array.isArray(text) ? text : [text];
+
+    // Join the array into a single string
+    let cleanedText = textArray.join(" ");
+
+    // Remove unwanted characters and replace with spaces
+    // cleanedText = cleanedText.replace(/[^\w\s]/gi, ' ');
+
+    // Replace multiple spaces with a single space
+    cleanedText = cleanedText.replace(/\s+/g, " ");
+
+    // Trim any leading or trailing spaces
+    cleanedText = cleanedText.trim();
+
+    // Convert the first letter of the cleaned text to uppercase
+    cleanedText = cleanedText.charAt(0).toUpperCase() + cleanedText.slice(1);
+
+    // Add a period at the end if it's missing
+    // if (cleanedText.slice(-1) !== '.') {
+    //   cleanedText += '.';
+    // }
+    const utterance = new SpeechSynthesisUtterance(cleanedText);
+    utterance.onerror = (event) => { };
+    // Event listener for when the speech ends
+    utterance.onend = () => {
+      const updatedChat = [...selectedchat];
+      updatedChat[index] = { ...updatedChat[index], speak: false };
+      setSelectedChat(updatedChat);
+    };
+
+    // console.log("ssssss",cleanedText,voices);
+    const voice = voices.find(
+      (voice) => voice.name === "Microsoft Mark - English (United States)"
+    ) as SpeechSynthesisVoice;
+    utterance.rate = 0.9;
+    utterance.voice = voice;
+    synth.speak(utterance);
+    // setSelectedChat({ ...selectedchat, speak: true });
+    const updatedChat = [...selectedchat];
+    updatedChat[index] = { ...updatedChat[index], speak: true };
+    setSelectedChat(updatedChat);
+  };
+  const stop = (index: number) => {
+    // setSelectedChat({ ...selectedchat, speak: false });
+    const updatedChat = [...selectedchat];
+    updatedChat[index] = { ...updatedChat[index], speak: false };
+    setSelectedChat(updatedChat);
+    synth.cancel();
+  };
+
+  const regenerateChat = () => {
+
+    setLoader(true);
+    setLoaderMsg("Fetching Data from Ollama model.");
+    setSearchErr(false);
+
+    let prompt = profileDatas?.prompt?.replace("**question**", "answer");
+    let payload = {};
+
+    if (selectedchat?.question !== "") {
+      payload = {
+        question: regenerateSearch,
+        prompt: prompt,
+        // course: studentDetail?.course === null ? "" : studentDetail?.course,
+        course: "class_10",
+        stream: profileDatas?.subject,
+        chat_hostory: [
+          { role: "user", content: selectedchat?.question },
+          {
+            role: "assistant",
+            content: selectedchat?.answer,
+          },
+        ],
+      };
+    } else {
+      payload = {
+        question: regenerateSearch,
+        prompt: prompt,
+        course: profileDatas?.course === null ? "" : profileDatas?.course,
+        stream: profileDatas?.subject,
+      };
+    }
+
+    getData(
+      // `http://13.232.96.204:5000//ollama-chat?user_query=${search}`
+      `https://uatllm.gyansetu.ai/ollama-chat?user_query=${regenerateSearch}`
+    )
+      .then((response) => {
+        if (response?.status === 200) {
+          handleResponse(response);
+          let ChatStorepayload = {
+            student_id: StudentId,
+            chat_question: regenerateSearch,
+            response: response?.answer,
+          };
+          postData(`${ChatStore}`, ChatStorepayload).catch(
+            handleError
+          );
+        }
+      })
+      .catch(() => {
+        postData(`${ChatURLAI}`, payload)
+          .then((response) => handleResponse(response))
+          .catch((error) => handleError(error));
+      });
+  }
+
+  const copyText = (index: number) => {
+    console.log("Text Copied");
+
+    // Get the text content of the div with the specific inline styles
+    const textToCopy = (document.getElementById(`answer-${index}`) as HTMLDivElement)?.innerText;
+
+    // Use the Clipboard API to copy the text
+    navigator.clipboard.writeText(textToCopy)
+      .then(() => {
+        const updatedState = {
+          ...isTextCopied,
+          [`answer-${index}`]: true
+        }
+        setIsTextCopied(updatedState)
+      })
+      .catch((err) => {
+        console.error('Error copying text: ', err);
+      });
+  };
+
   return (
     <>
-      {loading && <FullScreenLoader />}
+      {loader && <FullScreenLoader msg={loaderMsg} />}
       {/* {basicinfo!==null && basicinfo?.basic_info && userName === 'admin' ?  */}
       {userName === "admin" ? (
         <>
@@ -1157,7 +1663,7 @@ function MainContent() {
                         <div className="col-12">
                           <div className="d-flex align-items-center gap-lg-3 gap-2 mobile-profile">
                             <img
-                              src={personImage}
+                              src={profileImage ? profileImage : profileDatas?.basic_info?.gender.toLowerCase() === "female" ? femaleImage : maleImage}
                               className="rounded-circle bg-grd-info p-1"
                               width="100"
                               height="100"
@@ -1175,9 +1681,9 @@ function MainContent() {
                                     {studentClass || studentCourse}
                                   </small>
                                 </div>
-                                <a href="" className="text-dark link-underline fs-14">
+                                <Link to="/main/StudentProfile" className="text-dark link-underline">
                                   Edit Profile
-                                </a>
+                                </Link>
                               </div>
 
                               <div className="d-flex justify-content-between gap-2 flex-wrap align-items-center">
@@ -1285,17 +1791,17 @@ function MainContent() {
                             exercise courses,{" "}
                           </small>
                         </div>
-                        <a
-                          href=""
-                          className="fw-semibold text-nowrap text-dark fs-14"
+                        <Link
+                          to="/main/StudentProfile"
+                          className="fw-semibold text-nowrap text-dark"
                         >
                           See All
-                        </a>
+                        </Link>
                       </div>
                       <div className="d-flex flex-column justify-content-between gap-4">
                         <div className="d-flex align-items-center gap-4  show-seprate">
-                          <a
-                            href="#"
+                          <Link
+                            to="/main/StudentProfile"
                             className="d-flex gap-0 flex-grow-1 flex-column text-start nav-link"
                           >
                             <p className="mb-0 ">
@@ -1304,7 +1810,7 @@ function MainContent() {
                                 : ""}
                             </p>
                             {/* <small className="text-success">Completed</small> */}
-                          </a>
+                          </Link>
                           <div className="">
                             <p className="mb-0 fs-6">
                               {profileDatas?.subject_preference
@@ -1390,130 +1896,122 @@ function MainContent() {
                         </Link>
                       </div>
                     </div>
-                    {/* <div className="chat-content ms-0 rounded-top-4"> */}
-                    <PerfectScrollbar className="chat-content ms-0 rounded-top-5">
-                      <div className="chat-content-rightside">
-                        <div className="d-flex ms-auto">
-                          <div className="flex-grow-1 me-2">
-                            <div className="chat-right-msg">
-                              <span className="anstext">
-                                <SearchOutlinedIcon sx={{ fontSize: "18px" }} />{" "}
-                                Question
-                              </span>
-                              <p className="mb-0">
-                                Give me a description of each one
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="chat-content-leftside">
-                        <div className="d-flex">
-                          <img
-                            src={logo}
-                            width="38"
-                            height="38"
-                            style={{ backgroundColor: "#9943ec" }}
-                            // className="rounded-circle p-2 bg-primary"
-                            className="rounded-circle p-2"
-                            alt=""
-                          />
-                          <div className="flex-grow-1 ms-2">
-                            <div className="chat-left-msg">
-                              <span className="anstext">
-                                <DescriptionOutlinedIcon
-                                  sx={{ fontSize: "14px" }}
-                                />{" "}
-                                Answer
-                              </span>
-                              <div className="mb-4">
-                                <p>
-                                  Lorem ipsum dolor sit amet consectetur
-                                  adipisicing elit. Cupiditate alias iste
-                                  minima! Illo blanditiis minima aspernatur id
-                                  iste a! Dolore similique voluptate earum
-                                  dolorem pariatur. Pariatur sint aliquam
-                                  reiciendis minima.
-                                </p>
+                    <div className="chat-content ms-0 rounded-top-5">
+                      {selectedchat?.length > 0 ? selectedchat?.map((chat: any, index: any) => (
+                        <>
+                          {chat?.question && (
+                            <div key={`dashboard_question_${index}`} className="chat-content-rightside">
+                              <div className="d-flex ms-auto">
+                                <div className="flex-grow-1 me-2">
+                                  <div className="chat-right-msg">
+                                    <span className="anstext">
+                                      <SearchOutlinedIcon sx={{ fontSize: "18px" }} />{" "}
+                                      Question
+                                    </span>
+                                    <p className="mb-0">
+                                      {chat?.question}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
-                              <ul className="ansfooter">
-                                <li>
-                                  <ThumbUpAltOutlinedIcon
-                                    sx={{ fontSize: "14px" }}
-                                  />
-                                </li>
-                                <li>
-                                  <ThumbDownOutlinedIcon
-                                    sx={{ fontSize: "14px" }}
-                                  />
-                                </li>
-                                <li>
-                                  <ContentCopyOutlinedIcon
-                                    sx={{ fontSize: "14px" }}
-                                  />{" "}
-                                  <span>Copy</span>
-                                </li>
-                                <li>
-                                  <VolumeUpOutlinedIcon
-                                    sx={{ fontSize: "14px" }}
-                                  />{" "}
-                                  <span>Read</span>
-                                </li>
-                                <li>
-                                  <CachedOutlinedIcon
-                                    sx={{ fontSize: "14px" }}
-                                  />{" "}
-                                  <span>Regenerate</span>
-                                </li>
-                              </ul>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="chat-content-rightside">
-                        <div className="d-flex ms-auto">
-                          <div className="flex-grow-1 me-2">
-                            <div className="chat-right-msg">
-                              <span className="anstext">
-                                <SearchOutlinedIcon sx={{ fontSize: "18px" }} />{" "}
-                                Question
-                              </span>
-                              <p className="mb-0">
-                                Give me a description of each one
-                              </p>
+                          )}
+                          {chat?.answer &&
+                            (<div key={`dashboard_answer_${index}`} className="chat-content-leftside">
+                              <div className="d-flex">
+                                <img
+                                  src={logo}
+                                  width="38"
+                                  height="38"
+                                  style={{ backgroundColor: "#9943ec" }}
+                                  className="rounded-circle p-2"
+                                  alt=""
+                                />
+                                <div className="flex-grow-1 ms-2">
+                                  <div className="chat-left-msg">
+                                    <span className="anstext">
+                                      <DescriptionOutlinedIcon
+                                        sx={{ fontSize: "14px" }}
+                                      />{" "}
+                                      Answer
+                                    </span>
+                                    <div className="mb-4">
+                                      <p>
+                                        <Chatbot answer={chat?.answer} index={index} />
+                                      </p>
+                                    </div>
+                                    <ul className="ansfooter">
+                                      <li>
+                                        <ThumbUpAltOutlinedIcon
+                                          sx={{ fontSize: "14px" }}
+                                        />
+                                      </li>
+                                      <li>
+                                        <ThumbDownOutlinedIcon
+                                          sx={{ fontSize: "14px" }}
+                                        />
+                                      </li>
+                                      <li onClick={() => copyText(index)}>
+                                        <ContentCopyOutlinedIcon
+                                          sx={{ fontSize: "14px" }}
+                                        />{" "}
+                                        <span>{isTextCopied[`answer-${index}`] ? "Copied" : "Copy"}</span>
+                                      </li>
+                                      {!chat?.speak ? <li onClick={() =>
+                                        speak(chat && chat?.answer, index)
+                                      }><VolumeUpOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Read</span>
+                                      </li> : <li onClick={() => stop(index)} ><VolumeOffOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Stop</span></li>}
+                                      <li onClick={regenerateChat}>
+                                        <CachedOutlinedIcon
+                                          sx={{ fontSize: "14px" }}
+                                        />{" "}
+                                        <span>Regenerate</span>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </div>
-                      {/* </div> */}
-                    </PerfectScrollbar>
+                            )}
+                        </>)) : <div className="d-flex flex-column align-items-center">
+                        <img width={"200px"} src={chatLogo} alt="" />
+                        <h4>Hi, How can I help you today?</h4>
+                      </div>}
+                    </div>
                     <div className="chat-footer d-flex align-items-center start-0 rounded-bottom-5 bg-white border-0 ">
                       <div className="flex-grow-1 pe-2">
                         <div className="input-group">
-                          {/* <span className="input-group-text">
-                            <MicOutlinedIcon />
-                          </span> */}
                           <input
                             type="text"
-                            className="form-control rounded-pill"
-                            placeholder="Type a message"
+                            className="form-control rounded-pill w-100"
+                            ref={chatRef}
+                            placeholder="Type your question"
+                            aria-label="Search"
+                            value={search}
+                            onChange={(e) => setSearch(e?.target?.value)}
+                            onKeyDown={handleKeyDown}
                           />
+                          {searcherr === true && (
+                            <small className="text-danger">
+                              Please Enter your query!!
+                            </small>
+                          )}
                         </div>
                       </div>
                       <div className="chat-footer-menu">
-                        <a
-                          href="#"
+                        <button
+                          onClick={searchData}
                           className="btn-outline-light btn-circle rounded-circle d-flex gap-2 wh-48"
                         >
                           <SendOutlinedIcon />
-                        </a>
+                        </button>
                       </div>
                     </div>
                     <div className="overlay chat-toggle-btn-mobile"></div>
                   </div>
                 </div>
 
-                <div className="col-xl-6 d-flex align-items-stretch">
+                <div className="col-xl-6 d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
                   <div className="row mt-4 mt-lg-0">
                     <div className="col-lg-12 d-flex align-items-stretch">
                       <div className="card w-100 rounded-4 desk-card ">
@@ -1545,7 +2043,7 @@ function MainContent() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-6 d-flex align-items-stretch">
+                    <div className="col-lg-6 d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
                       <div className="card w-100 rounded-4 desk-card">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-1">
@@ -1599,7 +2097,7 @@ function MainContent() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-6 d-flex align-items-stretch">
+                    <div className="col-lg-6 d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
                       <div className="card w-100 rounded-4 desk-card">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-3">
@@ -1661,7 +2159,7 @@ function MainContent() {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-6  d-flex align-items-stretch">
+                <div className="col-xl-6  d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
                   <div className="card w-100 rounded-4 desk-card">
                     <div className="card-body">
                       <Chart
@@ -1747,6 +2245,11 @@ function MainContent() {
         onCancel={handlecancel}
         onOkClick={() => handleOk(userName)}
         title="Your profile is incomplete"
+      />
+      <CommonModal
+        message={"Coming soon"}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
       />
     </>
   );

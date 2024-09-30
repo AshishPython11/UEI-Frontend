@@ -39,6 +39,9 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
   const [permanentAddress, setPermanentAddress] = useState<StudentAddress>({
     address_type: "permanent",
   });
+  const [permanentAddress1, setPermanentAddress1] = useState<StudentAddress>({
+    address_type: "permanent",
+  });
   const [editFlag, setEditFlag] = useState<boolean>(false);
   const [pincode, setPincode] = useState("");
   const [isValid, setIsValid] = useState(true);
@@ -131,6 +134,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           response?.data.forEach((address: any) => {
             if (address?.address_type === "permanent") {
               setPermanentAddress(address);
+              setPermanentAddress1(address)
             } else if (address?.address_type === "current") {
               setStudentAddress(address);
               setStudentAddress1(address);
@@ -146,6 +150,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error(response?.message, {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         }
       })
@@ -153,6 +158,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -387,6 +393,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       ...permanentAddress,
     };
     const eq = deepEqual(studentAddress1, currentAddressPayload);
+    const permanentAddressEq = deepEqual(permanentAddress1, permanentAddressPayload);
     if (editFlag) {
       const addAddress = async (addressType: string, addressPayload: any) => {
         try {
@@ -396,6 +403,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.success(`${addressType} address saved successfully`, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"              
             });
             setActiveForm((prev) => prev + 1);
           } else {
@@ -409,11 +417,13 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(error?.message, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           } else {
             toast.error("An unexpected error occurred", {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           }
         }
@@ -439,6 +449,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.success(`${addressType} address updated successfully`, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
             listData();
             setActiveForm((prev) => prev + 1);
@@ -453,27 +464,25 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(error?.message, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           } else {
             toast.error("An unexpected error occurred", {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           }
         }
       };
 
-      if (StudentId !== null) {
+      if (StudentId !== null) {        
         // Edit current address
-        if (studentAddress?.address_type === "current") {
-          // eslint-disable-next-line no-lone-blocks
-
-          if (!eq) (await editAddress("Current", currentAddressPayload));
-
-        }
-        // Edit permanent address
-        if (permanentAddress?.address_type === "permanent") {
-          await editAddress("Permanent", permanentAddressPayload);
+        if (eq && permanentAddressEq) setActiveForm((prev) => prev + 1);
+        else {
+          if (studentAddress?.address_type === "current" && !eq) await editAddress("Current", currentAddressPayload)
+          // Edit permanent address
+          if (permanentAddress?.address_type === "permanent" && !permanentAddressEq) await editAddress("Permanent", permanentAddressPayload);
         }
       } else {
         // Handle the case where StudentId is null
@@ -581,7 +590,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             className="form-control"
             value={studentAddress.address2}
             onChange={(e) => handleInputChange(e, "current")}
-            // required
+          // required
           />
           {/* <div> {studentAddress.address2 == "" && (
             <p style={{ color: 'red' }}>Please enter Address 2.</p>
@@ -632,11 +641,10 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         <div className="col-6 pb-3 form_field_wrapper">
           {studentAddress.country && (
             <label
-              className={`col-form-label  ${
-                isFocusedstate || studentAddress.country
-                  ? "focused"
-                  : "focusedempty"
-              }`}
+              className={`col-form-label  ${isFocusedstate || studentAddress.country
+                ? "focused"
+                : "focusedempty"
+                }`}
               style={{ fontSize: "14px" }}
             >
               Country <span>*</span>
@@ -659,11 +667,10 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
           <label
-            className={`col-form-label ${
-              isFocusedstate || studentAddress.state
-                ? "focused"
-                : "focusedempty"
-            }`}
+            className={`col-form-label ${isFocusedstate || studentAddress.state
+              ? "focused"
+              : "focusedempty"
+              }`}
             style={{ fontSize: "14px" }}
           >
             State <span>*</span>
@@ -905,9 +912,8 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div> */}
         <div className="col-6 pb-3 form_field_wrapper" ref={dropdownRef}>
           <label
-            className={`col-form-label ${
-              isFocused || permanentAddress.country ? "focused" : "focusedempty"
-            }`}
+            className={`col-form-label ${isFocused || permanentAddress.country ? "focused" : "focusedempty"
+              }`}
             style={{ fontSize: "14px" }}
           >
             Country <span></span>
@@ -929,11 +935,10 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
         <div className="col-6 pb-3 form_field_wrapper" ref={dropdownstateRef}>
           <label
-            className={`col-form-label ${
-              isFocusedstate || permanentAddress.state
-                ? "focused"
-                : "focusedempty"
-            }`}
+            className={`col-form-label ${isFocusedstate || permanentAddress.state
+              ? "focused"
+              : "focusedempty"
+              }`}
             style={{ fontSize: "14px" }}
           >
             State <span></span>
