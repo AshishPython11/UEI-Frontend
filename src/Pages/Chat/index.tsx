@@ -142,10 +142,6 @@ const Chat = () => {
     }, 500);
   }, [Id]);
 
-  useEffect(() => {
-    console.log("Selected Chat", selectedchat);
-  }, [selectedchat])
-
   const callAPI = async () => {
     getData(`${StudentGETURL}${userdata ? `/${userdata?.id}` : ""}`)
       .then((data: any) => {
@@ -1099,8 +1095,6 @@ const Chat = () => {
   }
 
   const copyText = (index: number) => {
-    console.log("Text Copied");
-
     // Get the text content of the div with the specific inline styles
     const textToCopy = (document.getElementById(`answer-${index}`) as HTMLDivElement)?.innerText;
 
