@@ -493,7 +493,7 @@ const Chat = () => {
           // );
           if (studentDetail?.academic_history?.institution_type === "school") {
             return getData(
-              `https://uatllm.gyansetu.ai/rag-model-className?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.className?.name}`
+              `https://uatllm.gyansetu.ai/rag-model-className?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.class?.name}`
             )
               .then((response) => {
                 if (response?.status === 200) {
@@ -1500,7 +1500,7 @@ const Chat = () => {
               </div>
 
               <div className="history-label">
-                Today
+                Today's Search
               </div>
               <ul className="history-list">
                 <>
