@@ -445,7 +445,8 @@ const Chatbot: React.FC<IChatBot> = ({ answer, index }) => {
     };
 
     const renderText = (text: string): JSX.Element => {
-        const cleanedText = text.replace(/`{1,3}/g, '').replace(/\*{2}$/g, '');
+        // const cleanedText = text.replace(/`{1,3}/g, '').replace(/\*{2}$/g, '');
+        const cleanedText = text.replace(/`{1,3}/g, '').replace(/\*/g, '');
 
         // Check for bold formatting and render accordingly
         if (cleanedText.startsWith("**") && cleanedText.endsWith("**")) {
