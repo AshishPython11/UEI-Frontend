@@ -48,6 +48,7 @@ import { ProfileDialog } from "../Dailog/ProfileComplation";
 import "../../../node_modules/react-perfect-scrollbar/dist/css/styles.css";
 import ThemeSidebar from "../ThemeSidebar/ThemeSidebar";
 import Chatbot from "../../Pages/Chatbot";
+import CommonModal from "../CommonModal";
 // import "../react-perfect-scrollbar/dist/css/styles.css";
 
 function MainContent() {
@@ -97,6 +98,7 @@ function MainContent() {
   const [chathistory, setchathistory] = useState<any>([]);
   const [chathistoryrecent, setchathistoryrecent] = useState<any>();
   const [isTextCopied, setIsTextCopied] = useState<any>({});
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   let synth: SpeechSynthesis;
   synth = window?.speechSynthesis;
   synth.onvoiceschanged = () => {
@@ -1679,9 +1681,9 @@ function MainContent() {
                                     {studentClass || studentCourse}
                                   </small>
                                 </div>
-                                <a href="" className="text-dark link-underline">
+                                <Link to="/main/StudentProfile" className="text-dark link-underline">
                                   Edit Profile
-                                </a>
+                                </Link>
                               </div>
 
                               <div className="d-flex justify-content-between gap-2 flex-wrap align-items-center">
@@ -1789,17 +1791,17 @@ function MainContent() {
                             exercise courses,{" "}
                           </small>
                         </div>
-                        <a
-                          href=""
+                        <Link
+                          to="/main/StudentProfile"
                           className="fw-semibold text-nowrap text-dark"
                         >
                           See All
-                        </a>
+                        </Link>
                       </div>
                       <div className="d-flex flex-column justify-content-between gap-4">
                         <div className="d-flex align-items-center gap-4  show-seprate">
-                          <a
-                            href="#"
+                          <Link
+                            to="/main/StudentProfile"
                             className="d-flex gap-0 flex-grow-1 flex-column text-start nav-link"
                           >
                             <p className="mb-0 ">
@@ -1808,7 +1810,7 @@ function MainContent() {
                                 : ""}
                             </p>
                             {/* <small className="text-success">Completed</small> */}
-                          </a>
+                          </Link>
                           <div className="">
                             <p className="mb-0 fs-6">
                               {profileDatas?.subject_preference
@@ -2009,7 +2011,7 @@ function MainContent() {
                   </div>
                 </div>
 
-                <div className="col-xl-6 d-flex align-items-stretch">
+                <div className="col-xl-6 d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
                   <div className="row mt-4 mt-lg-0">
                     <div className="col-lg-12 d-flex align-items-stretch">
                       <div className="card w-100 rounded-4 desk-card ">
@@ -2041,7 +2043,7 @@ function MainContent() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-6 d-flex align-items-stretch">
+                    <div className="col-lg-6 d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
                       <div className="card w-100 rounded-4 desk-card">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-1">
@@ -2095,7 +2097,7 @@ function MainContent() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-6 d-flex align-items-stretch">
+                    <div className="col-lg-6 d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
                       <div className="card w-100 rounded-4 desk-card">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-3">
@@ -2157,7 +2159,7 @@ function MainContent() {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-6  d-flex align-items-stretch">
+                <div className="col-xl-6  d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
                   <div className="card w-100 rounded-4 desk-card">
                     <div className="card-body">
                       <Chart
@@ -2243,6 +2245,11 @@ function MainContent() {
         onCancel={handlecancel}
         onOkClick={() => handleOk(userName)}
         title="Your profile is incomplete"
+      />
+      <CommonModal
+        message={"Coming soon"}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
       />
     </>
   );
