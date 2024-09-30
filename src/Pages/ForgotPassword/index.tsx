@@ -19,7 +19,6 @@ import {
 import "swiper/css";
 import "swiper/css/pagination";
 // import "../../assets/css/main.min.css";
-import "../../assets/css/main.scss";
 import FullScreenLoader from "../Loader/FullScreenLoader";
 
 const Forgotpassword = () => {
@@ -144,7 +143,7 @@ const Forgotpassword = () => {
             </div>
             <div className="col-6">
               <div className="d-flex justify-content-end">
-                <Link to="/signup" className="new-btn new-btn-secondary px-4">
+                <Link to="/signup" className="btn btn-secondary px-4">
                   Register
                 </Link>
               </div>
@@ -251,7 +250,7 @@ const Forgotpassword = () => {
                       <button
                         type="submit"
                         onClick={(e) => sendLink(e)}
-                        className="new-btn btn-primary w-100 mb-4"
+                        className="btn btn-secondary w-100 mb-4 mh-56 rounded-pill"
                       >
                         Send Link
                       </button>

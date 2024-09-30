@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "../Header/Header.scss";
+// import "../Header/Header.scss";
 import notification from "../../assets/img/notification.svg";
 import profile from "../../assets/img/profile_img.svg";
 import { toast } from "react-toastify";
@@ -44,9 +44,9 @@ import ShoppingBasketOutlinedIcon from "@mui/icons-material/ShoppingBasketOutlin
 import LaptopOutlinedIcon from "@mui/icons-material/LaptopOutlined";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { CircularProgress, Switch } from "@mui/material";
-import ThemeModel from "../../assets/css/themes/ThemeModel";
-import "../../assets/css/newstyle.min.css";
-import "../../assets/css/main.min.css";
+// import ThemeModel from "../../assets/css/themes/ThemeModel";
+// import "../../assets/css/newstyle.min.css";
+// import "../../assets/css/main.min.css";
 import "react-perfect-scrollbar/dist/css/styles.css";
 // import { Button } from '@mui/material';
 
@@ -117,6 +117,7 @@ const Header = () => {
       }
     }
   }
+
   function handleSearchClick() {
     let main_content = document.getElementById("search-toggle");
     if (main_content) {
@@ -216,7 +217,25 @@ const Header = () => {
 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   useEffect(() => {
-    // document.querySelector("body")?.classList.add("toggled")
+
+
+
+    function toggleOnDesktop() {
+      if (window.innerWidth >= 1024) {
+        document.querySelector("body")?.classList.add("toggled");
+      } else {
+        document.querySelector("body")?.classList.remove("toggled");
+      }
+    }
+
+    // Run the function on load and on resize
+    toggleOnDesktop();
+    window.addEventListener("resize", toggleOnDesktop);
+
+
+
+
+
     const theme = localStorage.getItem("theme");
     if (theme) {
       // localStorage.getItem('--bodybackground');
@@ -449,7 +468,9 @@ const Header = () => {
       </header> */}
       <header className="top-header">
         <nav className="navbar navbar-expand align-items-center gap-lg-4">
-          <div className="btn-toggle">
+          <div className="btn-toggle" style={{
+            cursor: "pointer"
+          }}>
             {/* <a href="#"> */}
             <MenuIcon onClick={handleClick} />
             {/* </a> */}
@@ -570,7 +591,7 @@ const Header = () => {
               </a>
             </li>
             {/* <li className="nav-item d-none d-lg-flex">
-              <button onClick={() => navigator("/main/Chat/recentChat")} className="new-btn btn-primary rounded-pill px-lg-4">
+              <button onClick={() => navigator("/main/Chat/recentChat")} className="btn btn-primary rounded-pill px-lg-4">
                 New Chat
               </button>
             </li> */}

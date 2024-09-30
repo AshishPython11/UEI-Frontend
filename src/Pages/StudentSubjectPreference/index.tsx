@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -58,6 +58,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
   const [editFalg, setEditFlag] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
+  const navigate = useNavigate()
   // const [pervalidet, setpervalidet] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{
     [key: number]: { [key: string]: boolean };
@@ -80,6 +81,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -98,6 +100,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -112,6 +115,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -160,6 +164,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -225,6 +230,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
           toast.success(data?.message, {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
           setBoxes(boxes.filter((box, index) => index !== indx));
         })
@@ -232,12 +238,14 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
           toast.error(e?.message, {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         });
     } else {
       toast.success("Data Deleted Successfully", {
         hideProgressBar: true,
         theme: "colored",
+        position: "top-center"
       });
       console.log("Data Deleted Successfully", boxes, indx);
       setBoxes(boxes.filter((box, index) => index !== indx));
@@ -385,8 +393,10 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
         toast.success("Subject Preference save successfully", {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
         setInitialState(initial);
+        navigate('/')
         // getPrefrencelist()
         // setBoxes11(boxes)
       } else {
@@ -402,6 +412,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
       toast.error(error?.message, {
         hideProgressBar: true,
         theme: "colored",
+        position: "top-center"
       });
       // }
     }
@@ -570,7 +581,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
           <div className="mt-3 d-flex align-items-center justify-content-between">
             <button
               type="button"
-              className="new-btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
+              className="btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
               onClick={() => {
                 setActiveForm((prev) => prev - 1);
               }}
@@ -579,7 +590,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
             </button>
             <button
               type="button"
-              className="new-btn btn-dark px-lg-5  ms-auto d-block rounded-pill submit-btn"
+              className="btn btn-dark px-lg-5  ms-auto d-block rounded-pill submit-btn"
               onClick={handleSubmit}
             >
               Submit

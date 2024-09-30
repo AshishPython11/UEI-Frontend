@@ -299,7 +299,7 @@ const AddStudentFeedback = () => {
                   <div className="btn-group">
                     <button
                       type="button"
-                      className="new-btn btn-outline-primary rounded-pill px-lg-4"
+                      className="btn btn-outline-primary rounded-pill px-lg-4"
                       data-bs-toggle="offcanvas"
                       data-bs-target="#staticBackdrop"
                     >

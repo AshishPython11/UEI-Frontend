@@ -155,7 +155,7 @@
 		left: -260px!important;
 		.sidebar-header {
 			.sidebar-close {
-				display: flex;
+				display: flex!important;
 			}
 		}
 	}
@@ -170,7 +170,7 @@
 	.toggled {
 		.sidebar-wrapper {
 			width: 260px;
-			left: 0px;
+			left: 0px!important;
 			.sidebar-header {
 				width: 260px;
 			}
@@ -187,7 +187,7 @@
 			}
 		}
 		.page-footer {
-			left: 0px;
+			left: 0px!important;
 		}
 		.main-wrapper {
 			margin-left: 0!important;
@@ -246,7 +246,15 @@
 
     .page-footer {
     
-        left: 0px;
+        left: 0px!important;
+		text-align: center;
+		padding: .5rem;
+		height: auto!important;
+		bottom: 0!important;
+		font-size: 11px;
+		a{
+			font-size: 11px;
+		}
     }
 
     /*mini sidebar*/

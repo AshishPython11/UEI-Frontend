@@ -135,6 +135,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.warning("Please add your information", {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         } else {
           // console.log("error comes from api");
@@ -144,6 +145,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -288,16 +290,19 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               toast.success(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
             } else if (data?.status === 404) {
               toast.error(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
             } else {
               toast.error(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
             }
           })
@@ -305,6 +310,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(e?.message, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           });
       }
@@ -428,6 +434,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               toast.success("Basic information saved successfully", {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
               setActiveForm((prev) => prev + 1);
               setNamepro({
@@ -453,6 +460,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               toast.error(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
             }
           })
@@ -460,6 +468,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(e?.message, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           });
       } else {
@@ -471,6 +480,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 toast.success("Basic information updated successfully", {
                   hideProgressBar: true,
                   theme: "colored",
+                  position: "top-center"
                 });
                 setActiveForm((prev) => prev + 1);
                 // getStudentBasicInfo()
@@ -499,6 +509,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 toast.error(data?.message, {
                   hideProgressBar: true,
                   theme: "colored",
+                  position: "top-center"
                 });
               }
             })
@@ -571,7 +582,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
     <form>
       <div className="row d-flex">
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             First Name <span>*</span>
           </label>
@@ -609,7 +620,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Last Name <span>*</span>
           </label>
@@ -709,7 +720,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Father Name <span>*</span>
           </label>
@@ -747,7 +758,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Mother Name <span>*</span>
           </label>
@@ -785,7 +796,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Guardian Name <span></span>
           </label>
@@ -816,7 +827,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
 
         <div className="col-md-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Aim <span></span>
           </label>
@@ -935,7 +946,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         <div className="col-lg-12">
           <button
             type="button"
-            className="new-btn btn-dark px-lg-5 mt-3 ms-auto d-block rounded-pill next-btn px-4"
+            className="btn btn-dark px-lg-5 mt-3 ms-auto d-block rounded-pill next-btn px-4"
             onClick={() => submitHandel()}
           >
             Next

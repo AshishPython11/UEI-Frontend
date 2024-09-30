@@ -39,6 +39,9 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
   const [permanentAddress, setPermanentAddress] = useState<StudentAddress>({
     address_type: "permanent",
   });
+  const [permanentAddress1, setPermanentAddress1] = useState<StudentAddress>({
+    address_type: "permanent",
+  });
   const [editFlag, setEditFlag] = useState<boolean>(false);
   const [pincode, setPincode] = useState("");
   const [isValid, setIsValid] = useState(true);
@@ -131,6 +134,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           response?.data.forEach((address: any) => {
             if (address?.address_type === "permanent") {
               setPermanentAddress(address);
+              setPermanentAddress1(address)
             } else if (address?.address_type === "current") {
               setStudentAddress(address);
               setStudentAddress1(address);
@@ -146,6 +150,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error(response?.message, {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         }
       })
@@ -153,6 +158,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -387,6 +393,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       ...permanentAddress,
     };
     const eq = deepEqual(studentAddress1, currentAddressPayload);
+    const permanentAddressEq = deepEqual(permanentAddress1, permanentAddressPayload);
     if (editFlag) {
       const addAddress = async (addressType: string, addressPayload: any) => {
         try {
@@ -396,6 +403,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.success(`${addressType} address saved successfully`, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"              
             });
             setActiveForm((prev) => prev + 1);
           } else {
@@ -409,11 +417,13 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(error?.message, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           } else {
             toast.error("An unexpected error occurred", {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           }
         }
@@ -439,6 +449,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.success(`${addressType} address updated successfully`, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
             listData();
             setActiveForm((prev) => prev + 1);
@@ -453,27 +464,25 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(error?.message, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           } else {
             toast.error("An unexpected error occurred", {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           }
         }
       };
 
-      if (StudentId !== null) {
+      if (StudentId !== null) {        
         // Edit current address
-        if (studentAddress?.address_type === "current") {
-          // eslint-disable-next-line no-lone-blocks
-
-          if (!eq) (await editAddress("Current", currentAddressPayload));
-
-        }
-        // Edit permanent address
-        if (permanentAddress?.address_type === "permanent") {
-          await editAddress("Permanent", permanentAddressPayload);
+        if (eq && permanentAddressEq) setActiveForm((prev) => prev + 1);
+        else {
+          if (studentAddress?.address_type === "current" && !eq) await editAddress("Current", currentAddressPayload)
+          // Edit permanent address
+          if (permanentAddress?.address_type === "permanent" && !permanentAddressEq) await editAddress("Permanent", permanentAddressPayload);
         }
       } else {
         // Handle the case where StudentId is null
@@ -528,7 +537,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
   return (
     <form>
       <div className="row form_field_wrapper">
-        <div className="col-12 p-0">
+        <div className="col-12">
           <h5 className="font-weight-bold profiletext">
             {" "}
             <b>Current Address</b>
@@ -537,7 +546,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       </div>
       <div className="row">
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Address 1 <span>*</span>
           </label>
@@ -566,7 +575,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.address1 && <span style={{ color: 'red' }}>{error.address1}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label> Address 2</label>
+          <label className="col-form-label"> Address 2</label>
           {/* <TextField
             type="text"
             name="address2"
@@ -581,7 +590,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             className="form-control"
             value={studentAddress.address2}
             onChange={(e) => handleInputChange(e, "current")}
-            // required
+          // required
           />
           {/* <div> {studentAddress.address2 == "" && (
             <p style={{ color: 'red' }}>Please enter Address 2.</p>
@@ -632,7 +641,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         <div className="col-6 pb-3 form_field_wrapper">
           {studentAddress.country && (
             <label
-              className={`floating-label ${isFocusedstate || studentAddress.country
+              className={`col-form-label  ${isFocusedstate || studentAddress.country
                 ? "focused"
                 : "focusedempty"
                 }`}
@@ -658,7 +667,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
           <label
-            className={`floating-label ${isFocusedstate || studentAddress.state
+            className={`col-form-label ${isFocusedstate || studentAddress.state
               ? "focused"
               : "focusedempty"
               }`}
@@ -685,7 +694,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           </div>
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             City <span>*</span>
           </label>
@@ -722,7 +731,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.city && <span style={{ color: 'red' }}>{error.city}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             District <span>*</span>
           </label>
@@ -759,7 +768,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.district && <span style={{ color: 'red' }}>{error.district}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Pincode <span>*</span>
           </label>
@@ -800,7 +809,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.pincode && <span style={{ color: 'red' }}>{error.pincode}</span>} */}
         </div>
       </div>
-      <div className="row">
+      <div className="row mt-4">
         <div className="col-12 ">
           <h5 className="font-weight-bold profiletext">
             {" "}
@@ -823,7 +832,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           </FormControl>
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Address 1 <span></span>
           </label>
@@ -845,7 +854,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           />
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Address 2 <span></span>
           </label>
@@ -903,7 +912,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div> */}
         <div className="col-6 pb-3 form_field_wrapper" ref={dropdownRef}>
           <label
-            className={`floating-label ${isFocused || permanentAddress.country ? "focused" : "focusedempty"
+            className={`col-form-label ${isFocused || permanentAddress.country ? "focused" : "focusedempty"
               }`}
             style={{ fontSize: "14px" }}
           >
@@ -926,7 +935,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div>
         <div className="col-6 pb-3 form_field_wrapper" ref={dropdownstateRef}>
           <label
-            className={`floating-label ${isFocusedstate || permanentAddress.state
+            className={`col-form-label ${isFocusedstate || permanentAddress.state
               ? "focused"
               : "focusedempty"
               }`}
@@ -953,7 +962,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           </div>
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             City <span></span>
           </label>
@@ -984,7 +993,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.city && <span style={{ color: 'red' }}>{error.city}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             District <span></span>
           </label>
@@ -1015,7 +1024,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           {/* {error.district && <span style={{ color: 'red' }}>{error.district}</span>} */}
         </div>
         <div className="col-6 pb-3 form_field_wrapper">
-          <label>
+          <label className="col-form-label">
             {" "}
             Pincode <span></span>
           </label>
@@ -1053,7 +1062,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           <div className="mt-3 d-flex align-items-center justify-content-between">
             <button
               type="button"
-              className="new-btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
+              className="btn btn-outline-dark prev-btn px-lg-4  rounded-pill"
               onClick={() => {
                 setActiveForm((prev) => prev - 1);
               }}
@@ -1062,7 +1071,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             </button>
             <button
               type="button"
-              className="new-btn btn-dark px-lg-5  ms-auto d-block rounded-pill next-btn px-4"
+              className="btn btn-dark px-lg-5  ms-auto d-block rounded-pill next-btn px-4"
               onClick={SubmitHandle}
             >
               Next

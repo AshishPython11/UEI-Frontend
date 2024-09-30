@@ -74,6 +74,11 @@ import FAQ from './Components/FAQ/FAQ';
 // import "./assets/css/main.scss";
 // import "./assets/css/newstyle.scss";
 
+
+// import "./assets/css/main.min.css";
+// import "./assets/css/newstyle.min.css";
+// import "./assets/css/main.min.css";
+// import "./assets/css/newstyle.min.css";
 // import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 function App() {

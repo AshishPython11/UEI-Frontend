@@ -25,11 +25,9 @@ import useApi from "../../hooks/useAPI";
 import gyansetuLogo from "../../assets/img/logo-white.svg";
 import { QUERY_KEYS_MENU } from "../../utils/const";
 import sidebarlog from "../../assets/img/logo.svg";
-import "../Sidebar/Sidebar.scss";
+// import "../Sidebar/Sidebar.scss";
 // import "../../assets/css/newstyle.min.css";
 // import "../../assets/css/main.min.css";
-import "../../assets/css/newstyle.scss";
-import "../../assets/css/main.scss";
 // import "../../assets/css/main.css";
 import "../../../node_modules/metismenujs/dist/metismenujs.css";
 import "simplebar-react/dist/simplebar.min.css";
@@ -212,7 +210,13 @@ const Sidebar = () => {
   const handleMouseLeave = () => {
     document.body.classList.remove("sidebar-hovered");
   };
-
+  function removeMobileToggle(){
+    if (window.innerWidth <= 1024) {
+      document.querySelector("body")?.classList.remove("toggled");
+  } else {
+      document.querySelector("body")?.classList.add("toggled");
+  }
+  }
   // console.log("test hhh",selectedIndex1)
   // const SidebarContainer = styled.aside`
   //   width: 250px;
@@ -484,7 +488,7 @@ const Sidebar = () => {
             </div>
             <div className="sidebar-close">
               <CloseOutlinedIcon
-                onClick={() => document.body.classList.remove("toggled")}
+                onClick={removeMobileToggle}
               />
             </div>
           </div>
@@ -492,7 +496,7 @@ const Sidebar = () => {
             <MetisMenu>
               {/* <ul id="sidenav"> */}
               <li>
-                <Link to="/main/DashBoard">
+                <Link to="/main/DashBoard" onClick={removeMobileToggle}>
                   <div className="parent-icon">
                     <HomeOutlinedIcon />
                   </div>
@@ -502,7 +506,8 @@ const Sidebar = () => {
               {profileCompletion === "100" ?
                 <>
                   <li>
-                    <Link to="/main/Chat/recentChat">
+                    <Link to="/main/Chat/recentChat" onClick={removeMobileToggle}
+                    >
                       <div className="parent-icon">
                         <ChatOutlinedIcon />
                       </div>
@@ -510,7 +515,7 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/main/Chat">
+                    <Link to="/main/Chat" onClick={removeMobileToggle}>
                       <div className="parent-icon">
                         <LocalLibraryOutlinedIcon />
                       </div>
@@ -518,7 +523,7 @@ const Sidebar = () => {
                     </Link>
                   </li>
                   <li>
-                    <Link to="/main/student-feedback/add-student-feedback">
+                    <Link to="/main/student-feedback/add-student-feedback" onClick={removeMobileToggle}>
                       <div className="parent-icon">
                         <InfoOutlinedIcon />
                       </div>
@@ -527,7 +532,7 @@ const Sidebar = () => {
                   </li>
                 </> : ''}
               <li>
-                <Link to="/main/faq">
+                <Link to="/main/faq" onClick={removeMobileToggle}>
                   <div className="parent-icon">
                     <LiveHelpOutlinedIcon />
                   </div>
