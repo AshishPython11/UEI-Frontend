@@ -1180,9 +1180,9 @@ function MainContent() {
                                 </a>
                               </div>
 
-                              <div className="d-flex justify-content-between gap-2 flex-wrap flex-lg-nowrap">
-                                <i>Student Standard Account</i>
-                                <button className="btn btn-primary rounded-pill btn-sm  text-nowrap px-lg-4">
+                              <div className="d-flex justify-content-between gap-2 flex-wrap align-items-center">
+                                <i>Student Standard <span className="d-lg-block"> Account </span></i>
+                                <button className="btn btn-primary rounded-pill btn-sm  text-nowrap px-lg-3">
                                   Upgrade <KeyboardArrowRightIcon />
                                 </button>
                               </div>

@@ -4,7 +4,22 @@
 
   $headingColor: #d5d5d5;
   $headerbg: #212529;
- 
+  .chat-panel .main-chat-panel .inner-panel .chat-result ul li .chat-card{
+    background-color: #212529!important;
+  }
+  .feedback .feedback-questions .question {
+   
+   
+    background: rgb(75 75 75 / 48%)!important;
+    
+}
+.chat-wrapper{
+  background-color: #212529!important;
+}
+.form-control:focus {
+  box-shadow: none !important;
+  border-color: #495057 !important;
+}
   .accordion-item:not(:first-of-type) {
     border-top: 1px solid rgba(73, 80, 87, 1) !important;
   }
@@ -12,6 +27,7 @@
   .chat-content {
     background-color: #212529 !important;
   }
+
   input::placeholder {
     color: #fff !important;
   }
@@ -73,9 +89,10 @@
   }
 
   @media (min-width: 1024px) {
-    .main-chat-panel {
-      border-left: 1px solid rgba(white, 0.1) !important;
+    .left-side-history  {
+      border-right: 1px solid rgba($stroke-100, 0.1) !important;
     }
+    
   }
 
   /*header*/
