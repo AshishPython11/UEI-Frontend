@@ -9,7 +9,7 @@ import { PieChart } from "@mui/x-charts/PieChart";
 // import Box from '@mui/material/Box';
 import useApi from "../../hooks/useAPI";
 // import Button from '@mui/material/Button';
-
+import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   QUERY_KEYS,
@@ -24,7 +24,7 @@ import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
-import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
+import VolumeOffOutlinedIcon from "@mui/icons-material/VolumeOffOutlined";
 import CachedOutlinedIcon from "@mui/icons-material/CachedOutlined";
 import MicOutlinedIcon from "@mui/icons-material/MicOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
@@ -415,8 +415,8 @@ function MainContent() {
   };
 
   useEffect(() => {
-    setLoader(loading)
-  }, [loading])
+    setLoader(loading);
+  }, [loading]);
 
   const countKeysWithValue = (obj: any): number => {
     return Object.keys(obj).filter(
@@ -531,7 +531,7 @@ function MainContent() {
                           .replace("_", " ")
                           .charAt(0)
                           .toUpperCase() +
-                        response.data.class_name.replace("_", " ").slice(1)
+                          response.data.class_name.replace("_", " ").slice(1)
                       )
                   );
                 }
@@ -548,10 +548,11 @@ function MainContent() {
                   getData(`class/get/${academic_history?.course_id}`).then(
                     (response) =>
                       setStudentCourse(
-                        response.data.course_name?.replace("_", " ")
+                        response.data.course_name
+                          ?.replace("_", " ")
                           .charAt(0)
                           .toUpperCase() +
-                        response.data.course_name.replace("_", " ").slice(1)
+                          response.data.course_name.replace("_", " ").slice(1)
                       )
                   );
                 }
@@ -703,9 +704,9 @@ function MainContent() {
               if (data?.data?.pic_path !== "") {
                 getData(`${"upload_file/get_image/" + data?.data?.pic_path}`)
                   .then((imgdata: any) => {
-                    setprofileImage(imgdata?.data)
+                    setprofileImage(imgdata?.data);
                   })
-                  .catch((e) => { });
+                  .catch((e) => {});
               }
 
               let totalcount = Object.keys(basic_info)?.length;
@@ -915,9 +916,7 @@ function MainContent() {
       .then((data: any) => {
         setchatlistData(data?.data);
         setchathistory(data?.data?.filter((chat: any) => !chat?.flagged));
-        setchathistoryrecent(
-          data?.data?.filter((chat: any) => !chat?.flagged)
-        );
+        setchathistoryrecent(data?.data?.filter((chat: any) => !chat?.flagged));
       })
       .catch((e) => {
         toast.error(e?.message, {
@@ -929,15 +928,15 @@ function MainContent() {
 
   const handleError = (e: {
     message:
-    | string
-    | number
-    | boolean
-    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-    | Iterable<React.ReactNode>
-    | React.ReactPortal
-    | ((props: ToastContentProps<unknown>) => React.ReactNode)
-    | null
-    | undefined;
+      | string
+      | number
+      | boolean
+      | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+      | Iterable<React.ReactNode>
+      | React.ReactPortal
+      | ((props: ToastContentProps<unknown>) => React.ReactNode)
+      | null
+      | undefined;
   }) => {
     setLoader(false);
     toast.error(e?.message, {
@@ -946,9 +945,8 @@ function MainContent() {
     });
   };
 
-
   const searchData = () => {
-    setRegenerateSearch(search)
+    setRegenerateSearch(search);
     setSearch("");
     // setShowInitialPage(false)
     if (search === "") {
@@ -1312,7 +1310,7 @@ function MainContent() {
     //   cleanedText += '.';
     // }
     const utterance = new SpeechSynthesisUtterance(cleanedText);
-    utterance.onerror = (event) => { };
+    utterance.onerror = (event) => {};
     // Event listener for when the speech ends
     utterance.onend = () => {
       const updatedChat = [...selectedchat];
@@ -1341,7 +1339,6 @@ function MainContent() {
   };
 
   const regenerateChat = () => {
-
     setLoader(true);
     setLoaderMsg("Fetching Data from Ollama model.");
     setSearchErr(false);
@@ -1385,9 +1382,7 @@ function MainContent() {
             chat_question: regenerateSearch,
             response: response?.answer,
           };
-          postData(`${ChatStore}`, ChatStorepayload).catch(
-            handleError
-          );
+          postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
         }
       })
       .catch(() => {
@@ -1395,25 +1390,28 @@ function MainContent() {
           .then((response) => handleResponse(response))
           .catch((error) => handleError(error));
       });
-  }
+  };
 
   const copyText = (index: number) => {
     console.log("Text Copied");
 
     // Get the text content of the div with the specific inline styles
-    const textToCopy = (document.getElementById(`answer-${index}`) as HTMLDivElement)?.innerText;
+    const textToCopy = (
+      document.getElementById(`answer-${index}`) as HTMLDivElement
+    )?.innerText;
 
     // Use the Clipboard API to copy the text
-    navigator.clipboard.writeText(textToCopy)
+    navigator.clipboard
+      .writeText(textToCopy)
       .then(() => {
         const updatedState = {
           ...isTextCopied,
-          [`answer-${index}`]: true
-        }
-        setIsTextCopied(updatedState)
+          [`answer-${index}`]: true,
+        };
+        setIsTextCopied(updatedState);
       })
       .catch((err) => {
-        console.error('Error copying text: ', err);
+        console.error("Error copying text: ", err);
       });
   };
 
@@ -1663,7 +1661,14 @@ function MainContent() {
                         <div className="col-12">
                           <div className="d-flex align-items-center gap-lg-3 gap-2 mobile-profile">
                             <img
-                              src={profileImage ? profileImage : profileDatas?.basic_info?.gender.toLowerCase() === "female" ? femaleImage : maleImage}
+                              src={
+                                profileImage
+                                  ? profileImage
+                                  : profileDatas?.basic_info?.gender.toLowerCase() ===
+                                    "female"
+                                  ? femaleImage
+                                  : maleImage
+                              }
                               className="rounded-circle bg-grd-info p-1"
                               width="100"
                               height="100"
@@ -1681,13 +1686,19 @@ function MainContent() {
                                     {studentClass || studentCourse}
                                   </small>
                                 </div>
-                                <Link to="/main/StudentProfile" className="text-dark link-underline">
+                                <Link
+                                  to="/main/StudentProfile"
+                                  className="text-dark link-underline"
+                                >
                                   Edit Profile
                                 </Link>
                               </div>
 
                               <div className="d-flex justify-content-between gap-2 flex-wrap align-items-center">
-                                <i className="fs-12">Student Standard <span className="d-lg-block"> Account </span></i>
+                                <i className="fs-12">
+                                  Student Standard{" "}
+                                  <span className="d-lg-block"> Account </span>
+                                </i>
                                 <button className="btn btn-primary rounded-pill btn-sm  text-nowrap px-lg-3">
                                   Upgrade <KeyboardArrowRightIcon />
                                 </button>
@@ -1816,7 +1827,7 @@ function MainContent() {
                               {profileDatas?.subject_preference
                                 ?.score_in_percentage
                                 ? profileDatas?.subject_preference
-                                  ?.score_in_percentage
+                                    ?.score_in_percentage
                                 : ""}
                             </p>
                           </div>
@@ -1887,131 +1898,170 @@ function MainContent() {
                       <div>
                         <img src={robotImage} className="chatroboimg" alt="" />
                       </div>
-                      <div className="chat-top-header-menu ms-auto">
-                        <Link
-                          to={"/main/Chat/recentChat"}
-                          className="btn-outline-light btn-circle rounded-circle d-flex gap-2 wh-48"
-                        >
-                          <OpenInFullOutlinedIcon sx={{ fontSize: "24px" }} />
-                        </Link>
-                      </div>
+                      {stats1?.Student_Profile === 100 && (
+                        <div className="chat-top-header-menu ms-auto">
+                          <Link
+                            to={"/main/Chat/recentChat"}
+                            className="btn-outline-primary btn btn-circle rounded-circle d-flex gap-2 wh-32"
+                          >
+                            <OpenInFullOutlinedIcon sx={{ fontSize: "24px" }} />
+                          </Link>
+                        </div>
+                      )}
                     </div>
                     <div className="chat-content ms-0 rounded-top-5">
-                      {selectedchat?.length > 0 ? selectedchat?.map((chat: any, index: any) => (
-                        <>
-                          {chat?.question && (
-                            <div key={`dashboard_question_${index}`} className="chat-content-rightside">
-                              <div className="d-flex ms-auto">
-                                <div className="flex-grow-1 me-2">
-                                  <div className="chat-right-msg">
-                                    <span className="anstext">
-                                      <SearchOutlinedIcon sx={{ fontSize: "18px" }} />{" "}
-                                      Question
-                                    </span>
-                                    <p className="mb-0">
-                                      {chat?.question}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
-                          {chat?.answer &&
-                            (<div key={`dashboard_answer_${index}`} className="chat-content-leftside">
-                              <div className="d-flex">
-                                <img
-                                  src={logo}
-                                  width="38"
-                                  height="38"
-                                  style={{ backgroundColor: "#9943ec" }}
-                                  className="rounded-circle p-2"
-                                  alt=""
-                                />
-                                <div className="flex-grow-1 ms-2">
-                                  <div className="chat-left-msg">
-                                    <span className="anstext">
-                                      <DescriptionOutlinedIcon
-                                        sx={{ fontSize: "14px" }}
-                                      />{" "}
-                                      Answer
-                                    </span>
-                                    <div className="mb-4">
-                                      <p>
-                                        <Chatbot answer={chat?.answer} index={index} />
-                                      </p>
+                      {selectedchat?.length > 0 ? (
+                        selectedchat?.map((chat: any, index: any) => (
+                          <>
+                            {chat?.question && (
+                              <div
+                                key={`dashboard_question_${index}`}
+                                className="chat-content-rightside"
+                              >
+                                <div className="d-flex ms-auto">
+                                  <div className="flex-grow-1 me-2">
+                                    <div className="chat-right-msg">
+                                      <span className="anstext">
+                                        <SearchOutlinedIcon
+                                          sx={{ fontSize: "18px" }}
+                                        />{" "}
+                                        Question
+                                      </span>
+                                      <p className="mb-0">{chat?.question}</p>
                                     </div>
-                                    <ul className="ansfooter">
-                                      <li>
-                                        <ThumbUpAltOutlinedIcon
-                                          sx={{ fontSize: "14px" }}
-                                        />
-                                      </li>
-                                      <li>
-                                        <ThumbDownOutlinedIcon
-                                          sx={{ fontSize: "14px" }}
-                                        />
-                                      </li>
-                                      <li onClick={() => copyText(index)}>
-                                        <ContentCopyOutlinedIcon
-                                          sx={{ fontSize: "14px" }}
-                                        />{" "}
-                                        <span>{isTextCopied[`answer-${index}`] ? "Copied" : "Copy"}</span>
-                                      </li>
-                                      {!chat?.speak ? <li onClick={() =>
-                                        speak(chat && chat?.answer, index)
-                                      }><VolumeUpOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Read</span>
-                                      </li> : <li onClick={() => stop(index)} ><VolumeOffOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Stop</span></li>}
-                                      <li onClick={regenerateChat}>
-                                        <CachedOutlinedIcon
-                                          sx={{ fontSize: "14px" }}
-                                        />{" "}
-                                        <span>Regenerate</span>
-                                      </li>
-                                    </ul>
                                   </div>
                                 </div>
                               </div>
-                            </div>
                             )}
-                        </>)) : <div className="d-flex flex-column align-items-center">
-                        <img width={"200px"} src={chatLogo} alt="" />
-                        <h4>Hi, How can I help you today?</h4>
-                      </div>}
+                            {chat?.answer && (
+                              <div
+                                key={`dashboard_answer_${index}`}
+                                className="chat-content-leftside"
+                              >
+                                <div className="d-flex">
+                                  <img
+                                    src={logo}
+                                    width="38"
+                                    height="38"
+                                    style={{ backgroundColor: "#9943ec" }}
+                                    className="rounded-circle p-2"
+                                    alt=""
+                                  />
+                                  <div className="flex-grow-1 ms-2">
+                                    <div className="chat-left-msg">
+                                      <span className="anstext">
+                                        <DescriptionOutlinedIcon
+                                          sx={{ fontSize: "14px" }}
+                                        />{" "}
+                                        Answer
+                                      </span>
+                                      <div className="mb-4">
+                                        <p>
+                                          <Chatbot
+                                            answer={chat?.answer}
+                                            index={index}
+                                          />
+                                        </p>
+                                      </div>
+                                      <ul className="ansfooter">
+                                        <li>
+                                          <ThumbUpAltOutlinedIcon
+                                            sx={{ fontSize: "14px" }}
+                                          />
+                                        </li>
+                                        <li>
+                                          <ThumbDownOutlinedIcon
+                                            sx={{ fontSize: "14px" }}
+                                          />
+                                        </li>
+                                        <li onClick={() => copyText(index)}>
+                                          <ContentCopyOutlinedIcon
+                                            sx={{ fontSize: "14px" }}
+                                          />{" "}
+                                          <span>
+                                            {isTextCopied[`answer-${index}`]
+                                              ? "Copied"
+                                              : "Copy"}
+                                          </span>
+                                        </li>
+                                        {!chat?.speak ? (
+                                          <li
+                                            onClick={() =>
+                                              speak(chat && chat?.answer, index)
+                                            }
+                                          >
+                                            <VolumeUpOutlinedIcon
+                                              sx={{ fontSize: "14px" }}
+                                            />{" "}
+                                            <span>Read</span>
+                                          </li>
+                                        ) : (
+                                          <li onClick={() => stop(index)}>
+                                            <VolumeOffOutlinedIcon
+                                              sx={{ fontSize: "14px" }}
+                                            />{" "}
+                                            <span>Stop</span>
+                                          </li>
+                                        )}
+                                        <li onClick={regenerateChat}>
+                                          <CachedOutlinedIcon
+                                            sx={{ fontSize: "14px" }}
+                                          />{" "}
+                                          <span>Regenerate</span>
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        ))
+                      ) : (
+                        <div className="d-flex flex-column align-items-center">
+                          <img width={"200px"} src={chatLogo} alt="" />
+                          <h4>Hi, How can I help you today?</h4>
+                        </div>
+                      )}
                     </div>
-                    <div className="chat-footer d-flex align-items-center start-0 rounded-bottom-5 bg-white border-0 ">
-                      <div className="flex-grow-1 pe-2">
-                        <div className="input-group">
-                          <input
-                            type="text"
-                            className="form-control rounded-pill w-100"
-                            ref={chatRef}
-                            placeholder="Type your question"
-                            aria-label="Search"
-                            value={search}
-                            onChange={(e) => setSearch(e?.target?.value)}
-                            onKeyDown={handleKeyDown}
-                          />
+                    {stats1?.Student_Profile === 100 && (
+                      <div className="chat-footer d-flex align-items-center start-0 rounded-bottom-5 bg-white border-0 ">
+                        <div className="flex-grow-1">
+                          <div className="fix-btn-inline">
+                            <input
+                              type="text"
+                              className="form-control rounded-pill w-100"
+                              ref={chatRef}
+                              placeholder="Type your question"
+                              aria-label="Search"
+                              value={search}
+                              onChange={(e) => setSearch(e?.target?.value)}
+                              onKeyDown={handleKeyDown}
+                            />
+                            <button
+                              onClick={searchData}
+                              
+                            >
+                              <ArrowUpwardOutlinedIcon />
+                            </button>
+                          </div>
                           {searcherr === true && (
                             <small className="text-danger">
                               Please Enter your query!!
                             </small>
                           )}
                         </div>
+                        <div className="chat-footer-menu"></div>
                       </div>
-                      <div className="chat-footer-menu">
-                        <button
-                          onClick={searchData}
-                          className="btn-outline-light btn-circle rounded-circle d-flex gap-2 wh-48"
-                        >
-                          <SendOutlinedIcon />
-                        </button>
-                      </div>
-                    </div>
+                    )}
                     <div className="overlay chat-toggle-btn-mobile"></div>
                   </div>
                 </div>
 
-                <div className="col-xl-6 d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
+                <div
+                  className="col-xl-6 d-flex align-items-stretch"
+                  onClick={() => setIsOpen(true)}
+                >
                   <div className="row mt-4 mt-lg-0">
                     <div className="col-lg-12 d-flex align-items-stretch">
                       <div className="card w-100 rounded-4 desk-card ">
@@ -2043,7 +2093,10 @@ function MainContent() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-6 d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
+                    <div
+                      className="col-lg-6 d-flex align-items-stretch"
+                      onClick={() => setIsOpen(true)}
+                    >
                       <div className="card w-100 rounded-4 desk-card">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-1">
@@ -2097,7 +2150,10 @@ function MainContent() {
                         </div>
                       </div>
                     </div>
-                    <div className="col-lg-6 d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
+                    <div
+                      className="col-lg-6 d-flex align-items-stretch"
+                      onClick={() => setIsOpen(true)}
+                    >
                       <div className="card w-100 rounded-4 desk-card">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-3">
@@ -2159,7 +2215,10 @@ function MainContent() {
                     </div>
                   </div>
                 </div>
-                <div className="col-xl-6  d-flex align-items-stretch" onClick={() => setIsOpen(true)}>
+                <div
+                  className="col-xl-6  d-flex align-items-stretch"
+                  onClick={() => setIsOpen(true)}
+                >
                   <div className="card w-100 rounded-4 desk-card">
                     <div className="card-body">
                       <Chart

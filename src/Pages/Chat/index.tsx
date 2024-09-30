@@ -1119,6 +1119,9 @@ const Chat = () => {
       });
   };
 
+
+  
+
   return (
     <>
       {loading && <FullScreenLoader msg={loaderMsg} />}
@@ -1679,7 +1682,7 @@ const Chat = () => {
                       {selectedchat?.map((chat: any, index: any) => (
                         <>
                           {chat?.question && (
-                            <li key={`question_${index}`} className="right-chat">
+                            <li key={`question_${index}`} className="right-chat" >
                               <div className="chat-card">
                                 <div className="chat-card-header">
                                   <span className="anstext"><SearchOutlinedIcon sx={{ fontSize: '14px' }} /> Question</span>
@@ -1694,7 +1697,7 @@ const Chat = () => {
                               </div>
                             </li>)}
                           {chat?.answer &&
-                            (<li key={`answer_${index}`} className="left-chat">
+                            (<li key={`answer_${index}`} className="left-chat" >
                               <div className="profile-icon">
                                 <img src={primaryLogo} alt="" />
                               </div>
@@ -1721,7 +1724,7 @@ const Chat = () => {
                             </li>)}
                         </>))}
                     </ul>
-                    : showInitialPage && <div className="welcome-box d-flex flex-column justify-content-center">
+                    : showInitialPage && <div className="welcome-box">
                       <img src={chatLogo} alt="" />
                       <h3>Hi, How can I help you today?</h3>
                     </div>}
