@@ -1175,13 +1175,13 @@ function MainContent() {
                                     {studentClass || studentCourse}
                                   </small>
                                 </div>
-                                <a href="" className="text-dark link-underline">
+                                <a href="" className="text-dark link-underline fs-14">
                                   Edit Profile
                                 </a>
                               </div>
 
                               <div className="d-flex justify-content-between gap-2 flex-wrap align-items-center">
-                                <i>Student Standard <span className="d-lg-block"> Account </span></i>
+                                <i className="fs-12">Student Standard <span className="d-lg-block"> Account </span></i>
                                 <button className="btn btn-primary rounded-pill btn-sm  text-nowrap px-lg-3">
                                   Upgrade <KeyboardArrowRightIcon />
                                 </button>
@@ -1287,7 +1287,7 @@ function MainContent() {
                         </div>
                         <a
                           href=""
-                          className="fw-semibold text-nowrap text-dark"
+                          className="fw-semibold text-nowrap text-dark fs-14"
                         >
                           See All
                         </a>

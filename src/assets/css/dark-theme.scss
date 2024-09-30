@@ -13,6 +13,14 @@
     background: rgb(75 75 75 / 48%)!important;
     
 }
+.wizard-content .form-control, .wizard-content .form-select, .btn-dark {
+  background-color: #32363b;
+  border-color: #32363b;
+}
+.btn-outline-dark {
+  border-color: #32363b;
+  color: white;
+}
 .chat-wrapper{
   background-color: #212529!important;
 }

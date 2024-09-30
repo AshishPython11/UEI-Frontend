@@ -221,7 +221,7 @@ const Header = () => {
 
 
 function toggleOnDesktop() {
-  if (window.innerWidth >= 1024) {
+  if (window.innerWidth >= 1200) {
       document.querySelector("body")?.classList.add("toggled");
   } else {
       document.querySelector("body")?.classList.remove("toggled");
