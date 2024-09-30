@@ -10,9 +10,10 @@ import {
 } from "../../utils/const";
 import useApi from "../../hooks/useAPI";
 import NameContext from "../../Pages/Context/NameContext";
-import images_man from "../../assets/img/images_man.png";
-import images_female from "../../assets/img/images_female.png";
-import personImage from "../../assets/img/profile.png";
+import images_man from "../../assets/img/avatars/male.png";
+import images_female from "../../assets/img/avatars/female.png";
+import maleImage from "../../assets/img/avatars/male.png";
+import femaleImage from "../../assets/img/avatars/female.png";
 import Country1 from "../../assets/img/country/01.png";
 import Country2 from "../../assets/img/country/02.png";
 import Country3 from "../../assets/img/country/03.png";
@@ -68,7 +69,7 @@ const Header = () => {
   const user_type = localStorage.getItem("user_type");
   const [profileImage, setprofileImage] = useState<any>();
   const [profileName, setprofileName] = useState<any>();
-  const [gender, setGender] = useState<any>();
+  const [gender, setGender] = useState<any>("");
   const proFalg = localStorage.getItem("proFalg");
   let synth: SpeechSynthesis;
   synth = window.speechSynthesis;
@@ -137,7 +138,7 @@ const Header = () => {
             // let name = basic_info.first_name + " " + basic_info.last_name;
             let name = basic_info.first_name;
             setprofileName(name);
-            // setGender(basic_info?.gender)
+            setGender(basic_info?.gender)
             setNamepro({
               first_name: basic_info?.first_name,
               last_name: basic_info?.last_name,
@@ -147,7 +148,7 @@ const Header = () => {
             if (data.data.pic_path !== "") {
               getData(`${"upload_file/get_image/" + data.data.pic_path}`)
                 .then((imgdata: any) => {
-                  // setprofileImage(imgdata.data)
+                  setprofileImage(imgdata.data)
                   setProImage(imgdata.data);
                 })
                 .catch((e) => { });
@@ -172,7 +173,7 @@ const Header = () => {
           if (adminInfo && Object.keys(adminInfo).length > 0) {
             const name = `${adminInfo?.first_name}  ${adminInfo?.last_name}`;
             setprofileName(name);
-            // setGender(adminInfo?.gender)
+            setGender(adminInfo?.gender)
             setNamepro({
               first_name: adminInfo?.first_name,
               last_name: adminInfo?.last_name,
@@ -181,7 +182,7 @@ const Header = () => {
             if (response.data.pic_path !== "") {
               getData(`${"upload_file/get_image/" + response.data.pic_path}`)
                 .then((imgdata) => {
-                  // setprofileImage(imgdata.data)
+                  setprofileImage(imgdata.data)
                   setProImage(imgdata.data);
                 })
                 .catch((e) => { });
@@ -778,7 +779,7 @@ const Header = () => {
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
                             <img
-                              src={personImage}
+                              src={maleImage}
                               className="rounded-circle"
                               width="45"
                               height="45"
@@ -943,7 +944,7 @@ const Header = () => {
                 data-bs-toggle="dropdown"
               >
                 <img
-                  src={personImage}
+                  src={profileImage ? profileImage : gender?.toLowerCase() === "female" ? femaleImage : maleImage}
                   className="rounded-circle p-1 border"
                   width="45"
                   height="45"
@@ -954,7 +955,7 @@ const Header = () => {
                 <a className="dropdown-item  gap-2 py-2" href="#">
                   <div className="text-center">
                     <img
-                      src={personImage}
+                      src={profileImage ? profileImage : gender?.toLowerCase() === "female" ? femaleImage : maleImage}
                       className="rounded-circle p-1 shadow mb-3"
                       width="90"
                       height="90"
