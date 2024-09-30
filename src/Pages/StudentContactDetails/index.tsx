@@ -78,8 +78,8 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
             value === ""
               ? ""
               : !/^\d{10}$/.test(value)
-              ? "Phone number should be 10 digits"
-              : "",
+                ? "Phone number should be 10 digits"
+                : "",
         });
         break;
       case "email":
@@ -130,6 +130,7 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -141,12 +142,20 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
     // event.preventDefault();
 
     if (errors.phoneNum || errors.email || errors.whatsappNum) {
-      toast.error("Please fix the errors before submitting");
+      toast.error("Please fix the errors before submitting", {
+        hideProgressBar: true,
+        theme: "colored",
+        position: "top-center"
+      });
       return;
     }
 
     if (phoneNum.length !== 10) {
-      toast.error("Phone number should be 10 digits");
+      toast.error("Phone number should be 10 digits", {
+        hideProgressBar: true,
+        theme: "colored",
+        position: "top-center"
+      });
       return;
     }
     let payload = {
@@ -166,12 +175,14 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
             toast.success("Contact Details saved successfully", {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
             setActiveForm((prev) => prev + 1);
           } else {
             toast.error(data?.message, {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           }
         })
@@ -179,6 +190,7 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
           toast.error(e?.message, {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         });
     } else {
@@ -191,6 +203,7 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
                 toast.success("Contact Details updated successfully", {
                   hideProgressBar: true,
                   theme: "colored",
+                  position: "top-center"
                 });
                 getContacInfo();
                 setActiveForm((prev) => prev + 1);
@@ -200,6 +213,7 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
               toast.error(e?.message, {
                 hideProgressBar: true,
                 theme: "colored",
+                position: "top-center"
               });
             });
         } else setActiveForm((prev) => prev + 1);
@@ -212,7 +226,7 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
       {/* <div className=' mt-5'> */}
       <div
         className="d-flex justify-content-start"
-        // style={{ margin: "25px" }}
+      // style={{ margin: "25px" }}
       >
         <div className="row">
           {/* <label className="pb-2">Mobile Number *</label> */}
@@ -297,7 +311,7 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
       {/* <div className="mt-3"> */}
       <div
         className="d-flex justify-content-start"
-        // style={{ margin: "25px" }}
+      // style={{ margin: "25px" }}
       >
         <div className="row">
           {/* <label className="pb-2"> Whatsapp Number </label> */}
@@ -384,7 +398,7 @@ const StudentcontactDetails: React.FC<ChildComponentProps> = ({
 
       <div
         className="row d-flex justify-content-start"
-        // style={{ marginLeft: "1%" }}
+      // style={{ marginLeft: "1%" }}
       >
         <div className="col-lg-6 form_field_wrapper">
           {/* <label>{""}   E-mail <span></span></label> */}

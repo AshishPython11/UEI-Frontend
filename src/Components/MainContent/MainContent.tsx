@@ -515,8 +515,7 @@ function MainContent() {
                   getData(`class/get/${academic_history?.course_id}`).then(
                     (response) =>
                       setStudentCourse(
-                        response.data.course_name
-                          .replace("_", " ")
+                        response.data.course_name?.replace("_", " ")
                           .charAt(0)
                           .toUpperCase() +
                         response.data.course_name.replace("_", " ").slice(1)

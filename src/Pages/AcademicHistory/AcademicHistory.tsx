@@ -126,6 +126,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.success("Academic history deleted successfully", {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           }
         })
@@ -133,6 +134,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error(e?.message, {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         });
     }
@@ -158,6 +160,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error(error?.message, {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
 
           resolve(false);
@@ -181,6 +184,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(error?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
     getData("/class/list")
@@ -208,6 +212,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(error?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
 
@@ -297,6 +302,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(error?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   }, []);
@@ -369,7 +375,11 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             );
           }
         } else {
-          toast.error(" PLease Enter Year ");
+          toast.error(" PLease Enter Year ", {
+            hideProgressBar: true,
+            theme: "colored",
+            position: "top-center"
+          });
           return Promise.resolve(null); // If payload is invalid, return a resolved promise
         }
       })
@@ -386,12 +396,14 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.success("Academic history saved successfully", {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
           setActiveForm((prev) => prev + 1);
         } else {
           toast.error("An error occurred while saving", {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         }
       })
@@ -404,8 +416,6 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         // });
       });
   };
-
-  useEffect(() => {}, [boxes]);
 
   const setDataInsitute = async (value: any) => {
     setInsituteFlag(true);
@@ -461,6 +471,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.success("Institution name saved successfully", {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
         setDataInsitute(boxes1[0]?.Institute_Name_Add);
       }
@@ -469,6 +480,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       toast.error("Error while saving institution name", {
         hideProgressBar: true,
         theme: "colored",
+        position: "top-center"
       });
     }
   };
@@ -905,7 +917,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               )}
             {box.institute_type !== "competition_exams" &&
               box.institute_type !== "school" && (
-                <div className="col form_field_wrapper">
+                <div className="col-lg-3 col-md-6 form_field_wrapper">
                   <FormControl
                     required
                     sx={{

@@ -98,6 +98,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.success("Language deleted successfully", {
               hideProgressBar: true,
               theme: "colored",
+              position: "top-center"
             });
           }
         })
@@ -105,6 +106,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error(e?.message, {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         });
     }
@@ -134,6 +136,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error(data?.message, {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         }
       })
@@ -141,6 +144,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   };
@@ -159,6 +163,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
     getdatalanguage();
@@ -210,11 +215,13 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.success("Language saved successfully", {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });          
         } else {
           toast.success("Language updated successfully", {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         }
         // getdatalanguage()
@@ -232,6 +239,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       toast.error(error?.message, {
         hideProgressBar: true,
         theme: "colored",
+        position: "top-center"
       });
     }
   };

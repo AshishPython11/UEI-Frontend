@@ -117,7 +117,7 @@ const Header = () => {
       }
     }
   }
-  
+
   function handleSearchClick() {
     let main_content = document.getElementById("search-toggle");
     if (main_content) {
@@ -220,17 +220,17 @@ const Header = () => {
 
 
 
-function toggleOnDesktop() {
-  if (window.innerWidth >= 1024) {
-      document.querySelector("body")?.classList.add("toggled");
-  } else {
-      document.querySelector("body")?.classList.remove("toggled");
-  }
-}
+    function toggleOnDesktop() {
+      if (window.innerWidth >= 1024) {
+        document.querySelector("body")?.classList.add("toggled");
+      } else {
+        document.querySelector("body")?.classList.remove("toggled");
+      }
+    }
 
-// Run the function on load and on resize
-toggleOnDesktop();
-window.addEventListener("resize", toggleOnDesktop);
+    // Run the function on load and on resize
+    toggleOnDesktop();
+    window.addEventListener("resize", toggleOnDesktop);
 
 
 
@@ -468,7 +468,9 @@ window.addEventListener("resize", toggleOnDesktop);
       </header> */}
       <header className="top-header">
         <nav className="navbar navbar-expand align-items-center gap-lg-4">
-          <div className="btn-toggle">
+          <div className="btn-toggle" style={{
+            cursor: "pointer"
+          }}>
             {/* <a href="#"> */}
             <MenuIcon onClick={handleClick} />
             {/* </a> */}

@@ -61,6 +61,7 @@ const StudentHobbies = ({ save }: { save: boolean }) => {
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
 
@@ -80,6 +81,7 @@ const StudentHobbies = ({ save }: { save: boolean }) => {
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         });
       });
   }, []);
@@ -144,11 +146,13 @@ const StudentHobbies = ({ save }: { save: boolean }) => {
           toast.success("Hobbies saved successfully", {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         } else {
           toast.success("Hobbies update successfully", {
             hideProgressBar: true,
             theme: "colored",
+            position: "top-center"
           });
         }
       } else if (results.some((res) => res.status !== 204)) {
@@ -163,6 +167,7 @@ const StudentHobbies = ({ save }: { save: boolean }) => {
       toast.error("An error occurred while saving hobbies", {
         hideProgressBar: true,
         theme: "colored",
+        position: "top-center"
       });
     }
     // >>>>>>> Stashed changes
