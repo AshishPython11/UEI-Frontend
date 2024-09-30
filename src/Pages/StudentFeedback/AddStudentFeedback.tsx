@@ -393,8 +393,8 @@ const AddStudentFeedback = () => {
           </div>
         </>
       ) : (
-        <div className="feedback-view">
-          {finalList.map((question: any, qIndex: number) => (
+        <>
+          {/* {finalList.map((question: any, qIndex: number) => (
             <div key={question.id}>
               {" "}
               <h5 className="my-3">
@@ -439,13 +439,105 @@ const AddStudentFeedback = () => {
                 )}
               </div>
             </div>
-          ))}
+          ))} */}
+
+          <div className="main-wrapper mb-4">
+            <div className="main-content">
+              <div className="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+                <div className="breadcrumb-title pe-3">Feedback</div>
+                <div className="ps-3">
+                  <nav aria-label="breadcrumb">
+                    <ol className="breadcrumb mb-0 p-0">
+                      <li className="breadcrumb-item"><a href="javascript:;"><i className="bx bx-home-alt"></i></a>
+                      </li>
+                      {/* <li className="breadcrumb-item" aria-current="page">Submit Feedback</li> */}
+                      <li aria-current="page">Submit Feedback</li>
+                    </ol>
+                  </nav>
+                </div>
+                <div className="ms-auto">
+                  <div className="btn-group">
+                    <button
+                      type="button"
+                      className="btn btn-outline-primary rounded-pill px-lg-4"
+                      data-bs-toggle="offcanvas"
+                      data-bs-target="#staticBackdrop"
+                    >
+                      Settings
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div className="feedback">
+                <h1>You have already submitted your feedback</h1>
+                <div className="feedback-questions">
+                  {(
+                    <>
+                      {finalList.map((question: any, qIndex: any) => (
+                        <div className="question" key={question.id}>
+                          <label htmlFor="" className="top-label"> {question.question}</label>
+                          <div className="row g-2">
+                            {question?.options?.length > 0 ? (
+                              question?.options.map(
+                                (option: any, index: number) => (
+                                  <div className="col-lg-6" key={index}>
+                                    <div className="form-check">
+                                      <input className="form-check-input" type="radio" name={`question-${question.id}`}
+                                        id={`option-${index}`}
+                                        value={option}
+                                        checked={question.answer === option}
+                                        onChange={() =>
+                                          handleSelectedOption(
+                                            question.id,
+                                            option,
+                                            question.question
+                                          )
+                                        } />
+                                      <label className="form-check-label" htmlFor={`option-${index}`}>
+                                        {option}
+                                      </label>
+                                    </div>
+                                  </div>
+                                )
+                              )
+                            ) : (
+                              <div>
+                                <TextField
+                                  label="Question *"
+                                  name="question"
+                                  value={question.answer}
+                                  variant="outlined"
+                                  onChange={(e) =>
+                                    handleSelectedOption(
+                                      question.id,
+                                      e.target.value,
+                                      question.question
+                                    )
+                                  }
+                                />
+                              </div>
+                            )}
+                            {errors[question.id] && (
+                              <span style={{ color: "red" }}>
+                                {errors[question.id]}
+                              </span>
+                            )}
+
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
           <CommonModal
             message={"You have already submitted your feedback."}
             isOpen={isOpen}
             setIsOpen={setIsOpen}
           />
-        </div>
+        </>
       )}
       {/* <div
         className="offcanvas offcanvas-end"

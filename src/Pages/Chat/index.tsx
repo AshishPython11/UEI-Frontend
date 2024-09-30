@@ -995,11 +995,11 @@ const Chat = () => {
   const toggleChatHistory = () => setIsChatHistoryOpen(!isChatHistoryOpen);
 
   const regenerateChat = () => {
-    
+
     setLoading(true);
     setLoaderMsg("Fetching Data from Ollama model.");
     setSearchErr(false);
-   
+
     let prompt = studentDetail?.prompt?.replace("**question**", "answer");
     let payload = {};
     console.log("studentDetail", studentDetail);
@@ -1532,7 +1532,7 @@ const Chat = () => {
       </div> */}
       <main className="main-wrapper">
         <div className="main-content">
-          <div className={`chat-panel ${showInitialPage ? 'new-chat' : ''}`}>
+          <div className={`chat-panel ${!(filteredChats?.length > 0) ? 'new-chat' : ''}`}>
             {Id ? <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
               <div className="d-lg-none mb-4 ms-auto d-flex">
                 <button className="btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
@@ -1662,11 +1662,11 @@ const Chat = () => {
               </div>
               <div className="inner-panel">
                 {Id !== undefined ? <div className="chat-header2">
-                  <button className="btn btn-primary btn-sm d-flex align-items-center gap-1 rounded-pill" onClick={newchat}><AddOutlinedIcon /> New Chat</button>
+                  {!showInitialPage && <button className="btn btn-primary btn-sm d-flex align-items-center gap-1 rounded-pill" onClick={newchat}><AddOutlinedIcon /> New Chat</button>}
                   {!showInitialPage ? chatsaved ? <FlagIcon style={{ color: "#9943ec" }} /> : <FlagOutlinedIcon onClick={saveChatstar} /> : <></>}
                 </div> : <></>}
                 {/* <div className="chat-result"> */}
-                <PerfectScrollbar className="chat-result">
+                <PerfectScrollbar className={`chat-result ${showInitialPage ? "justify-content-center" : ""}`}>
                   {selectedchat?.length && selectedchat?.length > 0 ?
                     <ul>
                       {selectedchat?.map((chat: any, index: any) => (
@@ -1714,9 +1714,9 @@ const Chat = () => {
                             </li>)}
                         </>))}
                     </ul>
-                    : showInitialPage && <div className="welcome-box">
+                    : showInitialPage && <div className="welcome-box d-flex flex-column justify-content-center">
                       <img src={chatLogo} alt="" />
-                      <h1>Hi, How can I help you today?</h1>
+                      <h3>Hi, How can I help you today?</h3>
                     </div>}
                 </PerfectScrollbar>
                 {/* </div> */}
