@@ -50,12 +50,12 @@ $form-check-input-border: 1px solid rgba($primary, 0.4);
 // @import "bootstrap/forms/form-check";
 // @import "bootstrap/bootstrap.scss";
 //@import "css/bootstrap/bootstrap.scss";
-@import "responsive";
+
 @import "blue-theme";
 @import "dark-theme";
 @import "bordered-theme";
 @import "semi-dark";
-
+@import "responsive";
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 body {
@@ -71,6 +71,18 @@ body {
     color: white !important;
   }
 }
+
+.btn-outline-primary{
+  color: $primary!important;
+  border-color: $primary !important;
+  &:hover{
+    color: white !important;
+    background-color: $primary!important;
+  }
+}
+.text-primary{
+  color: $primary!important;
+}
 .btn-secondary{
   background-color: $secondary !important;
   border-color: $secondary !important;
@@ -78,8 +90,18 @@ body {
     color: white !important;
   }
 }
+.form-control{
+  &:focus{
+    box-shadow: 0px 8px 16px 0px rgba($primary, 0.08)!important;
+    border-color: rgba($primary, 0.08)!important;
+  }
+}
+.dropdown-item.active, .dropdown-item:active{
+  background-color: $primary!important;
+}
 a {
   text-decoration: none;
+  color: $primary;
 }
 .fs-18{
   font-size: 18px;
@@ -229,8 +251,11 @@ img {
 }
 
 @media (min-width: 1024px) {
-  .main-chat-panel {
-    border-left: 1px solid $stroke-100;
+  .left-side-history  {
+    border-right: 1px solid rgba($stroke-100, 0.5) !important;
+  }
+  .main-chat-panel{
+    border: 0!important;
   }
 }
 
@@ -321,7 +346,7 @@ img {
           padding: 0;
           margin: 0;
           display: flex;
-          padding: 0 1rem;
+          padding: 0 .5rem;
 
           li {
             padding: 0.5rem;
@@ -343,7 +368,7 @@ img {
 
         .chat-input {
           position: fixed;
-          bottom: 1rem;
+          bottom: 3rem;
           left: 1rem;
           right: 1rem;
         }
@@ -1949,7 +1974,7 @@ body .desk-card {
       margin: 0;
       max-height: 550px;
       height: 100%;
-
+      padding-right: 20px;
       li {
         padding-left: 48px;
         position: relative;
@@ -2019,9 +2044,15 @@ body .desk-card {
           transform: translateY(-50%);
 
           li {
-            padding-left: 0;
-            opacity: 0;
+            align-items: center;
+            border-radius: 30px;
+            display: flex;
+            height: 32px;
+            justify-content: center;
             margin-bottom: 0;
+            opacity: 0;
+            padding: 0;
+            width: 32px;
 
             i {
               font-size: 18px;
@@ -2038,6 +2069,9 @@ body .desk-card {
 
             &::after {
               display: none;
+            }
+            &:hover{
+              background-color: #9943ec1a;
             }
           }
         }
@@ -2071,7 +2105,9 @@ body .desk-card {
         padding: 1rem;
         margin-bottom: 1rem;
         border-radius: 1rem;
+        display: flex;
         ul {
+          width: 100%;
           padding: 0;
           margin: 0;
           list-style: none;
@@ -2286,7 +2322,7 @@ body .desk-card {
 
       .welcome-box {
         text-align: center;
-
+        margin: auto;
         h1 {
           font-size: 24px;
         }
@@ -2379,4 +2415,48 @@ a{
   border: 1px solid  rgba(170, 47, 135, 0.10);
   border-radius: 1rem;
   padding: 1rem;
+}
+
+.chat-header2{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ps__rail-y {
+  background-color: rgba($primary, 0.1)!important;
+  width: 7px!important;
+}
+
+.ps__thumb-y {
+  background-color: $primary!important;
+  width: 7px!important;
+  transition: background-color 0.3s;
+  right: 0!important;
+  
+}
+
+.ps__rail-x {
+  background-color: $primary!important;
+  width: 7px!important;
+}
+.ps__thumb-x {
+  background-color: $primary;
+ 
+  transition: background-color 0.3s;
+
+  
+}
+
+
+.accordion-button:not(.collapsed) {
+  color: #3d1b5e!important;
+  background-color: #ebd9fb!important;
+  box-shadow: inset 0 1px 0 #ebd9fb!important;
+}
+
+.form-check-input:checked {
+  background-color: $primary!important;
+  border-color: $primary!important;
 }

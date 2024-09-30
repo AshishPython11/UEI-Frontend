@@ -1485,7 +1485,7 @@ const Chat = () => {
           <div className={`chat-panel ${showInitialPage ? 'new-chat' : ''}`}>
             {Id ? <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
               <div className="d-lg-none mb-4 ms-auto d-flex">
-                <button className="new-btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
+                <button className="btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
                   <CloseOutlinedIcon onClick={() => setShowHistory(false)} /></button>
               </div>
               <div className="search-filter">
@@ -1494,7 +1494,7 @@ const Chat = () => {
                   title="Enter search keyword"
                   value={searchQuery}
                   onChange={handleSearchChange} />
-                <button className="new-btn btn-primary">
+                <button className="btn btn-primary">
                   <img src={searchWhite} alt="" />
                 </button>
               </div>
@@ -1544,7 +1544,7 @@ const Chat = () => {
             </div> :
               <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
                 <div className="d-lg-none mb-4 ms-auto d-flex">
-                  <button className="new-btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
+                  <button className="btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
                     <CloseOutlinedIcon onClick={() => setShowHistory(false)} /></button>
                 </div>
                 <div className="search-filter">
@@ -1553,7 +1553,7 @@ const Chat = () => {
                     title="Enter search keyword"
                     value={searchQuery}
                     onChange={handleSearchChange} />
-                  <button className="new-btn btn-primary">
+                  <button className="btn btn-primary">
                     <img src={searchWhite} alt="" />
                   </button>
                 </div>
@@ -1693,7 +1693,7 @@ const Chat = () => {
                         onChange={(e) => setSearch(e?.target?.value)}
                         onKeyDown={handleKeyDown}
                       />
-                      <button type="button" onClick={() => searchData()} className="new-btn btn-primary p-0"><ArrowUpwardOutlinedIcon /></button>
+                      <button type="button" onClick={() => searchData()} className="btn btn-primary p-0"><ArrowUpwardOutlinedIcon /></button>
                     </div>
                     {searcherr === true && (
                       <small className="text-danger">

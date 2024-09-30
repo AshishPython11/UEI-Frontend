@@ -117,6 +117,7 @@ const Header = () => {
       }
     }
   }
+  
   function handleSearchClick() {
     let main_content = document.getElementById("search-toggle");
     if (main_content) {
@@ -230,6 +231,9 @@ function toggleOnDesktop() {
 // Run the function on load and on resize
 toggleOnDesktop();
 window.addEventListener("resize", toggleOnDesktop);
+
+
+
 
 
     const theme = localStorage.getItem("theme");
@@ -585,7 +589,7 @@ window.addEventListener("resize", toggleOnDesktop);
               </a>
             </li>
             {/* <li className="nav-item d-none d-lg-flex">
-              <button onClick={() => navigator("/main/Chat/recentChat")} className="new-btn btn-primary rounded-pill px-lg-4">
+              <button onClick={() => navigator("/main/Chat/recentChat")} className="btn btn-primary rounded-pill px-lg-4">
                 New Chat
               </button>
             </li> */}
