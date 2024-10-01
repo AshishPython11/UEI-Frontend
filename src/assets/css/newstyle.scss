@@ -2647,23 +2647,31 @@ a{
 .addcomingsoon{
   position: relative;
   overflow: hidden;
-  &::after{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(white, 0.8);
-    content: "Coming Soon!";
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
-    font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  &:hover{
+    transition: all 0.3s ease-in-out;
+    &::after{
+      position: absolute;
+      transition: all 0.3s ease-in-out;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(white, 0.8);
+      content: "Coming Soon!";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+      font-weight: 500;
+    }
   }
 }
 
 .MuiInputLabel-root{
   left: -12px!important;
   top: -10px!important;
+}
+.MuiInputBase-root {
+  border: 0!important;
 }

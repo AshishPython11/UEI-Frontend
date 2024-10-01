@@ -2062,7 +2062,7 @@ function MainContent() {
                   className="col-xl-6 "
                   onClick={() => setIsOpen(true)}
                 >
-                  <div className="row mt-4 mt-lg-0">
+                  <div className="row g-4">
                     <div className="col-lg-12 ">
                       <div className="card w-100 rounded-4 desk-card addcomingsoon">
                         <div className="card-body">
