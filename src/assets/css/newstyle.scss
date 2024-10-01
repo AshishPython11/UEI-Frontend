@@ -198,7 +198,7 @@ img {
 }
 
 .outsecbtn {
-  display: flex;
+  display: flex!important;
   align-items: center;
   gap: 0.7rem;
   justify-content: center;
@@ -215,7 +215,7 @@ img {
 
 .access-card {
   background-color: white;
-  padding: 2.5rem;
+  padding: 2rem;
   border-radius:2rem;
   height: 100%;
   max-width: 550px;
@@ -1697,7 +1697,7 @@ body .desk-card {
     top: 0;
     left: 6.5%;
     width: 2px;
-    background-color: $secondary;
+    background-color: #53fb26;
     z-index: 2;
     transition: height 0.3s;
     transform: translateX(-6.5%);
@@ -1747,8 +1747,8 @@ body .desk-card {
       }
 
       &.filled {
-        border: 3px solid $secondary;
-        color: $secondary;
+        border: 3px solid #53fb26;
+        color: #53fb26;
         i {
           color: $secondary;
           font-size: 18px;
@@ -1806,11 +1806,11 @@ body .desk-card {
 
   .progress-bar {
     margin-top: 5px;
-    height: 28px;
+    height: 12px;
     background-color: white;
     border-radius: 5px;
     overflow: hidden;
-    padding: 5px;
+    padding: 2px;
 
     .progress {
       height: 100%;
@@ -2631,5 +2631,34 @@ a{
     align-items: center;
     justify-content: center;
 
+  }
+}
+.logoui{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  img{width: 32px;}
+  span{
+    font-size: 24px;
+    font-weight: bold;
+  }
+}
+
+.addcomingsoon{
+  position: relative;
+  overflow: hidden;
+  &:hover::after{
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(white, 0.8);
+    content: "Coming Soon!";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    font-weight: 500;
   }
 }

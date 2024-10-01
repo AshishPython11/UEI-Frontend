@@ -271,7 +271,10 @@ const Login = () => {
         <header className="container-fluid mb-5 py-3 d-none d-lg-block">
           <div className="row align-items-center">
             <div className="col-6">
-              <img src={gLogo} alt="" />
+              <div className="logoui">
+                 <img src={gLogo} alt="" />
+                 <span>Gyansetu</span>
+              </div>              
             </div>
             <div className="col-6">
               <div className="d-flex justify-content-end">
@@ -335,26 +338,33 @@ const Login = () => {
               <div className="access-card">
                 {showForm ? (
                   <>
-                    <div className="row gy-4">
+                    <div className="row gy-3">
                       <div className="col-lg-12">
                         <BackArrowCircle
-                          className="d-none d-lg-block"
+                          className="d-none d-lg-block mt-3"
                           onClick={() => setShowForm(false)}
                         />
                         <ArrowLeft
-                          className="d-lg-none"
+                          className="d-lg-none mt-3"
                           onClick={() => setShowForm(false)}
                         />
                       </div>
+                      <div className="col-lg-12 d-lg-none d-block">
+                      <img
+                      src={gyansetuLogo}
+                      className=" mx-auto my-0 d-block"
+                      alt="" width="120px"
+                    />
+                      </div>
                       <div className="col-lg-12">
-                        <h1 className="mt-4 mt-lg-0 mb-0 inter-600">Sign In</h1>
+                        <h1 className="mt-2 mb-0 inter-600">Sign In</h1>
                         <p className="fs-14 d-lg-none">
                           Input your Gyansetu account!
                         </p>
                       </div>
                       <div className="col-lg-12">
                         <form method="" className="mb-3">
-                          <div className="mb-4">
+                          <div className="mb-3">
                             <label htmlFor="" className="form-label">
                               Email / Phone
                             </label>
@@ -399,7 +409,7 @@ const Login = () => {
                               }}
                             />
                           </div>
-                          <div className="mb-4">
+                          <div className="mb-3">
                             <label
                               htmlFor="passwordInput"
                               className="form-label"
@@ -487,7 +497,7 @@ const Login = () => {
                               />
                             </RadioGroup>
                           </div>
-                          <div className="my-4 text-center">
+                          <div className="mt-2 mb-4 text-center">
                             <Link
                               to="/forgotpassword"
                               className="text-danger fw-semibold"
@@ -497,7 +507,7 @@ const Login = () => {
                           </div>
                           <button
                             type="submit"
-                            className="btn btn-secondary w-100 mb-4 mh-56 rounded-pill"
+                            className="btn btn-secondary w-100 mb-3 mh-56 rounded-pill"
                             onClick={(e) => {
                               e.preventDefault();
                               login(e as any);
@@ -505,7 +515,7 @@ const Login = () => {
                           >
                             Sign in Now
                           </button>
-                          <p className="text-center">
+                          <p className="text-center mt-2">
                             New to Gyansetu?{" "}
                             <Link
                               to="/signup"

@@ -458,7 +458,11 @@ const Signup = () => {
         <header className="container-fluid mb-5 py-3 d-none d-lg-block">
           <div className="row align-items-center">
             <div className="col-6">
-              <img src={gLogo} alt="" onClick={() => navigate("/")} />
+              <div className="logoui">
+                <img src={gLogo} alt="" onClick={() => navigate("/")} />
+                <span>Gyansetu</span>
+              </div>
+             
             </div>
           </div>
         </header>
@@ -513,19 +517,26 @@ const Signup = () => {
             </div>
             <div className="col-lg-6">
               <div className="access-card">
-                <div className="row gy-4">
+                <div className="row gy-3">
                   <div className="col-lg-12">
                     <BackArrowCircle
-                      className="d-none d-lg-block"
+                      className="d-none d-lg-block mt-3"
                       onClick={() => navigate("/")}
                     />
                     <ArrowLeft
-                      className="d-lg-none"
+                      className="d-lg-none mt-3"
                       onClick={() => navigate("/")}
                     />
                   </div>
+                  <div className="col-lg-12 d-lg-none d-block">
+                      <img
+                      src={gyansetuLogo}
+                      className=" mx-auto my-0 d-block"
+                      alt="" width="120"
+                    />
+                      </div>
                   <div className="col-lg-12">
-                    <h1 className=" mt-4 mt-lg-0 mb-0 inter-600">Sign Up</h1>
+                    <h1 className=" mt-2 mt-lg-0 mb-0 inter-600">Sign Up</h1>
                     <p className="fs-14 d-lg-none">
                       Input your gyansetu account!
                     </p>
@@ -539,7 +550,7 @@ const Signup = () => {
                       method=""
                       className="mb-3"
                     >
-                      <div className="mb-4">
+                      <div className="mb-3">
                         <label htmlFor="" className="form-label">
                           Email/Phone
                         </label>
@@ -577,11 +588,11 @@ const Signup = () => {
                           }}
                         />
                       </div>
-                      {/* <div className="mb-4">
+                      {/* <div className="mb-3">
                     <label htmlFor="" className="form-label">Phone</label>
                     <input type="text" className="form-control   h-52"  placeholder="Enter Your Phone"/>
                   </div> */}
-                      <div className="mb-4">
+                      <div className="mb-3">
                         <label htmlFor="passwordInput" className="form-label">
                           Password
                         </label>
@@ -646,7 +657,7 @@ const Signup = () => {
                         </div>
                       </div>
 
-                      <div className="form-check mb-4 fs-14">
+                      <div className="form-check mb-3 fs-14">
                         <input
                           className="form-check-input"
                           type="checkbox"

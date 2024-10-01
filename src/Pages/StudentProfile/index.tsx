@@ -19,7 +19,7 @@ import { toast } from "react-toastify";
 import NameContext from "../Context/NameContext";
 import useApi from "../../hooks/useAPI";
 import { QUERY_KEYS_STUDENT } from "../../utils/const";
-import { Await, useNavigate } from "react-router-dom";
+import { Await, useLocation, useNavigate } from "react-router-dom";
 import {
   inputfield,
   inputfieldhover,
@@ -34,6 +34,13 @@ export interface ChildComponentProps {
 
 const StudentProfile = () => {
   const context = useContext(NameContext);
+  const location: {
+    state: {
+      value: number
+    }
+  } = useLocation();
+  console.log("Location", location);
+
   const { namecolor }: any = context;
   const steps = [
     "Basic Information",
@@ -124,6 +131,11 @@ const StudentProfile = () => {
       }
     }
   };
+
+  useEffect(() => {
+    if (location?.state?.value) setActiveForm(location?.state?.value)
+    else setActiveForm(0)
+  }, [location?.state?.value])
 
   const callAPIStudent = async () => {
     if (usertype === "student") {
@@ -506,12 +518,12 @@ const StudentProfile = () => {
                     </small>
                   </h4></>}
               </div>
-              <div className="col-lg-6 d-none d-xxl-block px-0">
-                <div className="wizard-content">
-                  <p className="mb-0">
+              <div className="col-lg-12 d-none d-xxl-block px-0">
+                <div className="wizard-content p-0 mt-4">
+                  {/* <p className="mb-0">
                     <span className="crntstep">{activeForm + 1}</span> of 6
                     Completed{" "}
-                  </p>
+                  </p> */}
                   <div className="progress-bar">
                     <div ref={progressRef} className="progress"></div>
                   </div>
@@ -521,7 +533,7 @@ const StudentProfile = () => {
             <div className="row">
               <div className="col-lg-12 px-0">
                 <div
-                  className="card rounded-5 mt-4 bg-transparent-mb"
+                  className="card rounded-5 mt-3 bg-transparent-mb"
                   style={{ border: "0" }}
                 >
                   <div className="card-body p-0">
@@ -539,6 +551,8 @@ const StudentProfile = () => {
                                 ref={(el) => (stepsRef.current[0] = el!)}
                                 className={`step ${activeForm === 0 ? "active" : ""
                                   }`}
+                                onClick={() => setActiveForm(0)}
+                                style={{ cursor: "pointer" }}
                               >
                                 <div
                                   className={`step-circle ${activeForm >= 0 ? "filled" : ""
@@ -554,6 +568,8 @@ const StudentProfile = () => {
                                 ref={(el) => (stepsRef.current[1] = el!)}
                                 className={`step ${activeForm === 1 ? "active" : ""
                                   }`}
+                                onClick={() => setActiveForm(1)}
+                                style={{ cursor: "pointer" }}
                               >
                                 <div
                                   className={`step-circle ${activeForm >= 1 ? "filled" : ""
@@ -567,6 +583,8 @@ const StudentProfile = () => {
                                 ref={(el) => (stepsRef.current[2] = el!)}
                                 className={`step ${activeForm === 2 ? "active" : ""
                                   }`}
+                                onClick={() => setActiveForm(2)}
+                                style={{ cursor: "pointer" }}
                               >
                                 <div
                                   className={`step-circle ${activeForm >= 2 ? "filled" : ""
@@ -582,6 +600,8 @@ const StudentProfile = () => {
                                 ref={(el) => (stepsRef.current[3] = el!)}
                                 className={`step ${activeForm === 3 ? "active" : ""
                                   }`}
+                                onClick={() => setActiveForm(3)}
+                                style={{ cursor: "pointer" }}
                               >
                                 <div
                                   className={`step-circle ${activeForm >= 3 ? "filled" : ""
@@ -598,6 +618,8 @@ const StudentProfile = () => {
                                 ref={(el) => (stepsRef.current[4] = el!)}
                                 className={`step ${activeForm === 4 ? "active" : ""
                                   }`}
+                                onClick={() => setActiveForm(4)}
+                                style={{ cursor: "pointer" }}
                               >
                                 <div
                                   className={`step-circle ${activeForm >= 4 ? "filled" : ""
@@ -614,6 +636,8 @@ const StudentProfile = () => {
                                 ref={(el) => (stepsRef.current[5] = el!)}
                                 className={`step ${activeForm === 5 ? "active" : ""
                                   }`}
+                                onClick={() => setActiveForm(5)}
+                                style={{ cursor: "pointer" }}
                               >
                                 <div
                                   className={`step-circle ${activeForm >= 5 ? "filled" : ""

@@ -13,6 +13,15 @@
     background: rgb(75 75 75 / 48%)!important;
     
 }
+
+.addcomingsoon{
+
+  &::after{
+   
+    background-color: rgba(75, 75, 75, 0.8);
+    
+  }
+}
 .MuiFormLabel-colorPrimary{
   color: $headingColor!important;
 }

@@ -139,7 +139,11 @@ const Forgotpassword = () => {
         <header className="container-fluid mb-5 py-3 d-none d-lg-block">
           <div className="row align-items-center">
             <div className="col-6">
-              <img onClick={() => navigate('/')} src={gLogo} alt="" />
+              
+              <div className="logoui">
+                <img onClick={() => navigate("/")} src={gLogo} alt="" />
+                <span>Gyansetu</span>
+              </div>
             </div>
             <div className="col-6">
               <div className="d-flex justify-content-end">
