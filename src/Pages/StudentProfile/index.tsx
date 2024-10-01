@@ -506,8 +506,8 @@ const StudentProfile = () => {
                     </small>
                   </h4></>}
               </div>
-              <div className="col-lg-6 d-none d-xxl-block px-0">
-                <div className="wizard-content">
+              <div className="col-lg-12 d-none d-xxl-block px-0">
+                <div className="wizard-content p-0">
                   <p className="mb-0">
                     <span className="crntstep">{activeForm + 1}</span> of 6
                     Completed{" "}
@@ -521,7 +521,7 @@ const StudentProfile = () => {
             <div className="row">
               <div className="col-lg-12 px-0">
                 <div
-                  className="card rounded-5 mt-4 bg-transparent-mb"
+                  className="card rounded-5 mt-3 bg-transparent-mb"
                   style={{ border: "0" }}
                 >
                   <div className="card-body p-0">

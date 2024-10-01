@@ -9,7 +9,7 @@ import { PieChart } from "@mui/x-charts/PieChart";
 // import Box from '@mui/material/Box';
 import useApi from "../../hooks/useAPI";
 // import Button from '@mui/material/Button';
-import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   QUERY_KEYS,
@@ -115,6 +115,7 @@ function MainContent() {
     chart: {
       id: "chart5",
       height: 295,
+      width: '100%',
       toolbar: {
         show: false,
       },
@@ -261,6 +262,8 @@ function MainContent() {
   var secondLineChartOptions = {
     chart: {
       id: "chart8",
+      height: "100%",
+      width: "100%",
       zoom: {
         enabled: false, // Disables zoom functionality
       },
@@ -1789,7 +1792,7 @@ function MainContent() {
                     </div>
                   </div>
                 </div>
-                <div className="col-xxl-3 col-xl-6 d-flex align-items-stretch ">
+                <div className="col-xxl-3 col-xl-6  d-flex align-items-stretch">
                   <div className="card w-100 rounded-4 shadow-none desk-card">
                     <div className="card-body">
                       <div className="d-flex align-items-start justify-content-between mb-3 gap-4">
@@ -1892,7 +1895,7 @@ function MainContent() {
                     </div>
                   </div>
                 </div>
-                <div className="col-xxl-6 d-flex align-items-stretch mb-xl-4">
+                <div className="col-xxl-6  mb-xl-4">
                   <div className="chat-wrapper desk-chat-wrapper  shadow-none rounded-5">
                     <div className="chat-header d-flex align-items-center start-0 rounded-top-5">
                       <div>
@@ -2038,10 +2041,7 @@ function MainContent() {
                               onChange={(e) => setSearch(e?.target?.value)}
                               onKeyDown={handleKeyDown}
                             />
-                            <button
-                              onClick={searchData}
-                              
-                            >
+                            <button onClick={searchData}>
                               <ArrowUpwardOutlinedIcon />
                             </button>
                           </div>
@@ -2059,12 +2059,12 @@ function MainContent() {
                 </div>
 
                 <div
-                  className="col-xl-6 d-flex align-items-stretch"
+                  className="col-xl-6 "
                   onClick={() => setIsOpen(true)}
                 >
                   <div className="row mt-4 mt-lg-0">
-                    <div className="col-lg-12 d-flex align-items-stretch">
-                      <div className="card w-100 rounded-4 desk-card ">
+                    <div className="col-lg-12 ">
+                      <div className="card w-100 rounded-4 desk-card addcomingsoon">
                         <div className="card-body">
                           <div className="text-center">
                             <h6 className="mb-0">Study Chart</h6>
@@ -2097,7 +2097,7 @@ function MainContent() {
                       className="col-lg-6 d-flex align-items-stretch"
                       onClick={() => setIsOpen(true)}
                     >
-                      <div className="card w-100 rounded-4 desk-card">
+                      <div className="card w-100 rounded-4 desk-card addcomingsoon">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-1">
                             <div className="">
@@ -2154,7 +2154,7 @@ function MainContent() {
                       className="col-lg-6 d-flex align-items-stretch"
                       onClick={() => setIsOpen(true)}
                     >
-                      <div className="card w-100 rounded-4 desk-card">
+                      <div className="card w-100 rounded-4 desk-card addcomingsoon">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-3">
                             <div className="">
@@ -2216,10 +2216,10 @@ function MainContent() {
                   </div>
                 </div>
                 <div
-                  className="col-xl-6  d-flex align-items-stretch"
+                  className="col-xl-6  "
                   onClick={() => setIsOpen(true)}
                 >
-                  <div className="card w-100 rounded-4 desk-card">
+                  <div className="card w-100 rounded-4 desk-card addcomingsoon">
                     <div className="card-body">
                       <Chart
                         options={secondLineChartOptions}
