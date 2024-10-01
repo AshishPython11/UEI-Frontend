@@ -768,11 +768,11 @@ export const ProfileDialog: FunctionComponent<{
       institute_id:
         answeredData?.academic_history?.institute_id ||
         selectedInstitute?.toString() ||
-        "95",
+        "1",
       course_id:
         answeredData?.academic_history?.course_id ||
         selectCourse?.toString() ||
-        "18",
+        "1",
       learning_style:
         answeredData?.academic_history?.learning_style || selectedLearningStyle,
       class_id:
@@ -800,7 +800,7 @@ export const ProfileDialog: FunctionComponent<{
   const saveAnswerforsubjectpreference = (answers: string[]) => {
     const payload = {
       student_id: StudentId,
-      course_id: answeredData?.subject_preference?.course_name || selectCourse,
+      course_id: answeredData?.subject_preference?.course_id || selectCourse,
       subject_id: answeredData?.subject_preference?.id || selectSubject,
       preference: answeredData?.subject_preference?.preference || answers[28],
       score_in_percentage:
