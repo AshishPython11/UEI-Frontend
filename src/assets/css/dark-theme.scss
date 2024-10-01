@@ -13,6 +13,17 @@
     background: rgb(75 75 75 / 48%)!important;
     
 }
+.MuiFormLabel-colorPrimary{
+  color: $headingColor!important;
+}
+.wizard-content .form-control, .wizard-content .form-select, .btn-dark, .wizard-content .progress-bar, .chat-top-header-menu a {
+  background-color: #32363b!important;
+  border-color: #32363b!important;
+}
+.btn-outline-dark {
+  border-color: #32363b;
+  color: white;
+}
 .chat-wrapper{
   background-color: #212529!important;
 }

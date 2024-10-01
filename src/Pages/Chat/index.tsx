@@ -233,6 +233,10 @@ const Chat = () => {
     }
   };
 
+
+ 
+
+
   useEffect(() => {
     if (Id === "recentChat") {
       filterdataCall();
@@ -991,15 +995,18 @@ const Chat = () => {
   // },[chatlist,statredchat,chathistory])
   // console.log("test starred",statredchat,chatlist,selectedchat)
 
+ 
+ 
+
   const toggleStarredChat = () => setIsStarredChatOpen(!isStarredChatOpen);
   const toggleChatHistory = () => setIsChatHistoryOpen(!isChatHistoryOpen);
 
   const regenerateChat = () => {
-
+    
     setLoading(true);
     setLoaderMsg("Fetching Data from Ollama model.");
     setSearchErr(false);
-
+   
     let prompt = studentDetail?.prompt?.replace("**question**", "answer");
     let payload = {};
     console.log("studentDetail", studentDetail);
@@ -1111,6 +1118,9 @@ const Chat = () => {
         console.error('Error copying text: ', err);
       });
   };
+
+
+  
 
   return (
     <>
@@ -1666,13 +1676,13 @@ const Chat = () => {
                   {!showInitialPage ? chatsaved ? <FlagIcon style={{ color: "#9943ec" }} /> : <FlagOutlinedIcon onClick={saveChatstar} /> : <></>}
                 </div> : <></>}
                 {/* <div className="chat-result"> */}
-                <PerfectScrollbar className={`chat-result ${showInitialPage ? "justify-content-center" : ""}`}>
+                <div className="chat-result">
                   {selectedchat?.length && selectedchat?.length > 0 ?
                     <ul>
                       {selectedchat?.map((chat: any, index: any) => (
                         <>
                           {chat?.question && (
-                            <li key={`question_${index}`} className="right-chat">
+                            <li key={`question_${index}`} className="right-chat" >
                               <div className="chat-card">
                                 <div className="chat-card-header">
                                   <span className="anstext"><SearchOutlinedIcon sx={{ fontSize: '14px' }} /> Question</span>
@@ -1687,7 +1697,7 @@ const Chat = () => {
                               </div>
                             </li>)}
                           {chat?.answer &&
-                            (<li key={`answer_${index}`} className="left-chat">
+                            (<li key={`answer_${index}`} className="left-chat" >
                               <div className="profile-icon">
                                 <img src={primaryLogo} alt="" />
                               </div>
@@ -1714,11 +1724,11 @@ const Chat = () => {
                             </li>)}
                         </>))}
                     </ul>
-                    : showInitialPage && <div className="welcome-box d-flex flex-column justify-content-center">
+                    : showInitialPage && <div className="welcome-box">
                       <img src={chatLogo} alt="" />
                       <h3>Hi, How can I help you today?</h3>
                     </div>}
-                </PerfectScrollbar>
+                </div>
                 {/* </div> */}
                 {/* <div className="chat-suggestion">
                   <h4>Suggestions</h4>

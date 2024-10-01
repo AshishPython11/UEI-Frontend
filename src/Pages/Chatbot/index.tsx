@@ -415,10 +415,10 @@ const Chatbot: React.FC<IChatBot> = ({ answer, index }) => {
     //   }, [displayText]);
 
 
-    useEffect(() => {
-        //3️⃣ bring the last item into view        
-        lastElementRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' })
-    }, [displayText]);
+    // useEffect(() => {
+    //     //3️⃣ bring the last item into view        
+    //     lastElementRef.current?.lastElementChild?.scrollIntoView({ behavior: 'smooth' })
+    // }, [displayText]);
 
     const style: CSSProperties = {
         wordBreak: 'break-word',

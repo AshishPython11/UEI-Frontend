@@ -221,13 +221,13 @@ const Header = () => {
 
 
 
-    function toggleOnDesktop() {
-      if (window.innerWidth >= 1024) {
-        document.querySelector("body")?.classList.add("toggled");
-      } else {
-        document.querySelector("body")?.classList.remove("toggled");
-      }
-    }
+function toggleOnDesktop() {
+  if (window.innerWidth >= 1200) {
+      document.querySelector("body")?.classList.add("toggled");
+  } else {
+      document.querySelector("body")?.classList.remove("toggled");
+  }
+}
 
     // Run the function on load and on resize
     toggleOnDesktop();
@@ -974,7 +974,7 @@ const Header = () => {
                 </Link>
                 <a
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
-                  href="#"
+                  //href="#"
                 >
                   <LocalBarOutlinedIcon />
                   Setting
