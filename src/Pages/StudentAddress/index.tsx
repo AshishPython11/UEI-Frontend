@@ -403,7 +403,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.success(`${addressType} address saved successfully`, {
               hideProgressBar: true,
               theme: "colored",
-              position: "top-center"              
+              position: "top-center"
             });
             setActiveForm((prev) => prev + 1);
           } else {
@@ -476,7 +476,7 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         }
       };
 
-      if (StudentId !== null) {        
+      if (StudentId !== null) {
         // Edit current address
         if (eq && permanentAddressEq) setActiveForm((prev) => prev + 1);
         else {
@@ -639,17 +639,15 @@ const StudentAddress: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         </div> */}
 
         <div className="col-6 pb-3 form_field_wrapper">
-          {studentAddress.country && (
-            <label
-              className={`col-form-label  ${isFocusedstate || studentAddress.country
-                ? "focused"
-                : "focusedempty"
-                }`}
-              style={{ fontSize: "14px" }}
-            >
-              Country <span>*</span>
-            </label>
-          )}
+          <label
+            className={`col-form-label  ${isFocusedstate || studentAddress.country
+              ? "focused"
+              : "focusedempty"
+              }`}
+            style={{ fontSize: "14px" }}
+          >
+            Country <span>*</span>
+          </label>
           <CountryDropdown
             classes="form-select custom-dropdown"
             defaultOptionLabel={studentAddress.country}

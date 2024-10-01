@@ -362,7 +362,7 @@ export const ProfileDialog: FunctionComponent<{
     // School-specific
     "Please select your board": ["12", "academic_history", "board"],
     "Please select your class": ["14", "academic_history", "class_id"],
-    "Please select your state?": [
+    "Please select your state": [
       "13",
       "academic_history",
       "state_for_stateboard",
@@ -370,7 +370,7 @@ export const ProfileDialog: FunctionComponent<{
 
     // College-specific
     "Please select your course": ["15", "academic_history", "course_id"],
-    "What is your institution name?": [
+    "Please select your institution": [
       "16",
       "academic_history",
       "institution_name",
@@ -411,7 +411,7 @@ export const ProfileDialog: FunctionComponent<{
 
       // Remove college-specific mappings
       delete adjustedMapping["Please select your course"];
-      delete adjustedMapping["What is your institution name?"];
+      delete adjustedMapping["Please select your institution"];
       delete adjustedMapping["What is your learning style?"];
       delete adjustedMapping["Please select year"];
     } else if (institutionType === "college") {
@@ -486,7 +486,6 @@ export const ProfileDialog: FunctionComponent<{
             }
           );
         }
-
         setCurrentQuestionIndex(Number(mapping[filteredQuestions?.[0]]?.[0]));
         setMessages([{ text: filteredQuestions[0], type: "question" }]);
       } else {
@@ -1961,16 +1960,14 @@ export const ProfileDialog: FunctionComponent<{
                   return (
                     <div
                       key={index}
-                      className={`message-wrapper d-flex mb-3 ${
-                        message.type === "question"
+                      className={`message-wrapper d-flex mb-3 ${message.type === "question"
                           ? "justify-content-start"
                           : "justify-content-end"
-                      }`}
+                        }`}
                     >
                       <div
-                        className={`message-bubble p-3 ${
-                          message.type === "question" ? "left" : "right"
-                        }`}
+                        className={`message-bubble p-3 ${message.type === "question" ? "left" : "right"
+                          }`}
                         style={{
                           maxWidth: "80%",
                           backgroundColor:
@@ -2008,16 +2005,16 @@ export const ProfileDialog: FunctionComponent<{
                   per ||
                   preferenceError ||
                   errordate) && (
-                  <p
-                    style={{
-                      color: "red",
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                    }}
-                  >
-                    {errordata[currentQuestionIndex]}
-                  </p>
-                )}
+                    <p
+                      style={{
+                        color: "red",
+                        paddingLeft: "10px",
+                        paddingRight: "10px",
+                      }}
+                    >
+                      {errordata[currentQuestionIndex]}
+                    </p>
+                  )}
                 {error1 && (
                   <p
                     style={{
