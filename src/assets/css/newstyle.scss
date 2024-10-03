@@ -2668,10 +2668,16 @@ a{
   }
 }
 
-.MuiInputLabel-root{
-  left: -12px!important;
-  top: -10px!important;
-}
+
 .MuiInputBase-root {
   border: 0!important;
+}
+
+.main-wrapper .main-content .page-breadcrumb .breadcrumb-item + .breadcrumb-item::before{
+  display: none!important;
+}
+
+.MuiFormLabel-root{
+  font-size: 14px!important;
+  font-weight: 500!important;
 }
