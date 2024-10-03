@@ -458,9 +458,7 @@ const UserChangePassword = () => {
                           {"Change Password"}
                         </button>
                       </div>
-                      </div>
-
-                     
+                      </div>                     
                     </Form>
                   )}
                 </Formik>

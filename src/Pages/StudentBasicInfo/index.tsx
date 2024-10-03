@@ -59,7 +59,6 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
   const context = useContext(NameContext);
   const { setNamepro, setProImage }: any = context;
   let StudentId = localStorage.getItem("_id");
-  console.log(StudentId);
   const { getData, postData, putData, postFileData } = useApi();
   const [gender, setGender] = useState("Male");
   const [name, setName] = useState();
@@ -919,7 +918,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                   <img
                     src={filePreview}
                     alt="Uploaded Preview"
-                    style={{ maxWidth: "50%", marginTop: "10px" }}
+                    style={{ marginTop: "10px" }}
                   />
                 </div>
               )}

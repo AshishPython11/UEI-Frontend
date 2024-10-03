@@ -24,7 +24,7 @@ import { Field, Formik, FormikHelpers, FormikProps, Form } from "formik";
 import * as Yup from "yup";
 import useApi from "../../hooks/useAPI";
 import { toast } from "react-toastify";
-import gLogo from "../../assets/img/g-logo.svg";
+import gLogo from "../../assets/img/logo-white.svg";
 import loginImage from "../../assets/img/login-image.png";
 import { Autoplay, Pagination } from "swiper/modules";
 import {
