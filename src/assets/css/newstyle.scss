@@ -783,7 +783,7 @@ body .desk-card {
   box-shadow: none!important;
   border: 0 !important;
   border-radius: 2.5rem !important;
-
+  height: 100%;
   .card-header {
     padding: 20px !important;
   }
@@ -1648,7 +1648,7 @@ body .desk-card {
     height: 100%;
     overflow: auto;
     padding: 1rem;
-    max-height: 32vh;
+    max-height: 280px;
     overflow: auto;
     display: flex;
     flex-direction: column-reverse;
@@ -2647,18 +2647,37 @@ a{
 .addcomingsoon{
   position: relative;
   overflow: hidden;
-  &:hover::after{
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(white, 0.8);
-    content: "Coming Soon!";
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
-    font-weight: 500;
+  transition: all 0.3s ease-in-out;
+  &:hover{
+    transition: all 0.3s ease-in-out;
+    &::after{
+      position: absolute;
+      transition: all 0.3s ease-in-out;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(white, 0.8);
+      content: "Coming Soon!";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+      font-weight: 500;
+    }
   }
+}
+
+
+.MuiInputBase-root {
+  border: 0!important;
+}
+
+.main-wrapper .main-content .page-breadcrumb .breadcrumb-item + .breadcrumb-item::before{
+  display: none!important;
+}
+
+.MuiFormLabel-root{
+  font-size: 14px!important;
+  font-weight: 500!important;
 }

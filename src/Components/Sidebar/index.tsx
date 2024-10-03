@@ -214,7 +214,7 @@ const Sidebar = () => {
     if (window.innerWidth <= 1024) {
       document.querySelector("body")?.classList.remove("toggled");
   } else {
-      document.querySelector("body")?.classList.add("toggled");
+      document.querySelector("body")?.classList.remove("toggled");
   }
   }
   // console.log("test hhh",selectedIndex1)

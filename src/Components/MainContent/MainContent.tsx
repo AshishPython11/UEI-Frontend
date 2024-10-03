@@ -481,8 +481,8 @@ function MainContent() {
             let sectionCount = 0;
 
             if (basic_info && Object.keys(basic_info).length > 0) {
-              if (data.data.pic_path !== "") {
-                getData(`${"upload_file/get_image/" + data.data.pic_path}`)
+              if (data.data.basic_info.pic_path !== "") {
+                getData(`${"upload_file/get_image/" + data.data.basic_info.pic_path}`)
                   .then((imgdata: any) => {
                     setprofileImage(imgdata.data);
                   })
@@ -705,8 +705,8 @@ function MainContent() {
             let totalPercentage = 0;
             let sectionCount = 0;
             if (basic_info && Object.keys(basic_info)?.length > 0) {
-              if (data?.data?.pic_path !== "") {
-                getData(`${"upload_file/get_image/" + data?.data?.pic_path}`)
+              if (data?.data?.basic_info.pic_path !== "") {
+                getData(`${"upload_file/get_image/" + data?.data?.basic_info.pic_path}`)
                   .then((imgdata: any) => {
                     setprofileImage(imgdata?.data);
                   })
@@ -1701,7 +1701,7 @@ function MainContent() {
                 </div>
               </div> */}
 
-              <div className="row mt-lg-5">
+              <div className="row mt-lg-4 g-4">
                 <div className="col-xxl-3 col-xl-6 d-flex align-items-stretch">
                   <div className="card w-100 overflow-hidden rounded-4 shadow-none desk-card">
                     <div className="card-header bg-primary-20 border-bottom-0">
@@ -1942,7 +1942,7 @@ function MainContent() {
                     </div>
                   </div>
                 </div>
-                <div className="col-xxl-6  mb-xl-4">
+                <div className="col-xxl-6  d-flex align-items-stretch">
                   <div className="chat-wrapper desk-chat-wrapper  shadow-none rounded-5">
                     <div className="chat-header d-flex align-items-center start-0 rounded-top-5">
                       <div>

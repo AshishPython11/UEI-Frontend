@@ -37,6 +37,7 @@ import MicOffOutlinedIcon from "@mui/icons-material/MicOffOutlined";
 import GradeOutlinedIcon from "@mui/icons-material/GradeOutlined";
 import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import LockResetOutlinedIcon from '@mui/icons-material/LockResetOutlined';
 import LocalBarOutlinedIcon from "@mui/icons-material/LocalBarOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
@@ -145,8 +146,8 @@ const Header = () => {
               gender: basic_info?.gender,
             });
 
-            if (data.data.pic_path !== "") {
-              getData(`${"upload_file/get_image/" + data.data.pic_path}`)
+            if (data.data.basic_info.pic_path !== "") {
+              getData(`${"upload_file/get_image/" + data.data.basic_info.pic_path}`)
                 .then((imgdata: any) => {
                   setprofileImage(imgdata.data)
                   setProImage(imgdata.data);
@@ -179,8 +180,8 @@ const Header = () => {
               last_name: adminInfo?.last_name,
               gender: adminInfo?.gender,
             });
-            if (response.data.pic_path !== "") {
-              getData(`${"upload_file/get_image/" + response.data.pic_path}`)
+            if (response.data.basic_info.pic_path !== "") {
+              getData(`${"upload_file/get_image/" + response.data.basic_info.pic_path}`)
                 .then((imgdata) => {
                   setprofileImage(imgdata.data)
                   setProImage(imgdata.data);
@@ -221,13 +222,13 @@ const Header = () => {
 
 
 
-function toggleOnDesktop() {
-  if (window.innerWidth >= 1200) {
-      document.querySelector("body")?.classList.add("toggled");
-  } else {
-      document.querySelector("body")?.classList.remove("toggled");
-  }
-}
+    function toggleOnDesktop() {
+      if (window.innerWidth >= 1200) {
+        document.querySelector("body")?.classList.add("toggled");
+      } else {
+        document.querySelector("body")?.classList.remove("toggled");
+      }
+    }
 
     // Run the function on load and on resize
     toggleOnDesktop();
@@ -972,19 +973,26 @@ function toggleOnDesktop() {
                   <PersonOutlineOutlinedIcon />
                   Profile
                 </Link>
-                <a
+                {/* <a
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
                   //href="#"
                 >
                   <LocalBarOutlinedIcon />
                   Setting
-                </a>
+                </a> */}
                 <Link
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
                   to="/main/DashBoard"
                 >
                   <DashboardOutlinedIcon />
                   Dashboard
+                </Link>
+                <Link
+                  className="dropdown-item d-flex align-items-center gap-2 py-2"
+                  to="/main/changepassword"
+                >
+                  <LockResetOutlinedIcon />
+                  Change Password
                 </Link>
 
                 <hr className="dropdown-divider" />

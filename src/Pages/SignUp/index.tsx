@@ -20,7 +20,7 @@ import {
   VisibilityOn,
   VisibilityOff,
 } from "../../assets";
-import gLogo from "../../assets/img/g-logo.svg";
+import gLogo from "../../assets/img/logo-white.svg";
 import gyansetuLogo from "../../assets/img/gyansetu-logo.svg";
 import useApi from "../../hooks/useAPI";
 import { Autoplay, Pagination } from "swiper/modules";

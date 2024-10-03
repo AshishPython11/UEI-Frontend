@@ -21,7 +21,7 @@ import FullScreenLoader from "../../Pages/Loader/FullScreenLoader";
 import emailicon from "../../assets/img/email.svg";
 import phoneicon from "../../assets/img/phone.svg";
 import passwordicon from "../../assets/img/password.svg";
-import gLogo from "../../assets/img/g-logo.svg";
+import gLogo from "../../assets/img/logo-white.svg";
 import gyansetuLogo from "../../assets/img/gyansetu-logo.svg";
 import loginImage from "../../assets/img/login-image.png";
 import {

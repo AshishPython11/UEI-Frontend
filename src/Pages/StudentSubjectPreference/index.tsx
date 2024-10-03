@@ -55,7 +55,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
   const [boxes11, setBoxes11] = useState<Box[]>([]);
   let StudentId = localStorage.getItem("_id");
   const [subjectPreferences, setSubjectPreferences] = useState([]);
-  const [editFalg, setEditFlag] = useState(false);
+  const [editFlag, setEditFlag] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const navigate = useNavigate()
@@ -122,7 +122,6 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
   const getPrefrencelist = async () => {
     getData("/subject_preference/edit/" + StudentId)
       .then((data: any) => {
-        console.log(data);
         if (data?.status === 200) {
           data.data.map((item: any, index: number) => {
             const newBox: Box = {
@@ -335,6 +334,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
     // console.log("test data11111",boxes11,boxes,eqq)
     // if(!eqq === true)  {
     let initial = {};
+    let eq;
     try {
       const promises = boxes.map(async (box) => {
         const submissionData = {
@@ -345,16 +345,9 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
           score_in_percentage: box.score_in_percentage,
         };
         initial = submissionData;
-        const eq = deepEqual(initialState, submissionData);
-        console.log(
-          "test data",
-          eq,
-          initialState,
-          submissionData,
-          editFalg,
-          box.id
-        );
-        if (editFalg) {
+        eq = deepEqual(initialState, submissionData);
+
+        if (editFlag) {
           return postData("/subject_preference/add", submissionData);
         } else {
           if (box.id === 0) {
@@ -388,15 +381,26 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
         (result) => result?.status === 200
       );
 
-      console.log("test data allSuccessful", allSuccessful, results);
       if (allSuccessful) {
-        toast.success("Subject Preference save successfully", {
-          hideProgressBar: true,
-          theme: "colored",
-          position: "top-center"
-        });
+        if (editFlag) {
+          toast.success("Subject Preference saved successfully", {
+            hideProgressBar: true,
+            theme: "colored",
+            position: "top-center"
+          });
+          navigate('/')
+        } else {
+          if (!eq === true) {
+            toast.success("Subject Preference updated successfully", {
+              hideProgressBar: true,
+              theme: "colored",
+              position: "top-center"
+            });
+          }
+          navigate('/')
+        }
         setInitialState(initial);
-        navigate('/')
+
         // getPrefrencelist()
         // setBoxes11(boxes)
       } else {
