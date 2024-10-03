@@ -1697,7 +1697,7 @@ body .desk-card {
     top: 0;
     left: 6.5%;
     width: 2px;
-    background-color: $secondary;
+    background-color: #53fb26;
     z-index: 2;
     transition: height 0.3s;
     transform: translateX(-6.5%);
@@ -1747,8 +1747,8 @@ body .desk-card {
       }
 
       &.filled {
-        border: 3px solid $secondary;
-        color: $secondary;
+        border: 3px solid #53fb26;
+        color: #53fb26;
         i {
           color: $secondary;
           font-size: 18px;

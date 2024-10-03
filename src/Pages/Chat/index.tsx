@@ -170,7 +170,6 @@ const Chat = () => {
 
   const getVoices = () => {
     setVoices(synth.getVoices());
-    console.log("voices", voices);
     // filterVoicesByGender("Google UK English Female");
     // filterVoicesByGender("Microsoft Zira - English (United States)");
     // filterVoicesByGender('Microsoft Mark - English (United States)');
@@ -233,10 +232,6 @@ const Chat = () => {
     }
   };
 
-
- 
-
-
   useEffect(() => {
     if (Id === "recentChat") {
       filterdataCall();
@@ -245,6 +240,7 @@ const Chat = () => {
       setchathistory(chathistoryrecent);
     }
   }, [Id, chatlist]);
+
   const speak = (text: string, index: number) => {
     const textArray = Array.isArray(text) ? text : [text];
 
@@ -288,6 +284,7 @@ const Chat = () => {
     updatedChat[index] = { ...updatedChat[index], speak: true };
     setSelectedChat(updatedChat);
   };
+
   const stop = (index: number) => {
     // setSelectedChat({ ...selectedchat, speak: false });
     const updatedChat = [...selectedchat];
@@ -365,8 +362,6 @@ const Chat = () => {
 
   const handleResponse = (data: { data: any }) => {
     const newData = data?.data ? data?.data : data;
-    console.log("newData", newData);
-
     newData.speak = false;
     setFilteredProducts(newData);
     setSelectedChat((prevState: any) => [...prevState, newData]);
@@ -703,8 +698,6 @@ const Chat = () => {
   }, [dataflagged]);
 
   useEffect(() => {
-    console.log("Chat", chat);
-    console.log("Chat Saved", chatsaved);
     if (chat.length > 0) {
       localStorage.setItem("chatData", JSON.stringify(chat));
       localStorage.setItem("chatsaved", JSON.stringify(chatsaved));
@@ -837,13 +830,6 @@ const Chat = () => {
       });
   };
 
-  // useEffect(() => {
-  //   saveChat()
-  // }, [])
-
-  const checkifchatsaved = (ques: any) => {
-    let chat = chatlist.filter();
-  };
   useEffect(() => {
     setFilteredProducts([]);
   }, []);
@@ -995,21 +981,20 @@ const Chat = () => {
   // },[chatlist,statredchat,chathistory])
   // console.log("test starred",statredchat,chatlist,selectedchat)
 
- 
- 
+
+
 
   const toggleStarredChat = () => setIsStarredChatOpen(!isStarredChatOpen);
   const toggleChatHistory = () => setIsChatHistoryOpen(!isChatHistoryOpen);
 
   const regenerateChat = () => {
-    
+
     setLoading(true);
     setLoaderMsg("Fetching Data from Ollama model.");
     setSearchErr(false);
-   
+
     let prompt = studentDetail?.prompt?.replace("**question**", "answer");
     let payload = {};
-    console.log("studentDetail", studentDetail);
 
     if (selectedchat?.question !== "") {
       payload = {
@@ -1120,7 +1105,7 @@ const Chat = () => {
   };
 
 
-  
+
 
   return (
     <>
@@ -1542,7 +1527,7 @@ const Chat = () => {
       </div> */}
       <main className="main-wrapper">
         <div className="main-content">
-          <div className={`chat-panel ${!(filteredChats?.length > 0) ? 'new-chat' : ''}`}>
+          <div className={`chat-panel ${!(filteredChats?.length > 0) ? '' : ''}`}>
             {Id ? <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
               <div className="d-lg-none mb-4 ms-auto d-flex">
                 <button className="btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
@@ -1558,7 +1543,6 @@ const Chat = () => {
                   <img src={searchWhite} alt="" />
                 </button>
               </div>
-
               <div className="history-label">
                 Today's Search
               </div>
@@ -1753,7 +1737,7 @@ const Chat = () => {
                         onChange={(e) => setSearch(e?.target?.value)}
                         onKeyDown={handleKeyDown}
                       />
-                      <button type="button" onClick={() => searchData()} className="btn btn-primary p-0"><ArrowUpwardOutlinedIcon /></button>
+                      <button type="button" onClick={searchData} className="btn btn-primary p-0"><ArrowUpwardOutlinedIcon /></button>
                     </div>
                     {searcherr === true && (
                       <small className="text-danger">

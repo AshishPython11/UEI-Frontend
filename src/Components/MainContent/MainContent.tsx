@@ -69,6 +69,7 @@ function MainContent() {
   const ChatDELETEURL = QUERY_KEYS.CHATDELETE;
   const chatlisturl = QUERY_KEYS.CHAT_LIST;
   const ChatURLAI = QUERY_KEYS.CHATADDAI;
+  const chataddconversationurl = QUERY_KEYS.CHAT_HISTORYCON;
   const [profileDatas, setProfileDatas] = useState<any>({});
   const [basicinfoPercentage, setbasicinfoPercentage] = useState<number>(0);
   const [addressPercentage, setaddressPercentage] = useState<number>(0);
@@ -98,12 +99,14 @@ function MainContent() {
   const [chathistory, setchathistory] = useState<any>([]);
   const [chathistoryrecent, setchathistoryrecent] = useState<any>();
   const [isTextCopied, setIsTextCopied] = useState<any>({});
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   let synth: SpeechSynthesis;
   synth = window?.speechSynthesis;
   synth.onvoiceschanged = () => {
     getVoices();
   };
+  const position = {
+    value: 5
+  }
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const chatRef = useRef<HTMLInputElement>(null);
 
@@ -213,7 +216,7 @@ function MainContent() {
     labels: ["Progress"], // Label (hidden as per the dataLabels.name.show: false)
   };
 
-  var lineChartOptions = {
+  const lineChartOptions = {
     chart: {
       id: "chart2",
       sparkline: {
@@ -259,7 +262,7 @@ function MainContent() {
     },
   };
 
-  var secondLineChartOptions = {
+  const secondLineChartOptions = {
     chart: {
       id: "chart8",
       height: "100%",
@@ -460,6 +463,7 @@ function MainContent() {
               language_id: data?.data?.language_known?.language_id,
               proficiency: data?.data?.language_known?.proficiency,
             };
+
             let academic_history = data?.data?.academic_history;
             //   let contact = data.data.contact;
             let contact = {
@@ -534,7 +538,7 @@ function MainContent() {
                           .replace("_", " ")
                           .charAt(0)
                           .toUpperCase() +
-                          response.data.class_name.replace("_", " ").slice(1)
+                        response.data.class_name.replace("_", " ").slice(1)
                       )
                   );
                 }
@@ -548,20 +552,17 @@ function MainContent() {
                   delete academic_history?.state_for_stateboard;
               } else {
                 if (academic_history?.course_id) {
-                  getData(`class/get/${academic_history?.course_id}`).then(
-                    (response) =>
-                      setStudentCourse(
-                        response.data.course_name
-                          ?.replace("_", " ")
-                          .charAt(0)
-                          .toUpperCase() +
-                          response.data.course_name.replace("_", " ").slice(1)
-                      )
+                  getData(`course/edit/${academic_history?.course_id}`).then(
+                    (response) => {
+                      setStudentCourse(response.data.course_name)
+                    }
                   );
                 }
+
                 delete academic_history?.board;
                 delete academic_history?.class_id;
                 delete academic_history?.state_for_stateboard;
+                delete academic_history?.university_name;
               }
               let totalcount = Object.keys(academic_history).length;
               let filledCount = countKeysWithValue(academic_history);
@@ -709,7 +710,7 @@ function MainContent() {
                   .then((imgdata: any) => {
                     setprofileImage(imgdata?.data);
                   })
-                  .catch((e) => {});
+                  .catch((e) => { });
               }
 
               let totalcount = Object.keys(basic_info)?.length;
@@ -906,6 +907,10 @@ function MainContent() {
     // fetchstucount();
   }, []);
 
+  useEffect(() => {
+    saveChat()
+  }, [chatlist])
+
   const handleResponse = (data: { data: any }) => {
     const newData = data?.data ? data?.data : data;
 
@@ -931,15 +936,15 @@ function MainContent() {
 
   const handleError = (e: {
     message:
-      | string
-      | number
-      | boolean
-      | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-      | Iterable<React.ReactNode>
-      | React.ReactPortal
-      | ((props: ToastContentProps<unknown>) => React.ReactNode)
-      | null
-      | undefined;
+    | string
+    | number
+    | boolean
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | Iterable<React.ReactNode>
+    | React.ReactPortal
+    | ((props: ToastContentProps<unknown>) => React.ReactNode)
+    | null
+    | undefined;
   }) => {
     setLoader(false);
     toast.error(e?.message, {
@@ -1282,15 +1287,12 @@ function MainContent() {
 
   const getVoices = () => {
     setVoices(synth.getVoices());
-    console.log("voices", voices);
     // filterVoicesByGender("Google UK English Female");
     // filterVoicesByGender("Microsoft Zira - English (United States)");
     // filterVoicesByGender('Microsoft Mark - English (United States)');
   };
 
   const speak = (text: string, index: number) => {
-    console.log("SPEAK", text, index);
-
     const textArray = Array.isArray(text) ? text : [text];
 
     // Join the array into a single string
@@ -1313,7 +1315,7 @@ function MainContent() {
     //   cleanedText += '.';
     // }
     const utterance = new SpeechSynthesisUtterance(cleanedText);
-    utterance.onerror = (event) => {};
+    utterance.onerror = (event) => { };
     // Event listener for when the speech ends
     utterance.onend = () => {
       const updatedChat = [...selectedchat];
@@ -1321,7 +1323,6 @@ function MainContent() {
       setSelectedChat(updatedChat);
     };
 
-    // console.log("ssssss",cleanedText,voices);
     const voice = voices.find(
       (voice) => voice.name === "Microsoft Mark - English (United States)"
     ) as SpeechSynthesisVoice;
@@ -1395,9 +1396,53 @@ function MainContent() {
       });
   };
 
-  const copyText = (index: number) => {
-    console.log("Text Copied");
+  const saveChat = async () => {
+    // alert("called!!");
+    let datatest;
+    if (chatlist !== undefined) {
+      datatest = chatlist?.filter(
+        (chatitem: { chat_title: any }) =>
+          chatitem?.chat_title === chat[0]?.question
+      );
+    }
 
+    let chat_payload;
+    if (datatest?.length !== 0 && Array.isArray(chat) && chat.length >= 2) {
+      chat?.shift();
+      chat_payload = {
+        student_id: userdata?.id,
+        chat_title: chat[0]?.question,
+        chat_conversation: JSON.stringify(chat),
+        flagged: chatsaved,
+      };
+    } else {
+      chat_payload = {
+        student_id: userdata?.id,
+        chat_title: chat[0]?.question,
+        chat_conversation: JSON.stringify(chat),
+        flagged: chatsaved,
+      };
+    }
+    await postData(`${chataddconversationurl}`, chat_payload)
+      .then((chatdata: any) => {
+        setChatSaved(false);
+        // toast.success(chatdata?.message, {
+        //   hideProgressBar: true,
+        //   theme: "colored",
+        // });
+        localStorage.removeItem("chatData");
+        localStorage.removeItem("chatsaved");
+        // callAPI();
+      })
+      .catch((e) => {
+        toast.error(e?.message, {
+          hideProgressBar: true,
+          theme: "colored",
+        });
+      });
+  };
+
+  const copyText = (index: number) => {
     // Get the text content of the div with the specific inline styles
     const textToCopy = (
       document.getElementById(`answer-${index}`) as HTMLDivElement
@@ -1669,8 +1714,8 @@ function MainContent() {
                                   ? profileImage
                                   : profileDatas?.basic_info?.gender.toLowerCase() ===
                                     "female"
-                                  ? femaleImage
-                                  : maleImage
+                                    ? femaleImage
+                                    : maleImage
                               }
                               className="rounded-circle bg-grd-info p-1"
                               width="100"
@@ -1683,7 +1728,7 @@ function MainContent() {
                                   <h4 className="fw-semibold mb-0 fs-4 mb-0">
                                     {profileDatas?.basic_info?.first_name
                                       ? `${profileDatas?.basic_info?.first_name}`
-                                      : ""}
+                                      : "Welcome"}
                                   </h4>
                                   <small className="mb-lg-3 mb-1 d-block">
                                     {studentClass || studentCourse}
@@ -1808,6 +1853,7 @@ function MainContent() {
                         <Link
                           to="/main/StudentProfile"
                           className="fw-semibold text-nowrap text-dark"
+                          state={position}
                         >
                           See All
                         </Link>
@@ -1817,6 +1863,7 @@ function MainContent() {
                           <Link
                             to="/main/StudentProfile"
                             className="d-flex gap-0 flex-grow-1 flex-column text-start nav-link"
+                            state={position}
                           >
                             <p className="mb-0 ">
                               {profileDatas?.subject_preference?.subject_name
@@ -1830,7 +1877,7 @@ function MainContent() {
                               {profileDatas?.subject_preference
                                 ?.score_in_percentage
                                 ? profileDatas?.subject_preference
-                                    ?.score_in_percentage
+                                  ?.score_in_percentage
                                 : ""}
                             </p>
                           </div>
@@ -2054,15 +2101,12 @@ function MainContent() {
                         <div className="chat-footer-menu"></div>
                       </div>
                     )}
-                    
+                    {/* <div className="overlay chat-toggle-btn-mobile"></div> */}
                   </div>
                 </div>
 
-                <div
-                  className="col-xl-6 "
-                  onClick={() => setIsOpen(true)}
-                >
-                  <div className="row g-4">
+                <div className="col-xl-6 ">
+                  <div className="row mt-4 mt-lg-0">
                     <div className="col-lg-12 ">
                       <div className="card w-100 rounded-4 desk-card addcomingsoon">
                         <div className="card-body">
@@ -2093,10 +2137,7 @@ function MainContent() {
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="col-lg-6 d-flex align-items-stretch"
-                      onClick={() => setIsOpen(true)}
-                    >
+                    <div className="col-lg-6 d-flex align-items-stretch">
                       <div className="card w-100 rounded-4 desk-card addcomingsoon">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-1">
@@ -2150,10 +2191,7 @@ function MainContent() {
                         </div>
                       </div>
                     </div>
-                    <div
-                      className="col-lg-6 d-flex align-items-stretch"
-                      onClick={() => setIsOpen(true)}
-                    >
+                    <div className="col-lg-6 d-flex align-items-stretch">
                       <div className="card w-100 rounded-4 desk-card addcomingsoon">
                         <div className="card-body">
                           <div className="d-flex align-items-start justify-content-between mb-3">
@@ -2215,10 +2253,7 @@ function MainContent() {
                     </div>
                   </div>
                 </div>
-                <div
-                  className="col-xl-6  "
-                  onClick={() => setIsOpen(true)}
-                >
+                <div className="col-xl-6">
                   <div className="card w-100 rounded-4 desk-card addcomingsoon">
                     <div className="card-body">
                       <Chart
@@ -2304,11 +2339,6 @@ function MainContent() {
         onCancel={handlecancel}
         onOkClick={() => handleOk(userName)}
         title="Your profile is incomplete"
-      />
-      <CommonModal
-        message={"Coming soon"}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
       />
     </>
   );

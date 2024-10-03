@@ -242,12 +242,12 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
           });
         });
     } else {
-      toast.success("Data Deleted Successfully", {
-        hideProgressBar: true,
-        theme: "colored",
-        position: "top-center"
-      });
-      console.log("Data Deleted Successfully", boxes, indx);
+      // toast.success("Data Deleted Successfully", {
+      //   hideProgressBar: true,
+      //   theme: "colored",
+      //   position: "top-center"
+      // });
+      // console.log("Data Deleted Successfully", boxes, indx);
       setBoxes(boxes.filter((box, index) => index !== indx));
     }
   };
