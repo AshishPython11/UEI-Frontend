@@ -1821,7 +1821,7 @@ function MainContent() {
 
                       <div className="d-flex align-items-center gap-3 mb-3">
                         <div className="flex-grow-1">
-                          <h6 className="mb-0 fw-normal fs-14">Adhar KYC</h6>
+                          <h6 className="mb-0 fw-normal fs-14">Aadhar KYC</h6>
                         </div>
                         <div style={{ color: `#9943EC` }}>Pending</div>
                       </div>
@@ -2281,7 +2281,7 @@ function MainContent() {
                       <div className="d-flex flex-column gap-3">
                         <div className="">
                           <p className="mb-1">
-                            Cliks <span className="float-end">2589</span>
+                            Clicks <span className="float-end">2589</span>
                           </p>
                           <div className="progress" style={{ height: "5px" }}>
                             <div
