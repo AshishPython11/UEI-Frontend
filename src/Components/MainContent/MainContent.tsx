@@ -2068,7 +2068,7 @@ function MainContent() {
                           </>
                         ))
                       ) : (
-                        <div className="d-flex flex-column align-items-center">
+                        <div className="d-flex flex-column align-items-center text-center">
                           <img width={"200px"} src={chatLogo} alt="" />
                           <h4>Hi, How can I help you today?</h4>
                         </div>
@@ -2106,7 +2106,7 @@ function MainContent() {
                 </div>
 
                 <div className="col-xl-6 ">
-                  <div className="row mt-4 mt-lg-0">
+                  <div className="row  g-4">
                     <div className="col-lg-12 ">
                       <div className="card w-100 rounded-4 desk-card addcomingsoon">
                         <div className="card-body">
