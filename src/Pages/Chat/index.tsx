@@ -50,6 +50,7 @@ const Chat = () => {
   const [search, setSearch] = useState("");
   const [regenerateSearch, setRegenerateSearch] = useState("");
   const [studentDetail, setStudentData] = useState<any>();
+  const [studentCourse, setStudentCourse] = useState<any>();
   const [searcherr, setSearchErr] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   // const [starFlagged, setStarFlagged] = useState(false);
@@ -146,6 +147,15 @@ const Chat = () => {
     getData(`${StudentGETURL}${userdata ? `/${userdata?.id}` : ""}`)
       .then((data: any) => {
         setStudentData(data?.data);
+        if (data?.data?.academic_history && Object.keys(data?.data?.academic_history).length > 0) {
+          if (data?.data?.academic_history?.institution_type === "college") {
+            getData(`course/edit/${data?.data?.academic_history?.course_id}`).then(
+              (response) => {
+                setStudentCourse(response.data.course_name)
+              }
+            );
+          }
+        }
       })
       .catch((e) => {
         toast.error(e?.message, {
@@ -426,7 +436,8 @@ const Chat = () => {
         question: search,
         prompt: prompt,
         // course: studentDetail?.course === null ? "" : studentDetail?.course,
-        course: "class_10",
+        // course: "class_10",
+        course: studentDetail?.academic_history?.institution_type === "school" ? studentDetail?.class?.name : studentCourse,
         stream: studentDetail?.subject,
         chat_hostory: [
           { role: "user", content: selectedchat?.question },
@@ -444,7 +455,7 @@ const Chat = () => {
       payload = {
         question: search,
         prompt: prompt,
-        course: studentDetail?.course === null ? "" : studentDetail?.course,
+        course: studentDetail?.academic_history?.institution_type === "school" ? studentDetail?.class?.name : studentCourse,
         stream: studentDetail?.subject,
       };
       rag_payload = {
@@ -492,7 +503,7 @@ const Chat = () => {
           // );
           if (studentDetail?.academic_history?.institution_type === "school") {
             return getData(
-              `https://uatllm.gyansetu.ai/rag-model-className?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.class?.name}`
+              `https://uatllm.gyansetu.ai/rag-model-class?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.class?.name}`
             )
               .then((response) => {
                 if (response?.status === 200) {
@@ -503,6 +514,13 @@ const Chat = () => {
                     response: response?.answer,
                   };
                   postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                } else if (response?.status === 402) {
+                  setLoading(false);
+                  toast.error(response?.answer, {
+                    hideProgressBar: true,
+                    theme: "colored",
+                    position: 'top-center'
+                  })
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -566,6 +584,13 @@ const Chat = () => {
                     response: response?.answer,
                   };
                   postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                } else if (response?.status === 402) {
+                  setLoading(false);
+                  toast.error(response?.answer, {
+                    hideProgressBar: true,
+                    theme: "colored",
+                    position: 'top-center'
+                  })
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -988,7 +1013,6 @@ const Chat = () => {
   const toggleChatHistory = () => setIsChatHistoryOpen(!isChatHistoryOpen);
 
   const regenerateChat = () => {
-
     setLoading(true);
     setLoaderMsg("Fetching Data from Ollama model.");
     setSearchErr(false);
@@ -1001,7 +1025,8 @@ const Chat = () => {
         question: regenerateSearch,
         prompt: prompt,
         // course: studentDetail?.course === null ? "" : studentDetail?.course,
-        course: "class_10",
+        // course: "class_10",
+        course: studentDetail?.academic_history?.institution_type === "school" ? studentDetail?.class?.name : studentCourse,
         stream: studentDetail?.subject,
         chat_hostory: [
           { role: "user", content: selectedchat?.question },

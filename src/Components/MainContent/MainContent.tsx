@@ -912,7 +912,7 @@ function MainContent() {
 
   useEffect(() => {
     saveChat()
-  }, [chatlist])
+  }, [chat])
 
   const handleResponse = (data: { data: any }) => {
     const newData = data?.data ? data?.data : data;
@@ -977,7 +977,8 @@ function MainContent() {
         question: search,
         prompt: prompt,
         // course: studentDetail?.course === null ? "" : studentDetail?.course,
-        course: "class_10",
+        // course: "class_10",
+        course: profileDatas?.academic_history?.institution_type === "school" ? profileDatas?.class?.name : studentCourse,
         stream: profileDatas?.subject,
         chat_hostory: [
           { role: "user", content: selectedchat?.question },
@@ -995,7 +996,7 @@ function MainContent() {
       payload = {
         question: search,
         prompt: prompt,
-        course: profileDatas?.course === null ? "" : profileDatas?.course,
+        course: profileDatas?.academic_history?.institution_type === "school" ? profileDatas?.class?.name : studentCourse,
         stream: profileDatas?.subject,
       };
       rag_payload = {
@@ -1042,7 +1043,7 @@ function MainContent() {
           // );
           if (profileDatas?.academic_history?.institution_type === "school") {
             return getData(
-              `https://uatllm.gyansetu.ai/rag-model-className?user_query=${search}&student_id=${StudentId}&class_name=${profileDatas?.class?.name}`
+              `https://uatllm.gyansetu.ai/rag-model-class?user_query=${search}&student_id=${StudentId}&class_name=${profileDatas?.class?.name}`
             )
               .then((response) => {
                 if (response?.status === 200) {
@@ -1053,6 +1054,13 @@ function MainContent() {
                     response: response?.answer,
                   };
                   postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                } else if (response?.status === 402) {
+                  setLoader(false);
+                  toast.error(response?.answer, {
+                    hideProgressBar: true,
+                    theme: "colored",
+                    position: 'top-center'
+                  })
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -1116,6 +1124,13 @@ function MainContent() {
                     response: response?.answer,
                   };
                   postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                } else if (response?.status === 402) {
+                  setLoader(false);
+                  toast.error(response?.answer, {
+                    hideProgressBar: true,
+                    theme: "colored",
+                    position: 'top-center'
+                  })
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -1357,8 +1372,8 @@ function MainContent() {
       payload = {
         question: regenerateSearch,
         prompt: prompt,
-        // course: studentDetail?.course === null ? "" : studentDetail?.course,
-        course: "class_10",
+        course: profileDatas?.academic_history?.institution_type === "school" ? profileDatas?.class?.name : studentCourse,
+        // course: "class_10",
         stream: profileDatas?.subject,
         chat_hostory: [
           { role: "user", content: selectedchat?.question },
@@ -1372,7 +1387,7 @@ function MainContent() {
       payload = {
         question: regenerateSearch,
         prompt: prompt,
-        course: profileDatas?.course === null ? "" : profileDatas?.course,
+        course: profileDatas?.academic_history?.institution_type === "school" ? profileDatas?.class?.name : studentCourse,
         stream: profileDatas?.subject,
       };
     }

@@ -242,6 +242,7 @@ const StudentProfile = () => {
                 delete academic_history?.board;
                 delete academic_history?.class_id;
                 delete academic_history?.state_for_stateboard;
+                delete academic_history?.university_name;
               }
               let totalCount = Object.keys(academic_history).length;
               let filledCount = countKeysWithValue(academic_history);
@@ -334,18 +335,11 @@ const StudentProfile = () => {
     navigator("/main/DashBoard");
   };
   const handleReset = async () => {
-    if ((await isProComplate) !== 100 && (await isProComplate1)) {
-      toast.success(
-        "Your profile is incomplete. Please complete your profile.",
-        {
-          hideProgressBar: true,
-          theme: "colored",
-        }
-      );
-    } else if ((await isProComplate) === 100 && (await isProComplate1)) {
+    if ((await isProComplate) === 100 && (await isProComplate1)) {
       toast.success("You have completed your profile", {
         hideProgressBar: true,
         theme: "colored",
+        position: "top-center"
       });
     } else {
       toast.success(
@@ -353,6 +347,7 @@ const StudentProfile = () => {
         {
           hideProgressBar: true,
           theme: "colored",
+          position: "top-center"
         }
       );
     }
@@ -702,6 +697,7 @@ const StudentProfile = () => {
                                 <div>
                                   <div>
                                     <StudentSubjectPreference
+                                      handleReset={handleReset}
                                       setActiveForm={setActiveForm}
                                     />
                                   </div>
