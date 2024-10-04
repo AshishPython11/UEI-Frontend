@@ -16,6 +16,7 @@ import {
   QUERY_KEYS_ADMIN_BASIC_INFO,
   QUERY_KEYS_STUDENT,
 } from "../../utils/const";
+import CreateIcon from '@mui/icons-material/Create';
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import OpenInFullOutlinedIcon from "@mui/icons-material/OpenInFullOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -32,6 +33,7 @@ import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import IconButton from '@mui/material/IconButton';
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { toast, ToastContentProps } from "react-toastify";
 import logo from "../../assets/img/g-logo-white.svg";
@@ -49,6 +51,7 @@ import "../../../node_modules/react-perfect-scrollbar/dist/css/styles.css";
 import ThemeSidebar from "../ThemeSidebar/ThemeSidebar";
 import Chatbot from "../../Pages/Chatbot";
 import CommonModal from "../CommonModal";
+
 // import "../react-perfect-scrollbar/dist/css/styles.css";
 
 function MainContent() {
@@ -1717,37 +1720,35 @@ function MainContent() {
                                     ? femaleImage
                                     : maleImage
                               }
-                              className="rounded-circle bg-grd-info p-1"
-                              width="100"
-                              height="100"
+                              className="rounded-circle img-fluid bg-grd-info p-1"
+                              width="80"
+                              height="80"
                               alt="user"
                             />
                             <div className="w-100">
-                              <div className="d-flex justify-content-between align-items-start">
+                              <div className="d-flex justify-content-between align-items-start mb-2 mb-lg-0">
                                 <div className="">
-                                  <h4 className="fw-semibold mb-0 fs-4 mb-0">
+                                  <h4 className="fw-semibold mb-0 fs-18 mb-0">
                                     {profileDatas?.basic_info?.first_name
                                       ? `${profileDatas?.basic_info?.first_name}`
                                       : "Welcome"}
                                   </h4>
-                                  <small className="mb-lg-3 mb-1 d-block">
+                                  <small className="mb-lg-3 mb-1 d-block ">
                                     {studentClass || studentCourse}
                                   </small>
                                 </div>
-                                <Link
-                                  to="/main/StudentProfile"
-                                  className="text-dark link-underline"
+                                <IconButton href="/main/StudentProfile"
                                 >
-                                  Edit Profile
-                                </Link>
+                                  <CreateIcon /> 
+                                </IconButton>
                               </div>
 
-                              <div className="d-flex justify-content-between gap-2 flex-wrap align-items-center">
+                              <div className="d-flex justify-content-between gap-2 flex-wrap  align-items-center">
                                 <i className="fs-12">
                                   Student Standard{" "}
                                   <span className="d-lg-block"> Account </span>
                                 </i>
-                                <button className="btn btn-primary rounded-pill btn-sm  text-nowrap px-lg-3">
+                                <button className="btn btn-primary fs-12 rounded-pill btn-sm  text-nowrap ps-3">
                                   Upgrade <KeyboardArrowRightIcon />
                                 </button>
                               </div>

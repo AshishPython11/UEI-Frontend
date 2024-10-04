@@ -273,4 +273,31 @@
       top: 0 !important;
       z-index: 10;
     }
+	.freechatbox{
+		.profilechatinner{
+			height: 100vh;
+			width: 100%!important;
+			border-radius: 0!important;
+			display: flex;
+			flex-direction: column;
+			max-width: 100%!important;
+			margin: 0!important;
+
+			.afterheader{
+				.chat-box{
+					height: 84vh!important;
+					overflow: auto;
+					scrollbar-width:initial!important;
+				}
+				.chatinput-body{
+					position: fixed;
+					bottom: 0rem;
+					left: 1rem;
+					right: 1rem;
+					width: auto;
+				}
+			}
+		}
+		.copyright{display: none;}
+	}
   }
