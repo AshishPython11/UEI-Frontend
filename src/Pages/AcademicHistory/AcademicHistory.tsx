@@ -313,8 +313,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       });
   }, []);
 
-  const saveAcademicHistory = async () => {
-    if (boxes1[0].Institute_Name_Add) await saveAcademi(0)
+  const saveAcademicHistory = async (instituteId: number = 0) => {
     // event: React.FormEvent<HTMLFormElement>
     // event.preventDefault();
     // const validatePayload = (
@@ -365,7 +364,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           institution_type: box.institute_type,
           board: box.board,
           state_for_stateboard: box.state_for_stateboard,
-          institute_id: String(!box.institute_id ? 95 : box.institute_id),
+          institute_id: String(instituteId || (!box.institute_id ? 95 : box.institute_id)),
           course_id: String(!box.course_id ? 18 : box.course_id),
           learning_style: box.learning_style,
           class_id: String(!box.class_id ? 1 : box.class_id),
@@ -441,68 +440,71 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
     setInsituteFlag(true);
   };
 
-  const saveAcademi = async (index: number) => {
-    try {
-      const validatePayload = (
-        payload: { [s: string]: unknown } | ArrayLike<unknown>
-      ) => {
-        return Object.values(payload).every((value) => value !== "");
-      };
+  const saveAcademy = async (index: number) => {
+    if (boxes1[0].Institute_Name_Add) {
+      try {
+        const validatePayload = (
+          payload: { [s: string]: unknown } | ArrayLike<unknown>
+        ) => {
+          return Object.values(payload).every((value) => value !== "");
+        };
 
-      const promises = boxes1
-        .map((box) => {
-          const payload = {
-            institution_name: box.Institute_Name_Add,
-          };
+        const promises = boxes1
+          .map((box) => {
+            const payload = {
+              institution_name: box.Institute_Name_Add,
+            };
 
-          if (validatePayload(payload)) {
-            if (editFlag || box.id === 0) {
-              return postData("/institution/add", payload);
+            if (validatePayload(payload)) {
+              if (editFlag || box.id === 0) {
+                return postData("/institution/add", payload);
+              } else {
+                return postData("/institution/add", payload);
+              }
             } else {
-              return postData("/institution/add", payload);
+              return Promise.resolve(null);
             }
-          } else {
-            return Promise.resolve(null);
-          }
-        })
-        .filter((promise) => promise !== null);
+          })
+          .filter((promise) => promise !== null);
 
-      const responses = await Promise.all(promises);
+        const responses = await Promise.all(promises);
 
-      const allSuccessful = responses.every(
-        (response) => response?.status === 200
-      );
+        const allSuccessful = responses.every(
+          (response) => response?.status === 200
+        );
 
-      if (allSuccessful) {
-        setIdInstitute(responses[0].institution.id);
-        // setBoxes([...boxes, { institute_id: responses[0]?.institution?.id }]);
-        const newBoxes: any = [...boxes];
-        newBoxes[index]["institute_id"] = responses[0].institution.id;
-        setBoxes(newBoxes);
-        setBoxes1([
-          {
-            id: 0,
-            Institute_Name_Add: "",
-          },
-        ]);
-        // setBoxes((prevBoxes) => [...prevBoxes, { institute_id: responses[0]?.institution?.id }]);
+        if (allSuccessful) {
+          setIdInstitute(responses[0].institution.id);
+          // setBoxes([...boxes, { institute_id: responses[0]?.institution?.id }]);
+          const newBoxes: any = [...boxes];
+          newBoxes[index]["institute_id"] = responses[0].institution.id;
+          saveAcademicHistory(responses[0].institution.id)
+          setBoxes(newBoxes);
+          setBoxes1([
+            {
+              id: 0,
+              Institute_Name_Add: "",
+            },
+          ]);
+          // setBoxes((prevBoxes) => [...prevBoxes, { institute_id: responses[0]?.institution?.id }]);
 
-        await listData();
-        toast.success("Institution name saved successfully", {
+          await listData();
+          toast.success("Institution name saved successfully", {
+            hideProgressBar: true,
+            theme: "colored",
+            position: "top-center"
+          });
+          setDataInsitute(boxes1[0]?.Institute_Name_Add);
+        }
+      } catch (error) {
+        console.error("Error while saving academy", error);
+        toast.error("Error while saving institution name", {
           hideProgressBar: true,
           theme: "colored",
           position: "top-center"
         });
-        setDataInsitute(boxes1[0]?.Institute_Name_Add);
       }
-    } catch (error) {
-      console.error("Error while saving academia:", error);
-      toast.error("Error while saving institution name", {
-        hideProgressBar: true,
-        theme: "colored",
-        position: "top-center"
-      });
-    }
+    } else saveAcademicHistory()
   };
 
   const handleInputChange = (
@@ -805,7 +807,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                     onChange={(e) =>
                       handleInputChange(index, "institute_id", e.target.value)
                     }
-                    label="Institute Name"
+                    label="University Name"
                   >
                     {institutes.map((institute) => (
                       <MenuItem
@@ -876,9 +878,8 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 </div> */}
               </div>
             )}
-            {box.institute_type !== "competition_exams" &&
-              box.institute_type !== "school" && (
-                <div className="col form_field_wrapper">
+            {box.institute_type === "college" && (
+                <div className='col-lg-3 form_field_wrapper'>
                   <FormControl
                     required
                     sx={{ m: 1, minWidth: 70, width: "100%", maxWidth: 200 }}
@@ -938,9 +939,8 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                   </FormControl>
                 </div>
               )}
-            {box.institute_type !== "competition_exams" &&
-              box.institute_type !== "school" && (
-                <div className={`${box.institute_id == "1" ? "col" : "col-lg-3 col-md-6"} form_field_wrapper`}>
+            {box.institute_type === "college" && (
+                <div className={`${box.institute_id == "1" ? "col-lg-3" : "col-lg-3 col-md-6"} form_field_wrapper`}>
                   <FormControl
                     required
                     sx={{
@@ -993,7 +993,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           <button
             type="button"
             className="btn btn-dark px-lg-5 ms-auto d-block rounded-pill next-btn"
-            onClick={saveAcademicHistory}
+            onClick={() => saveAcademy(0)}
           >
             Next
           </button>

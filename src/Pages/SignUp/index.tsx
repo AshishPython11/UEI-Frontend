@@ -124,11 +124,11 @@ const Signup = () => {
             setIsLoading(false);
             navigate("/");
           } else if (
-            data?.status === 201 &&
+            data?.status === 400 &&
             data?.message === "Userid already exists"
           ) {
             // setLoading(false);
-            toast.info(data?.message, {
+            toast.error(data?.message, {
               hideProgressBar: true,
               theme: "colored",
             });

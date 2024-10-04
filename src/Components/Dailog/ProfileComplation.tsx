@@ -51,11 +51,12 @@ import type {
   StandardTextFieldProps,
   TextFieldVariants,
 } from "@mui/material";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./stylechat.css"; // Import your CSS file
 import useApi from "../../hooks/useAPI";
+import glogo from "../../assets/img/logo-white.svg";
 import { toast } from "react-toastify";
+import IconButton from '@mui/material/IconButton';
 import {
   Button,
   Dialog,
@@ -92,6 +93,70 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { Flag } from "@mui/icons-material";
 import { ChatDialogClose } from "./ChatDialogClose";
+import { styled } from '@mui/material/styles';
+
+
+
+const MaterialUISwitch = styled(Switch)(({ theme }) => ({
+  width: 50,
+  height: 28,
+  padding: 8,
+  '& .MuiSwitch-switchBase': {
+    margin: 1,
+    padding: 0,
+    transform: 'translateX(6px)',
+    '&.Mui-checked': {
+      color: '#fff',
+      transform: 'translateX(22px)',
+      '& .MuiSwitch-thumb:before': {
+        backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+          '#fff',
+        )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
+      },
+      '& + .MuiSwitch-track': {
+        opacity: 1,
+        backgroundColor: '#aab4be',
+        ...theme.applyStyles('dark', {
+          backgroundColor: '#8796A5',
+        }),
+      },
+    },
+  },
+  '& .MuiSwitch-thumb': {
+    backgroundColor: '#001e3c',
+    width: 24,
+    height: 24,
+    '&::before': {
+      content: "''",
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      left: 0,
+      top: 0,
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
+        '#fff',
+      )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
+    },
+    ...theme.applyStyles('dark', {
+      backgroundColor: '#003892',
+    }),
+  },
+  '& .MuiSwitch-track': {
+    opacity: 1,
+    backgroundColor: '#aab4be',
+    borderRadius: 20 / 2,
+    ...theme.applyStyles('dark', {
+      backgroundColor: '#8796A5',
+    }),
+  },
+}));
+
+
+
+
+
 
 interface Institute {
   id: number;
@@ -144,6 +209,7 @@ export const ProfileDialog: FunctionComponent<{
     if (reason && reason === "backdropClick") return;
     onCancel();
   };
+
   const context = useContext(NameContext);
   const { namecolor, setNamecolor }: any = context;
   let StudentId = localStorage.getItem("_id");
@@ -252,7 +318,21 @@ export const ProfileDialog: FunctionComponent<{
 
   useEffect(() => {
     callAPI();
+    // for add overflow hidden in body
+    // const freeDiv = document.getElementById("freechatbox");
+    // if (freeDiv) {
+    //   const isFlex = window.getComputedStyle(freeDiv).display === "flex";
+    //   if (isFlex) {
+    //     document.body.classList.add("overflow-hidden");
+    //   } else {
+    //     document.body.classList.remove("overflow-hidden");
+    //   }
+    // }
   }, []);
+
+  useEffect(() => {
+    if (isOpen) document.body.classList.add("overflow-hidden");
+  }, [isOpen])
 
   const initialQuestions: { [key: string]: string[] } = {
     basic: [
@@ -1828,10 +1908,12 @@ export const ProfileDialog: FunctionComponent<{
   };
   const handlecancel = () => {
     setclosemodel(false);
+
   };
   const handleok = () => {
     onCancel();
     setclosemodel(false);
+    document.body.classList.remove("overflow-hidden");
     // navigate("/main/Dashboard");
   };
   const handleOpen = () => {
@@ -1887,47 +1969,35 @@ export const ProfileDialog: FunctionComponent<{
   // },[messages,currentQuestionIndex,answers,selectedInstitute,selectCourse,selectSubject,selectedHobby,selectedLanguage,selectedproficiency])
   return (
     <>
-      <Dialog
-        open={isOpen}
+      <div style={{ display: "flex" }} id="freechatbox"
+        className={`${!isOpen ? 'd-none' : ''} freechatbox`}
+        //open={isOpen}
         // className="dialog"
         // open={true}
-        onClose={handleClose}
+        //onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        PaperProps={{
-          style: {
-            position: "fixed",
-            bottom: 50,
-            // left: 0,
-            right: 50,
-            margin: 0,
-            width: "400px",
-            backgroundColor: chatdialog(namecolor),
-          },
-        }}
+      // PaperProps={{
+      //   style: {
+      //     position: "fixed",
+      //     bottom: 50,
+      //     // left: 0,
+      //     right: 50,
+      //     margin: 0,
+      //     width: "400px",
+      //     backgroundColor: chatdialog(namecolor),
+      //   },
+      // }}
       >
-        {/* <Button
+        <div className="profilechatinner">
+          {/* <Button
    onClick={() => handleClose({}, 'backdropClick')}  // Adjusted to pass the expected arguments
    style={{ position: 'absolute', top: 10, right: 10 }}
    aria-label="close"
  > */}
-        <Button
-          onClick={() => setclosemodel(true)}
-          style={{ position: "absolute", top: 10, left: 0 }}
-          aria-label="close"
-        >
-          <CloseIcon />
-        </Button>
-
-        <div
-          style={{
-            position: "fixed",
-            right: 50,
-            margin: "2px",
-            padding: "5px",
-          }}
-        >
-          <FormControlLabel
+          <div className="proheader">
+            <div className="me-auto"> <img src={glogo} width="20" alt="" /> Add your information <br /> for better services</div>
+            {/* <FormControlLabel
             control={
               <Switch
                 checked={checked}
@@ -1935,34 +2005,39 @@ export const ProfileDialog: FunctionComponent<{
               />
             }
             label=""
-          />
-        </div>
-        <div style={{ marginTop: "25px" }}>
-          <DialogTitle id="alert-dialog-title">
+          /> */}
+            <FormControlLabel className="me-0"
+              control={<MaterialUISwitch sx={{ m: 0 }} size="small" checked={checked} onChange={() => handleChange(checked ? "light" : "dark")} />}
+              label=""
+            />
+            <IconButton onClick={() => setclosemodel(true)} aria-label="close">
+              <CloseIcon />
+            </IconButton >
+
+            <div>
+
+            </div>
+
+
+          </div>
+
+
+          <div className="afterheader">
+            {/* <DialogTitle id="alert-dialog-title">
             <p style={{ color: inputfieldtext(namecolor) }}>
               Add your information for better services
             </p>
-          </DialogTitle>
-          <DialogContent>
-            <div
-              className="chat-box"
-              ref={chatBoxRef}
-              style={{
-                height: "400px",
-                overflowY: "scroll",
-                paddingBottom: "80px",
-                scrollbarWidth: "none", // For Firefox
-                msOverflowStyle: "none", // For Internet Explorer and Edge
-              }}
-            >
+          </DialogTitle> */}
+
+            <div className="chat-box" ref={chatBoxRef}>
               {messages.map((message, index) => {
                 if (message.text) {
                   return (
                     <div
                       key={index}
                       className={`message-wrapper d-flex mb-3 ${message.type === "question"
-                          ? "justify-content-start"
-                          : "justify-content-end"
+                        ? "justify-content-start"
+                        : "justify-content-end"
                         }`}
                     >
                       <div
@@ -1990,21 +2065,27 @@ export const ProfileDialog: FunctionComponent<{
                 }
               })}
             </div>
-          </DialogContent>
-          {currentSection && (
-            <>
-              <div className="chatinput-body px-4">
-                {(fullName ||
-                  genderError ||
-                  motherNameError ||
-                  fName ||
-                  gName ||
-                  phnumber ||
-                  distic ||
-                  pincode ||
-                  per ||
-                  preferenceError ||
-                  errordate) && (
+
+            {currentSection && (
+              <>
+                <div className="chatinput-body">
+                  {(fullName ||
+                    genderError ||
+                    motherNameError ||
+                    fName ||
+                    gName ||
+                    phnumber ||
+                    distic ||
+                    pincode ||
+                    per ||
+                    preferenceError ||
+                    errordate) && (
+                      <p className="error-text"
+                      >
+                        {errordata[currentQuestionIndex]}
+                      </p>
+                    )}
+                  {error1 && (
                     <p
                       style={{
                         color: "red",
@@ -2012,317 +2093,377 @@ export const ProfileDialog: FunctionComponent<{
                         paddingRight: "10px",
                       }}
                     >
-                      {errordata[currentQuestionIndex]}
+                      {error1}
                     </p>
                   )}
-                {error1 && (
-                  <p
-                    style={{
-                      color: "red",
-                      paddingLeft: "10px",
-                      paddingRight: "10px",
-                    }}
-                  >
-                    {error1}
-                  </p>
-                )}
-                {currentQuestionIndex === 15 || currentQuestionIndex === 26 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangecourse}
-                    options={courseSelectOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectCourse}
-                  />
-                ) : currentQuestionIndex === 11 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangeInstituteType}
-                    options={institutionTypeOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedInstituteType}
-                  />
-                ) : currentQuestionIndex === 8 ? (
-                  <PhoneInput
-                    country={""}
-                    value={phone}
-                    onChange={handlePhoneChange}
-                    inputProps={{
-                      name: "phone",
-                      required: true,
-                      autoFocus: true,
-                      readOnly: true,
-                    }}
-                    placeholder=""
-                    enableSearch={true}
-                    disableDropdown={false}
-                    preferredCountries={["us", "in"]}
-                  />
-                ) : currentQuestionIndex === 7 ? (
-                  <>
-                    <div
-                      style={{ position: "relative", display: "inline-block" }}
-                    >
-                      <input
-                        type="file"
-                        className="form-control"
-                        onChange={handleFileUpload}
-                        style={{ paddingLeft: "2px" }} // Adjust padding to make space for the button
-                      />
-                      <p
-                        style={{
-                          position: "absolute",
-                          top: "50%",
-                          right: "10px", // Adjust this value to move the button horizontally
-                          transform: "translateY(-50%)",
-                          cursor: "pointer",
-                          color: chattextbgright(namecolor),
-                          margin: 0,
-                        }}
-                        onClick={handleSkip}
-                      >
-                        Skip
-                      </p>
-                    </div>
-                  </>
-                ) : currentQuestionIndex === 12 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangeBoard}
-                    options={boardOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedBoard}
-                  />
-                ) : currentQuestionIndex === 16 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangeInstitute}
-                    options={instituteSelectOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedInstitute}
-                  />
-                ) : currentQuestionIndex === 13 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangeAcademicState}
-                    options={academicStateOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedAcademicState}
-                  />
-                ) : currentQuestionIndex === 14 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangeClass}
-                    options={classOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedClass}
-                  />
-                ) : currentQuestionIndex === 17 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangeLearningStyle}
-                    options={learningStyleOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedLearningStyle}
-                  />
-                ) : currentQuestionIndex === 27 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangesubject}
-                    options={subjectOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectSubject}
-                  />
-                ) : currentQuestionIndex === 2 ||
-                  currentQuestionIndex === 18 ? (
-                  <>
-                    <div style={{ display: "flex" }}>
+                  {currentQuestionIndex === 15 || currentQuestionIndex === 26 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangecourse}
+                      options={courseSelectOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectCourse}
+                    />
+                  ) : currentQuestionIndex === 11 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangeInstituteType}
+                      options={institutionTypeOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedInstituteType}
+                    />
+                  ) : currentQuestionIndex === 8 ? (
+                    <PhoneInput
+                      country={""}
+                      value={phone}
+                      onChange={handlePhoneChange}
+                      inputProps={{
+                        name: "phone",
+                        required: true,
+                        autoFocus: true,
+                        readOnly: true,
+                      }}
+                      placeholder=""
+                      enableSearch={true}
+                      disableDropdown={false}
+                      preferredCountries={["us", "in"]}
+                    />
+                  ) : currentQuestionIndex === 7 ? (
+                    <>
                       <div
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          alignItems: "center",
-                          position: "relative",
-                        }}
+                        style={{ position: "relative", display: "inline-block" }}
                       >
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            //  open={open}
-                            // open={true}
-                            views={
-                              currentQuestionIndex === 18
-                                ? ["year"]
-                                : ["day", "month", "year"]
-                            }
-                            label={
-                              currentQuestionIndex === 18
-                                ? "Year"
-                                : "Date of Birth"
-                            }
-                            onChange={handleDateChange}
-                            // onAccept={() => setOpen(false)} // Close on date selection
-                            // onClose={() => setOpen(false)}  // Close on outside click
-                            disableFuture
-                            format={
-                              currentQuestionIndex === 18
-                                ? "YYYY"
-                                : "DD/MM/YYYY"
-                            }
-                            // value={datecheck}
-                            slotProps={{
-                              field: {
-                                readOnly: true,
-                              },
-                              textField: {
-                                sx: {
-                                  "& .MuiInputLabel-root": {
-                                    // paddingLeft: '0px',
-                                    color: chatdatetext(namecolor), // Change the label text color
-                                    backgroundColor: "transperent",
-                                  },
-                                  "& .MuiInputBase-root": {
-                                    // flexDirection: 'row-reverse',
-                                    color: chatdatetext(namecolor), // Change the label text color
-                                    backgroundColor: "transperent",
-                                    paddingLeft: "100px",
-                                    paddingRight: "50px",
-                                  },
-                                  "& .MuiOutlinedInput-notchedOutline": {
-                                    // borderColor: 'transperent',
-                                  },
-                                  "& .MuiInputAdornment-root": {
-                                    // color: chatdatetext(namecolor), // Change the color of the calendar icon
-                                  },
-                                },
-                              },
-                              inputAdornment: {
-                                sx: {
-                                  "& .MuiSvgIcon-root": {
-                                    color: chatcalandericon(namecolor), // Ensure the icon color is changed
-                                  },
-                                },
-                                // onClick: handleOpen
-                              },
-                            }}
-                          />
-                          <button
-                            className="chat_search_btn"
-                            style={{
-                              position: "absolute",
-                              right: "10px",
-                              top: "50%",
-                              transform: "translateY(-50%)",
-                              border: "none",
-                              background: "none",
-                              cursor: "pointer",
-                            }}
-                            type="button"
-                            onClick={handleclickdate}
-                          >
-                            {" "}
-                            <SendIcon className="mainsearch" />
-                          </button>
-                        </LocalizationProvider>
+                        <input
+                          type="file"
+                          className="form-control"
+                          onChange={handleFileUpload}
+                          style={{ paddingLeft: "2px" }} // Adjust padding to make space for the button
+                        />
+                        <p
+                          style={{
+                            position: "absolute",
+                            top: "50%",
+                            right: "10px", // Adjust this value to move the button horizontally
+                            transform: "translateY(-50%)",
+                            cursor: "pointer",
+                            color: chattextbgright(namecolor),
+                            margin: 0,
+                          }}
+                          onClick={handleSkip}
+                        >
+                          Skip
+                        </p>
                       </div>
-                    </div>
-                  </>
-                ) : currentQuestionIndex === 30 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangehobby}
-                    options={hobbyOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedHobby}
-                  />
-                ) : currentQuestionIndex === 19 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    options={countryOptions}
-                    onChange={handleCountryChange}
-                    placeholder="Select a country"
-                    menuPlacement="top"
-                    value={selectedCountry}
-                  />
-                ) : currentQuestionIndex === 20 && stateOptions?.length > 0 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    options={stateOptions}
-                    placeholder="Select a state"
-                    onChange={handleStateChange}
-                    isDisabled={!selectedCountry}
-                    menuPlacement="top"
-                    value={selectedstate}
-                  />
-                ) : currentQuestionIndex === 31 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangelanguage}
-                    options={languageOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedLanguage}
-                  />
-                ) : currentQuestionIndex === 32 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangeproficiency}
-                    options={proficiencyOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedproficiency}
-                  />
-                ) : currentQuestionIndex === 1 ? (
-                  <Select
-                    className="dropdown-wrapper"
-                    onChange={handleDropdownChangegender}
-                    options={genderOptions}
-                    placeholder="Select an option"
-                    menuPlacement="top"
-                    value={selectedgender}
-                  />
-                ) : currentQuestionIndex + 1 ===
-                  initialQuestions.basic.length ? (
-                  <Button
-                    onClick={viewProfile}
-                    style={{ display: "block", margin: "0 auto" }}
-                  >
-                    View Profile
-                  </Button>
-                ) : (
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="Type your answer and press enter"
-                    value={answers[currentQuestionIndex] || ""}
-                    onChange={handleAnswerChange}
-                    onKeyPress={handleKeyPress}
-                  />
-                )}
-              </div>
-            </>
-          )}
-          {/* <Button onClick={onCancel} autoFocus>
+                    </>
+                  ) : currentQuestionIndex === 12 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangeBoard}
+                      options={boardOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedBoard}
+                    />
+                  ) : currentQuestionIndex === 16 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangeInstitute}
+                      options={instituteSelectOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedInstitute}
+                    />
+                  ) : currentQuestionIndex === 13 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangeAcademicState}
+                      options={academicStateOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedAcademicState}
+                    />
+                  ) : currentQuestionIndex === 14 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangeClass}
+                      options={classOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedClass}
+                    />
+                  ) : currentQuestionIndex === 17 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangeLearningStyle}
+                      options={learningStyleOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedLearningStyle}
+                    />
+                  ) : currentQuestionIndex === 27 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangesubject}
+                      options={subjectOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectSubject}
+                    />
+                  ) : currentQuestionIndex === 2
+                    ? (
+                      <>
+                        <div style={{ display: "flex" }}>
+                          <div
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              position: "relative",
+                            }}
+                          >
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                //  open={open}
+                                // open={true}
+                                label={"Date of Birth"}
+                                onChange={handleDateChange}
+                                // onAccept={() => setOpen(false)} // Close on date selection
+                                // onClose={() => setOpen(false)}  // Close on outside click
+                                disableFuture
+                                format={"DD/MM/YYYY"}
+                                // value={datecheck}
+                                slotProps={{
+                                  field: {
+                                    readOnly: true,
+                                  },
+                                  textField: {
+                                    sx: {
+                                      "& .MuiInputLabel-root": {
+                                        // paddingLeft: '0px',
+                                        color: chatdatetext(namecolor), // Change the label text color
+                                        backgroundColor: "transperent",
+                                      },
+                                      "& .MuiInputBase-root": {
+                                        // flexDirection: 'row-reverse',
+                                        color: chatdatetext(namecolor), // Change the label text color
+                                        backgroundColor: "transperent",
+                                        paddingLeft: "100px",
+                                        paddingRight: "50px",
+                                      },
+                                      "& .MuiOutlinedInput-notchedOutline": {
+                                        // borderColor: 'transperent',
+                                      },
+                                      "& .MuiInputAdornment-root": {
+                                        // color: chatdatetext(namecolor), // Change the color of the calendar icon
+                                      },
+                                    },
+                                  },
+                                  inputAdornment: {
+                                    sx: {
+                                      "& .MuiSvgIcon-root": {
+                                        color: chatcalandericon(namecolor), // Ensure the icon color is changed
+                                      },
+                                    },
+                                    // onClick: handleOpen
+                                  },
+                                }}
+                              />
+                              <button
+                                className="chat_search_btn"
+                                style={{
+                                  position: "absolute",
+                                  right: "10px",
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  border: "none",
+                                  background: "none",
+                                  cursor: "pointer",
+                                }}
+                                type="button"
+                                onClick={handleclickdate}
+                              >
+                                {" "}
+                                <SendIcon className="mainsearch" />
+                              </button>
+                            </LocalizationProvider>
+                          </div>
+                        </div>
+                      </>
+                    ) : currentQuestionIndex === 18 ? (
+                      <>
+                        <div style={{ display: "flex" }}>
+                          <div
+                            style={{
+                              width: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              position: "relative",
+                            }}
+                          >
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <DatePicker
+                                //  open={open}
+                                // open={true}
+                                views={["year"]}
+                                label={"Year"}
+                                onChange={handleDateChange}
+                                // onAccept={() => setOpen(false)} // Close on date selection
+                                // onClose={() => setOpen(false)}  // Close on outside click
+                                disableFuture
+                                format={"YYYY"}
+                                // value={datecheck}
+                                slotProps={{
+                                  field: {
+                                    readOnly: true,
+                                  },
+                                  textField: {
+                                    sx: {
+                                      "& .MuiInputLabel-root": {
+                                        // paddingLeft: '0px',
+                                        color: chatdatetext(namecolor), // Change the label text color
+                                        backgroundColor: "transperent",
+                                      },
+                                      "& .MuiInputBase-root": {
+                                        // flexDirection: 'row-reverse',
+                                        color: chatdatetext(namecolor), // Change the label text color
+                                        backgroundColor: "transperent",
+                                        paddingLeft: "100px",
+                                        paddingRight: "50px",
+                                      },
+                                      "& .MuiOutlinedInput-notchedOutline": {
+                                        // borderColor: 'transperent',
+                                      },
+                                      "& .MuiInputAdornment-root": {
+                                        // color: chatdatetext(namecolor), // Change the color of the calendar icon
+                                      },
+                                    },
+                                  },
+                                  inputAdornment: {
+                                    sx: {
+                                      "& .MuiSvgIcon-root": {
+                                        color: chatcalandericon(namecolor), // Ensure the icon color is changed
+                                      },
+                                    },
+                                    // onClick: handleOpen
+                                  },
+                                }}
+                              />
+                              <button
+                                className="chat_search_btn"
+                                style={{
+                                  position: "absolute",
+                                  right: "10px",
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  border: "none",
+                                  background: "none",
+                                  cursor: "pointer",
+                                }}
+                                type="button"
+                                onClick={handleclickdate}
+                              >
+                                {" "}
+                                <SendIcon className="mainsearch" />
+                              </button>
+                            </LocalizationProvider>
+                          </div>
+                        </div>
+                      </>
+                    ) : currentQuestionIndex === 30 ? (
+                      <Select
+                        className="dropdown-wrapper"
+                        onChange={handleDropdownChangehobby}
+                        options={hobbyOptions}
+                        placeholder="Select an option"
+                        menuPlacement="top"
+                        value={selectedHobby}
+                      />
+                    ) : currentQuestionIndex === 19 ? (
+                      <Select
+                        className="dropdown-wrapper"
+                        options={countryOptions}
+                        onChange={handleCountryChange}
+                        placeholder="Select a country"
+                        menuPlacement="top"
+                        value={selectedCountry}
+                      />
+                    ) : currentQuestionIndex === 20 && stateOptions?.length > 0 ? (
+                      <Select
+                        className="dropdown-wrapper"
+                        options={stateOptions}
+                        placeholder="Select a state"
+                        onChange={handleStateChange}
+                        isDisabled={!selectedCountry}
+                        menuPlacement="top"
+                        value={selectedstate}
+                      />
+                    ) : currentQuestionIndex === 31 ? (
+                      <Select
+                        className="dropdown-wrapper"
+                        onChange={handleDropdownChangelanguage}
+                        options={languageOptions}
+                        placeholder="Select an option"
+                        menuPlacement="top"
+                        value={selectedLanguage}
+                      />
+                    ) : currentQuestionIndex === 32 ? (
+                      <Select
+                        className="dropdown-wrapper"
+                        onChange={handleDropdownChangeproficiency}
+                        options={proficiencyOptions}
+                        placeholder="Select an option"
+                        menuPlacement="top"
+                        value={selectedproficiency}
+                      />
+                    ) : currentQuestionIndex === 1 ? (
+                      <Select
+                        className="dropdown-wrapper"
+                        onChange={handleDropdownChangegender}
+                        options={genderOptions}
+                        placeholder="Select an option"
+                        menuPlacement="top"
+                        value={selectedgender}
+                      />
+                    ) : currentQuestionIndex + 1 ===
+                      initialQuestions.basic.length ? (
+                      <Button
+                        onClick={viewProfile}
+                        style={{ display: "block", margin: "0 auto" }}
+                      >
+                        View Profile
+                      </Button>
+                    ) : (
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Type your answer and press enter"
+                        value={answers[currentQuestionIndex] || ""}
+                        onChange={handleAnswerChange}
+                        onKeyPress={handleKeyPress}
+                      />
+                    )}
+                </div>
+              </>
+            )}
+            {/* <Button onClick={onCancel} autoFocus>
       Cancel
     </Button> */}
 
-          {/* </DialogActions> */}
+            {/* </DialogActions> */}
+
+          </div>
+
         </div>
-      </Dialog>
-      <ChatDialogClose
-        isOpen={closemodel}
-        onCancel={handlecancel}
-        onDeleteClick={() => handleok()}
-        title="Close chat?"
-      />
+        {/* <div className="copyright">&copy; Copyright 2024, All Right Reserved </div> */}
+        <ChatDialogClose
+          isOpen={closemodel}
+          onCancel={handlecancel}
+          onDeleteClick={() => handleok()}
+          title="Close chat?"
+        />
+      </div>
     </>
   );
 };

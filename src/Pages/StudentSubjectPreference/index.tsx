@@ -10,8 +10,8 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import useApi from "../../hooks/useAPI";
 import { toast } from "react-toastify";
 import {
@@ -32,21 +32,25 @@ interface Box {
   preference: string;
   score_in_percentage: string;
 }
-
 interface Course {
   id: string;
   course_id: string;
   course_name: string;
 }
-
 interface Subject {
   id: string;
   subject_name: string;
   subject_id: string;
 }
 
-const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
+interface PropsItem {
+  setActiveForm: React.Dispatch<React.SetStateAction<number>>;
+  handleReset: () => Promise<void>;
+}
+
+const StudentSubjectPreference: React.FC<PropsItem> = ({
   setActiveForm,
+  handleReset
 }) => {
   const context = useContext(NameContext);
   const { namecolor }: any = context;
@@ -388,6 +392,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
             theme: "colored",
             position: "top-center"
           });
+          handleReset()
           navigate('/')
         } else {
           if (!eq === true) {
@@ -553,7 +558,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
                   color: tabletools(namecolor),
                 }}
               >
-                <AddIcon />
+                <AddCircleOutlinedIcon />
               </IconButton>
               {boxes.length !== 1 && (
                 <IconButton
@@ -564,7 +569,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
                     color: tabletools(namecolor),
                   }}
                 >
-                  <DeleteIcon />
+                  <DeleteOutlineOutlinedIcon />
                 </IconButton>
               )}
             </div>
