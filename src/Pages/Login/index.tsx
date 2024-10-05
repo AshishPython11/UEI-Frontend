@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { jwtDecode, JwtPayload } from "jwt-decode";
+// import { jwtDecode, JwtPayload } from "jwt-decode";
 import { toast } from "react-toastify";
 import { MdContactMail } from "react-icons/md";
 import { Visibility } from "@mui/icons-material";
@@ -200,6 +200,7 @@ const Login = () => {
     localStorage.setItem("pd", password);
     localStorage.setItem("userdata", JSON.stringify(data?.data));
     localStorage.setItem("_id", data?.data?.id);
+    localStorage.setItem("lastRoute", window.location.pathname);    
 
     const tokenLifespan = 7100; // token lifespan in seconds (1 hour)
     // Calculate the expiry time
@@ -272,9 +273,9 @@ const Login = () => {
           <div className="row align-items-center">
             <div className="col-6">
               <div className="logoui">
-                 <img src={gLogo} alt="" />
-                 <span>Gyansetu</span>
-              </div>              
+                <img src={gLogo} alt="" />
+                <span>Gyansetu</span>
+              </div>
             </div>
             <div className="col-6">
               <div className="d-flex justify-content-end">
@@ -350,11 +351,11 @@ const Login = () => {
                         />
                       </div>
                       <div className="col-lg-12 d-lg-none d-block">
-                      <img
-                      src={gyansetuLogo}
-                      className=" mx-auto my-0 d-block"
-                      alt="" width="120px"
-                    />
+                        <img
+                          src={gyansetuLogo}
+                          className=" mx-auto my-0 d-block"
+                          alt="" width="120px"
+                        />
                       </div>
                       <div className="col-lg-12">
                         <h1 className="mt-2 mb-0 inter-600">Sign In</h1>

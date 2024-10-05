@@ -36,8 +36,8 @@ const StudentProfile = () => {
   const context = useContext(NameContext);
   const location: {
     state: {
-      value: number
-    }
+      value: number;
+    };
   } = useLocation();
   console.log("Location", location);
 
@@ -55,8 +55,8 @@ const StudentProfile = () => {
   const [studentData, setStudentData] = useState<any>({});
   const [skipped, setSkipped] = useState(new Set<number>());
   const [isEdit, setIsEdit] = useState(false);
-  const [isProComplate, setIsProComplate] = useState(0);
-  const [isProComplate1, setIsProComplate1] = useState(false);
+  const [isProComplete, setIsProComplete] = useState(0);
+  const [isProComplete1, setIsProComplete1] = useState(false);
   const [activeForm, setActiveForm] = useState(0);
   const usertype: any = localStorage.getItem("user_type");
   const { getData } = useApi();
@@ -98,16 +98,19 @@ const StudentProfile = () => {
     if (progressRef.current && progressLineRef.current) {
       if (isMobile) {
         // Horizontal progress for mobile
-        progressRef.current.style.width = `${((activeForm + 1) / totalSteps) * 100
-          }%`;
-        progressLineRef.current.style.width = `${((activeForm + 1) / totalSteps) * 100
-          }%`;
+        progressRef.current.style.width = `${
+          ((activeForm + 1) / totalSteps) * 100
+        }%`;
+        progressLineRef.current.style.width = `${
+          ((activeForm + 1) / totalSteps) * 100
+        }%`;
         progressLineRef.current.style.height = "2px";
         progressLineRef.current.style.top = "auto";
       } else {
         // Vertical progress for desktop
-        progressRef.current.style.width = `${((activeForm + 1) / totalSteps) * 100
-          }%`;
+        progressRef.current.style.width = `${
+          ((activeForm + 1) / totalSteps) * 100
+        }%`;
 
         const stepHeight = stepsRef.current[activeForm]?.offsetHeight || 0;
         const computedStyle = window.getComputedStyle(
@@ -133,9 +136,9 @@ const StudentProfile = () => {
   };
 
   useEffect(() => {
-    if (location?.state?.value) setActiveForm(location?.state?.value)
-    else setActiveForm(0)
-  }, [location?.state?.value])
+    if (location?.state?.value) setActiveForm(location?.state?.value);
+    else setActiveForm(0);
+  }, [location?.state?.value]);
 
   const callAPIStudent = async () => {
     if (usertype === "student") {
@@ -284,14 +287,14 @@ const StudentProfile = () => {
               // setoverallProfilePercentage(overallPercentage); // Set the overall percentage
               overallPercentage = Math.round(overallPercentage);
               // const nandata = 100 - overallPercentage
-              setIsProComplate(overallPercentage);
+              setIsProComplete(overallPercentage);
               // console.log("overallPercentage sss", nandata,overallPercentage);
               // setStats1({
               //     Student_Profile:overallPercentage,
               //     Student_null:nandata
               // })
             }
-            setIsProComplate1(true);
+            setIsProComplete1(true);
           }
         })
         .catch((e) => {
@@ -335,11 +338,11 @@ const StudentProfile = () => {
     navigator("/main/DashBoard");
   };
   const handleReset = async () => {
-    if ((await isProComplate) === 100 && (await isProComplate1)) {
+    if ((await isProComplete) === 100 && (await isProComplete1)) {
       toast.success("You have completed your profile", {
         hideProgressBar: true,
         theme: "colored",
-        position: "top-center"
+        position: "top-center",
       });
     } else {
       toast.success(
@@ -347,7 +350,7 @@ const StudentProfile = () => {
         {
           hideProgressBar: true,
           theme: "colored",
-          position: "top-center"
+          position: "top-center",
         }
       );
     }
@@ -501,17 +504,27 @@ const StudentProfile = () => {
           <div className="container mb-5">
             <div className="row align-items-center">
               <div className="col-lg-6 px-0">
-                {isProComplate1 ? <h4 className="fs-1 fw-bold">My <span style={{ color: "#9943EC" }}> Profile </span></h4> : <> <h4 className="fs-1 fw-bold d-none d-xxl-block">
-                  Complete Your{" "}
-                  <span style={{ color: "#9943EC" }}> Account </span>
-                </h4>
-                  <h4 className="fs-1 d-xxl-none fw-bold mb-0">
-                    {`Hey, ${studentData?.basic_info?.first_name || "User"} ${studentData?.basic_info?.last_name || ""
+                {isProComplete1 ? (
+                  <h4 className="fs-1 fw-bold">
+                    My <span style={{ color: "#9943EC" }}> Profile </span>
+                  </h4>
+                ) : (
+                  <>
+                    {" "}
+                    <h4 className="fs-1 fw-bold d-none d-xxl-block">
+                      Complete Your{" "}
+                      <span style={{ color: "#9943EC" }}> Account </span>
+                    </h4>
+                    <h4 className="fs-1 d-xxl-none fw-bold mb-0">
+                      {`Hey, ${studentData?.basic_info?.first_name || "User"} ${
+                        studentData?.basic_info?.last_name || ""
                       }`}
-                    <small className="mt-1 fs-14 d-block opacity-50 fw-normal">
-                      Please Complete Your Profile
-                    </small>
-                  </h4></>}
+                      <small className="mt-1 fs-14 d-block opacity-50 fw-normal">
+                        Please Complete Your Profile
+                      </small>
+                    </h4>
+                  </>
+                )}
               </div>
               <div className="col-lg-12 d-none d-xxl-block px-0">
                 <div className="wizard-content p-0 mt-4">
@@ -544,14 +557,16 @@ const StudentProfile = () => {
                               ></div>
                               <div
                                 ref={(el) => (stepsRef.current[0] = el!)}
-                                className={`step ${activeForm === 0 ? "active" : ""
-                                  }`}
+                                className={`step ${
+                                  activeForm === 0 ? "active" : ""
+                                }`}
                                 onClick={() => setActiveForm(0)}
                                 style={{ cursor: "pointer" }}
                               >
                                 <div
-                                  className={`step-circle ${activeForm >= 0 ? "filled" : ""
-                                    }`}
+                                  className={`step-circle ${
+                                    activeForm >= 0 ? "filled" : ""
+                                  }`}
                                 >
                                   <CheckOutlinedIcon />
                                 </div>
@@ -561,14 +576,16 @@ const StudentProfile = () => {
                               </div>
                               <div
                                 ref={(el) => (stepsRef.current[1] = el!)}
-                                className={`step ${activeForm === 1 ? "active" : ""
-                                  }`}
+                                className={`step ${
+                                  activeForm === 1 ? "active" : ""
+                                }`}
                                 onClick={() => setActiveForm(1)}
                                 style={{ cursor: "pointer" }}
                               >
                                 <div
-                                  className={`step-circle ${activeForm >= 1 ? "filled" : ""
-                                    }`}
+                                  className={`step-circle ${
+                                    activeForm >= 1 ? "filled" : ""
+                                  }`}
                                 >
                                   <CheckOutlinedIcon />
                                 </div>
@@ -576,14 +593,16 @@ const StudentProfile = () => {
                               </div>
                               <div
                                 ref={(el) => (stepsRef.current[2] = el!)}
-                                className={`step ${activeForm === 2 ? "active" : ""
-                                  }`}
+                                className={`step ${
+                                  activeForm === 2 ? "active" : ""
+                                }`}
                                 onClick={() => setActiveForm(2)}
                                 style={{ cursor: "pointer" }}
                               >
                                 <div
-                                  className={`step-circle ${activeForm >= 2 ? "filled" : ""
-                                    }`}
+                                  className={`step-circle ${
+                                    activeForm >= 2 ? "filled" : ""
+                                  }`}
                                 >
                                   <CheckOutlinedIcon />
                                 </div>
@@ -593,14 +612,16 @@ const StudentProfile = () => {
                               </div>
                               <div
                                 ref={(el) => (stepsRef.current[3] = el!)}
-                                className={`step ${activeForm === 3 ? "active" : ""
-                                  }`}
+                                className={`step ${
+                                  activeForm === 3 ? "active" : ""
+                                }`}
                                 onClick={() => setActiveForm(3)}
                                 style={{ cursor: "pointer" }}
                               >
                                 <div
-                                  className={`step-circle ${activeForm >= 3 ? "filled" : ""
-                                    }`}
+                                  className={`step-circle ${
+                                    activeForm >= 3 ? "filled" : ""
+                                  }`}
                                 >
                                   <CheckOutlinedIcon />
                                 </div>
@@ -611,14 +632,16 @@ const StudentProfile = () => {
 
                               <div
                                 ref={(el) => (stepsRef.current[4] = el!)}
-                                className={`step ${activeForm === 4 ? "active" : ""
-                                  }`}
+                                className={`step ${
+                                  activeForm === 4 ? "active" : ""
+                                }`}
                                 onClick={() => setActiveForm(4)}
                                 style={{ cursor: "pointer" }}
                               >
                                 <div
-                                  className={`step-circle ${activeForm >= 4 ? "filled" : ""
-                                    }`}
+                                  className={`step-circle ${
+                                    activeForm >= 4 ? "filled" : ""
+                                  }`}
                                 >
                                   <CheckOutlinedIcon />
                                 </div>
@@ -629,14 +652,16 @@ const StudentProfile = () => {
 
                               <div
                                 ref={(el) => (stepsRef.current[5] = el!)}
-                                className={`step ${activeForm === 5 ? "active" : ""
-                                  }`}
+                                className={`step ${
+                                  activeForm === 5 ? "active" : ""
+                                }`}
                                 onClick={() => setActiveForm(5)}
                                 style={{ cursor: "pointer" }}
                               >
                                 <div
-                                  className={`step-circle ${activeForm >= 5 ? "filled" : ""
-                                    }`}
+                                  className={`step-circle ${
+                                    activeForm >= 5 ? "filled" : ""
+                                  }`}
                                 >
                                   <CheckOutlinedIcon />
                                 </div>
@@ -649,30 +674,34 @@ const StudentProfile = () => {
                           <div className="wizard-content">
                             <form id="wizard-form">
                               <div
-                                className={`form-step ${activeForm === 0 ? "active" : ""
-                                  }`}
+                                className={`form-step ${
+                                  activeForm === 0 ? "active" : ""
+                                }`}
                               >
                                 <StudentBasicInfo
                                   setActiveForm={setActiveForm}
                                 />
                               </div>
                               <div
-                                className={`form-step ${activeForm === 1 ? "active" : ""
-                                  }`}
+                                className={`form-step ${
+                                  activeForm === 1 ? "active" : ""
+                                }`}
                               >
                                 <StudentAddress setActiveForm={setActiveForm} />
                               </div>
                               <div
-                                className={`form-step ${activeForm === 2 ? "active" : ""
-                                  }`}
+                                className={`form-step ${
+                                  activeForm === 2 ? "active" : ""
+                                }`}
                               >
                                 <StudentLanguageKnown
                                   setActiveForm={setActiveForm}
                                 />
                               </div>
                               <div
-                                className={`form-step ${activeForm === 3 ? "active" : ""
-                                  }`}
+                                className={`form-step ${
+                                  activeForm === 3 ? "active" : ""
+                                }`}
                               >
                                 <div>
                                   <div>
@@ -683,16 +712,18 @@ const StudentProfile = () => {
                                 </div>
                               </div>
                               <div
-                                className={`form-step ${activeForm === 4 ? "active" : ""
-                                  }`}
+                                className={`form-step ${
+                                  activeForm === 4 ? "active" : ""
+                                }`}
                               >
                                 <StudentContactDetails
                                   setActiveForm={setActiveForm}
                                 />
                               </div>
                               <div
-                                className={`form-step ${activeForm === 5 ? "active" : ""
-                                  }`}
+                                className={`form-step ${
+                                  activeForm === 5 ? "active" : ""
+                                }`}
                               >
                                 <div>
                                   <div>

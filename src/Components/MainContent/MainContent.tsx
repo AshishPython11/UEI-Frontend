@@ -16,7 +16,7 @@ import {
   QUERY_KEYS_ADMIN_BASIC_INFO,
   QUERY_KEYS_STUDENT,
 } from "../../utils/const";
-import CreateIcon from '@mui/icons-material/Create';
+import CreateIcon from "@mui/icons-material/Create";
 import MoreVertOutlinedIcon from "@mui/icons-material/MoreVertOutlined";
 import OpenInFullOutlinedIcon from "@mui/icons-material/OpenInFullOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
@@ -33,7 +33,7 @@ import ExpandLessOutlinedIcon from "@mui/icons-material/ExpandLessOutlined";
 import TrendingUpOutlinedIcon from "@mui/icons-material/TrendingUpOutlined";
 import CircularProgress from "@mui/material/CircularProgress";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { toast, ToastContentProps } from "react-toastify";
 import logo from "../../assets/img/g-logo-white.svg";
@@ -57,7 +57,7 @@ import CommonModal from "../CommonModal";
 function MainContent() {
   const context = useContext(NameContext);
   const navigate = useNavigate();
-  const { setProPercentage }: any = context;
+  const { ProPercentage, setProPercentage }: any = context;
   const [userName, setUserName] = useState("");
   let StudentId = localStorage.getItem("_id");
   let menuList = localStorage.getItem("menulist1");
@@ -108,8 +108,8 @@ function MainContent() {
     getVoices();
   };
   const position = {
-    value: 5
-  }
+    value: 5,
+  };
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const chatRef = useRef<HTMLInputElement>(null);
 
@@ -121,7 +121,7 @@ function MainContent() {
     chart: {
       id: "chart5",
       height: 295,
-      width: '100%',
+      width: "100%",
       toolbar: {
         show: false,
       },
@@ -346,6 +346,19 @@ function MainContent() {
     }
   }, [usertype]);
 
+  useEffect(() => {
+    const lastRoute = localStorage.getItem("lastRoute");
+    if (lastRoute && ProPercentage) {
+      if (ProPercentage === 100) {
+        navigate("/main/Chat/recentChat");
+        localStorage.removeItem("lastRoute");
+      } else {
+        navigate("/main/Dashboard");
+        localStorage.removeItem("lastRoute");
+      }
+    }
+  }, [ProPercentage]);
+
   const profileData: any = sessionStorage.getItem("profileData");
 
   let basicinfo: any = {};
@@ -485,7 +498,11 @@ function MainContent() {
 
             if (basic_info && Object.keys(basic_info).length > 0) {
               if (data?.data?.basic_info?.pic_path !== "") {
-                getData(`${"upload_file/get_image/" + data?.data?.basic_info?.pic_path}`)
+                getData(
+                  `${
+                    "upload_file/get_image/" + data?.data?.basic_info?.pic_path
+                  }`
+                )
                   .then((imgdata: any) => {
                     setprofileImage(imgdata.data);
                   })
@@ -541,7 +558,7 @@ function MainContent() {
                           .replace("_", " ")
                           .charAt(0)
                           .toUpperCase() +
-                        response.data.class_name.replace("_", " ").slice(1)
+                          response.data.class_name.replace("_", " ").slice(1)
                       )
                   );
                 }
@@ -557,7 +574,7 @@ function MainContent() {
                 if (academic_history?.course_id) {
                   getData(`course/edit/${academic_history?.course_id}`).then(
                     (response) => {
-                      setStudentCourse(response.data.course_name)
+                      setStudentCourse(response.data.course_name);
                     }
                   );
                 }
@@ -709,11 +726,15 @@ function MainContent() {
             let sectionCount = 0;
             if (basic_info && Object.keys(basic_info)?.length > 0) {
               if (data?.data?.basic_info?.pic_path !== "") {
-                getData(`${"upload_file/get_image/" + data?.data?.basic_info?.pic_path}`)
+                getData(
+                  `${
+                    "upload_file/get_image/" + data?.data?.basic_info?.pic_path
+                  }`
+                )
                   .then((imgdata: any) => {
                     setprofileImage(imgdata?.data);
                   })
-                  .catch((e) => { });
+                  .catch((e) => {});
               }
 
               let totalcount = Object.keys(basic_info)?.length;
@@ -911,8 +932,8 @@ function MainContent() {
   }, []);
 
   useEffect(() => {
-    saveChat()
-  }, [chat])
+    saveChat();
+  }, [chat]);
 
   const handleResponse = (data: { data: any }) => {
     const newData = data?.data ? data?.data : data;
@@ -939,15 +960,15 @@ function MainContent() {
 
   const handleError = (e: {
     message:
-    | string
-    | number
-    | boolean
-    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-    | Iterable<React.ReactNode>
-    | React.ReactPortal
-    | ((props: ToastContentProps<unknown>) => React.ReactNode)
-    | null
-    | undefined;
+      | string
+      | number
+      | boolean
+      | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+      | Iterable<React.ReactNode>
+      | React.ReactPortal
+      | ((props: ToastContentProps<unknown>) => React.ReactNode)
+      | null
+      | undefined;
   }) => {
     setLoader(false);
     toast.error(e?.message, {
@@ -974,11 +995,15 @@ function MainContent() {
     let rag_payload = {};
     if (selectedchat?.question !== "") {
       payload = {
+        student_id: StudentId,
         question: search,
         prompt: prompt,
         // course: studentDetail?.course === null ? "" : studentDetail?.course,
         // course: "class_10",
-        course: profileDatas?.academic_history?.institution_type === "school" ? profileDatas?.class?.name : studentCourse,
+        course:
+          profileDatas?.academic_history?.institution_type === "school"
+            ? profileDatas?.class?.name
+            : studentCourse,
         stream: profileDatas?.subject,
         chat_hostory: [
           { role: "user", content: selectedchat?.question },
@@ -994,9 +1019,13 @@ function MainContent() {
       };
     } else {
       payload = {
+        student_id: StudentId,
         question: search,
         prompt: prompt,
-        course: profileDatas?.academic_history?.institution_type === "school" ? profileDatas?.class?.name : studentCourse,
+        course:
+          profileDatas?.academic_history?.institution_type === "school"
+            ? profileDatas?.class?.name
+            : studentCourse,
         stream: profileDatas?.subject,
       };
       rag_payload = {
@@ -1046,7 +1075,7 @@ function MainContent() {
               `https://uatllm.gyansetu.ai/rag-model-class?user_query=${search}&student_id=${StudentId}&class_name=${profileDatas?.class?.name}`
             )
               .then((response) => {
-                if (response?.status === 200) {
+                if (response?.status === 200 || response?.status === 402) {
                   handleResponse(response);
                   let ChatStorepayload = {
                     student_id: StudentId,
@@ -1054,13 +1083,6 @@ function MainContent() {
                     response: response?.answer,
                   };
                   postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
-                } else if (response?.status === 402) {
-                  setLoader(false);
-                  toast.error(response?.answer, {
-                    hideProgressBar: true,
-                    theme: "colored",
-                    position: 'top-center'
-                  })
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -1116,7 +1138,7 @@ function MainContent() {
               `https://uatllm.gyansetu.ai/rag-model?user_query=${search}&student_id=${StudentId}`
             )
               .then((response) => {
-                if (response?.status === 200) {
+                if (response?.status === 200 || response?.status === 402) {
                   handleResponse(response);
                   let ChatStorepayload = {
                     student_id: StudentId,
@@ -1124,13 +1146,6 @@ function MainContent() {
                     response: response?.answer,
                   };
                   postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
-                } else if (response?.status === 402) {
-                  setLoader(false);
-                  toast.error(response?.answer, {
-                    hideProgressBar: true,
-                    theme: "colored",
-                    position: 'top-center'
-                  })
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -1333,7 +1348,7 @@ function MainContent() {
     //   cleanedText += '.';
     // }
     const utterance = new SpeechSynthesisUtterance(cleanedText);
-    utterance.onerror = (event) => { };
+    utterance.onerror = (event) => {};
     // Event listener for when the speech ends
     utterance.onend = () => {
       const updatedChat = [...selectedchat];
@@ -1372,7 +1387,10 @@ function MainContent() {
       payload = {
         question: regenerateSearch,
         prompt: prompt,
-        course: profileDatas?.academic_history?.institution_type === "school" ? profileDatas?.class?.name : studentCourse,
+        course:
+          profileDatas?.academic_history?.institution_type === "school"
+            ? profileDatas?.class?.name
+            : studentCourse,
         // course: "class_10",
         stream: profileDatas?.subject,
         chat_hostory: [
@@ -1387,7 +1405,10 @@ function MainContent() {
       payload = {
         question: regenerateSearch,
         prompt: prompt,
-        course: profileDatas?.academic_history?.institution_type === "school" ? profileDatas?.class?.name : studentCourse,
+        course:
+          profileDatas?.academic_history?.institution_type === "school"
+            ? profileDatas?.class?.name
+            : studentCourse,
         stream: profileDatas?.subject,
       };
     }
@@ -1732,8 +1753,8 @@ function MainContent() {
                                   ? profileImage
                                   : profileDatas?.basic_info?.gender.toLowerCase() ===
                                     "female"
-                                    ? femaleImage
-                                    : maleImage
+                                  ? femaleImage
+                                  : maleImage
                               }
                               className="rounded-circle img-fluid bg-grd-info p-1"
                               width="80"
@@ -1752,9 +1773,8 @@ function MainContent() {
                                     {studentClass || studentCourse}
                                   </small>
                                 </div>
-                                <IconButton href="/main/StudentProfile"
-                                >
-                                  <CreateIcon /> 
+                                <IconButton href="/main/StudentProfile">
+                                  <CreateIcon />
                                 </IconButton>
                               </div>
 
@@ -1893,7 +1913,7 @@ function MainContent() {
                               {profileDatas?.subject_preference
                                 ?.score_in_percentage
                                 ? profileDatas?.subject_preference
-                                  ?.score_in_percentage
+                                    ?.score_in_percentage
                                 : ""}
                             </p>
                           </div>
@@ -2030,25 +2050,11 @@ function MainContent() {
                                         </p>
                                       </div>
                                       <ul className="ansfooter">
-                                        <li>
-                                          <ThumbUpAltOutlinedIcon
-                                            sx={{ fontSize: "14px" }}
-                                          />
-                                        </li>
-                                        <li>
-                                          <ThumbDownOutlinedIcon
-                                            sx={{ fontSize: "14px" }}
-                                          />
-                                        </li>
-                                        <li onClick={() => copyText(index)}>
-                                          <ContentCopyOutlinedIcon
+                                        <li onClick={regenerateChat}>
+                                          <CachedOutlinedIcon
                                             sx={{ fontSize: "14px" }}
                                           />{" "}
-                                          <span>
-                                            {isTextCopied[`answer-${index}`]
-                                              ? "Copied"
-                                              : "Copy"}
-                                          </span>
+                                          <span>Regenerate</span>
                                         </li>
                                         {!chat?.speak ? (
                                           <li
@@ -2069,11 +2075,25 @@ function MainContent() {
                                             <span>Stop</span>
                                           </li>
                                         )}
-                                        <li onClick={regenerateChat}>
-                                          <CachedOutlinedIcon
+                                        <li onClick={() => copyText(index)}>
+                                          <ContentCopyOutlinedIcon
                                             sx={{ fontSize: "14px" }}
                                           />{" "}
-                                          <span>Regenerate</span>
+                                          <span>
+                                            {isTextCopied[`answer-${index}`]
+                                              ? "Copied"
+                                              : "Copy"}
+                                          </span>
+                                        </li>
+                                        <li>
+                                          <ThumbDownOutlinedIcon
+                                            sx={{ fontSize: "14px" }}
+                                          />
+                                        </li>
+                                        <li>
+                                          <ThumbUpAltOutlinedIcon
+                                            sx={{ fontSize: "14px" }}
+                                          />
                                         </li>
                                       </ul>
                                     </div>

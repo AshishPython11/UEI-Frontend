@@ -56,7 +56,7 @@ import "./stylechat.css"; // Import your CSS file
 import useApi from "../../hooks/useAPI";
 import glogo from "../../assets/img/logo-white.svg";
 import { toast } from "react-toastify";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import {
   Button,
   Dialog,
@@ -93,70 +93,63 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { Flag } from "@mui/icons-material";
 import { ChatDialogClose } from "./ChatDialogClose";
-import { styled } from '@mui/material/styles';
-
-
+import { styled } from "@mui/material/styles";
 
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 50,
   height: 28,
   padding: 8,
-  '& .MuiSwitch-switchBase': {
+  "& .MuiSwitch-switchBase": {
     margin: 1,
     padding: 0,
-    transform: 'translateX(6px)',
-    '&.Mui-checked': {
-      color: '#fff',
-      transform: 'translateX(22px)',
-      '& .MuiSwitch-thumb:before': {
+    transform: "translateX(6px)",
+    "&.Mui-checked": {
+      color: "#fff",
+      transform: "translateX(22px)",
+      "& .MuiSwitch-thumb:before": {
         backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-          '#fff',
+          "#fff"
         )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
       },
-      '& + .MuiSwitch-track': {
+      "& + .MuiSwitch-track": {
         opacity: 1,
-        backgroundColor: '#aab4be',
-        ...theme.applyStyles('dark', {
-          backgroundColor: '#8796A5',
+        backgroundColor: "#aab4be",
+        ...theme.applyStyles("dark", {
+          backgroundColor: "#8796A5",
         }),
       },
     },
   },
-  '& .MuiSwitch-thumb': {
-    backgroundColor: '#001e3c',
+  "& .MuiSwitch-thumb": {
+    backgroundColor: "#001e3c",
     width: 24,
     height: 24,
-    '&::before': {
+    "&::before": {
       content: "''",
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
+      position: "absolute",
+      width: "100%",
+      height: "100%",
       left: 0,
       top: 0,
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center',
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
       backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-        '#fff',
+        "#fff"
       )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
     },
-    ...theme.applyStyles('dark', {
-      backgroundColor: '#003892',
+    ...theme.applyStyles("dark", {
+      backgroundColor: "#003892",
     }),
   },
-  '& .MuiSwitch-track': {
+  "& .MuiSwitch-track": {
     opacity: 1,
-    backgroundColor: '#aab4be',
+    backgroundColor: "#aab4be",
     borderRadius: 20 / 2,
-    ...theme.applyStyles('dark', {
-      backgroundColor: '#8796A5',
+    ...theme.applyStyles("dark", {
+      backgroundColor: "#8796A5",
     }),
   },
 }));
-
-
-
-
-
 
 interface Institute {
   id: number;
@@ -332,7 +325,7 @@ export const ProfileDialog: FunctionComponent<{
 
   useEffect(() => {
     if (isOpen) document.body.classList.add("overflow-hidden");
-  }, [isOpen])
+  }, [isOpen]);
 
   const initialQuestions: { [key: string]: string[] } = {
     basic: [
@@ -858,7 +851,7 @@ export const ProfileDialog: FunctionComponent<{
       class_id:
         answeredData?.academic_history?.class_id ||
         answers[14]?.toString() ||
-        "",
+        "1",
       year: answeredData?.academic_history?.year || answers[18] || "",
     };
 
@@ -995,10 +988,12 @@ export const ProfileDialog: FunctionComponent<{
     },
   ];
 
-  const academicStateOptions = State.getStatesOfCountry("IN").map((state) => ({
-    value: state.isoCode,
-    label: state.name,
-  }));
+  const academicStateOptions = State.getStatesOfCountry("IN").map(
+    (state: any) => ({
+      value: state.isoCode,
+      label: state.name,
+    })
+  );
 
   const saveanswerForHobbeis = (answers: string[]) => {
     let payload = {
@@ -1696,7 +1691,6 @@ export const ProfileDialog: FunctionComponent<{
     }
   };
   const handleDropdownChangeClass = (e: any) => {
-
     const updatedAnswers = [...answers];
     updatedAnswers[currentQuestionIndex] = e.value;
     setSelectedClass(e.value);
@@ -1831,7 +1825,7 @@ export const ProfileDialog: FunctionComponent<{
     }
   };
 
-  const countryOptions = Country.getAllCountries().map((country) => ({
+  const countryOptions = Country.getAllCountries().map((country: any) => ({
     value: country.isoCode,
     label: country.name,
   }));
@@ -1840,7 +1834,7 @@ export const ProfileDialog: FunctionComponent<{
     setSelectedCountry(selectedOption);
     if (selectedOption) {
       const states = State.getStatesOfCountry(selectedOption.value);
-      const stateOptions = states.map((state) => ({
+      const stateOptions = states.map((state: any) => ({
         value: state.isoCode,
         label: state.name,
       }));
@@ -1908,7 +1902,6 @@ export const ProfileDialog: FunctionComponent<{
   };
   const handlecancel = () => {
     setclosemodel(false);
-
   };
   const handleok = () => {
     onCancel();
@@ -1969,25 +1962,27 @@ export const ProfileDialog: FunctionComponent<{
   // },[messages,currentQuestionIndex,answers,selectedInstitute,selectCourse,selectSubject,selectedHobby,selectedLanguage,selectedproficiency])
   return (
     <>
-      <div style={{ display: "flex" }} id="freechatbox"
-        className={`${!isOpen ? 'd-none' : ''} freechatbox`}
+      <div
+        style={{ display: "flex" }}
+        id="freechatbox"
+        className={`${!isOpen ? "d-none" : ""} freechatbox`}
         //open={isOpen}
         // className="dialog"
         // open={true}
         //onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-      // PaperProps={{
-      //   style: {
-      //     position: "fixed",
-      //     bottom: 50,
-      //     // left: 0,
-      //     right: 50,
-      //     margin: 0,
-      //     width: "400px",
-      //     backgroundColor: chatdialog(namecolor),
-      //   },
-      // }}
+        // PaperProps={{
+        //   style: {
+        //     position: "fixed",
+        //     bottom: 50,
+        //     // left: 0,
+        //     right: 50,
+        //     margin: 0,
+        //     width: "400px",
+        //     backgroundColor: chatdialog(namecolor),
+        //   },
+        // }}
       >
         <div className="profilechatinner">
           {/* <Button
@@ -1996,7 +1991,11 @@ export const ProfileDialog: FunctionComponent<{
    aria-label="close"
  > */}
           <div className="proheader">
-            <div className="me-auto"> <img src={glogo} width="20" alt="" /> Add your information <br /> for better services</div>
+            <div className="me-auto">
+              {" "}
+              <img src={glogo} width="20" alt="" /> Add your information <br />{" "}
+              for better services
+            </div>
             {/* <FormControlLabel
             control={
               <Switch
@@ -2006,21 +2005,23 @@ export const ProfileDialog: FunctionComponent<{
             }
             label=""
           /> */}
-            <FormControlLabel className="me-0"
-              control={<MaterialUISwitch sx={{ m: 0 }} size="small" checked={checked} onChange={() => handleChange(checked ? "light" : "dark")} />}
+            <FormControlLabel
+              className="me-0"
+              control={
+                <MaterialUISwitch
+                  sx={{ m: 0 }}
+                  size="small"
+                  checked={checked}
+                  onChange={() => handleChange(checked ? "light" : "dark")}
+                />
+              }
               label=""
             />
             <IconButton onClick={() => setclosemodel(true)} aria-label="close">
               <CloseIcon />
-            </IconButton >
-
-            <div>
-
-            </div>
-
+            </IconButton>
 
           </div>
-
 
           <div className="afterheader">
             {/* <DialogTitle id="alert-dialog-title">
@@ -2035,14 +2036,16 @@ export const ProfileDialog: FunctionComponent<{
                   return (
                     <div
                       key={index}
-                      className={`message-wrapper d-flex mb-3 ${message.type === "question"
-                        ? "justify-content-start"
-                        : "justify-content-end"
-                        }`}
+                      className={`message-wrapper d-flex mb-3 ${
+                        message.type === "question"
+                          ? "justify-content-start"
+                          : "justify-content-end"
+                      }`}
                     >
                       <div
-                        className={`message-bubble p-3 ${message.type === "question" ? "left" : "right"
-                          }`}
+                        className={`message-bubble p-3 ${
+                          message.type === "question" ? "left" : "right"
+                        }`}
                         style={{
                           maxWidth: "80%",
                           backgroundColor:
@@ -2080,11 +2083,10 @@ export const ProfileDialog: FunctionComponent<{
                     per ||
                     preferenceError ||
                     errordate) && (
-                      <p className="error-text"
-                      >
-                        {errordata[currentQuestionIndex]}
-                      </p>
-                    )}
+                    <p className="error-text">
+                      {errordata[currentQuestionIndex]}
+                    </p>
+                  )}
                   {error1 && (
                     <p
                       style={{
@@ -2096,7 +2098,8 @@ export const ProfileDialog: FunctionComponent<{
                       {error1}
                     </p>
                   )}
-                  {currentQuestionIndex === 15 || currentQuestionIndex === 26 ? (
+                  {currentQuestionIndex === 15 ||
+                  currentQuestionIndex === 26 ? (
                     <Select
                       className="dropdown-wrapper"
                       onChange={handleDropdownChangecourse}
@@ -2133,7 +2136,10 @@ export const ProfileDialog: FunctionComponent<{
                   ) : currentQuestionIndex === 7 ? (
                     <>
                       <div
-                        style={{ position: "relative", display: "inline-block" }}
+                        style={{
+                          position: "relative",
+                          display: "inline-block",
+                        }}
                       >
                         <input
                           type="file"
@@ -2211,239 +2217,239 @@ export const ProfileDialog: FunctionComponent<{
                       menuPlacement="top"
                       value={selectSubject}
                     />
-                  ) : currentQuestionIndex === 2
-                    ? (
-                      <>
-                        <div style={{ display: "flex" }}>
-                          <div
-                            style={{
-                              width: "100%",
-                              display: "flex",
-                              alignItems: "center",
-                              position: "relative",
-                            }}
-                          >
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker
-                                //  open={open}
-                                // open={true}
-                                label={"Date of Birth"}
-                                onChange={handleDateChange}
-                                // onAccept={() => setOpen(false)} // Close on date selection
-                                // onClose={() => setOpen(false)}  // Close on outside click
-                                disableFuture
-                                format={"DD/MM/YYYY"}
-                                // value={datecheck}
-                                slotProps={{
-                                  field: {
-                                    readOnly: true,
-                                  },
-                                  textField: {
-                                    sx: {
-                                      "& .MuiInputLabel-root": {
-                                        // paddingLeft: '0px',
-                                        color: chatdatetext(namecolor), // Change the label text color
-                                        backgroundColor: "transperent",
-                                      },
-                                      "& .MuiInputBase-root": {
-                                        // flexDirection: 'row-reverse',
-                                        color: chatdatetext(namecolor), // Change the label text color
-                                        backgroundColor: "transperent",
-                                        paddingLeft: "100px",
-                                        paddingRight: "50px",
-                                      },
-                                      "& .MuiOutlinedInput-notchedOutline": {
-                                        // borderColor: 'transperent',
-                                      },
-                                      "& .MuiInputAdornment-root": {
-                                        // color: chatdatetext(namecolor), // Change the color of the calendar icon
-                                      },
+                  ) : currentQuestionIndex === 2 ? (
+                    <>
+                      <div style={{ display: "flex" }}>
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            position: "relative",
+                          }}
+                        >
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              //  open={open}
+                              // open={true}
+                              label={"Date of Birth"}
+                              onChange={handleDateChange}
+                              // onAccept={() => setOpen(false)} // Close on date selection
+                              // onClose={() => setOpen(false)}  // Close on outside click
+                              disableFuture
+                              format={"DD/MM/YYYY"}
+                              // value={datecheck}
+                              slotProps={{
+                                field: {
+                                  readOnly: true,
+                                },
+                                textField: {
+                                  sx: {
+                                    "& .MuiInputLabel-root": {
+                                      // paddingLeft: '0px',
+                                      color: chatdatetext(namecolor), // Change the label text color
+                                      backgroundColor: "transperent",
+                                    },
+                                    "& .MuiInputBase-root": {
+                                      // flexDirection: 'row-reverse',
+                                      color: chatdatetext(namecolor), // Change the label text color
+                                      backgroundColor: "transperent",
+                                      paddingLeft: "100px",
+                                      paddingRight: "50px",
+                                    },
+                                    "& .MuiOutlinedInput-notchedOutline": {
+                                      // borderColor: 'transperent',
+                                    },
+                                    "& .MuiInputAdornment-root": {
+                                      // color: chatdatetext(namecolor), // Change the color of the calendar icon
                                     },
                                   },
-                                  inputAdornment: {
-                                    sx: {
-                                      "& .MuiSvgIcon-root": {
-                                        color: chatcalandericon(namecolor), // Ensure the icon color is changed
-                                      },
+                                },
+                                inputAdornment: {
+                                  sx: {
+                                    "& .MuiSvgIcon-root": {
+                                      color: chatcalandericon(namecolor), // Ensure the icon color is changed
                                     },
-                                    // onClick: handleOpen
                                   },
-                                }}
-                              />
-                              <button
-                                className="chat_search_btn"
-                                style={{
-                                  position: "absolute",
-                                  right: "10px",
-                                  top: "50%",
-                                  transform: "translateY(-50%)",
-                                  border: "none",
-                                  background: "none",
-                                  cursor: "pointer",
-                                }}
-                                type="button"
-                                onClick={handleclickdate}
-                              >
-                                {" "}
-                                <SendIcon className="mainsearch" />
-                              </button>
-                            </LocalizationProvider>
-                          </div>
+                                  // onClick: handleOpen
+                                },
+                              }}
+                            />
+                            <button
+                              className="chat_search_btn"
+                              style={{
+                                position: "absolute",
+                                right: "10px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                border: "none",
+                                background: "none",
+                                cursor: "pointer",
+                              }}
+                              type="button"
+                              onClick={handleclickdate}
+                            >
+                              {" "}
+                              <SendIcon className="mainsearch" />
+                            </button>
+                          </LocalizationProvider>
                         </div>
-                      </>
-                    ) : currentQuestionIndex === 18 ? (
-                      <>
-                        <div style={{ display: "flex" }}>
-                          <div
-                            style={{
-                              width: "100%",
-                              display: "flex",
-                              alignItems: "center",
-                              position: "relative",
-                            }}
-                          >
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <DatePicker
-                                //  open={open}
-                                // open={true}
-                                views={["year"]}
-                                label={"Year"}
-                                onChange={handleDateChange}
-                                // onAccept={() => setOpen(false)} // Close on date selection
-                                // onClose={() => setOpen(false)}  // Close on outside click
-                                disableFuture
-                                format={"YYYY"}
-                                // value={datecheck}
-                                slotProps={{
-                                  field: {
-                                    readOnly: true,
-                                  },
-                                  textField: {
-                                    sx: {
-                                      "& .MuiInputLabel-root": {
-                                        // paddingLeft: '0px',
-                                        color: chatdatetext(namecolor), // Change the label text color
-                                        backgroundColor: "transperent",
-                                      },
-                                      "& .MuiInputBase-root": {
-                                        // flexDirection: 'row-reverse',
-                                        color: chatdatetext(namecolor), // Change the label text color
-                                        backgroundColor: "transperent",
-                                        paddingLeft: "100px",
-                                        paddingRight: "50px",
-                                      },
-                                      "& .MuiOutlinedInput-notchedOutline": {
-                                        // borderColor: 'transperent',
-                                      },
-                                      "& .MuiInputAdornment-root": {
-                                        // color: chatdatetext(namecolor), // Change the color of the calendar icon
-                                      },
+                      </div>
+                    </>
+                  ) : currentQuestionIndex === 18 ? (
+                    <>
+                      <div style={{ display: "flex" }}>
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            position: "relative",
+                          }}
+                        >
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePicker
+                              //  open={open}
+                              // open={true}
+                              views={["year"]}
+                              label={"Year"}
+                              onChange={handleDateChange}
+                              // onAccept={() => setOpen(false)} // Close on date selection
+                              // onClose={() => setOpen(false)}  // Close on outside click
+                              disableFuture
+                              format={"YYYY"}
+                              // value={datecheck}
+                              slotProps={{
+                                field: {
+                                  readOnly: true,
+                                },
+                                textField: {
+                                  sx: {
+                                    "& .MuiInputLabel-root": {
+                                      // paddingLeft: '0px',
+                                      color: chatdatetext(namecolor), // Change the label text color
+                                      backgroundColor: "transperent",
+                                    },
+                                    "& .MuiInputBase-root": {
+                                      // flexDirection: 'row-reverse',
+                                      color: chatdatetext(namecolor), // Change the label text color
+                                      backgroundColor: "transperent",
+                                      paddingLeft: "100px",
+                                      paddingRight: "50px",
+                                    },
+                                    "& .MuiOutlinedInput-notchedOutline": {
+                                      // borderColor: 'transperent',
+                                    },
+                                    "& .MuiInputAdornment-root": {
+                                      // color: chatdatetext(namecolor), // Change the color of the calendar icon
                                     },
                                   },
-                                  inputAdornment: {
-                                    sx: {
-                                      "& .MuiSvgIcon-root": {
-                                        color: chatcalandericon(namecolor), // Ensure the icon color is changed
-                                      },
+                                },
+                                inputAdornment: {
+                                  sx: {
+                                    "& .MuiSvgIcon-root": {
+                                      color: chatcalandericon(namecolor), // Ensure the icon color is changed
                                     },
-                                    // onClick: handleOpen
                                   },
-                                }}
-                              />
-                              <button
-                                className="chat_search_btn"
-                                style={{
-                                  position: "absolute",
-                                  right: "10px",
-                                  top: "50%",
-                                  transform: "translateY(-50%)",
-                                  border: "none",
-                                  background: "none",
-                                  cursor: "pointer",
-                                }}
-                                type="button"
-                                onClick={handleclickdate}
-                              >
-                                {" "}
-                                <SendIcon className="mainsearch" />
-                              </button>
-                            </LocalizationProvider>
-                          </div>
+                                  // onClick: handleOpen
+                                },
+                              }}
+                            />
+                            <button
+                              className="chat_search_btn"
+                              style={{
+                                position: "absolute",
+                                right: "10px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                border: "none",
+                                background: "none",
+                                cursor: "pointer",
+                              }}
+                              type="button"
+                              onClick={handleclickdate}
+                            >
+                              {" "}
+                              <SendIcon className="mainsearch" />
+                            </button>
+                          </LocalizationProvider>
                         </div>
-                      </>
-                    ) : currentQuestionIndex === 30 ? (
-                      <Select
-                        className="dropdown-wrapper"
-                        onChange={handleDropdownChangehobby}
-                        options={hobbyOptions}
-                        placeholder="Select an option"
-                        menuPlacement="top"
-                        value={selectedHobby}
-                      />
-                    ) : currentQuestionIndex === 19 ? (
-                      <Select
-                        className="dropdown-wrapper"
-                        options={countryOptions}
-                        onChange={handleCountryChange}
-                        placeholder="Select a country"
-                        menuPlacement="top"
-                        value={selectedCountry}
-                      />
-                    ) : currentQuestionIndex === 20 && stateOptions?.length > 0 ? (
-                      <Select
-                        className="dropdown-wrapper"
-                        options={stateOptions}
-                        placeholder="Select a state"
-                        onChange={handleStateChange}
-                        isDisabled={!selectedCountry}
-                        menuPlacement="top"
-                        value={selectedstate}
-                      />
-                    ) : currentQuestionIndex === 31 ? (
-                      <Select
-                        className="dropdown-wrapper"
-                        onChange={handleDropdownChangelanguage}
-                        options={languageOptions}
-                        placeholder="Select an option"
-                        menuPlacement="top"
-                        value={selectedLanguage}
-                      />
-                    ) : currentQuestionIndex === 32 ? (
-                      <Select
-                        className="dropdown-wrapper"
-                        onChange={handleDropdownChangeproficiency}
-                        options={proficiencyOptions}
-                        placeholder="Select an option"
-                        menuPlacement="top"
-                        value={selectedproficiency}
-                      />
-                    ) : currentQuestionIndex === 1 ? (
-                      <Select
-                        className="dropdown-wrapper"
-                        onChange={handleDropdownChangegender}
-                        options={genderOptions}
-                        placeholder="Select an option"
-                        menuPlacement="top"
-                        value={selectedgender}
-                      />
-                    ) : currentQuestionIndex + 1 ===
-                      initialQuestions.basic.length ? (
-                      <Button
-                        onClick={viewProfile}
-                        style={{ display: "block", margin: "0 auto" }}
-                      >
-                        View Profile
-                      </Button>
-                    ) : (
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Type your answer and press enter"
-                        value={answers[currentQuestionIndex] || ""}
-                        onChange={handleAnswerChange}
-                        onKeyPress={handleKeyPress}
-                      />
-                    )}
+                      </div>
+                    </>
+                  ) : currentQuestionIndex === 30 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangehobby}
+                      options={hobbyOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedHobby}
+                    />
+                  ) : currentQuestionIndex === 19 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      options={countryOptions}
+                      onChange={handleCountryChange}
+                      placeholder="Select a country"
+                      menuPlacement="top"
+                      value={selectedCountry}
+                    />
+                  ) : currentQuestionIndex === 20 &&
+                    stateOptions?.length > 0 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      options={stateOptions}
+                      placeholder="Select a state"
+                      onChange={handleStateChange}
+                      isDisabled={!selectedCountry}
+                      menuPlacement="top"
+                      value={selectedstate}
+                    />
+                  ) : currentQuestionIndex === 31 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangelanguage}
+                      options={languageOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedLanguage}
+                    />
+                  ) : currentQuestionIndex === 32 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangeproficiency}
+                      options={proficiencyOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedproficiency}
+                    />
+                  ) : currentQuestionIndex === 1 ? (
+                    <Select
+                      className="dropdown-wrapper"
+                      onChange={handleDropdownChangegender}
+                      options={genderOptions}
+                      placeholder="Select an option"
+                      menuPlacement="top"
+                      value={selectedgender}
+                    />
+                  ) : currentQuestionIndex + 1 ===
+                    initialQuestions.basic.length ? (
+                    <Button
+                      onClick={viewProfile}
+                      style={{ display: "block", margin: "0 auto" }}
+                    >
+                      View Profile
+                    </Button>
+                  ) : (
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Type your answer and press enter"
+                      value={answers[currentQuestionIndex] || ""}
+                      onChange={handleAnswerChange}
+                      onKeyPress={handleKeyPress}
+                    />
+                  )}
                 </div>
               </>
             )}
@@ -2452,9 +2458,7 @@ export const ProfileDialog: FunctionComponent<{
     </Button> */}
 
             {/* </DialogActions> */}
-
           </div>
-
         </div>
         {/* <div className="copyright">&copy; Copyright 2024, All Right Reserved </div> */}
         <ChatDialogClose
