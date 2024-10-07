@@ -31,6 +31,7 @@ import {
   inputfieldhover,
   inputfieldtext,
   tabletools,
+  deepEqual
 } from "../../utils/helpers";
 import { Country, State, City } from "country-state-city";
 import { ChildComponentProps } from "../StudentProfile";
@@ -81,6 +82,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
   const { namecolor }: any = context;
   const { getData, postData, putData, deleteData } = useApi();
   const [boxes, setBoxes] = useState<Box[]>([]);
+  const [checkBoxes, setCheckBoxes] = useState<Box[]>([]);
   const [boxes1, setBoxes1] = useState<Boxset[]>([Boxsetvalue]);
   const [institutes, setInstitutes] = useState<Institute[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -101,6 +103,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
     }));
     setStateOptions(stateOptions);
   }, [State]);
+
   const addRow = () => {
     const newBox: Box = {
       id: 0,
@@ -140,6 +143,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
     }
     setBoxes(boxes.filter((box, index) => index !== indx));
   };
+
   const listData = async () => {
     return new Promise((resolve) => {
       getData("/institution/list")
@@ -167,6 +171,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         });
     });
   };
+
   useEffect(() => {
     listData();
 
@@ -277,6 +282,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             };
             if (!boxes.some((box) => box.id === newBox.id)) {
               setBoxes((prevBoxes) => [...prevBoxes, newBox]);
+              setCheckBoxes((prevBoxes) => [...prevBoxes, newBox])
             }
           });
         } else if (data?.status === 404) {
@@ -307,7 +313,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       });
   }, []);
 
-  const saveAcademicHistory = async () => {
+  const saveAcademicHistory = async (instituteId: number = 0) => {
     // event: React.FormEvent<HTMLFormElement>
     // event.preventDefault();
     // const validatePayload = (
@@ -364,7 +370,8 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           class_id: String(!box.class_id ? 1 : box.class_id),
           year: String(box?.year?.$y), // Assuming 'year' is a string
         };
-        //validatePayload(payload)
+
+        //validatePayload(payload)  
         if (validatePayload(payload.institution_type, payload.year)) {
           if (editFlag || box.id === 0) {
             return postData("/new_student_academic_history/add", payload);
@@ -393,12 +400,24 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         );
 
         if (allSuccessful) {
-          toast.success("Academic history saved successfully", {
-            hideProgressBar: true,
-            theme: "colored",
-            position: "top-center"
-          });
-          setActiveForm((prev) => prev + 1);
+          if (editFlag) {
+            toast.success("Academic history saved successfully", {
+              hideProgressBar: true,
+              theme: "colored",
+              position: "top-center"
+            })
+            setActiveForm((prev) => prev + 1);
+          } else {
+            const isEqual = deepEqual(checkBoxes[0], boxes[0])
+            if (!isEqual) {
+              toast.success("Academic history updated successfully", {
+                hideProgressBar: true,
+                theme: "colored",
+                position: "top-center"
+              });
+            }
+            setActiveForm((prev) => prev + 1);
+          }
         } else {
           toast.error("An error occurred while saving", {
             hideProgressBar: true,
@@ -421,68 +440,71 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
     setInsituteFlag(true);
   };
 
-  const saveAcademi = async (index: number) => {
-    try {
-      const validatePayload = (
-        payload: { [s: string]: unknown } | ArrayLike<unknown>
-      ) => {
-        return Object.values(payload).every((value) => value !== "");
-      };
+  const saveAcademy = async (index: number) => {
+    if (boxes1[0].Institute_Name_Add) {
+      try {
+        const validatePayload = (
+          payload: { [s: string]: unknown } | ArrayLike<unknown>
+        ) => {
+          return Object.values(payload).every((value) => value !== "");
+        };
 
-      const promises = boxes1
-        .map((box) => {
-          const payload = {
-            institution_name: box.Institute_Name_Add,
-          };
+        const promises = boxes1
+          .map((box) => {
+            const payload = {
+              institution_name: box.Institute_Name_Add,
+            };
 
-          if (validatePayload(payload)) {
-            if (editFlag || box.id === 0) {
-              return postData("/institution/add", payload);
+            if (validatePayload(payload)) {
+              if (editFlag || box.id === 0) {
+                return postData("/institution/add", payload);
+              } else {
+                return postData("/institution/add", payload);
+              }
             } else {
-              return postData("/institution/add", payload);
+              return Promise.resolve(null);
             }
-          } else {
-            return Promise.resolve(null);
-          }
-        })
-        .filter((promise) => promise !== null);
+          })
+          .filter((promise) => promise !== null);
 
-      const responses = await Promise.all(promises);
+        const responses = await Promise.all(promises);
 
-      const allSuccessful = responses.every(
-        (response) => response?.status === 200
-      );
+        const allSuccessful = responses.every(
+          (response) => response?.status === 200
+        );
 
-      if (allSuccessful) {
-        setIdInstitute(responses[0].institution.id);
-        // setBoxes([...boxes, { institute_id: responses[0]?.institution?.id }]);
-        const newBoxes: any = [...boxes];
-        newBoxes[index]["institute_id"] = responses[0].institution.id;
-        setBoxes(newBoxes);
-        setBoxes1([
-          {
-            id: 0,
-            Institute_Name_Add: "",
-          },
-        ]);
-        // setBoxes((prevBoxes) => [...prevBoxes, { institute_id: responses[0]?.institution?.id }]);
+        if (allSuccessful) {
+          setIdInstitute(responses[0].institution.id);
+          // setBoxes([...boxes, { institute_id: responses[0]?.institution?.id }]);
+          const newBoxes: any = [...boxes];
+          newBoxes[index]["institute_id"] = responses[0].institution.id;
+          saveAcademicHistory(responses[0].institution.id)
+          setBoxes(newBoxes);
+          setBoxes1([
+            {
+              id: 0,
+              Institute_Name_Add: "",
+            },
+          ]);
+          // setBoxes((prevBoxes) => [...prevBoxes, { institute_id: responses[0]?.institution?.id }]);
 
-        await listData();
-        toast.success("Institution name saved successfully", {
+          await listData();
+          toast.success("Institution name saved successfully", {
+            hideProgressBar: true,
+            theme: "colored",
+            position: "top-center"
+          });
+          setDataInsitute(boxes1[0]?.Institute_Name_Add);
+        }
+      } catch (error) {
+        console.error("Error while saving academy", error);
+        toast.error("Error while saving institution name", {
           hideProgressBar: true,
           theme: "colored",
           position: "top-center"
         });
-        setDataInsitute(boxes1[0]?.Institute_Name_Add);
       }
-    } catch (error) {
-      console.error("Error while saving academia:", error);
-      toast.error("Error while saving institution name", {
-        hideProgressBar: true,
-        theme: "colored",
-        position: "top-center"
-      });
-    }
+    } else saveAcademicHistory()
   };
 
   const handleInputChange = (
@@ -785,7 +807,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                     onChange={(e) =>
                       handleInputChange(index, "institute_id", e.target.value)
                     }
-                    label="Institute Name"
+                    label="University Name"
                   >
                     {institutes.map((institute) => (
                       <MenuItem
@@ -820,42 +842,44 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                         <p style={{ marginLeft: "10px", color: 'red' }}>Please select a Department name.</p>
                     )}</div> */}
                 </FormControl>
-                {box.institute_id == "1" && (
-                  <>
-                    <FormControl sx={{ m: 1, minWidth: 180, width: "100%" }}>
-                      {boxes1.map((box, index) => (
-                        <TextField
-                          key={box.id}
-                          name="Institute_Name_Add"
-                          value={box.Institute_Name_Add}
-                          onChange={(e) =>
-                            handleInputChange1(
-                              index,
-                              "Institute_Name_Add",
-                              e.target.value
-                            )
-                          }
-                          label="Institute Name Add"
-                        />
-                      ))}
-                    </FormControl>
-                    <div>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => saveAcademi(index)}
-                        style={{ marginTop: "25px" }}
-                      >
-                        Save Institute Name
-                      </Button>
-                    </div>
-                  </>
-                )}
               </div>
             )}
-            {box.institute_type !== "competition_exams" &&
-              box.institute_type !== "school" && (
-                <div className="col form_field_wrapper">
+            {box.institute_id == "1" && (
+              <div className="col form_field_wrapper">
+                <FormControl sx={{ m: 1, minWidth: 180, width: "100%" }}>
+                  {boxes1.map((box, index) => (
+                    <TextField
+                      key={box.id}
+                      name="Institute_Name_Add"
+                      sx={{
+                        backgroundColor: "#f5f5f5",
+                      }}
+                      value={box.Institute_Name_Add}
+                      onChange={(e) =>
+                        handleInputChange1(
+                          index,
+                          "Institute_Name_Add",
+                          e.target.value
+                        )
+                      }
+                      label="Institute Name"
+                    />
+                  ))}
+                </FormControl>
+                {/* <div>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => saveAcademi(index)}
+                    style={{ marginTop: "25px" }}
+                  >
+                    Save Institute Name
+                  </Button>
+                </div> */}
+              </div>
+            )}
+            {box.institute_type === "college" && (
+                <div className='col-lg-3 form_field_wrapper'>
                   <FormControl
                     required
                     sx={{ m: 1, minWidth: 70, width: "100%", maxWidth: 200 }}
@@ -915,15 +939,14 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                   </FormControl>
                 </div>
               )}
-            {box.institute_type !== "competition_exams" &&
-              box.institute_type !== "school" && (
-                <div className="col-lg-3 col-md-6 form_field_wrapper">
+            {box.institute_type === "college" && (
+                <div className={`${box.institute_id == "1" ? "col-lg-3" : "col-lg-3 col-md-6"} form_field_wrapper`}>
                   <FormControl
                     required
                     sx={{
                       m: 1,
                       minWidth: 180,
-                      width: "100%",
+                      // width: "100%",
                     }}
                   >
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -970,7 +993,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           <button
             type="button"
             className="btn btn-dark px-lg-5 ms-auto d-block rounded-pill next-btn"
-            onClick={saveAcademicHistory}
+            onClick={() => saveAcademy(0)}
           >
             Next
           </button>

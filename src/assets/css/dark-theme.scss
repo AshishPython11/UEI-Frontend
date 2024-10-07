@@ -1,7 +1,7 @@
 [data-bs-theme="dark"] body {
   color: var(--bs-body-color);
   background-color: var(--bs-body-bg-2);
-
+  $primary: #9943ec;
   $headingColor: #d5d5d5;
   $headerbg: #212529;
   .chat-panel .main-chat-panel .inner-panel .chat-result ul li .chat-card{
@@ -13,7 +13,42 @@
     background: rgb(75 75 75 / 48%)!important;
     
 }
+.freechatbox{
+  .profilechatinner{
+    background-color: $headerbg!important;
+    .MuiIconButton-root{
+      svg{
+        fill: rgba($headingColor, 0.6);
+      }
+    }
+    .chatinput-body{
+      input, select, .css-13cymwt-control{
+        background-color: rgb(75 75 75 / 48%)!important;
+      }
+    }
+    .message-bubble.left{
+      background-color: rgb(75 75 75 / 48%)!important;
+      color: $headingColor!important;
+    }
+    .message-bubble.right{
+      background-color: $primary!important;
+    }
+  }
+}
+.css-1tzjnoi-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root, .MuiInputBase-colorPrimary{
+  background-color: #32363b!important;
+  border-color: #32363b!important;
+}
+.MuiTextField-root{
+  background-color: transparent!important;
+}
 
+.MuiSelect-outlined, .MuiInputBase-input, .MuiInputBase-input{
+  color: $headingColor!important;
+}
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled{
+  -webkit-text-fill-color: black!important
+}
 .addcomingsoon{
 
   &::after{

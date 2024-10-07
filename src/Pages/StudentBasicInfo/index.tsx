@@ -59,7 +59,6 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
   const context = useContext(NameContext);
   const { setNamepro, setProImage }: any = context;
   let StudentId = localStorage.getItem("_id");
-  console.log(StudentId);
   const { getData, postData, putData, postFileData } = useApi();
   const [gender, setGender] = useState("Male");
   const [name, setName] = useState();
@@ -112,7 +111,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               .then((imgdata: any) => {
                 setFilePreview(imgdata.data);
               })
-              .catch((e) => { });
+              .catch((e) => {});
           }
           setBasicInfo(data?.data);
           setInitialState({
@@ -135,7 +134,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.warning("Please add your information", {
             hideProgressBar: true,
             theme: "colored",
-            position: "top-center"
+            position: "top-center",
           });
         } else {
           // console.log("error comes from api");
@@ -145,7 +144,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(e?.message, {
           hideProgressBar: true,
           theme: "colored",
-          position: "top-center"
+          position: "top-center",
         });
       });
   };
@@ -290,19 +289,19 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               toast.success(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
-                position: "top-center"
+                position: "top-center",
               });
             } else if (data?.status === 404) {
               toast.error(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
-                position: "top-center"
+                position: "top-center",
               });
             } else {
               toast.error(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
-                position: "top-center"
+                position: "top-center",
               });
             }
           })
@@ -310,7 +309,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(e?.message, {
               hideProgressBar: true,
               theme: "colored",
-              position: "top-center"
+              position: "top-center",
             });
           });
       }
@@ -404,6 +403,11 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
     // const validation = validate()
     // if (validation == true) {
 
+    if (!basicInfo?.first_name) setFname_col1(true);
+    if (!basicInfo?.last_name) setLname_col1(true);
+    if (!basicInfo?.father_name) setFathername_col1(true);
+    if (!basicInfo?.mother_name) setMothername_col1(true);
+
     let payload = {
       student_login_id: StudentId,
       first_name: basicInfo?.first_name,
@@ -426,7 +430,16 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
 
     const eq = deepEqual(initialAdminState, payload);
 
-    if (!fname_col && !lname_col && !fathername_col && !mothername_col) {
+    if (
+      basicInfo?.first_name &&
+      basicInfo?.last_name &&
+      basicInfo?.father_name &&
+      basicInfo?.mother_name &&
+      !fname_col &&
+      !lname_col &&
+      !fathername_col &&
+      !mothername_col
+    ) {
       if (editFalg) {
         postData(`${"student/add"}`, payload)
           .then((data: any) => {
@@ -434,7 +447,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               toast.success("Basic information saved successfully", {
                 hideProgressBar: true,
                 theme: "colored",
-                position: "top-center"
+                position: "top-center",
               });
               setActiveForm((prev) => prev + 1);
               setNamepro({
@@ -443,7 +456,8 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 gender: basicInfo?.gender,
               });
               getData(
-                `${"upload_file/get_image/"}${selectedFile ? selectedFile : basicInfo?.pic_path
+                `${"upload_file/get_image/"}${
+                  selectedFile ? selectedFile : basicInfo?.pic_path
                 }`
               )
                 .then((data: any) => {
@@ -460,7 +474,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               toast.error(data?.message, {
                 hideProgressBar: true,
                 theme: "colored",
-                position: "top-center"
+                position: "top-center",
               });
             }
           })
@@ -468,7 +482,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.error(e?.message, {
               hideProgressBar: true,
               theme: "colored",
-              position: "top-center"
+              position: "top-center",
             });
           });
       } else {
@@ -480,7 +494,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 toast.success("Basic information updated successfully", {
                   hideProgressBar: true,
                   theme: "colored",
-                  position: "top-center"
+                  position: "top-center",
                 });
                 setActiveForm((prev) => prev + 1);
                 // getStudentBasicInfo()
@@ -491,7 +505,8 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 });
                 if (selectedFile ? selectedFile : basicInfo?.pic_path) {
                   getData(
-                    `${"upload_file/get_image/"}${selectedFile ? selectedFile : basicInfo?.pic_path
+                    `${"upload_file/get_image/"}${
+                      selectedFile ? selectedFile : basicInfo?.pic_path
                     }`
                   )
                     .then((data: any) => {
@@ -509,7 +524,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 toast.error(data?.message, {
                   hideProgressBar: true,
                   theme: "colored",
-                  position: "top-center"
+                  position: "top-center",
                 });
               }
             })
@@ -919,7 +934,7 @@ const StudentBasicInfo: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                   <img
                     src={filePreview}
                     alt="Uploaded Preview"
-                    style={{ maxWidth: "50%", marginTop: "10px" }}
+                    style={{ marginTop: "10px" }}
                   />
                 </div>
               )}

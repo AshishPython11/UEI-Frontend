@@ -37,6 +37,7 @@ import MicOffOutlinedIcon from "@mui/icons-material/MicOffOutlined";
 import GradeOutlinedIcon from "@mui/icons-material/GradeOutlined";
 import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import LocalBarOutlinedIcon from "@mui/icons-material/LocalBarOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
@@ -60,6 +61,7 @@ const Header = () => {
     proImage,
     setProImage,
     ProPercentage,
+    setProPercentage,
   }: any = context;
   const [modalOpen, setModalOpen] = useState(false);
   let StudentId = localStorage.getItem("_id");
@@ -69,12 +71,14 @@ const Header = () => {
   const user_type = localStorage.getItem("user_type");
   const [profileImage, setprofileImage] = useState<any>();
   const [profileName, setprofileName] = useState<any>();
+  const [language, setLanguage] = useState<any>("EN");
   const [gender, setGender] = useState<any>("");
   const proFalg = localStorage.getItem("proFalg");
   let synth: SpeechSynthesis;
   synth = window.speechSynthesis;
   const { getData } = useApi();
   const handlogout = () => {
+    setProPercentage(0);
     localStorage.removeItem("token");
     localStorage.removeItem("user_type");
     localStorage.removeItem("userid");
@@ -138,20 +142,22 @@ const Header = () => {
             // let name = basic_info.first_name + " " + basic_info.last_name;
             let name = basic_info.first_name;
             setprofileName(name);
-            setGender(basic_info?.gender)
+            setGender(basic_info?.gender);
             setNamepro({
               first_name: basic_info?.first_name,
               last_name: basic_info?.last_name,
               gender: basic_info?.gender,
             });
 
-            if (data.data.pic_path !== "") {
-              getData(`${"upload_file/get_image/" + data.data.pic_path}`)
+            if (data?.data?.basic_info?.pic_path !== "") {
+              getData(
+                `${"upload_file/get_image/" + data?.data?.basic_info?.pic_path}`
+              )
                 .then((imgdata: any) => {
-                  setprofileImage(imgdata.data)
+                  setprofileImage(imgdata.data);
                   setProImage(imgdata.data);
                 })
-                .catch((e) => { });
+                .catch((e) => {});
             }
           }
           sessionStorage.setItem("profileData", JSON.stringify(data.data));
@@ -173,19 +179,24 @@ const Header = () => {
           if (adminInfo && Object.keys(adminInfo).length > 0) {
             const name = `${adminInfo?.first_name}  ${adminInfo?.last_name}`;
             setprofileName(name);
-            setGender(adminInfo?.gender)
+            setGender(adminInfo?.gender);
             setNamepro({
               first_name: adminInfo?.first_name,
               last_name: adminInfo?.last_name,
               gender: adminInfo?.gender,
             });
-            if (response.data.pic_path !== "") {
-              getData(`${"upload_file/get_image/" + response.data.pic_path}`)
+            if (response?.data?.basic_info?.pic_path !== "") {
+              getData(
+                `${
+                  "upload_file/get_image/" +
+                  response?.data?.basic_info?.pic_path
+                }`
+              )
                 .then((imgdata) => {
-                  setprofileImage(imgdata.data)
+                  setprofileImage(imgdata.data);
                   setProImage(imgdata.data);
                 })
-                .catch((e) => { });
+                .catch((e) => {});
             }
           }
         }
@@ -209,8 +220,8 @@ const Header = () => {
     namepro?.gender === "male" || namepro?.gender === "Male"
       ? images_man
       : namepro?.gender === "female" || namepro?.gender === "Female"
-        ? images_female
-        : images_man;
+      ? images_female
+      : images_man;
 
   // const profileImage1:any =( proImage !== "" ||  !== 'undefined')  ? proImage : defaultImage;
   const profileImage1: any =
@@ -218,24 +229,17 @@ const Header = () => {
 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   useEffect(() => {
-
-
-
-function toggleOnDesktop() {
-  if (window.innerWidth >= 1200) {
-      document.querySelector("body")?.classList.add("toggled");
-  } else {
-      document.querySelector("body")?.classList.remove("toggled");
-  }
-}
+    function toggleOnDesktop() {
+      if (window.innerWidth >= 1200) {
+        document.querySelector("body")?.classList.add("toggled");
+      } else {
+        document.querySelector("body")?.classList.remove("toggled");
+      }
+    }
 
     // Run the function on load and on resize
     toggleOnDesktop();
     window.addEventListener("resize", toggleOnDesktop);
-
-
-
-
 
     const theme = localStorage.getItem("theme");
     if (theme) {
@@ -469,9 +473,12 @@ function toggleOnDesktop() {
       </header> */}
       <header className="top-header">
         <nav className="navbar navbar-expand align-items-center gap-lg-4">
-          <div className="btn-toggle" style={{
-            cursor: "pointer"
-          }}>
+          <div
+            className="btn-toggle"
+            style={{
+              cursor: "pointer",
+            }}
+          >
             {/* <a href="#"> */}
             <MenuIcon onClick={handleClick} />
             {/* </a> */}
@@ -608,22 +615,20 @@ function toggleOnDesktop() {
             <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle dropdown-toggle-nocaret"
-                href="#"
+                href=""
                 data-bs-toggle="dropdown"
               >
-                <img src={Country2} width="22" height="22" alt="" />
+                {/* <img src={Country2} width="22" height="22" alt="" /> */}
+                <span>{language}</span>
               </a>
               <ul className="dropdown-menu dropdown-menu-end">
-                <li>
-                  <a
-                    className="dropdown-item d-flex align-items-center py-2"
-                    href="#"
-                  >
+                <li onClick={() => setLanguage("EN")}>
+                  <div className="dropdown-item d-flex align-items-center py-2">
                     <img src={Country1} width="20" height="20" alt="" />
                     <span className="ms-2">English</span>
-                  </a>
+                  </div>
                 </li>
-                <li>
+                {/* <li>
                   <a
                     className="dropdown-item d-flex align-items-center py-2"
                     href="#"
@@ -676,15 +681,12 @@ function toggleOnDesktop() {
                     <img src={Country7} width="20" height="20" alt="" />
                     <span className="ms-2">Georgian</span>
                   </a>
-                </li>
-                <li>
-                  <a
-                    className="dropdown-item d-flex align-items-center py-2"
-                    href="#"
-                  >
+                </li> */}
+                <li onClick={() => setLanguage("HN")}>
+                  <div className="dropdown-item d-flex align-items-center py-2">
                     <img src={Country8} width="20" height="20" alt="" />
                     <span className="ms-2">Hindi</span>
-                  </a>
+                  </div>
                 </li>
               </ul>
             </li>
@@ -772,10 +774,7 @@ function toggleOnDesktop() {
                 <PerfectScrollbar className="notify-list">
                   <div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
                             <img
@@ -802,10 +801,7 @@ function toggleOnDesktop() {
                       </a>
                     </div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="user-wrapper bg-primary text-primary bg-opacity-10">
                             <span>RS</span>
@@ -826,10 +822,7 @@ function toggleOnDesktop() {
                       </a>
                     </div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
                             <img
@@ -854,10 +847,7 @@ function toggleOnDesktop() {
                       </a>
                     </div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
                             <img
@@ -882,10 +872,7 @@ function toggleOnDesktop() {
                       </a>
                     </div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
                             <img
@@ -944,7 +931,13 @@ function toggleOnDesktop() {
                 data-bs-toggle="dropdown"
               >
                 <img
-                  src={profileImage ? profileImage : gender?.toLowerCase() === "female" ? femaleImage : maleImage}
+                  src={
+                    profileImage
+                      ? profileImage
+                      : gender?.toLowerCase() === "female"
+                      ? femaleImage
+                      : maleImage
+                  }
                   className="rounded-circle p-1 border"
                   width="45"
                   height="45"
@@ -955,13 +948,21 @@ function toggleOnDesktop() {
                 <a className="dropdown-item  gap-2 py-2" href="#">
                   <div className="text-center">
                     <img
-                      src={profileImage ? profileImage : gender?.toLowerCase() === "female" ? femaleImage : maleImage}
+                      src={
+                        profileImage
+                          ? profileImage
+                          : gender?.toLowerCase() === "female"
+                          ? femaleImage
+                          : maleImage
+                      }
                       className="rounded-circle p-1 shadow mb-3"
                       width="90"
                       height="90"
                       alt=""
                     />
-                    <h5 className="user-name mb-0 fw-bold">{`Hello, ${profileName || "User"}`}</h5>
+                    <h5 className="user-name mb-0 fw-bold">{`Hello, ${
+                      profileName || "User"
+                    }`}</h5>
                   </div>
                 </a>
                 <hr className="dropdown-divider" />
@@ -972,19 +973,26 @@ function toggleOnDesktop() {
                   <PersonOutlineOutlinedIcon />
                   Profile
                 </Link>
-                <a
+                {/* <a
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
                   //href="#"
                 >
                   <LocalBarOutlinedIcon />
                   Setting
-                </a>
+                </a> */}
                 <Link
                   className="dropdown-item d-flex align-items-center gap-2 py-2"
                   to="/main/DashBoard"
                 >
                   <DashboardOutlinedIcon />
                   Dashboard
+                </Link>
+                <Link
+                  className="dropdown-item d-flex align-items-center gap-2 py-2"
+                  to="/main/changepassword"
+                >
+                  <LockResetOutlinedIcon />
+                  Change Password
                 </Link>
 
                 <hr className="dropdown-divider" />

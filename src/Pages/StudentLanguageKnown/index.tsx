@@ -17,8 +17,8 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useApi from "../../hooks/useAPI";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import StudentHobbies from "../StudentHobbies";
 import {
   deepEqual,
@@ -384,7 +384,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                   color: tabletools(namecolor),
                 }}
               >
-                <AddIcon />
+                <AddCircleOutlinedIcon />
               </IconButton>
               {boxes.length !== 1 && (
                 <IconButton
@@ -395,7 +395,7 @@ const StudentLanguage: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                     color: tabletools(namecolor),
                   }}
                 >
-                  <DeleteIcon />
+                  <DeleteOutlineOutlinedIcon />
                 </IconButton>
               )}
             </div>

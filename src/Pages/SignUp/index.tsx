@@ -20,7 +20,7 @@ import {
   VisibilityOn,
   VisibilityOff,
 } from "../../assets";
-import gLogo from "../../assets/img/g-logo.svg";
+import gLogo from "../../assets/img/logo-white.svg";
 import gyansetuLogo from "../../assets/img/gyansetu-logo.svg";
 import useApi from "../../hooks/useAPI";
 import { Autoplay, Pagination } from "swiper/modules";
@@ -124,11 +124,11 @@ const Signup = () => {
             setIsLoading(false);
             navigate("/");
           } else if (
-            data?.status === 201 &&
+            data?.status === 400 &&
             data?.message === "Userid already exists"
           ) {
             // setLoading(false);
-            toast.info(data?.message, {
+            toast.error(data?.message, {
               hideProgressBar: true,
               theme: "colored",
             });

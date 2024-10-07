@@ -7,7 +7,7 @@ import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import useApi from "../../hooks/useAPI";
 import emailicon from "../../assets/img/email.svg";
-import gLogo from "../../assets/img/g-logo.svg";
+import gLogo from "../../assets/img/logo-white.svg";
 import gyansetuLogo from "../../assets/img/gyansetu-logo.svg";
 import loginImage from "../../assets/img/login-image.png";
 import { QUERY_KEYS } from "../../utils/const";

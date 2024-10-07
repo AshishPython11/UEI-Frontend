@@ -60,7 +60,7 @@ $max-items: 100;
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 body {
-  font-family: "Inter", system-ui;
+  font-family: "Inter", system-ui!important;
 }
 .mh-56{
   min-height: 3.5rem;
@@ -73,7 +73,7 @@ body {
   }
 }
 .fs-12{
-  font-size: 12px;
+  font-size: 12px!important;
 }
 .btn-outline-primary{
   color: $primary!important;
@@ -261,7 +261,9 @@ img {
     border: 0!important;
   }
 }
-
+.fs-10{
+  font-size: 10px!important;
+}
 @media (max-width: 428px) {
   .mobile-profile{
     img{
@@ -272,7 +274,7 @@ img {
       font-size: 14px!important;
     }
     i{
-      font-size: 12px;
+      font-size: 11px;
     }
     a{
       font-size: 12px;
@@ -281,7 +283,8 @@ img {
       font-size: 12px;
     }
     svg{
-      display: none;
+      width: 1.2rem;
+      height: 1.2rem;
     }
   }
   .feedback {
@@ -783,7 +786,7 @@ body .desk-card {
   box-shadow: none!important;
   border: 0 !important;
   border-radius: 2.5rem !important;
-
+  height: 100%;
   .card-header {
     padding: 20px !important;
   }
@@ -1648,7 +1651,7 @@ body .desk-card {
     height: 100%;
     overflow: auto;
     padding: 1rem;
-    max-height: 32vh;
+    max-height: 280px;
     overflow: auto;
     display: flex;
     flex-direction: column-reverse;
@@ -2647,18 +2650,113 @@ a{
 .addcomingsoon{
   position: relative;
   overflow: hidden;
-  &:hover::after{
-    position: absolute;
+  transition: all 0.3s ease-in-out;
+  &:hover{
+    transition: all 0.3s ease-in-out;
+    &::after{
+      position: absolute;
+      transition: all 0.3s ease-in-out;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(white, 0.8);
+      content: "Coming Soon!";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+      font-weight: 500;
+    }
+  }
+}
+
+
+.MuiInputBase-root {
+  border: 0!important;
+}
+
+.main-wrapper .main-content .page-breadcrumb .breadcrumb-item + .breadcrumb-item::before{
+  display: none!important;
+}
+
+.MuiFormLabel-root{
+  font-size: 14px!important;
+  font-weight: 500!important;
+}
+
+.freechatbox{
+   
+    position: fixed;
+    background-color: rgba(black, 0.3);
+    z-index: 1000;
+    bottom: 0;
     top: 0;
     right: 0;
-    bottom: 0;
     left: 0;
-    background-color: rgba(white, 0.8);
-    content: "Coming Soon!";
+    overflow: hidden;
+    display: flex;
+    align-items: end;
+    justify-content: end;
+    flex-direction: column;
+  .profilechatinner{
+    max-width: 500px;
+    background-color:  $bg-gray;
+    width: 100%;
+    border-radius: 1.5rem;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+    .chat-box{
+     
+      padding: 0.5rem !important;
+      height: 400px;
+      overflow: auto;
+      .message-bubble{
+        padding: .7rem .8rem!important;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px!important;
+        line-height: 1rem;
+        border-radius: 8px!important;
+        font-size: 15px;
+        &.left{
+          background-color: white!important;
+        }
+      }
+    }
+  }
+  .copyright{
+    font-size: 10px;
+    padding: .5rem;
+   
+  }
+  .proheader{
     display: flex;
     align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(5px);
+    padding: 1rem;
     font-weight: 500;
+    font-size: 14px;
+    .me-auto{
+      display: flex;
+      gap: .8rem;
+      line-height: 16px;
+    }
+  }
+
+  .chatinput-body{
+    width: calc(100% - 26px);    
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px!important;
+    border-radius: 12px;
+    margin: 0 auto .8rem;
+    .error-text{
+      color: $danger;
+      font-size: 14px;
+      margin-bottom: 0;
+      padding: .5rem;
+    }
+    input, select{
+      border-radius: 12px;      
+      border: 0;
+      min-height: 42px;
+     
+    }
   }
 }

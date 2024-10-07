@@ -10,8 +10,8 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
+import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import useApi from "../../hooks/useAPI";
 import { toast } from "react-toastify";
 import {
@@ -32,21 +32,25 @@ interface Box {
   preference: string;
   score_in_percentage: string;
 }
-
 interface Course {
   id: string;
   course_id: string;
   course_name: string;
 }
-
 interface Subject {
   id: string;
   subject_name: string;
   subject_id: string;
 }
 
-const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
+interface PropsItem {
+  setActiveForm: React.Dispatch<React.SetStateAction<number>>;
+  handleReset: () => Promise<void>;
+}
+
+const StudentSubjectPreference: React.FC<PropsItem> = ({
   setActiveForm,
+  handleReset
 }) => {
   const context = useContext(NameContext);
   const { namecolor }: any = context;
@@ -55,7 +59,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
   const [boxes11, setBoxes11] = useState<Box[]>([]);
   let StudentId = localStorage.getItem("_id");
   const [subjectPreferences, setSubjectPreferences] = useState([]);
-  const [editFalg, setEditFlag] = useState(false);
+  const [editFlag, setEditFlag] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const navigate = useNavigate()
@@ -122,7 +126,6 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
   const getPrefrencelist = async () => {
     getData("/subject_preference/edit/" + StudentId)
       .then((data: any) => {
-        console.log(data);
         if (data?.status === 200) {
           data.data.map((item: any, index: number) => {
             const newBox: Box = {
@@ -335,6 +338,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
     // console.log("test data11111",boxes11,boxes,eqq)
     // if(!eqq === true)  {
     let initial = {};
+    let eq;
     try {
       const promises = boxes.map(async (box) => {
         const submissionData = {
@@ -345,16 +349,9 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
           score_in_percentage: box.score_in_percentage,
         };
         initial = submissionData;
-        const eq = deepEqual(initialState, submissionData);
-        console.log(
-          "test data",
-          eq,
-          initialState,
-          submissionData,
-          editFalg,
-          box.id
-        );
-        if (editFalg) {
+        eq = deepEqual(initialState, submissionData);
+
+        if (editFlag) {
           return postData("/subject_preference/add", submissionData);
         } else {
           if (box.id === 0) {
@@ -388,15 +385,27 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
         (result) => result?.status === 200
       );
 
-      console.log("test data allSuccessful", allSuccessful, results);
       if (allSuccessful) {
-        toast.success("Subject Preference save successfully", {
-          hideProgressBar: true,
-          theme: "colored",
-          position: "top-center"
-        });
+        if (editFlag) {
+          toast.success("Subject Preference saved successfully", {
+            hideProgressBar: true,
+            theme: "colored",
+            position: "top-center"
+          });
+          handleReset()
+          navigate('/')
+        } else {
+          if (!eq === true) {
+            toast.success("Subject Preference updated successfully", {
+              hideProgressBar: true,
+              theme: "colored",
+              position: "top-center"
+            });
+          }
+          navigate('/')
+        }
         setInitialState(initial);
-        navigate('/')
+
         // getPrefrencelist()
         // setBoxes11(boxes)
       } else {
@@ -549,7 +558,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
                   color: tabletools(namecolor),
                 }}
               >
-                <AddIcon />
+                <AddCircleOutlinedIcon />
               </IconButton>
               {boxes.length !== 1 && (
                 <IconButton
@@ -560,7 +569,7 @@ const StudentSubjectPreference: React.FC<ChildComponentProps> = ({
                     color: tabletools(namecolor),
                   }}
                 >
-                  <DeleteIcon />
+                  <DeleteOutlineOutlinedIcon />
                 </IconButton>
               )}
             </div>

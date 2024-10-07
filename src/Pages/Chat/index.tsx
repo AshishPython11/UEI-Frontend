@@ -15,30 +15,30 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
 import { DeleteDialog } from "../../Components/Dailog/DeleteDialog";
 import StarIcon from "@mui/icons-material/Star";
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import BookmarkOutlinedIcon from '@mui/icons-material/BookmarkOutlined';
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import BookmarkOutlinedIcon from "@mui/icons-material/BookmarkOutlined";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import ArrowUpwardOutlinedIcon from "@mui/icons-material/ArrowUpwardOutlined";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ThumbUpAltOutlinedIcon from "@mui/icons-material/ThumbUpAltOutlined";
 import ThumbDownOutlinedIcon from "@mui/icons-material/ThumbDownOutlined";
 import ContentCopyOutlinedIcon from "@mui/icons-material/ContentCopyOutlined";
 import VolumeUpOutlinedIcon from "@mui/icons-material/VolumeUpOutlined";
-import VolumeOffOutlinedIcon from '@mui/icons-material/VolumeOffOutlined';
+import VolumeOffOutlinedIcon from "@mui/icons-material/VolumeOffOutlined";
 import CachedOutlinedIcon from "@mui/icons-material/CachedOutlined";
-import SyncAltOutlinedIcon from '@mui/icons-material/SyncAltOutlined';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import AddOutlinedIcon from '@mui/icons-material/AddOutlined';
-import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
-import FlagIcon from '@mui/icons-material/Flag';
+import SyncAltOutlinedIcon from "@mui/icons-material/SyncAltOutlined";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
+import FlagIcon from "@mui/icons-material/Flag";
 import NameContext from "../Context/NameContext";
-import searchWhite from '../../assets/icons/search-white.svg'
-import primaryLogo from '../../assets/icons/logo-primary.png'
-import chatLogo from '../../assets/img/chat-logo.svg'
+import searchWhite from "../../assets/icons/search-white.svg";
+import primaryLogo from "../../assets/icons/logo-primary.png";
+import chatLogo from "../../assets/img/chat-logo.svg";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import "../../assets/css/newstyle.scss"
-import "../../assets/css/main.scss"
+import "../../assets/css/newstyle.scss";
+import "../../assets/css/main.scss";
 import "react-perfect-scrollbar/dist/css/styles.css";
 // import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 
@@ -50,6 +50,7 @@ const Chat = () => {
   const [search, setSearch] = useState("");
   const [regenerateSearch, setRegenerateSearch] = useState("");
   const [studentDetail, setStudentData] = useState<any>();
+  const [studentCourse, setStudentCourse] = useState<any>();
   const [searcherr, setSearchErr] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   // const [starFlagged, setStarFlagged] = useState(false);
@@ -128,13 +129,13 @@ const Chat = () => {
     setSelectedChat([]);
     setTimeout(() => {
       if (Id !== undefined) {
-        setShowInitialPage(true)
+        setShowInitialPage(true);
         // setSelectedChat([intials]);
         setSelectedChat([]);
         setSearchQuery("");
         setSearchQuerystarred("");
       } else {
-        setShowInitialPage(false)
+        setShowInitialPage(false);
         setSelectedChat([]);
         setSearchQuery("");
         setSearchQuerystarred("");
@@ -146,6 +147,18 @@ const Chat = () => {
     getData(`${StudentGETURL}${userdata ? `/${userdata?.id}` : ""}`)
       .then((data: any) => {
         setStudentData(data?.data);
+        if (
+          data?.data?.academic_history &&
+          Object.keys(data?.data?.academic_history).length > 0
+        ) {
+          if (data?.data?.academic_history?.institution_type === "college") {
+            getData(
+              `course/edit/${data?.data?.academic_history?.course_id}`
+            ).then((response) => {
+              setStudentCourse(response.data.course_name);
+            });
+          }
+        }
       })
       .catch((e) => {
         toast.error(e?.message, {
@@ -264,7 +277,7 @@ const Chat = () => {
     //   cleanedText += '.';
     // }
     const utterance = new SpeechSynthesisUtterance(cleanedText);
-    utterance.onerror = (event) => { };
+    utterance.onerror = (event) => {};
     // Event listener for when the speech ends
     utterance.onend = () => {
       const updatedChat = [...selectedchat];
@@ -308,6 +321,7 @@ const Chat = () => {
       let payload = {};
       if (selectedchat?.question !== "") {
         payload = {
+          student_id: userid,
           question: search,
           prompt: prompt,
           course: studentDetail?.course === null ? "" : studentDetail?.course,
@@ -322,6 +336,7 @@ const Chat = () => {
         };
       } else {
         payload = {
+          student_id: userid,
           question: search,
           prompt: prompt,
           course: studentDetail?.course === null ? "" : studentDetail?.course,
@@ -374,9 +389,7 @@ const Chat = () => {
         setchatlistData(data?.data);
         setstatredchat(data?.data?.filter((chat: any) => chat?.flagged));
         setchathistory(data?.data?.filter((chat: any) => !chat?.flagged));
-        setchathistoryrecent(
-          data?.data?.filter((chat: any) => !chat?.flagged)
-        );
+        setchathistoryrecent(data?.data?.filter((chat: any) => !chat?.flagged));
       })
       .catch((e) => {
         toast.error(e?.message, {
@@ -388,15 +401,15 @@ const Chat = () => {
 
   const handleError = (e: {
     message:
-    | string
-    | number
-    | boolean
-    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-    | Iterable<React.ReactNode>
-    | React.ReactPortal
-    | ((props: ToastContentProps<unknown>) => React.ReactNode)
-    | null
-    | undefined;
+      | string
+      | number
+      | boolean
+      | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+      | Iterable<React.ReactNode>
+      | React.ReactPortal
+      | ((props: ToastContentProps<unknown>) => React.ReactNode)
+      | null
+      | undefined;
   }) => {
     setLoading(false);
     toast.error(e?.message, {
@@ -406,9 +419,9 @@ const Chat = () => {
   };
 
   const searchData = () => {
-    setRegenerateSearch(search)
+    setRegenerateSearch(search);
     setSearch("");
-    setShowInitialPage(false)
+    setShowInitialPage(false);
     if (search === "") {
       setSearchErr(true);
       return;
@@ -423,10 +436,15 @@ const Chat = () => {
     let rag_payload = {};
     if (selectedchat?.question !== "") {
       payload = {
+        student_id: userid,
         question: search,
         prompt: prompt,
         // course: studentDetail?.course === null ? "" : studentDetail?.course,
-        course: "class_10",
+        // course: "class_10",
+        course:
+          studentDetail?.academic_history?.institution_type === "school"
+            ? studentDetail?.class?.name
+            : studentCourse,
         stream: studentDetail?.subject,
         chat_hostory: [
           { role: "user", content: selectedchat?.question },
@@ -442,9 +460,13 @@ const Chat = () => {
       };
     } else {
       payload = {
+        student_id: userid,
         question: search,
         prompt: prompt,
-        course: studentDetail?.course === null ? "" : studentDetail?.course,
+        course:
+          studentDetail?.academic_history?.institution_type === "school"
+            ? studentDetail?.class?.name
+            : studentCourse,
         stream: studentDetail?.subject,
       };
       rag_payload = {
@@ -492,10 +514,10 @@ const Chat = () => {
           // );
           if (studentDetail?.academic_history?.institution_type === "school") {
             return getData(
-              `https://uatllm.gyansetu.ai/rag-model-className?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.class?.name}`
+              `https://uatllm.gyansetu.ai/rag-model-class?user_query=${search}&student_id=${userid}&class_name=${studentDetail?.class?.name}`
             )
               .then((response) => {
-                if (response?.status === 200) {
+                if (response?.status === 200 || response?.status === 402) {
                   handleResponse(response);
                   let ChatStorepayload = {
                     student_id: userid,
@@ -558,7 +580,7 @@ const Chat = () => {
               `https://uatllm.gyansetu.ai/rag-model?user_query=${search}&student_id=${userid}`
             )
               .then((response) => {
-                if (response?.status === 200) {
+                if (response?.status === 200 || response?.status === 402) {
                   handleResponse(response);
                   let ChatStorepayload = {
                     student_id: userid,
@@ -721,7 +743,6 @@ const Chat = () => {
   }, [chatData]);
 
   const saveChatlocal = async () => {
-
     const chatDataString = localStorage?.getItem("chatData");
     const chatflagged = localStorage?.getItem("chatsaved");
     // console.log("chatData testing save",chatDataString);
@@ -879,7 +900,7 @@ const Chat = () => {
     }
   };
   const displayChat = async (chats: any) => {
-    setShowInitialPage(false)
+    setShowInitialPage(false);
     const datatest = chatlist.filter(
       (chatitem: { chat_title: any }) =>
         chatitem.chat_title === chat[0]?.question
@@ -981,14 +1002,10 @@ const Chat = () => {
   // },[chatlist,statredchat,chathistory])
   // console.log("test starred",statredchat,chatlist,selectedchat)
 
-
-
-
   const toggleStarredChat = () => setIsStarredChatOpen(!isStarredChatOpen);
   const toggleChatHistory = () => setIsChatHistoryOpen(!isChatHistoryOpen);
 
   const regenerateChat = () => {
-
     setLoading(true);
     setLoaderMsg("Fetching Data from Ollama model.");
     setSearchErr(false);
@@ -1001,7 +1018,11 @@ const Chat = () => {
         question: regenerateSearch,
         prompt: prompt,
         // course: studentDetail?.course === null ? "" : studentDetail?.course,
-        course: "class_10",
+        // course: "class_10",
+        course:
+          studentDetail?.academic_history?.institution_type === "school"
+            ? studentDetail?.class?.name
+            : studentCourse,
         stream: studentDetail?.subject,
         chat_hostory: [
           { role: "user", content: selectedchat?.question },
@@ -1032,9 +1053,7 @@ const Chat = () => {
             chat_question: regenerateSearch,
             response: response?.answer,
           };
-          postData(`${ChatStore}`, ChatStorepayload).catch(
-            handleError
-          );
+          postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
         }
       })
       .catch(() => {
@@ -1042,7 +1061,7 @@ const Chat = () => {
           .then((response) => handleResponse(response))
           .catch((error) => handleError(error));
       });
-  }
+  };
 
   const iconcolor: any = {
     light: "#003032",
@@ -1065,47 +1084,49 @@ const Chat = () => {
   //   )
   //   : statredchat;
   const filteredChatsstarred = searchQuery
-    ? chatlist?.filter((chat: { chat_title: string }) =>
-      chat?.chat_title.toLowerCase().includes(searchQuery?.toLowerCase())
-    ).sort((a: any, b: any) => b.flagged - a.flagged)
+    ? chatlist
+        ?.filter((chat: { chat_title: string }) =>
+          chat?.chat_title.toLowerCase().includes(searchQuery?.toLowerCase())
+        )
+        .sort((a: any, b: any) => b.flagged - a.flagged)
     : chatlist?.sort((a: any, b: any) => b.flagged - a.flagged);
   const filteredChats = searchQuerystarred
     ? chathistory?.filter((chat: { chat_title: string }) =>
-      chat?.chat_title
-        ?.toLowerCase()
-        ?.includes(searchQuerystarred?.toLowerCase())
-    )
+        chat?.chat_title
+          ?.toLowerCase()
+          ?.includes(searchQuerystarred?.toLowerCase())
+      )
     : chathistory;
 
   const extractTime = (chatDate: string) => {
     const date = chatDate ? new Date(chatDate) : new Date();
 
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
     const formattedTime = `${hours}:${minutes}`;
     return formattedTime;
-  }
+  };
 
   const copyText = (index: number) => {
     // Get the text content of the div with the specific inline styles
-    const textToCopy = (document.getElementById(`answer-${index}`) as HTMLDivElement)?.innerText;
+    const textToCopy = (
+      document.getElementById(`answer-${index}`) as HTMLDivElement
+    )?.innerText;
 
     // Use the Clipboard API to copy the text
-    navigator.clipboard.writeText(textToCopy)
+    navigator.clipboard
+      .writeText(textToCopy)
       .then(() => {
         const updatedState = {
           ...isTextCopied,
-          [`answer-${index}`]: true
-        }
-        setIsTextCopied(updatedState)
+          [`answer-${index}`]: true,
+        };
+        setIsTextCopied(updatedState);
       })
       .catch((err) => {
-        console.error('Error copying text: ', err);
+        console.error("Error copying text: ", err);
       });
   };
-
-
-
 
   return (
     <>
@@ -1527,191 +1548,321 @@ const Chat = () => {
       </div> */}
       <main className="main-wrapper">
         <div className="main-content">
-          <div className={`chat-panel ${!(filteredChats?.length > 0) ? '' : ''}`}>
-            {Id ? <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
-              <div className="d-lg-none mb-4 ms-auto d-flex">
-                <button className="btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
-                  <CloseOutlinedIcon onClick={() => setShowHistory(false)} /></button>
-              </div>
-              <div className="search-filter">
-                <input type="text" className="form-control" placeholder="Search..."
-                  name="query" //question add
-                  title="Enter search keyword"
-                  value={searchQuery}
-                  onChange={handleSearchChange} />
-                <button className="btn btn-primary">
-                  <img src={searchWhite} alt="" />
-                </button>
-              </div>
-              <div className="history-label">
-                Today's Search
-              </div>
-              <ul className="history-list">
-                <>
-                  {filteredChats?.length > 0 && filteredChats?.map(
-                    (
-                      chat: {
-                        chat_title:
-                        | string
-                        | number
-                        | boolean
-                        | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                        >
-                        | Iterable<React.ReactNode>
-                        | React.ReactPortal
-                        | null
-                        | undefined;
-                        flagged: any;
-                        id: number | undefined;
-                        created_at: string;
-                      },
-                      index: React.Key | null | undefined
-                    ) => (
-                      <li onClick={() => displayChat(chat)} key={`recent_chat_${index}`}>
-                        <div className="d-flex flex-column " role="button">
-                          <div className="date">{extractTime(chat?.created_at)}</div>
-                          <div className="question">{chat?.chat_title}</div>
-                        </div>
-                        <ul className="action-button">
-                          <li role="button"><DeleteOutlineOutlinedIcon onClick={(e) => {
-                            e.stopPropagation()
-                            handleDeleteFiles(chat?.id)
-                          }} sx={{ fontSize: "18px" }} /></li>
-                        </ul>
-                      </li>
-                    ))
-                  }
-                </>
-              </ul>
-            </div> :
-              <div className={`left-side-history ${showHistory ? "showhistory" : ""}`} >
+          <div
+            className={`chat-panel ${!(filteredChats?.length > 0) ? "" : ""}`}
+          >
+            {Id ? (
+              <div
+                className={`left-side-history ${
+                  showHistory ? "showhistory" : ""
+                }`}
+              >
                 <div className="d-lg-none mb-4 ms-auto d-flex">
                   <button className="btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
-                    <CloseOutlinedIcon onClick={() => setShowHistory(false)} /></button>
+                    <CloseOutlinedIcon onClick={() => setShowHistory(false)} />
+                  </button>
                 </div>
                 <div className="search-filter">
-                  <input type="text" className="form-control" placeholder="Search..."
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search..."
                     name="query" //question add
                     title="Enter search keyword"
                     value={searchQuery}
-                    onChange={handleSearchChange} />
+                    onChange={handleSearchChange}
+                  />
+                  <button className="btn btn-primary">
+                    <img src={searchWhite} alt="" />
+                  </button>
+                </div>
+                <div className="history-label">Today's Search</div>
+                <ul className="history-list">
+                  <>
+                    {filteredChats?.length > 0 &&
+                      filteredChats?.map(
+                        (
+                          chat: {
+                            chat_title:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | Iterable<React.ReactNode>
+                              | React.ReactPortal
+                              | null
+                              | undefined;
+                            flagged: any;
+                            id: number | undefined;
+                            created_at: string;
+                          },
+                          index: React.Key | null | undefined
+                        ) => (
+                          <li
+                            onClick={() => displayChat(chat)}
+                            key={`recent_chat_${index}`}
+                          >
+                            <div className="d-flex flex-column " role="button">
+                              <div className="date">
+                                {extractTime(chat?.created_at)}
+                              </div>
+                              <div className="question">{chat?.chat_title}</div>
+                            </div>
+                            <ul className="action-button">
+                              <li role="button">
+                                <DeleteOutlineOutlinedIcon
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteFiles(chat?.id);
+                                  }}
+                                  sx={{ fontSize: "18px" }}
+                                />
+                              </li>
+                            </ul>
+                          </li>
+                        )
+                      )}
+                  </>
+                </ul>
+              </div>
+            ) : (
+              <div
+                className={`left-side-history ${
+                  showHistory ? "showhistory" : ""
+                }`}
+              >
+                <div className="d-lg-none mb-4 ms-auto d-flex">
+                  <button className="btn btn-outline-secondary ms-auto btn-sm d-flex align-items-center justify-content-center">
+                    <CloseOutlinedIcon onClick={() => setShowHistory(false)} />
+                  </button>
+                </div>
+                <div className="search-filter">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Search..."
+                    name="query" //question add
+                    title="Enter search keyword"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                  />
                   <button className="btn btn-primary">
                     <img src={searchWhite} alt="" />
                   </button>
                 </div>
 
-                <div className="history-label">
-                  Chat History
-                </div>
+                <div className="history-label">Chat History</div>
                 <PerfectScrollbar className="history-list">
                   <>
-                    {filteredChatsstarred?.length > 0 && filteredChatsstarred?.map(
-                      (
-                        chat: {
-                          chat_title:
-                          | string
-                          | number
-                          | boolean
-                          | React.ReactElement<
-                            any,
-                            string | React.JSXElementConstructor<any>
+                    {filteredChatsstarred?.length > 0 &&
+                      filteredChatsstarred?.map(
+                        (
+                          chat: {
+                            chat_title:
+                              | string
+                              | number
+                              | boolean
+                              | React.ReactElement<
+                                  any,
+                                  string | React.JSXElementConstructor<any>
+                                >
+                              | Iterable<React.ReactNode>
+                              | React.ReactPortal
+                              | null
+                              | undefined;
+                            flagged: any;
+                            id: number | undefined;
+                            created_at: string;
+                          },
+                          index: React.Key | null | undefined
+                        ) => (
+                          <li
+                            onClick={() => displayChat(chat)}
+                            key={`chat_${index}`}
                           >
-                          | Iterable<React.ReactNode>
-                          | React.ReactPortal
-                          | null
-                          | undefined;
-                          flagged: any;
-                          id: number | undefined;
-                          created_at: string;
-                        },
-                        index: React.Key | null | undefined
-                      ) => (
-                        <li onClick={() => displayChat(chat)} key={`chat_${index}`}>
-                          <div className="d-flex flex-column " role="button">
-                            <div className="date">{extractTime(chat?.created_at)}</div>
-                            <div className="question">{chat?.chat_title}</div>
-                          </div>
-                          <ul className="action-button">
-                            <li role="button"><DeleteOutlineOutlinedIcon onClick={(e) => {
-                              e.stopPropagation()
-                              handleDeleteFiles(chat?.id)
-                            }} sx={{ fontSize: "18px" }} /></li>
-                            {chat?.flagged && <li className={`${chat?.flagged ? "active" : ""}`} role="button"><BookmarkIcon sx={{ fontSize: "18px", color: "#9943ec" }} />
-                            </li>}
-                          </ul>
-                        </li>
-                      ))
-                    }
+                            <div className="d-flex flex-column " role="button">
+                              <div className="date">
+                                {extractTime(chat?.created_at)}
+                              </div>
+                              <div className="question">{chat?.chat_title}</div>
+                            </div>
+                            <ul className="action-button">
+                              <li role="button">
+                                <DeleteOutlineOutlinedIcon
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDeleteFiles(chat?.id);
+                                  }}
+                                  sx={{ fontSize: "18px" }}
+                                />
+                              </li>
+                              {chat?.flagged && (
+                                <li
+                                  className={`${chat?.flagged ? "active" : ""}`}
+                                  role="button"
+                                >
+                                  <BookmarkIcon
+                                    sx={{ fontSize: "18px", color: "#9943ec" }}
+                                  />
+                                </li>
+                              )}
+                            </ul>
+                          </li>
+                        )
+                      )}
                   </>
                 </PerfectScrollbar>
               </div>
-            }
+            )}
             <div className="main-chat-panel">
               <div className="mobile-chat-header d-lg-none">
                 <ul>
-                  <li><SyncAltOutlinedIcon onClick={() => setShowHistory(!showHistory)} /></li>
+                  <li>
+                    <SyncAltOutlinedIcon
+                      onClick={() => setShowHistory(!showHistory)}
+                    />
+                  </li>
                 </ul>
               </div>
               <div className="inner-panel">
-                {Id !== undefined ? <div className="chat-header2">
-                  {!showInitialPage && <button className="btn btn-primary btn-sm d-flex align-items-center gap-1 rounded-pill" onClick={newchat}><AddOutlinedIcon /> New Chat</button>}
-                  {!showInitialPage ? chatsaved ? <FlagIcon style={{ color: "#9943ec" }} /> : <FlagOutlinedIcon onClick={saveChatstar} /> : <></>}
-                </div> : <></>}
+                {Id !== undefined ? (
+                  <div className="chat-header2">
+                    {!showInitialPage && (
+                      <button
+                        className="btn btn-primary btn-sm d-flex align-items-center gap-1 rounded-pill"
+                        onClick={newchat}
+                      >
+                        <AddOutlinedIcon /> New Chat
+                      </button>
+                    )}
+                    {!showInitialPage ? (
+                      chatsaved ? (
+                        <FlagIcon style={{ color: "#9943ec" }} />
+                      ) : (
+                        <FlagOutlinedIcon onClick={saveChatstar} />
+                      )
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ) : (
+                  <></>
+                )}
                 {/* <div className="chat-result"> */}
                 <div className="chat-result">
-                  {selectedchat?.length && selectedchat?.length > 0 ?
+                  {selectedchat?.length && selectedchat?.length > 0 ? (
                     <ul>
                       {selectedchat?.map((chat: any, index: any) => (
                         <>
                           {chat?.question && (
-                            <li key={`question_${index}`} className="right-chat" >
+                            <li
+                              key={`question_${index}`}
+                              className="right-chat"
+                            >
                               <div className="chat-card">
                                 <div className="chat-card-header">
-                                  <span className="anstext"><SearchOutlinedIcon sx={{ fontSize: '14px' }} /> Question</span>
+                                  <span className="anstext">
+                                    <SearchOutlinedIcon
+                                      sx={{ fontSize: "14px" }}
+                                    />{" "}
+                                    Question
+                                  </span>
                                 </div>
                                 <div className="chat-card-body">
                                   <p>{chat?.question}</p>
                                 </div>
-
                               </div>
                               <div className="profile-icon">
                                 <img src={primaryLogo} alt="" />
                               </div>
-                            </li>)}
-                          {chat?.answer &&
-                            (<li key={`answer_${index}`} className="left-chat" >
+                            </li>
+                          )}
+                          {chat?.answer && (
+                            <li key={`answer_${index}`} className="left-chat">
                               <div className="profile-icon">
                                 <img src={primaryLogo} alt="" />
                               </div>
                               <div className="chat-card">
                                 <div className="chat-card-header">
-                                  <span className="anstext"><DescriptionOutlinedIcon sx={{ fontSize: '14px' }} /> Answer</span>
+                                  <span className="anstext">
+                                    <DescriptionOutlinedIcon
+                                      sx={{ fontSize: "14px" }}
+                                    />{" "}
+                                    Answer
+                                  </span>
                                 </div>
                                 <div className="chat-card-body">
-                                  <p><Chatbot answer={chat?.answer} index={index} /></p>
+                                  <p>
+                                    <Chatbot
+                                      answer={chat?.answer}
+                                      index={index}
+                                    />
+                                  </p>
                                 </div>
                                 <ul className="ansfooter">
-                                  <li><ThumbUpAltOutlinedIcon sx={{ fontSize: '14px' }} /></li>
-                                  <li><ThumbDownOutlinedIcon sx={{ fontSize: '14px' }} /></li>
-                                  <li onClick={() => copyText(index)}><ContentCopyOutlinedIcon sx={{ fontSize: '14px' }} /><span>{isTextCopied[`answer-${index}`] ? "Copied" : "Copy"}</span>
+                                  <li>
+                                    <ThumbUpAltOutlinedIcon
+                                      sx={{ fontSize: "14px" }}
+                                    />
                                   </li>
-                                  {!chat?.speak ? <li onClick={() =>
-                                    speak(chat && chat?.answer, index)
-                                  }><VolumeUpOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Read</span>
-                                  </li> : <li onClick={() => stop(index)} ><VolumeOffOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Stop</span></li>}
-                                  <li onClick={regenerateChat}><CachedOutlinedIcon sx={{ fontSize: '14px' }} /> <span>Regenerate</span>
+                                  <li>
+                                    <ThumbDownOutlinedIcon
+                                      sx={{ fontSize: "14px" }}
+                                    />
+                                  </li>
+                                  <li onClick={() => copyText(index)}>
+                                    <ContentCopyOutlinedIcon
+                                      sx={{ fontSize: "14px" }}
+                                    />
+                                    <span>
+                                      {isTextCopied[`answer-${index}`]
+                                        ? "Copied"
+                                        : "Copy"}
+                                    </span>
+                                  </li>
+                                  {!chat?.speak ? (
+                                    <li
+                                      onClick={() =>
+                                        speak(chat && chat?.answer, index)
+                                      }
+                                    >
+                                      <VolumeUpOutlinedIcon
+                                        sx={{ fontSize: "14px" }}
+                                      />{" "}
+                                      <span>Read</span>
+                                    </li>
+                                  ) : (
+                                    <li onClick={() => stop(index)}>
+                                      <VolumeOffOutlinedIcon
+                                        sx={{ fontSize: "14px" }}
+                                      />{" "}
+                                      <span>Stop</span>
+                                    </li>
+                                  )}
+                                  <li onClick={regenerateChat}>
+                                    <CachedOutlinedIcon
+                                      sx={{ fontSize: "14px" }}
+                                    />{" "}
+                                    <span>Regenerate</span>
                                   </li>
                                 </ul>
                               </div>
-                            </li>)}
-                        </>))}
+                            </li>
+                          )}
+                        </>
+                      ))}
                     </ul>
-                    : showInitialPage && <div className="welcome-box">
-                      <img src={chatLogo} alt="" />
-                      <h3>Hi, How can I help you today?</h3>
-                    </div>}
+                  ) : (
+                    showInitialPage && (
+                      <div className="welcome-box">
+                        <img src={chatLogo} alt="" />
+                        <h3>Hi, How can I help you today?</h3>
+                      </div>
+                    )
+                  )}
                 </div>
                 {/* </div> */}
                 {/* <div className="chat-suggestion">
@@ -1723,7 +1874,7 @@ const Chat = () => {
                   </ul>
                   <div className="dots"></div>
                 </div> */}
-                {Id !== undefined ?
+                {Id !== undefined ? (
                   <>
                     <div className="chat-input">
                       {/* <input type="text" className="form-control" placeholder="Type your question" /> */}
@@ -1737,15 +1888,23 @@ const Chat = () => {
                         onChange={(e) => setSearch(e?.target?.value)}
                         onKeyDown={handleKeyDown}
                       />
-                      <button type="button" onClick={searchData} className="btn btn-primary p-0"><ArrowUpwardOutlinedIcon /></button>
+                      <button
+                        type="button"
+                        onClick={searchData}
+                        className="btn btn-primary p-0"
+                      >
+                        <ArrowUpwardOutlinedIcon />
+                      </button>
                     </div>
                     {searcherr === true && (
                       <small className="text-danger">
                         Please Enter your query!!
                       </small>
                     )}
-                  </> : <></>
-                }
+                  </>
+                ) : (
+                  <></>
+                )}
                 {/* <div className="change-instructor">
                   <select name="" className="form-select" id="">
                     <option value="">Change Instructor</option>
@@ -1755,7 +1914,7 @@ const Chat = () => {
             </div>
           </div>
         </div>
-      </main >
+      </main>
       <DeleteDialog
         isOpen={dataDelete}
         onCancel={handlecancel}
