@@ -37,7 +37,7 @@ import MicOffOutlinedIcon from "@mui/icons-material/MicOffOutlined";
 import GradeOutlinedIcon from "@mui/icons-material/GradeOutlined";
 import LeaderboardOutlinedIcon from "@mui/icons-material/LeaderboardOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import LockResetOutlinedIcon from '@mui/icons-material/LockResetOutlined';
+import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import LocalBarOutlinedIcon from "@mui/icons-material/LocalBarOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
@@ -61,6 +61,7 @@ const Header = () => {
     proImage,
     setProImage,
     ProPercentage,
+    setProPercentage,
   }: any = context;
   const [modalOpen, setModalOpen] = useState(false);
   let StudentId = localStorage.getItem("_id");
@@ -76,6 +77,7 @@ const Header = () => {
   synth = window.speechSynthesis;
   const { getData } = useApi();
   const handlogout = () => {
+    setProPercentage(0);
     localStorage.removeItem("token");
     localStorage.removeItem("user_type");
     localStorage.removeItem("userid");
@@ -139,7 +141,7 @@ const Header = () => {
             // let name = basic_info.first_name + " " + basic_info.last_name;
             let name = basic_info.first_name;
             setprofileName(name);
-            setGender(basic_info?.gender)
+            setGender(basic_info?.gender);
             setNamepro({
               first_name: basic_info?.first_name,
               last_name: basic_info?.last_name,
@@ -147,12 +149,14 @@ const Header = () => {
             });
 
             if (data?.data?.basic_info?.pic_path !== "") {
-              getData(`${"upload_file/get_image/" + data?.data?.basic_info?.pic_path}`)
+              getData(
+                `${"upload_file/get_image/" + data?.data?.basic_info?.pic_path}`
+              )
                 .then((imgdata: any) => {
-                  setprofileImage(imgdata.data)
+                  setprofileImage(imgdata.data);
                   setProImage(imgdata.data);
                 })
-                .catch((e) => { });
+                .catch((e) => {});
             }
           }
           sessionStorage.setItem("profileData", JSON.stringify(data.data));
@@ -174,19 +178,24 @@ const Header = () => {
           if (adminInfo && Object.keys(adminInfo).length > 0) {
             const name = `${adminInfo?.first_name}  ${adminInfo?.last_name}`;
             setprofileName(name);
-            setGender(adminInfo?.gender)
+            setGender(adminInfo?.gender);
             setNamepro({
               first_name: adminInfo?.first_name,
               last_name: adminInfo?.last_name,
               gender: adminInfo?.gender,
             });
             if (response?.data?.basic_info?.pic_path !== "") {
-              getData(`${"upload_file/get_image/" + response?.data?.basic_info?.pic_path}`)
+              getData(
+                `${
+                  "upload_file/get_image/" +
+                  response?.data?.basic_info?.pic_path
+                }`
+              )
                 .then((imgdata) => {
-                  setprofileImage(imgdata.data)
+                  setprofileImage(imgdata.data);
                   setProImage(imgdata.data);
                 })
-                .catch((e) => { });
+                .catch((e) => {});
             }
           }
         }
@@ -210,8 +219,8 @@ const Header = () => {
     namepro?.gender === "male" || namepro?.gender === "Male"
       ? images_man
       : namepro?.gender === "female" || namepro?.gender === "Female"
-        ? images_female
-        : images_man;
+      ? images_female
+      : images_man;
 
   // const profileImage1:any =( proImage !== "" ||  !== 'undefined')  ? proImage : defaultImage;
   const profileImage1: any =
@@ -219,9 +228,6 @@ const Header = () => {
 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   useEffect(() => {
-
-
-
     function toggleOnDesktop() {
       if (window.innerWidth >= 1200) {
         document.querySelector("body")?.classList.add("toggled");
@@ -233,10 +239,6 @@ const Header = () => {
     // Run the function on load and on resize
     toggleOnDesktop();
     window.addEventListener("resize", toggleOnDesktop);
-
-
-
-
 
     const theme = localStorage.getItem("theme");
     if (theme) {
@@ -470,9 +472,12 @@ const Header = () => {
       </header> */}
       <header className="top-header">
         <nav className="navbar navbar-expand align-items-center gap-lg-4">
-          <div className="btn-toggle" style={{
-            cursor: "pointer"
-          }}>
+          <div
+            className="btn-toggle"
+            style={{
+              cursor: "pointer",
+            }}
+          >
             {/* <a href="#"> */}
             <MenuIcon onClick={handleClick} />
             {/* </a> */}
@@ -773,10 +778,7 @@ const Header = () => {
                 <PerfectScrollbar className="notify-list">
                   <div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
                             <img
@@ -803,10 +805,7 @@ const Header = () => {
                       </a>
                     </div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="user-wrapper bg-primary text-primary bg-opacity-10">
                             <span>RS</span>
@@ -827,10 +826,7 @@ const Header = () => {
                       </a>
                     </div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
                             <img
@@ -855,10 +851,7 @@ const Header = () => {
                       </a>
                     </div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
                             <img
@@ -883,10 +876,7 @@ const Header = () => {
                       </a>
                     </div>
                     <div>
-                      <a
-                        className="dropdown-item border-bottom py-2"
-                        href="#"
-                      >
+                      <a className="dropdown-item border-bottom py-2" href="#">
                         <div className="d-flex align-items-center gap-3">
                           <div className="">
                             <img
@@ -945,7 +935,13 @@ const Header = () => {
                 data-bs-toggle="dropdown"
               >
                 <img
-                  src={profileImage ? profileImage : gender?.toLowerCase() === "female" ? femaleImage : maleImage}
+                  src={
+                    profileImage
+                      ? profileImage
+                      : gender?.toLowerCase() === "female"
+                      ? femaleImage
+                      : maleImage
+                  }
                   className="rounded-circle p-1 border"
                   width="45"
                   height="45"
@@ -956,13 +952,21 @@ const Header = () => {
                 <a className="dropdown-item  gap-2 py-2" href="#">
                   <div className="text-center">
                     <img
-                      src={profileImage ? profileImage : gender?.toLowerCase() === "female" ? femaleImage : maleImage}
+                      src={
+                        profileImage
+                          ? profileImage
+                          : gender?.toLowerCase() === "female"
+                          ? femaleImage
+                          : maleImage
+                      }
                       className="rounded-circle p-1 shadow mb-3"
                       width="90"
                       height="90"
                       alt=""
                     />
-                    <h5 className="user-name mb-0 fw-bold">{`Hello, ${profileName || "User"}`}</h5>
+                    <h5 className="user-name mb-0 fw-bold">{`Hello, ${
+                      profileName || "User"
+                    }`}</h5>
                   </div>
                 </a>
                 <hr className="dropdown-divider" />
