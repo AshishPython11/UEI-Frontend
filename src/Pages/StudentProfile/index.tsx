@@ -39,7 +39,6 @@ const StudentProfile = () => {
       value: number;
     };
   } = useLocation();
-  console.log("Location", location);
 
   const { namecolor }: any = context;
   const steps = [
@@ -149,7 +148,7 @@ const StudentProfile = () => {
             setStudentData(data?.data);
             //   let basic_info = data.data.basic_info;
             let basic_info = {
-              aim: data?.data?.basic_info?.aim,
+              // aim: data?.data?.basic_info?.aim,
               dob: data?.data?.basic_info?.dob,
               father_name: data?.data?.basic_info?.father_name,
               first_name: data?.data?.basic_info?.first_name,
@@ -157,24 +156,22 @@ const StudentProfile = () => {
               id: data?.data?.basic_info?.id,
               // is_active: data?.data?.basic_info?.is_active,
               // is_kyc_verified: data?.data?.basic_info?.is_kyc_verified,
-              last_modified_datetime:
-                data?.data.basic_info?.last_modified_datetime,
+              // last_modified_datetime: data?.data.basic_info?.last_modified_datetime,
               last_name: data?.data?.basic_info?.last_name,
               mother_name: data?.data?.basic_info?.mother_name,
-              student_registration_no:
-                data?.data?.basic_info?.student_registration_no,
+              // student_registration_no: data?.data?.basic_info?.student_registration_no,
             };
             let address = data?.data?.address;
             let language = data?.data?.language_known;
             let academic_history = data.data.academic_history;
             //   let contact = data.data.contact;
             let contact = {
-              email_id: data?.data?.contact?.email_id,
+              // email_id: data?.data?.contact?.email_id,
               id: data?.data?.contact?.id,
-              is_active: data?.data?.contact?.is_active,
+              // is_active: data?.data?.contact?.is_active,
               mobile_isd_call: data?.data?.contact?.mobile_isd_call,
               mobile_no_call: data?.data?.contact?.mobile_no_call,
-              mobile_no_watsapp: data?.data?.contact?.mobile_no_watsapp,
+              // mobile_no_watsapp: data?.data?.contact?.mobile_no_watsapp,
             };
             let subject_preference = data?.data?.subject_preference;
             //   let hobby = data.data.hobby;
@@ -183,8 +180,8 @@ const StudentProfile = () => {
             let sectionCount = 0;
 
             if (basic_info && Object.keys(basic_info).length > 0) {
-              if (data?.data?.pic_path !== "") {
-                getData(`${"upload_file/get_image/" + data?.data?.pic_path}`)
+              if (data?.data?.basic_info?.pic_path !== "") {
+                getData(`${"upload_file/get_image/" + data?.data?.basic_info?.pic_path}`)
                   .then((imgdata: any) => {
                     // setprofileImage(imgdata.data);
                   })
