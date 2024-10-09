@@ -690,6 +690,10 @@ export const ProfileDialog: FunctionComponent<{
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (uploadedFile) saveAnswersforBasic([...answers]);
+  }, [uploadedFile]);
+
   const parseDate = (dateStr: string | number | Date) => {
     if (typeof dateStr === "string") {
       // Check if the date string is in DD/MM/YYYY format

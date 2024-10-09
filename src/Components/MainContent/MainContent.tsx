@@ -1854,12 +1854,12 @@ function MainContent() {
                         >{`${stats1?.Student_Profile}%`}</div>
                       </div>
 
-                      <div className="d-flex align-items-center gap-3 mb-3">
+                      {/* <div className="d-flex align-items-center gap-3 mb-3">
                         <div className="flex-grow-1">
                           <h6 className="mb-0 fw-normal fs-14">Aadhar KYC</h6>
                         </div>
                         <div style={{ color: `#9943EC` }}>Pending</div>
-                      </div>
+                      </div> */}
 
                       {/* <div className="d-flex align-items-center gap-3">
                         <div className="flex-grow-1">

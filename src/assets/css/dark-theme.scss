@@ -326,6 +326,23 @@
 
   .main-wrapper {
     .main-content {
+      .chat-panel {
+        .left-side-history {
+          .history-list {
+            li { 
+              &::before {
+              content: "";
+              position: absolute;
+              background-image: url("../icons/search-circle-white.svg");
+              width: 38px;
+              height: 38px;
+              background-size: 100%;
+              left: 0;
+              }
+            }
+          }
+        }
+      }
       .breadcrumb-title {
         border-right: 1.5px solid var(--bs-border-color-translucent);
       }

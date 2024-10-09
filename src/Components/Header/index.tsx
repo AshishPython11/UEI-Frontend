@@ -472,7 +472,7 @@ const Header = () => {
               />
       </header> */}
       <header className="top-header">
-        <nav className="navbar navbar-expand align-items-center gap-lg-4">
+        <nav className="navbar navbar-expand justify-content-between align-items-center gap-lg-4">
           <div
             className="btn-toggle"
             style={{
@@ -483,7 +483,7 @@ const Header = () => {
             <MenuIcon onClick={handleClick} />
             {/* </a> */}
           </div>
-          <div className="search-bar flex-grow-1">
+          {/* <div className="search-bar flex-grow-1">
             <div className="position-relative">
               <input
                 className="form-control rounded-5 px-5 search-control d-lg-block d-none"
@@ -591,13 +591,13 @@ const Header = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <ul className="navbar-nav gap-1 nav-right-links align-items-center">
-            <li className="nav-item d-lg-none mobile-search-btn">
+            {/* <li className="nav-item d-lg-none mobile-search-btn">
               <a className="nav-link" href="#">
                 <SearchOutlinedIcon onClick={displaySearchPopup} />
               </a>
-            </li>
+            </li> */}
             {/* <li className="nav-item d-none d-lg-flex">
               <button onClick={() => navigator("/main/Chat/recentChat")} className="btn btn-primary rounded-pill px-lg-4">
                 New Chat
@@ -932,8 +932,8 @@ const Header = () => {
               >
                 <img
                   src={
-                    profileImage
-                      ? profileImage
+                    proImage
+                      ? proImage
                       : gender?.toLowerCase() === "female"
                       ? femaleImage
                       : maleImage

@@ -143,7 +143,6 @@ const AddStudentFeedback = () => {
       };
       postData("/feedback/student_feedback", payload)
         .then((response) => {
-          console.log("Feedback submitted successfully:", response);
           if (response.status === 200) {
             toast.success("Feedback sent successfully", {
               hideProgressBar: true,
@@ -295,7 +294,7 @@ const AddStudentFeedback = () => {
                     </ol>
                   </nav>
                 </div>
-                <div className="ms-auto">
+                {/* <div className="ms-auto">
                   <div className="btn-group">
                     <button
                       type="button"
@@ -306,7 +305,7 @@ const AddStudentFeedback = () => {
                       Settings
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="feedback">
                 <h1>Give Your Valuable Feedback</h1>
@@ -455,7 +454,7 @@ const AddStudentFeedback = () => {
                     </ol>
                   </nav>
                 </div>
-                <div className="ms-auto">
+                {/* <div className="ms-auto">
                   <div className="btn-group">
                     <button
                       type="button"
@@ -466,7 +465,7 @@ const AddStudentFeedback = () => {
                       Settings
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="feedback">
                 <h1>You have already submitted your feedback</h1>

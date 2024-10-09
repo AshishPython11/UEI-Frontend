@@ -23,7 +23,7 @@ const FAQ = () => {
                                 </ol>
                             </nav>
                         </div>
-                        <div className="ms-auto">
+                        {/* <div className="ms-auto">
                             <div className="btn-group">
                                 <button type="button"
                                     className="btn btn-outline-primary rounded-pill px-lg-4"
@@ -31,7 +31,7 @@ const FAQ = () => {
                                     data-bs-target="#staticBackdrop">Settings</button>
 
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="row">

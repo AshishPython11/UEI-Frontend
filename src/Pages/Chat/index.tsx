@@ -97,6 +97,7 @@ const Chat = () => {
   const [chathistory, setchathistory] = useState<any>([]);
   const [chathistoryrecent, setchathistoryrecent] = useState<any>();
   const [chatsaved, setChatSaved] = useState<boolean>(false);
+  const [displayedChat, setDisplayedChat] = useState<any>([]);
   const { postData, getData, deleteData } = useApi();
   const navigate = useNavigate();
   const [profileCompletion, setProfileCompletion] = useState(
@@ -524,7 +525,10 @@ const Chat = () => {
                     chat_question: search,
                     response: response?.answer,
                   };
-                  postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                  !(response?.status === 402) &&
+                    postData(`${ChatStore}`, ChatStorepayload).catch(
+                      handleError
+                    );
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -587,7 +591,10 @@ const Chat = () => {
                     chat_question: search,
                     response: response?.answer,
                   };
-                  postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                  !(response?.status === 402) &&
+                    postData(`${ChatStore}`, ChatStorepayload).catch(
+                      handleError
+                    );
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -720,12 +727,12 @@ const Chat = () => {
   }, [dataflagged]);
 
   useEffect(() => {
-    if (chat.length > 0) {
-      localStorage.setItem("chatData", JSON.stringify(chat));
+    if (displayedChat?.length > 0) {
+      localStorage.setItem("chatData", JSON.stringify(displayedChat));
       localStorage.setItem("chatsaved", JSON.stringify(chatsaved));
       chatsaved && saveChatlocal();
     }
-  }, [chat, chatsaved]);
+  }, [displayedChat, chatsaved]);
 
   let chatData: any;
   useEffect(() => {
@@ -816,7 +823,7 @@ const Chat = () => {
 
     let chat_payload;
     if (datatest?.length !== 0 && Array.isArray(chat) && chat.length >= 2) {
-      chat?.shift();
+      // chat?.shift();
       chat_payload = {
         student_id: userdata.id,
         chat_title: chat[0]?.question,
@@ -915,6 +922,7 @@ const Chat = () => {
     }
     setchatData([]);
     const chatt = JSON.parse(chats?.chat_conversation);
+    setDisplayedChat(chatt);
     setSelectedChat([]);
     let chatdataset: any[] = [];
     chatt.map((itemchat: any) => {
@@ -1612,12 +1620,14 @@ const Chat = () => {
                               <div className="question">{chat?.chat_title}</div>
                             </div>
                             <ul className="action-button">
-                              <li role="button">
+                              <li
+                                role="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteFiles(chat?.id);
+                                }}
+                              >
                                 <DeleteOutlineOutlinedIcon
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteFiles(chat?.id);
-                                  }}
                                   sx={{ fontSize: "18px" }}
                                 />
                               </li>
@@ -1742,7 +1752,10 @@ const Chat = () => {
                       chatsaved ? (
                         <FlagIcon style={{ color: "#9943ec" }} />
                       ) : (
-                        <FlagOutlinedIcon onClick={saveChatstar} />
+                        <FlagOutlinedIcon
+                          style={{ cursor: "pointer" }}
+                          onClick={saveChatstar}
+                        />
                       )
                     ) : (
                       <></>
