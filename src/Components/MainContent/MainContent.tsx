@@ -578,7 +578,6 @@ function MainContent() {
                     }
                   );
                 }
-
                 delete academic_history?.board;
                 delete academic_history?.class_id;
                 delete academic_history?.state_for_stateboard;
@@ -932,7 +931,7 @@ function MainContent() {
   }, []);
 
   useEffect(() => {
-    saveChat();
+    if (chat?.length) saveChat();
   }, [chat]);
 
   const handleResponse = (data: { data: any }) => {
