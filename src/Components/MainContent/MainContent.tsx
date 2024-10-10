@@ -1081,7 +1081,7 @@ function MainContent() {
                     chat_question: search,
                     response: response?.answer,
                   };
-                  postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                  response?.status !== 402 && postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -1144,7 +1144,7 @@ function MainContent() {
                     chat_question: search,
                     response: response?.answer,
                   };
-                  postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                  response?.status !== 402 && postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
