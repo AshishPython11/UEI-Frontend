@@ -525,7 +525,7 @@ const Chat = () => {
                     chat_question: search,
                     response: response?.answer,
                   };
-                  !(response?.status === 402) &&
+                  response?.status !== 402 &&
                     postData(`${ChatStore}`, ChatStorepayload).catch(
                       handleError
                     );
@@ -591,7 +591,7 @@ const Chat = () => {
                     chat_question: search,
                     response: response?.answer,
                   };
-                  !(response?.status === 402) &&
+                  response?.status !== 402 &&
                     postData(`${ChatStore}`, ChatStorepayload).catch(
                       handleError
                     );
@@ -727,12 +727,15 @@ const Chat = () => {
   }, [dataflagged]);
 
   useEffect(() => {
-    if (displayedChat?.length > 0) {
-      localStorage.setItem("chatData", JSON.stringify(displayedChat));
+    if (chat?.length > 0 || displayedChat?.length > 0) {
+      localStorage.setItem(
+        "chatData",
+        JSON.stringify(chat?.length ? chat : displayedChat)
+      );
       localStorage.setItem("chatsaved", JSON.stringify(chatsaved));
       chatsaved && saveChatlocal();
     }
-  }, [displayedChat, chatsaved]);
+  }, [chat, displayedChat, chatsaved]);
 
   let chatData: any;
   useEffect(() => {
