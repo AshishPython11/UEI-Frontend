@@ -1872,12 +1872,14 @@ const Chat = () => {
                       ))}
                     </ul>
                   ) : (
-                    showInitialPage && (
-                      <div className="welcome-box">
-                        <img src={chatLogo} alt="" />
-                        <h3>Hi, How can I help you today?</h3>
-                      </div>
-                    )
+                    <div className="welcome-box">
+                      <img src={chatLogo} alt="" />
+                      <h3>{`${
+                        Id
+                          ? "Hi, How can I help you today?"
+                          : "Please select conversation"
+                      }`}</h3>
+                    </div>
                   )}
                 </div>
                 {/* </div> */}
