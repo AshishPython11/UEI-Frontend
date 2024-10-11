@@ -498,7 +498,6 @@ const Sidebar = () => {
           </div>
           <div className="sidebar-nav">
             <MetisMenu>
-              {/* <ul id="sidenav"> */}
               <li>
                 <Link to="/main/DashBoard" onClick={removeMobileToggle}>
                   <div className="parent-icon">

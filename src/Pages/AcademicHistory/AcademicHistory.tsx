@@ -31,7 +31,7 @@ import {
   inputfieldhover,
   inputfieldtext,
   tabletools,
-  deepEqual
+  deepEqual,
 } from "../../utils/helpers";
 import { Country, State, City } from "country-state-city";
 import { ChildComponentProps } from "../StudentProfile";
@@ -46,6 +46,7 @@ interface Box {
   learning_style: string;
   class_id: string;
   year: any;
+  stream: string;
 }
 interface Boxset {
   id: number;
@@ -87,6 +88,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
   const [institutes, setInstitutes] = useState<Institute[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
   const [classes, setClasses] = useState<Classes[]>([]);
+  const [particularClass, setParticularClass] = useState("");
   const [editFlag, setEditFlag] = useState<boolean>(false);
   const [idInstitute, setIdInstitute] = useState();
   const [insituteFlag, setInsituteFlag] = useState<boolean>(false);
@@ -115,6 +117,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
       course_id: "",
       learning_style: "",
       year: "",
+      stream: "",
       //   starting_date: null,
       //   ending_date: null,
     };
@@ -129,7 +132,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.success("Academic history deleted successfully", {
               hideProgressBar: true,
               theme: "colored",
-              position: "top-center"
+              position: "top-center",
             });
           }
         })
@@ -137,7 +140,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error(e?.message, {
             hideProgressBar: true,
             theme: "colored",
-            position: "top-center"
+            position: "top-center",
           });
         });
     }
@@ -164,7 +167,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error(error?.message, {
             hideProgressBar: true,
             theme: "colored",
-            position: "top-center"
+            position: "top-center",
           });
 
           resolve(false);
@@ -189,7 +192,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(error?.message, {
           hideProgressBar: true,
           theme: "colored",
-          position: "top-center"
+          position: "top-center",
         });
       });
     getData("/class/list")
@@ -217,7 +220,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(error?.message, {
           hideProgressBar: true,
           theme: "colored",
-          position: "top-center"
+          position: "top-center",
         });
       });
 
@@ -268,6 +271,13 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
     getData(`${"new_student_academic_history/get/" + StudentId}`)
       .then((data: any) => {
         if (data?.status === 200) {
+          getData(`/class/get/${data?.data?.[0]?.class_id}`).then(
+            (response: any) => {
+              if (response.status === 200) {
+                setParticularClass(response.data.class_name);
+              } else setParticularClass("");
+            }
+          );
           data?.data?.forEach((item: any) => {
             const newBox = {
               id: item?.id,
@@ -279,10 +289,11 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               learning_style: item?.learning_style,
               class_id: item?.class_id,
               year: item?.year ? dayjs(item?.year) : null,
+              stream: item?.stream,
             };
             if (!boxes.some((box) => box.id === newBox.id)) {
               setBoxes((prevBoxes) => [...prevBoxes, newBox]);
-              setCheckBoxes((prevBoxes) => [...prevBoxes, newBox])
+              setCheckBoxes((prevBoxes) => [...prevBoxes, newBox]);
             }
           });
         } else if (data?.status === 404) {
@@ -297,6 +308,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               learning_style: "",
               class_id: "",
               year: null,
+              stream: "",
             },
           ]);
           setEditFlag(true);
@@ -308,7 +320,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error(error?.message, {
           hideProgressBar: true,
           theme: "colored",
-          position: "top-center"
+          position: "top-center",
         });
       });
   }, []);
@@ -364,14 +376,20 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           institution_type: box.institute_type,
           board: box.board,
           state_for_stateboard: box.state_for_stateboard,
-          institute_id: String(instituteId || (!box.institute_id ? 95 : box.institute_id)),
+          institute_id: String(
+            instituteId || (!box.institute_id ? 95 : box.institute_id)
+          ),
           course_id: String(!box.course_id ? 18 : box.course_id),
           learning_style: box.learning_style,
           class_id: String(!box.class_id ? 1 : box.class_id),
           year: String(box?.year?.$y), // Assuming 'year' is a string
+          stream:
+            particularClass === "class_11" || particularClass === "class_12"
+              ? box?.stream
+              : "",
         };
 
-        //validatePayload(payload)  
+        //validatePayload(payload)
         if (validatePayload(payload.institution_type, payload.year)) {
           if (editFlag || box.id === 0) {
             return postData("/new_student_academic_history/add", payload);
@@ -385,7 +403,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error(" PLease Enter Year ", {
             hideProgressBar: true,
             theme: "colored",
-            position: "top-center"
+            position: "top-center",
           });
           return Promise.resolve(null); // If payload is invalid, return a resolved promise
         }
@@ -404,16 +422,16 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
             toast.success("Academic history saved successfully", {
               hideProgressBar: true,
               theme: "colored",
-              position: "top-center"
-            })
+              position: "top-center",
+            });
             setActiveForm((prev) => prev + 1);
           } else {
-            const isEqual = deepEqual(checkBoxes[0], boxes[0])
+            const isEqual = deepEqual(checkBoxes[0], boxes[0]);
             if (!isEqual) {
               toast.success("Academic history updated successfully", {
                 hideProgressBar: true,
                 theme: "colored",
-                position: "top-center"
+                position: "top-center",
               });
             }
             setActiveForm((prev) => prev + 1);
@@ -422,7 +440,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.error("An error occurred while saving", {
             hideProgressBar: true,
             theme: "colored",
-            position: "top-center"
+            position: "top-center",
           });
         }
       })
@@ -478,7 +496,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           // setBoxes([...boxes, { institute_id: responses[0]?.institution?.id }]);
           const newBoxes: any = [...boxes];
           newBoxes[index]["institute_id"] = responses[0].institution.id;
-          saveAcademicHistory(responses[0].institution.id)
+          saveAcademicHistory(responses[0].institution.id);
           setBoxes(newBoxes);
           setBoxes1([
             {
@@ -492,7 +510,7 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
           toast.success("Institution name saved successfully", {
             hideProgressBar: true,
             theme: "colored",
-            position: "top-center"
+            position: "top-center",
           });
           setDataInsitute(boxes1[0]?.Institute_Name_Add);
         }
@@ -501,10 +519,10 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
         toast.error("Error while saving institution name", {
           hideProgressBar: true,
           theme: "colored",
-          position: "top-center"
+          position: "top-center",
         });
       }
-    } else saveAcademicHistory()
+    } else saveAcademicHistory();
   };
 
   const handleInputChange = (
@@ -532,6 +550,13 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
 
     setBoxes(newBoxes);
     setEnddateInvalidList(newEnddateInvalidList);
+    if (field === "class_id") {
+      getData(`/class/get/${value}`).then((response: any) => {
+        if (response.status === 200) {
+          setParticularClass(response.data.class_name);
+        } else setParticularClass("");
+      });
+    }
   };
   const handleInputChange1 = (
     index: number,
@@ -725,6 +750,59 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                   required
                   sx={{ m: 1, minWidth: 220, width: "100%" }}
                 >
+                  <InputLabel>University Name</InputLabel>
+                  <Select
+                    name="institute_id"
+                    value={box.institute_id}
+                    sx={{
+                      backgroundColor: "#f5f5f5",
+                    }}
+                    onChange={(e) =>
+                      handleInputChange(index, "institute_id", e.target.value)
+                    }
+                    label="University Name"
+                  >
+                    {institutes.map((institute) => (
+                      <MenuItem
+                        key={institute.id}
+                        value={institute.id}
+                        sx={{
+                          backgroundColor: inputfield(namecolor),
+                          color: inputfieldtext(namecolor),
+                          "&:hover": {
+                            backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                          },
+                        }}
+                      >
+                        {institute.institution_name}
+                      </MenuItem>
+                    ))}
+                    <MenuItem
+                      key={1}
+                      value={1}
+                      sx={{
+                        backgroundColor: inputfield(namecolor),
+                        color: inputfieldtext(namecolor),
+                        "&:hover": {
+                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                        },
+                      }}
+                    >
+                      Others
+                    </MenuItem>
+                  </Select>
+                  {/* <div> {!box.institute_id && (
+                        <p style={{ marginLeft: "10px", color: 'red' }}>Please select a Department name.</p>
+                    )}</div> */}
+                </FormControl>
+              </div>
+            )}
+            {box.institute_type == "college" && (
+              <div className="col form_field_wrapper">
+                <FormControl
+                  required
+                  sx={{ m: 1, minWidth: 220, width: "100%" }}
+                >
                   <InputLabel>Course</InputLabel>
                   <Select
                     value={box.course_id}
@@ -791,59 +869,65 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
                 </FormControl>
               </div>
             )}
-            {box.institute_type == "college" && (
-              <div className="col form_field_wrapper">
-                <FormControl
-                  required
-                  sx={{ m: 1, minWidth: 220, width: "100%" }}
-                >
-                  <InputLabel>University Name</InputLabel>
-                  <Select
-                    name="institute_id"
-                    value={box.institute_id}
-                    sx={{
-                      backgroundColor: "#f5f5f5",
-                    }}
-                    onChange={(e) =>
-                      handleInputChange(index, "institute_id", e.target.value)
-                    }
-                    label="University Name"
+            {box.institute_type == "school" &&
+              (particularClass === "class_11" ||
+                particularClass === "class_12") && (
+                <div className="col-lg-3 form_field_wrapper">
+                  <FormControl
+                    required
+                    sx={{ m: 1, minWidth: 70, width: "100%", maxWidth: 200 }}
                   >
-                    {institutes.map((institute) => (
+                    <InputLabel>Stream</InputLabel>
+                    <Select
+                      value={box.stream}
+                      sx={{
+                        backgroundColor: "#f5f5f5",
+                      }}
+                      onChange={(e) =>
+                        handleInputChange(index, "stream", e.target.value)
+                      }
+                      label="Stream"
+                    >
                       <MenuItem
-                        key={institute.id}
-                        value={institute.id}
+                        value="science"
                         sx={{
                           backgroundColor: inputfield(namecolor),
                           color: inputfieldtext(namecolor),
                           "&:hover": {
-                            backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
+                            backgroundColor: inputfieldhover(namecolor),
                           },
                         }}
                       >
-                        {institute.institution_name}
+                        Science
                       </MenuItem>
-                    ))}
-                    <MenuItem
-                      key={1}
-                      value={1}
-                      sx={{
-                        backgroundColor: inputfield(namecolor),
-                        color: inputfieldtext(namecolor),
-                        "&:hover": {
-                          backgroundColor: inputfieldhover(namecolor), // Change this to your desired hover background color
-                        },
-                      }}
-                    >
-                      Others
-                    </MenuItem>
-                  </Select>
-                  {/* <div> {!box.institute_id && (
-                        <p style={{ marginLeft: "10px", color: 'red' }}>Please select a Department name.</p>
-                    )}</div> */}
-                </FormControl>
-              </div>
-            )}
+                      <MenuItem
+                        value="commerce"
+                        sx={{
+                          backgroundColor: inputfield(namecolor),
+                          color: inputfieldtext(namecolor),
+                          "&:hover": {
+                            backgroundColor: inputfieldhover(namecolor),
+                          },
+                        }}
+                      >
+                        Commerce
+                      </MenuItem>
+                      <MenuItem
+                        value="arts"
+                        sx={{
+                          backgroundColor: inputfield(namecolor),
+                          color: inputfieldtext(namecolor),
+                          "&:hover": {
+                            backgroundColor: inputfieldhover(namecolor),
+                          },
+                        }}
+                      >
+                        Arts
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </div>
+              )}
             {box.institute_id == "1" && (
               <div className="col form_field_wrapper">
                 <FormControl sx={{ m: 1, minWidth: 180, width: "100%" }}>
@@ -879,93 +963,93 @@ const AcademicHistory: React.FC<ChildComponentProps> = ({ setActiveForm }) => {
               </div>
             )}
             {box.institute_type === "college" && (
-                <div className='col-lg-3 form_field_wrapper'>
-                  <FormControl
-                    required
-                    sx={{ m: 1, minWidth: 70, width: "100%", maxWidth: 200 }}
+              <div className="col-lg-3 form_field_wrapper">
+                <FormControl
+                  required
+                  sx={{ m: 1, minWidth: 70, width: "100%", maxWidth: 200 }}
+                >
+                  <InputLabel>Learning Style</InputLabel>
+                  <Select
+                    value={box.learning_style}
+                    sx={{
+                      backgroundColor: "#f5f5f5",
+                    }}
+                    onChange={(e) =>
+                      handleInputChange(index, "learning_style", e.target.value)
+                    }
+                    label="Learning Style"
                   >
-                    <InputLabel>Learning Style</InputLabel>
-                    <Select
-                      value={box.learning_style}
+                    <MenuItem
+                      value="online"
+                      sx={{
+                        backgroundColor: inputfield(namecolor),
+                        color: inputfieldtext(namecolor),
+                        "&:hover": {
+                          backgroundColor: inputfieldhover(namecolor),
+                        },
+                      }}
+                    >
+                      Online
+                    </MenuItem>
+                    <MenuItem
+                      value="offline"
+                      sx={{
+                        backgroundColor: inputfield(namecolor),
+                        color: inputfieldtext(namecolor),
+                        "&:hover": {
+                          backgroundColor: inputfieldhover(namecolor),
+                        },
+                      }}
+                    >
+                      Offline
+                    </MenuItem>
+                    <MenuItem
+                      value="any"
+                      sx={{
+                        backgroundColor: inputfield(namecolor),
+                        color: inputfieldtext(namecolor),
+                        "&:hover": {
+                          backgroundColor: inputfieldhover(namecolor),
+                        },
+                      }}
+                    >
+                      Any
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+            )}
+            {box.institute_type === "college" && (
+              <div
+                className={`${
+                  box.institute_id == "1" ? "col-lg-3" : "col-lg-3 col-md-6"
+                } form_field_wrapper`}
+              >
+                <FormControl
+                  required
+                  sx={{
+                    m: 1,
+                    minWidth: 180,
+                    // width: "100%",
+                  }}
+                >
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      views={["year"]}
+                      format="YYYY"
+                      label="Year *"
                       sx={{
                         backgroundColor: "#f5f5f5",
                       }}
-                      onChange={(e) =>
-                        handleInputChange(
-                          index,
-                          "learning_style",
-                          e.target.value
-                        )
+                      value={dayjs(box.year)}
+                      onChange={(date) =>
+                        handleInputChange(index, "year", date)
                       }
-                      label="Learning Style"
-                    >
-                      <MenuItem
-                        value="online"
-                        sx={{
-                          backgroundColor: inputfield(namecolor),
-                          color: inputfieldtext(namecolor),
-                          "&:hover": {
-                            backgroundColor: inputfieldhover(namecolor),
-                          },
-                        }}
-                      >
-                        Online
-                      </MenuItem>
-                      <MenuItem
-                        value="offline"
-                        sx={{
-                          backgroundColor: inputfield(namecolor),
-                          color: inputfieldtext(namecolor),
-                          "&:hover": {
-                            backgroundColor: inputfieldhover(namecolor),
-                          },
-                        }}
-                      >
-                        Offline
-                      </MenuItem>
-                      <MenuItem
-                        value="any"
-                        sx={{
-                          backgroundColor: inputfield(namecolor),
-                          color: inputfieldtext(namecolor),
-                          "&:hover": {
-                            backgroundColor: inputfieldhover(namecolor),
-                          },
-                        }}
-                      >
-                        Any
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-              )}
-            {box.institute_type === "college" && (
-                <div className={`${box.institute_id == "1" ? "col-lg-3" : "col-lg-3 col-md-6"} form_field_wrapper`}>
-                  <FormControl
-                    required
-                    sx={{
-                      m: 1,
-                      minWidth: 180,
-                      // width: "100%",
-                    }}
-                  >
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                      <DatePicker
-                        views={["year"]}
-                        format="YYYY"
-                        label="Year *"
-                        sx={{
-                          backgroundColor: "#f5f5f5",
-                        }}
-                        value={dayjs(box.year)}
-                        onChange={(date) =>
-                          handleInputChange(index, "year", date)
-                        }
-                      />
-                    </LocalizationProvider>
-                  </FormControl>
-                </div>
-              )}
+                    />
+                  </LocalizationProvider>
+                </FormControl>
+              </div>
+            )}
           </div>
         ))}
         {/* <div className="row justify-content-center">

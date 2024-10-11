@@ -472,7 +472,7 @@ const Header = () => {
               />
       </header> */}
       <header className="top-header">
-        <nav className="navbar navbar-expand align-items-center gap-lg-4">
+        <nav className="navbar navbar-expand justify-content-between align-items-center gap-lg-4">
           <div
             className="btn-toggle"
             style={{
@@ -483,7 +483,7 @@ const Header = () => {
             <MenuIcon onClick={handleClick} />
             {/* </a> */}
           </div>
-          <div className="search-bar flex-grow-1">
+          {/* <div className="search-bar flex-grow-1">
             <div className="position-relative">
               <input
                 className="form-control rounded-5 px-5 search-control d-lg-block d-none"
@@ -591,13 +591,13 @@ const Header = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <ul className="navbar-nav gap-1 nav-right-links align-items-center">
-            <li className="nav-item d-lg-none mobile-search-btn">
+            {/* <li className="nav-item d-lg-none mobile-search-btn">
               <a className="nav-link" href="#">
                 <SearchOutlinedIcon onClick={displaySearchPopup} />
               </a>
-            </li>
+            </li> */}
             {/* <li className="nav-item d-none d-lg-flex">
               <button onClick={() => navigator("/main/Chat/recentChat")} className="btn btn-primary rounded-pill px-lg-4">
                 New Chat
@@ -606,9 +606,7 @@ const Header = () => {
             <li className="nav-item">
               <div className="toggle-mode nav-link" role="button">
                 <DarkModeOutlinedIcon
-                  onClick={() =>
-                    setTheme((prev) => (prev === "dark" ? "light" : "dark"))
-                  }
+                  onClick={toggleTheme}
                 />
               </div>
             </li>
@@ -682,12 +680,12 @@ const Header = () => {
                     <span className="ms-2">Georgian</span>
                   </a>
                 </li> */}
-                <li onClick={() => setLanguage("HN")}>
+                {/* <li onClick={() => setLanguage("HN")}>
                   <div className="dropdown-item d-flex align-items-center py-2">
                     <img src={Country8} width="20" height="20" alt="" />
                     <span className="ms-2">Hindi</span>
                   </div>
-                </li>
+                </li> */}
               </ul>
             </li>
 
@@ -932,8 +930,8 @@ const Header = () => {
               >
                 <img
                   src={
-                    profileImage
-                      ? profileImage
+                    proImage
+                      ? proImage
                       : gender?.toLowerCase() === "female"
                       ? femaleImage
                       : maleImage
@@ -949,8 +947,8 @@ const Header = () => {
                   <div className="text-center">
                     <img
                       src={
-                        profileImage
-                          ? profileImage
+                        proImage
+                          ? proImage
                           : gender?.toLowerCase() === "female"
                           ? femaleImage
                           : maleImage
@@ -961,7 +959,7 @@ const Header = () => {
                       alt=""
                     />
                     <h5 className="user-name mb-0 fw-bold">{`Hello, ${
-                      profileName || "User"
+                      namepro?.first_name || "User"
                     }`}</h5>
                   </div>
                 </a>

@@ -143,7 +143,6 @@ const AddStudentFeedback = () => {
       };
       postData("/feedback/student_feedback", payload)
         .then((response) => {
-          console.log("Feedback submitted successfully:", response);
           if (response.status === 200) {
             toast.success("Feedback sent successfully", {
               hideProgressBar: true,
@@ -288,14 +287,14 @@ const AddStudentFeedback = () => {
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb mb-0 p-0">
-                      <li className="breadcrumb-item"><a href="javascript:;"><i className="bx bx-home-alt"></i></a>
+                      <li className="breadcrumb-item"><a href=""><i className="bx bx-home-alt"></i></a>
                       </li>
                       {/* <li className="breadcrumb-item" aria-current="page">Submit Feedback</li> */}
                       <li aria-current="page">Submit Feedback</li>
                     </ol>
                   </nav>
                 </div>
-                <div className="ms-auto">
+                {/* <div className="ms-auto">
                   <div className="btn-group">
                     <button
                       type="button"
@@ -306,7 +305,7 @@ const AddStudentFeedback = () => {
                       Settings
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="feedback">
                 <h1>Give Your Valuable Feedback</h1>
@@ -448,14 +447,14 @@ const AddStudentFeedback = () => {
                 <div className="ps-3">
                   <nav aria-label="breadcrumb">
                     <ol className="breadcrumb mb-0 p-0">
-                      <li className="breadcrumb-item"><a href="javascript:;"><i className="bx bx-home-alt"></i></a>
+                      <li className="breadcrumb-item"><a href=""><i className="bx bx-home-alt"></i></a>
                       </li>
                       {/* <li className="breadcrumb-item" aria-current="page">Submit Feedback</li> */}
                       <li aria-current="page">Submit Feedback</li>
                     </ol>
                   </nav>
                 </div>
-                <div className="ms-auto">
+                {/* <div className="ms-auto">
                   <div className="btn-group">
                     <button
                       type="button"
@@ -466,7 +465,7 @@ const AddStudentFeedback = () => {
                       Settings
                     </button>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div className="feedback">
                 <h1>You have already submitted your feedback</h1>

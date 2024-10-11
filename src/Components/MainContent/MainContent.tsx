@@ -95,6 +95,7 @@ function MainContent() {
   const [searcherr, setSearchErr] = useState(false);
   const [loaderMsg, setLoaderMsg] = useState("");
   const [loader, setLoader] = useState(false);
+  const [chatLoader, setChatLoader] = useState(false);
   const [selectedchat, setSelectedChat] = useState<any>([]);
   const [chatsaved, setChatSaved] = useState<boolean>(false);
   const [chat, setchatData] = useState<any>([]);
@@ -578,7 +579,6 @@ function MainContent() {
                     }
                   );
                 }
-
                 delete academic_history?.board;
                 delete academic_history?.class_id;
                 delete academic_history?.state_for_stateboard;
@@ -932,7 +932,7 @@ function MainContent() {
   }, []);
 
   useEffect(() => {
-    saveChat();
+    if (chat?.length) saveChat();
   }, [chat]);
 
   const handleResponse = (data: { data: any }) => {
@@ -942,7 +942,7 @@ function MainContent() {
     setSelectedChat((prevState: any) => [...prevState, newData]);
     setChatSaved(false);
     setchatData((prevState: any) => [...prevState, newData]);
-    setLoader(false);
+    setChatLoader(false);
     setSearch("");
     getData(`${chatlisturl}/${userdata?.id}`)
       .then((data: any) => {
@@ -970,7 +970,7 @@ function MainContent() {
       | null
       | undefined;
   }) => {
-    setLoader(false);
+    setChatLoader(false);
     toast.error(e?.message, {
       hideProgressBar: true,
       theme: "colored",
@@ -986,7 +986,7 @@ function MainContent() {
       return;
     }
 
-    setLoader(true);
+    setChatLoader(true);
     setLoaderMsg("Searching result from knowledge base");
     setSearchErr(false);
 
@@ -1041,7 +1041,7 @@ function MainContent() {
       setSelectedChat((prevState: any) => [...prevState, newData]);
       setChatSaved(false);
       setchatData((prevState: any) => [...prevState, newData]);
-      setLoader(false);
+      setChatLoader(false);
       setSearch("");
       getData(`${chatlisturl}/${userdata?.id}`)
         .then((data: any) => {
@@ -1082,7 +1082,10 @@ function MainContent() {
                     chat_question: search,
                     response: response?.answer,
                   };
-                  postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                  response?.status !== 402 &&
+                    postData(`${ChatStore}`, ChatStorepayload).catch(
+                      handleError
+                    );
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -1145,7 +1148,10 @@ function MainContent() {
                     chat_question: search,
                     response: response?.answer,
                   };
-                  postData(`${ChatStore}`, ChatStorepayload).catch(handleError);
+                  response?.status !== 402 &&
+                    postData(`${ChatStore}`, ChatStorepayload).catch(
+                      handleError
+                    );
                 } else {
                   setLoaderMsg("Fetching Data from Ollama model.");
                   getData(
@@ -1376,7 +1382,7 @@ function MainContent() {
   };
 
   const regenerateChat = () => {
-    setLoader(true);
+    setChatLoader(true);
     setLoaderMsg("Fetching Data from Ollama model.");
     setSearchErr(false);
 
@@ -1504,7 +1510,7 @@ function MainContent() {
 
   return (
     <>
-      {loader && <FullScreenLoader msg={loaderMsg} />}
+      {loader && !chatLoader && <FullScreenLoader />}
       {/* {basicinfo!==null && basicinfo?.basic_info && userName === 'admin' ?  */}
       {userName === "admin" ? (
         <>
@@ -1778,7 +1784,7 @@ function MainContent() {
                                 </IconButton>
                               </div>
 
-                              <div className="d-flex justify-content-between gap-2 flex-wrap  align-items-center">
+                              {/* <div className="d-flex justify-content-between gap-2 flex-wrap  align-items-center">
                                 <i className="fs-12">
                                   Student Standard{" "}
                                   <span className="d-lg-block"> Account </span>
@@ -1786,7 +1792,7 @@ function MainContent() {
                                 <button className="btn btn-primary fs-12 rounded-pill btn-sm  text-nowrap ps-3">
                                   Upgrade <KeyboardArrowRightIcon />
                                 </button>
-                              </div>
+                              </div> */}
 
                               {/* <div className="">
                                 <div
@@ -1822,6 +1828,7 @@ function MainContent() {
                             type="checkbox"
                             id="status"
                             checked={true}
+                            readOnly
                           />
                         </div>
                       </div>
@@ -1855,12 +1862,12 @@ function MainContent() {
                         >{`${stats1?.Student_Profile}%`}</div>
                       </div>
 
-                      <div className="d-flex align-items-center gap-3 mb-3">
+                      {/* <div className="d-flex align-items-center gap-3 mb-3">
                         <div className="flex-grow-1">
                           <h6 className="mb-0 fw-normal fs-14">Aadhar KYC</h6>
                         </div>
                         <div style={{ color: `#9943EC` }}>Pending</div>
-                      </div>
+                      </div> */}
 
                       {/* <div className="d-flex align-items-center gap-3">
                         <div className="flex-grow-1">
@@ -1996,6 +2003,9 @@ function MainContent() {
                       )}
                     </div>
                     <div className="chat-content ms-0 rounded-top-5">
+                      {chatLoader && (
+                        <FullScreenLoader msg={loaderMsg} flag={"chat"} />
+                      )}
                       {selectedchat?.length > 0 ? (
                         selectedchat?.map((chat: any, index: any) => (
                           <>

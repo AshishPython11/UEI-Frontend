@@ -17,13 +17,13 @@ const FAQ = () => {
                         <div className="ps-3">
                             <nav aria-label="breadcrumb">
                                 <ol className="breadcrumb mb-0 p-0">
-                                    <li className="breadcrumb-item"><a href="javascript:;"><i className="bx bx-home-alt"></i></a>
+                                    <li className="breadcrumb-item"><a href=""><i className="bx bx-home-alt"></i></a>
                                     </li>
                                     <li aria-current="page">FAQ</li>
                                 </ol>
                             </nav>
                         </div>
-                        <div className="ms-auto">
+                        {/* <div className="ms-auto">
                             <div className="btn-group">
                                 <button type="button"
                                     className="btn btn-outline-primary rounded-pill px-lg-4"
@@ -31,7 +31,7 @@ const FAQ = () => {
                                     data-bs-target="#staticBackdrop">Settings</button>
 
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="row">
