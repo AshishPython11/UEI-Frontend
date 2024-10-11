@@ -145,7 +145,8 @@ const AddEditEntity = () => {
     })
 
     return (
-        <div className='profile_section'>
+        <div className='main-wrapper'>
+            <div className="main-content">
             <div className='card'>
                 <div className='card-body'>
                     <Typography variant="h6">
@@ -190,6 +191,8 @@ const AddEditEntity = () => {
                     </Formik>
                 </div>
             </div>
+            </div>
+            
         </div>
     )
 }

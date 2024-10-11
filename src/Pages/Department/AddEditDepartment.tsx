@@ -148,7 +148,8 @@ const AddEditDepartment = () => {
     })
 console.log("ttttt",inputfield(namecolor))
     return (
-        <div className='profile_section'>
+        <div className='main-wrapper'>
+            <div className="main-content">
             <div className='card'>
                 <div className='card-body'>
                     <Typography variant="h6">
@@ -200,6 +201,8 @@ console.log("ttttt",inputfield(namecolor))
                     </Formik>
                 </div>
             </div>
+            </div>
+           
         </div>
     )
 }

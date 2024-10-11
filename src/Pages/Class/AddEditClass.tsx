@@ -162,7 +162,8 @@ const AddEditClass = () => {
 const classes = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
 console.log("test",classes,selectedSubject)
     return (
-        <div className='profile_section'>
+        <div className='main-wrapper'>
+            <div className="main-content">
             <div className='card'>
                 <div className='card-body'>
                     <Typography variant="h6">
@@ -246,6 +247,8 @@ console.log("test",classes,selectedSubject)
                     </Formik>
                 </div>
             </div>
+            </div>
+            
         </div>
     )
 }
