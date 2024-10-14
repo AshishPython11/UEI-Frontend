@@ -258,7 +258,7 @@ const AddEditRolevsForm = () => {
         <>
             <div className='main-wrapper'>
                 <div className="main-content">
-                <div className='card'>
+                <div className='card p-lg-3'>
                     <div className='card-body'>
                         <Typography variant="h6">
                             {id ? <div className='main_title'>Edit Role vs Form</div> : <div className='main_title'>Add Role vs Form</div>}
@@ -280,7 +280,7 @@ const AddEditRolevsForm = () => {
                             {({ errors, values ,touched,isValid,dirty }:any) => (
                             <Form>
 
-                                    <div className='row'>
+                                    <div className='row gy-4 mt-0'>
                                         <div className='col-md-4'>
                                             <div className="form_field_wrapper">
                                                 <FormControl fullWidth>
@@ -424,7 +424,7 @@ const AddEditRolevsForm = () => {
                                             }
                                         </div>
                                     </div>
-                                    <button className='btn btn-primary mainbutton'  >{id ? "Update" : "Save"}</button>
+                                    <button className='btn btn-primary mainbutton mt-4'  >{id ? "Update" : "Save"}</button>
                                     </Form>
                             )}
                         </Formik>

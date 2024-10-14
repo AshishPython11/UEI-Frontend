@@ -181,7 +181,7 @@ const AddEditRole = () => {
         <>
             <div className='main-wrapper'>
                 <div className="main-content">
-                <div className='card'>
+                <div className='card p-lg-3'>
                     <div className='card-body'>
                         <Typography variant="h6">
                             {id ? <div className='main_title'>Edit Role</div> : <div className='main_title'>Add Role</div>}
@@ -199,7 +199,7 @@ const AddEditRole = () => {
                             {({ errors, values ,touched,isValid,dirty }:any) => (
                                 <Form>
 
-                                    <div className='row'>
+                                    <div className='row gy-4 flex-column mt-0'>
                                         <div className='col-md-4'>
                                             <div className="form_field_wrapper">
                                                 {/* <Field
@@ -227,8 +227,11 @@ const AddEditRole = () => {
                                                         <p style={{ color: 'red' }}>{errors.role_name}</p> : <></>
                                             } */}
                                         </div>
+                                        <div className="col-lg-4">
+                                        <button  className='btn btn-primary mainbutton'  >{id ? "Update" : "Save"}</button>
+                                        </div>
                                     </div>
-                                    <button  className='btn btn-primary mainbutton'  >{id ? "Update" : "Save"}</button>
+                                    
                                 </Form>
                             )}
                             </Formik>

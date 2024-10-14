@@ -2584,7 +2584,7 @@ function MainContent() {
                   </div>
                 </div>
 
-                <div className="col-xl-6 ">
+                <div className="col-xl-6 d-flex align-items-stretch">
                   <div className="row  g-4">
                     <div className="col-lg-12 ">
                       <div className="card w-100 rounded-4 desk-card addcomingsoon">

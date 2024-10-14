@@ -223,9 +223,9 @@ const AddEditSubmenu = () => {
         <>
             <div className='main-wrapper'>
                 <div className="main-content">
-                <div className='card'>
+                <div className='card p-lg-3'>
                     <div className='card-body'>
-                        <Typography variant="h6">
+                        <Typography variant="h6" >
                             {id ? <div className='main_title'>Edit Submenu</div> : <div className='main_title'>Add Submenu</div>}
                         </Typography>
                         <Formik
@@ -245,7 +245,7 @@ const AddEditSubmenu = () => {
                             <Form>
                         {/* <form onSubmit={(e) => handleSubmit(e, submenu)}> */}
 
-                            <div className='row'>
+                            <div className='row gy-4 mt-0'>
                             <div className='col-md-4'>
                                     <div className="form_field_wrapper">
                                         {/* <label>Speciality</label> */}
@@ -361,7 +361,7 @@ const AddEditSubmenu = () => {
                                 </div>
                                 
                             </div>
-                            <button className='btn btn-primary mainbutton'>{id ? "Update" : "Save"}</button>
+                            <button className='btn btn-primary mainbutton mt-4'>{id ? "Update" : "Save"}</button>
                         {/* </form> */}
                         </Form>
                          )}

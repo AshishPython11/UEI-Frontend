@@ -202,9 +202,9 @@ const AddEditSubject = () => {
     <>
       <div className="main-wrapper">
         <div className="main-content">
-        <div className="card">
+        <div className="card p-lg-3">
           <div className="card-body">
-            <Typography variant="h6">
+            <Typography variant="h6" className="mb-3">
               {id ? (
                 <div className="main_title">Edit Subject</div>
               ) : (

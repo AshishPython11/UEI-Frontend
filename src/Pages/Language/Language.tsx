@@ -105,7 +105,7 @@ const Language = () => {
          {loading && <FullScreenLoader />}
             <div className='main-wrapper'>
                 <div className="main-content">
-                <div className='card'>
+                <div className='card p-lg-3'>
                     <div className='card-body'>
                         <div className='table_wrapper'>
                             <div className='table_inner'>

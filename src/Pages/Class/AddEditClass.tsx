@@ -164,9 +164,9 @@ console.log("test",classes,selectedSubject)
     return (
         <div className='main-wrapper'>
             <div className="main-content">
-            <div className='card'>
+            <div className='card p-lg-3'>
                 <div className='card-body'>
-                    <Typography variant="h6">
+                    <Typography variant="h6" className='mb-3'>
                         <div className='main_title'>{id ? "Edit" : "Add"} Class</div>
                     </Typography>
                     <Formik
@@ -182,9 +182,9 @@ console.log("test",classes,selectedSubject)
                     >
                         {({ errors, values, touched ,isValid,dirty }) => (
                             <Form>
-                                <div className='row'>
+                                <div className='row '>
                                     <div className='col-md-4'>
-                                        <div className="form_field_wrapper">
+                                        <div className="form_field_wrapper mb-4">
                                             {/* <Field
                                                 component={TextField}
                                                 type="text"
